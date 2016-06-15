@@ -26,5 +26,9 @@ Collate:
     'loadfilesfunc.R'
     'getconsensuspeaks.R'
     'grangestodataframe.R'
+    'combineannotatepeaks.R'
+    'mergeclosepeaks.R'
+    'statscombineannotate.R'
+    'tssannotgrange.R'
 NeedsCompilation: no
 Packaged: 2016-02-09 15:56:42 UTC; bask05
