@@ -14,4 +14,9 @@
 #'
 #' Takes in a sample information file (CSV), loads peak files, and outputs a GRangesList object that holds all peaks for each sample type.  
 #'
+#' 2.\code{\link{getConsensusPeaks}}
+#'
+#' Takes in a sample peaks list (output from loadPeaks in step 1), and outputs consensus peaks.  Consensus peaks are those present in at least N replicates, where is defined by the user.
+#' The function outputs a list with the following slots: 1) GRangesList with consensus peaks for each sample type; 2) A statistics table summarizing how many peaks are in replicate samples and are called as consensus peaks.
+#'
 "_PACKAGE"

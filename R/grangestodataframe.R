@@ -1,5 +1,4 @@
-
-#' Helper function: converts granges to dataframe
+#' Internal function: converts granges to dataframe
 #'
 #' Takes a Grange input and converts it into a dataframe
 #' Not for use by package user
@@ -8,18 +7,9 @@
 #'
 #' @return dataframe
 #'
-#'
-#' @examples
-#' Grange1 <-
-#' GRanges(seqnames = c("chr1", "chr2", "chr1", "chr3"),
-#'                    ranges = IRanges(1:4, 7:10))
-#'
 #' Dataframe1=grangestodataframe(Grange1)
-#'
-#' @export
-#'
 
-.grangestodataframe<-function(grange){
+grangestodataframe<-function(grange){
   chr=seqnames(grange)
   dataframe=data.frame(chr)
   dataframe=data.frame(lapply(dataframe, as.character), stringsAsFactors=FALSE)
