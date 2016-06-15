@@ -1,5 +1,5 @@
 #' @import S4Vectors
-#' @importFrom GenomicRanges GRangesList findOverlaps GRanges distanceToNearest reduce
+#' @import GenomicRanges
 #' @importFrom IRanges IRanges
 #' @importFrom Rsamtools BamFileList
 #' @importFrom GenomeInfoDb sortSeqlevels seqinfo seqnames
