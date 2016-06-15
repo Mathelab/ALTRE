@@ -37,7 +37,7 @@ loadBedFiles <- function(csvfile) {
 
   bedFilesPath    <- file.path(csvfile$datapath, csvfile$peakfiles)
   bedFiles        <- mapply(readBed, bedFilesPath, seq_along(bedFilesPath))
-  names(bedFiles) <- paste0(csvfile$sample, csvfile$replicate)
+  names(bedFiles) <- paste(csvfile$sample, csvfile$replicate,sep="_")
   hotspots        <- lapply(bedFiles, function(x) as(x, "GRanges"))
 
   return(GRangesList(hotspots))
