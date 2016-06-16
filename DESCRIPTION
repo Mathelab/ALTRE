@@ -15,7 +15,12 @@ Imports:
     Rsamtools,
     S4Vectors,
     GenomeInfoDb,
-    IRanges
+    IRanges,
+    DESeq2,
+    GenomicAlignments,
+    SummarizedExperiment,
+    ggplot2,
+    reshape2
 License: GPL-3
 LazyData: TRUE
 RoxygenNote: 5.0.1
@@ -30,5 +35,6 @@ Collate:
     'mergeclosepeaks.R'
     'statscombineannotate.R'
     'tssannotgrange.R'
+    'getcounts.R'
 NeedsCompilation: no
 Packaged: 2016-02-09 15:56:42 UTC; bask05

@@ -101,7 +101,7 @@ CombineAnnotatePeaks<-function(conspeaks, TSS, mergedistenh=1000, mergedistprom=
     if (regregionspecific == FALSE){
       dataframeformerge=grangestodataframe(TSSgranges)
       #create grange from dataframe
-      bothafter=merging(dataframeformerge)
+      bothafter=mergeclosepeaks(dataframeformerge)
     }
 
     # Create matrix for comparison:
