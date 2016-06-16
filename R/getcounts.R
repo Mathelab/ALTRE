@@ -24,7 +24,7 @@
 #' samplePeaks <- loadPeaks(csvfile)
 #' consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
 #' consPeaksAnnotated=CombineAnnotatePeaks(conspeaks=consPeaks, TSS=TSSannot)
-#' counts_consPeaks=getcounts(annotpeaks=consPeaksAnnotated, csv=csvfile, reference="SAEC", chrom="chr21")
+#' counts_consPeaks=getcounts(annotpeaks=consPeaksAnnotated, csvfile=csvfile, reference="SAEC", chrom="chr21")
 #' @export
 
 getcounts<-function(annotpeaks, csvfile, reference, chrom = NULL){
@@ -44,8 +44,7 @@ getcounts<-function(annotpeaks, csvfile, reference, chrom = NULL){
                                 ignore.strand=TRUE)
   #add column labels
   SummarizedExperiment::colData(countsse) <- DataFrame(sampleinfo[,c(1:4)])
-
-  filtmatrix="The data was not filtered."
+  countsse$sample=as.factor(countsse$sample)
 
   countsse$status <- stats::relevel(countsse$sample, reference)
   countssedds <- DESeqDataSet(countsse, design = ~ sample)
@@ -85,12 +84,12 @@ getcounts<-function(annotpeaks, csvfile, reference, chrom = NULL){
   # Create densityplot
   region=originaldata$region
   alldata=cbind(myrpkmlog2,as.data.frame(region))
-  par(mar=c(5.1, 4.1, 4.1, 8.1), xpd=TRUE)
+  graphics::par(mar=c(5.1, 4.1, 4.1, 8.1), xpd=TRUE)
   varstack=suppressMessages(melt(alldata))
   varstack$concat=paste(varstack$region, varstack$variable, sep=": ")
   varstack$concat=sub("librarysize.*", "", varstack$concat)
-  densityplot=ggplot(varstack, aes(x=value)) +
-        geom_density(aes(group=concat, color=concat, fill=concat), alpha=0.3) +
+  densityplot=ggplot(varstack, aes(x=varstack$value)) +
+        geom_density(aes(group=varstack$concat, color=varstack$concat, fill=varstack$concat), alpha=0.3) +
         theme_bw(base_size = 15, base_family = "") +
         theme(legend.title=element_blank()) +
         scale_x_continuous(expand = c(0, 0)) +

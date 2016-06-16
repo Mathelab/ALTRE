@@ -35,6 +35,6 @@ csvfile <- file.path(dir, "lung.csv")
 samplePeaks <- loadPeaks(csvfile)
 consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
 consPeaksAnnotated=CombineAnnotatePeaks(conspeaks=consPeaks, TSS=TSSannot)
-counts_consPeaks=getcounts(annotpeaks=consPeaksAnnotated, csv=csvfile, reference="SAEC", chrom="chr21")
+counts_consPeaks=getcounts(annotpeaks=consPeaksAnnotated, csvfile=csvfile, reference="SAEC", chrom="chr21")
 }
 

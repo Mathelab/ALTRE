@@ -2,17 +2,16 @@ Package: ALTRE
 Type: Package
 Title: Workflow: Post-alignment to altered enhancers
     and promoters
-Version: 0.1
-Date: 2016-06-14
-Author: Elizabeth Baskin, Rick Farouni, Ewy Mathe
-Maintainer: Elizabeth Baskin <Elizabeth.Baskin@osumc.edu>, Ewy Mathe <ewy.mathe@osumc.edu>
+Version: 0.99.0
+Author: Rick Farouni, Elizabeth Baskin, Ewy Mathe
+Maintainer: Rick Farouni <rfarouni@gmail.com>, Elizabeth Baskin <Elizabeth.Baskin@osumc.edu>
 Description: This workflow takes alignment data and hotspot calls from
     assays of open chromatin (ATAC-seq, Dnase-seq, and FAIRE-seq) and identifies
     regions (enhancers and promoters) that differ based on cell and
     tissue type.
+Depends: R (>= 3.3.0)
 Imports:
-    GenomicRanges,
-    Rsamtools,
+    methods,
     S4Vectors,
     GenomeInfoDb,
     IRanges,
@@ -20,21 +19,11 @@ Imports:
     GenomicAlignments,
     SummarizedExperiment,
     ggplot2,
-    reshape2
+    reshape2,
+    GenomicRanges,
+    Rsamtools,
+    readr
 License: GPL-3
 LazyData: TRUE
 RoxygenNote: 5.0.1
-Collate:
-    'ALTRE.R'
-    'imports.R'
-    'loadfiles.R'
-    'loadfilesfunc.R'
-    'getconsensuspeaks.R'
-    'grangestodataframe.R'
-    'combineannotatepeaks.R'
-    'mergeclosepeaks.R'
-    'statscombineannotate.R'
-    'tssannotgrange.R'
-    'getcounts.R'
 NeedsCompilation: no
-Packaged: 2016-02-09 15:56:42 UTC; bask05
