@@ -1,29 +1,37 @@
-# Some functions to read in CSV and bedfiles
 
-#####################################
-# Read in CSV
-#####################################
+#' Read in CSV
+#' @export
 loadCSVFile <- function(csvPath) {
+
   stopifnot(is.character(csvPath))
-  
-  csvfile <- utils::read.csv(
-    csvPath
+  csvfile <- read_csv(
+    csvPath,
+    col_types = cols_only(
+      datapath  = col_character(),
+      bamfiles  = col_character(),
+      peakfiles = col_character(),
+      sample    = col_character(),
+      replicate = col_character()
     )
+  )
   return(csvfile)
 }
 
-#####################################
-# Load Bed Files
-#####################################
+
+#' Read in BED Files
+#' @export
+#'
 loadBedFiles <- function(csvfile) {
+
   if(!is(csvfile, "data.frame"))
     stop("csvfile must be a data.frame ")
 
   readBed <- function(bedPath, ind) {
-    bed <- DataFrame(utils::read.delim(
+    bed <- DataFrame(read_delim(
       bedPath,
-      header= FALSE,
-      na.strings = "."
+      delim = "\t",
+      col_names = FALSE,
+      na = "."
     ))[, 1:3]
     colnames(bed) <- c("seqnames", "start", "end")
     bed           <- DataFrame(bed, csvfile[ind, c("sample","replicate")])
@@ -43,17 +51,16 @@ loadBedFiles <- function(csvfile) {
   return(GRangesList(hotspots))
 }
 
-#####################################
-# Read in bam files
-#####################################
+#' Read in BAM files
+#' @export
+#'
 loadBamFiles <- function(csvfile) {
 
   if(!is(csvfile, "data.frame"))
     stop("csvfile must be a data.frame ")
 
   bamfiles <- file.path(csvfile$datapath, csvfile$bamfiles)
-  bamFiles <- BamFileList(bamfiles, yieldSize = 100000)
+  bamFiles <- Rsamtools::BamFileList(bamfiles, yieldSize = 100000)
 
   return(bamFiles)
 }
-
