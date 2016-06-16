@@ -6,8 +6,8 @@
 #' @param grange data frame of GRanges
 #' @param mergedist numeric
 #' @param peaklist peaklist
-#' @param distancefromTSS
-#' @param TSS
+#' @param distancefromTSS distancefromTSS
+#' @param TSS TSS
 #'
 #' @return GRanges object
 #'

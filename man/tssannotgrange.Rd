@@ -10,6 +10,8 @@ tssannotgrange(grange, TSS, distancefromTSS)
 \item{grange}{GRanges object}
 
 \item{TSS}{data frame of Transcription Start Site Locations}
+
+\item{distancefromTSS}{distancefromTSS}
 }
 \value{
 GRanges object

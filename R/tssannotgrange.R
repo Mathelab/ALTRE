@@ -5,6 +5,7 @@
 #'
 #' @param grange GRanges object
 #' @param TSS data frame of Transcription Start Site Locations
+#' @param distancefromTSS distancefromTSS
 #' @return GRanges object
 #'
 

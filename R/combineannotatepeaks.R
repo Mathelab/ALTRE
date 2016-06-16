@@ -13,7 +13,7 @@
 #'
 #' @param conspeaks list of GRanges objects for each sample type (output by getConsensusPeaks() function)
 #' @param TSS file of transcription start sites
-#' @param distanceFromTSS in bp; peaks within distFromTSS of an annotated Transcription Start Site (TSS) will be annotated as a promoter (default=1500bp)
+#' @param distancefromTSS in bp; peaks within distFromTSS of an annotated Transcription Start Site (TSS) will be annotated as a promoter (default=1500bp)
 #' @param mergedistprom merge promoters if they are < mergedistprom apart
 #' @param mergedistenh merge enhancers peaks if they are < mergedistenh apart
 #' @param regregionspecific logical to if TRUE, merging occurs within same type peaks (e.g. merge promoters, then merge enhancers) 

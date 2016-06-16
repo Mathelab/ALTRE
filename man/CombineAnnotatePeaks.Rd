@@ -18,7 +18,7 @@ CombineAnnotatePeaks(conspeaks, TSS, mergedistenh = 1000,
 
 \item{regregionspecific}{logical to if TRUE, merging occurs within same type peaks (e.g. merge promoters, then merge enhancers)}
 
-\item{distFromTSS}{in bp; peaks within distFromTSS of an annotated Transcription Start Site (TSS) will be annotated as a promoter (default=1500bp)}
+\item{distancefromTSS}{in bp; peaks within distFromTSS of an annotated Transcription Start Site (TSS) will be annotated as a promoter (default=1500bp)}
 }
 \value{
 List containing two items:

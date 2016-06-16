@@ -27,4 +27,3 @@
 #' a transcription start site) or an enhancer (>1500bp from a transcription
 #' start site). Function can also merge regulatory regions that are within a specified
 #' distance from each other. 
-"_PACKAGE"

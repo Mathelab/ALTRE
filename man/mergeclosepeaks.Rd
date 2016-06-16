@@ -7,9 +7,15 @@
 mergeclosepeaks(peaklist, grange, mergedist, TSS, distancefromTSS)
 }
 \arguments{
+\item{peaklist}{peaklist}
+
 \item{grange}{data frame of GRanges}
 
 \item{mergedist}{numeric}
+
+\item{TSS}{TSS}
+
+\item{distancefromTSS}{distancefromTSS}
 }
 \value{
 GRanges object
