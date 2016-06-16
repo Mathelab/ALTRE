@@ -1,7 +1,10 @@
-#' @import S4Vectors
-#' @import GenomicRanges
-#' @importFrom IRanges IRanges
-#' @importFrom Rsamtools BamFileList
-#' @importFrom GenomeInfoDb sortSeqlevels seqinfo seqnames
+#' @import methods
 #' @import IRanges
+#' @import GenomeInfoDb
+#' @import S4Vectors
+#' @import BiocGenerics
+#' @import GenomicRanges
+#' @importFrom Rsamtools BamFileList
+#' @import readr
 NULL
+
