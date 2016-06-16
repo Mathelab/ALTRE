@@ -1,4 +1,5 @@
-# Read in CSV
+#' Read in CSV
+#' @export
 loadCSVFile <- function(csvPath) {
 
   stopifnot(is.character(csvPath))
@@ -16,7 +17,8 @@ loadCSVFile <- function(csvPath) {
 }
 
 
-# Read in BED Files
+#' Read in BED Files
+#' @export
 loadBedFiles <- function(csvfile) {
 
   if(!is(csvfile, "data.frame"))
@@ -47,7 +49,8 @@ loadBedFiles <- function(csvfile) {
   return(GRangesList(hotspots))
 }
 
-# Read in BAM files
+#' Read in BAM files
+#' @export
 loadBamFiles <- function(csvfile) {
 
   if(!is(csvfile, "data.frame"))
@@ -56,6 +59,6 @@ loadBamFiles <- function(csvfile) {
   bamfiles <- file.path(csvfile$datapath, csvfile$bamfiles,fsep="")
   indexfiles <- file.path(csvfile$datapath, paste(csvfile$bamfiles,".bai",sep=""),fsep="")
   bamFiles <- Rsamtools::BamFileList(bamfiles, index=indexfiles,yieldSize = 100000)
-  
+
 return(bamFiles)
 }
