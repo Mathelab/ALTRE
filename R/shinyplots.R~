@@ -1,0 +1,336 @@
+
+
+
+
+#' plot highcharts
+#' @export
+#'
+plotBarplot <- function(sizePeaks) {
+
+  dat <- tidyr::gather(sizePeaks, track, count, 2:5,-merged)
+  dat <- dat %>% split(levels(dat$sample))
+  p <- highchart() %>%
+    hc_title(text = "Peak Counts by Cell Type",
+             style= list(
+               color= '#2E1717',
+               fontWeight= 'bold')) %>%
+    hc_subtitle(text = "For bioreplicates and their merged consensus track") %>%
+    hc_add_series(
+      data= dat[[1]]$count,
+      name = names(dat[1]),
+      type = "column",
+      dataLabels = list(enabled = TRUE,
+                        rotation=270,
+                        color= '#FFFFFF',
+                        y= 40)) %>%
+    hc_add_series(
+      data=dat[[2]]$count,
+      name = names(dat[2]),
+      dataLabels = list(enabled = TRUE,
+                        rotation=270,
+                        color= '#FFFFFF',
+                        y= 40),
+      type = "column") %>%
+    hc_yAxis(title = list(text = "Peak Counts"),
+             labels = list(format = "{value}")) %>%
+    hc_xAxis(categories = dat[[1]]$track) %>%
+    hc_legend(enabled = TRUE,
+              layout="vertical",
+              align= "right",
+              verticalAlign= "top",
+              floating= TRUE,
+              x= -20,
+              y= 60) %>%
+    hc_tooltip(
+      headerFormat= "<b>{series.name}_{point.key}</b><br>",
+      pointFormat = "{point.y}",
+      valueSuffix= ' peaks')
+  return(p)
+}
+
+#' plot heatmap
+#' @export
+
+plotHeatmap <- function() {
+
+  dat <- data.frame(matrix(c(0.094,0.668,0.4153,0.4613
+                    ,0.1138,-0.3847,0.2671,0.1529
+                    ,0.1893,0.3303,0.5821,0.2632
+                    ,-0.0102,-0.4259,-0.5967,0.18
+                    ,0.1587,0.2948,0.153,-0.2208
+                    ,-0.4558,0.2244,0.6619,0.0457
+                    ,-0.6241,-0.3119,0.3642,0.2003
+                    ,-0.227,0.499,0.3067,0.3289
+                    ,0.7365,-0.0872,-0.069,-0.4252
+                    ,0.9761,0.4355,0.8663,0.8107), ncol = 4))
+  x <- stats::dist(dat)
+  return(hchart(x))
+}
+
+#' plot boxplot
+#' @export
+#'
+plotBoxplot<- function() {
+
+  categ <-c('A1', 'A2', 'B1', 'B2', 'B3')
+
+  X <-list(c(760, 801, 848, 895, 965),
+           c(733, 853, 939, 980, 1080),
+           c(714, 762, 817, 870, 918),
+           c(724, 802, 806, 871, 950),
+           c(834, 836, 864, 882, 910))
+
+
+  p <- highchart() %>%
+    hc_title(text = "Highcharts Box Plot Example",
+             style= list(
+               color= '#2E1717',
+               fontWeight= 'bold')) %>%
+    hc_subtitle(text = "Subtitle") %>%
+    hc_plotOptions(
+      boxplot = list(
+        fillColor= '#F0F0E0',
+        lineWidth= 2,
+        medianColor= '#0C5DA5',
+        medianWidth= 3,
+        stemColor= '#A63400',
+        stemDashStyle= 'dot',
+        stemWidth= 1,
+        whiskerColor= '#3D9200',
+        whiskerLength= '20%',
+        whiskerWidth= 3)
+    ) %>%
+    hc_add_series(
+      data= X,
+      name = 'Observations',
+      type = "boxplot") %>%
+    hc_yAxis(title = list(text = "Observations"),
+             labels = list(format = "{value}")) %>%
+    hc_xAxis(categories = categ, title="Experiment No.") %>%
+    hc_tooltip(
+      headerFormat= "<b>{point.key}</b><br>",
+      pointFormat = "{point.y}")
+  return(p)
+}
+
+#' plot density
+#' @export
+plotDensity <- function() {
+  diamonds <- data.frame(price=stats::rpois(1000,100))
+
+  p <-hchart(diamonds$price, color = "#147DA3", name = "Price") %>%
+    hc_title(text = "Histogram") %>%
+    hc_subtitle(text = "You can zoom me")
+  return(p)
+}
+
+
+
+#' plot genome
+#' @export
+
+plotGenomicTracks <- function(peaksROI, peaksROIM, edb, input) {
+
+
+   atr <- AnnotationTrack(
+    peaksROI,
+    chromosome = input$chr,
+    group =  interaction(mcols(peaksROI)$sample, mcols(peaksROI)$replicate),
+    name = "Biosample Peaks",
+    fill = "black",
+    stacking = "full",
+    background.panel = "#f5f5f5",
+    background.title = "#2aa5e5",
+    cex.title = 0.8
+  )
+
+  merg <- AnnotationTrack(
+    peaksROIM,
+    chromosome = input$chr,
+    group =  as.factor(mcols(peaksROIM)$sample),
+    name = "Consensus Peaks",
+    fill = "blue",
+    stacking = "full",
+    background.panel = "#f5f5f5",
+    background.title = "#2aa5e5",
+    cex.title = 0.8
+  )
+
+  prot <- GeneRegionTrack(
+    getGeneRegionTrackForGviz(
+      edb,
+      chromosome = input$chr,
+      filter = GenebiotypeFilter(input$biotype),
+      star = input$window,
+      end = (input$window + input$winwidth)
+    ),
+    name = paste(input$biotype, "Genes"),
+    background.panel = "#f5f5f5",
+    background.title = "#2aa5e5",
+    cex.title = 0.8
+  )
+
+  #  Genome Axis Track
+  gtr <- GenomeAxisTrack(
+    chromosome = input$chr,
+    add53 = TRUE,
+    add35 = TRUE,
+    littleTicks = FALSE,
+    showId = TRUE
+  )
+
+  #  Ideogram Track
+  itr <- IdeogramTrack(
+    genome = "hg19",
+    chromosome = input$chr,
+    showId = TRUE,
+    showBandId = TRUE
+  )
+
+  pt <- plotTracks(
+    list(itr, gtr, prot, atr, merg),
+    transcriptAnnotation = "symbol",
+    groupAnnotation = "group",
+    sizes = c(1, 2, 6, 6, 4),
+    from = input$window,
+    to = (input$window + input$winwidth),
+    main = "Plot of Peaks Tracks"
+  )
+
+  return(pt)
+
+}
+
+venn_tooltip <- function( venn ){
+  venn$x$tasks[length(venn$x$tasks)+1] <- list(
+    htmlwidgets::JS('
+                    function(){
+                    var div = d3.select(this);
+
+                    // add a tooltip
+                    var tooltip = d3.select("body").append("div")
+                    .attr("class", "venntooltip")
+                    .style("position", "absolute")
+                    .style("text-align", "center")
+                    .style("width", 128)
+                    .style("height", 16)
+                    .style("background", "#333")
+                    .style("color","#ddd")
+                    .style("padding","2px")
+                    .style("border","0px")
+                    .style("border-radius","8px")
+                    .style("opacity",0);
+
+                    div.selectAll("path")
+                    .style("stroke-opacity", 0)
+                    .style("stroke", "#fff")
+                    .style("stroke-width", 0)
+
+                    // add listeners to all the groups to display tooltip on mousover
+                    div.selectAll("g")
+                    .on("mouseover", function(d, i) {
+
+                    // sort all the areas relative to the current item
+                    venn.sortAreas(div, d);
+
+                    // Display a tooltip with the current size
+                    tooltip.transition().duration(400).style("opacity", .9);
+                    tooltip.text(d.size);
+
+                    // highlight the current path
+                    var selection = d3.select(this).transition("tooltip").duration(400);
+                    selection.select("path")
+                    .style("stroke-width", 3)
+                    .style("fill-opacity", d.sets.length == 1 ? .4 : .1)
+                    .style("stroke-opacity", 1);
+                    })
+
+                    .on("mousemove", function() {
+                    tooltip.style("left", (d3.event.pageX) + "px")
+                    .style("top", (d3.event.pageY - 28) + "px");
+                    })
+
+                    .on("mouseout", function(d, i) {
+                    tooltip.transition().duration(400).style("opacity", 0);
+                    var selection = d3.select(this).transition("tooltip").duration(400);
+                    selection.select("path")
+                    .style("stroke-width", 0)
+                    .style("fill-opacity", d.sets.length == 1 ? .25 : .0)
+                    .style("stroke-opacity", 0);
+                    });
+                    }
+                    ')
+  )
+  venn
+}
+
+#' plot venn
+#' @export
+plotVennD3 <-function(){
+  vennObj <- d3vennR(
+    data = list(
+      list(sets = list("A"), size = 301),
+      list(sets = list("B"), size = 321),
+      list(sets = list("C"), size = 311),
+      list(sets = list("D"), size = 321),
+      list(sets = list("E"), size = 301),
+      list(sets = list("A","B"), size = 188),
+      list(sets = list("A","C"), size = 191),
+      list(sets = list("A","D"), size = 184),
+      list(sets = list("A","E"), size = 177),
+      list(sets = list("B","C"), size = 194),
+      list(sets = list("B","D"), size = 197),
+      list(sets = list("B","E"), size = 190),
+      list(sets = list("C","D"), size = 190),
+      list(sets = list("C","E"), size = 173),
+      list(sets = list("D","E"), size = 186),
+      list(sets = list("A","B","C"), size = 112),
+      list(sets = list("A","B","D"), size = 108),
+      list(sets = list("A","B","E"), size = 108),
+      list(sets = list("A","C","D"), size = 111),
+      list(sets = list("A","C","E"), size = 104),
+      list(sets = list("A","D","E"), size = 104),
+      list(sets = list("B","C","D"), size = 111),
+      list(sets = list("B","C","E"), size = 107),
+      list(sets = list("B","D","E"), size = 110),
+      list(sets = list("C","D","E"), size = 100),
+      list(sets = list("A","B","C","D"), size = 61),
+      list(sets = list("A","B","C","E"), size = 60),
+      list(sets = list("A","B","D","E"), size = 59),
+      list(sets = list("A","C","D","E"), size = 58),
+      list(sets = list("B","C","D","E"), size = 57),
+      list(sets = list("A","B","C","D","E"), size = 31)
+    )
+    # feel free to skip this complicated part to match colors
+    , colours = htmlwidgets::JS(sprintf('
+                                      d3.scale.category10().range(%s.map(function(col){return eval(col)}))
+                                      ',
+                                        jsonlite::toJSON(lapply(
+                                          c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3")
+                                          ,function(color){
+                                            rgb <- t(grDevices::col2rgb(color))
+                                            sprintf("d3.rgb(%s)",paste0(rgb,collapse=","))
+                                          }
+                                        ), auto_unbox=T)
+    )
+    )
+    ,layoutFunction = '
+function(d) { return venn.venn(d, { initialLayout: venn.classicMDSLayout });}
+'
+  )
+
+  return(venn_tooltip(vennObj))
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

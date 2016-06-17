@@ -4,13 +4,16 @@ Title: Workflow: Post-alignment to altered enhancers
     and promoters
 Version: 0.99.0
 Author: Elizabeth Baskin, Rick Farouni, Ewy Mathe
-Maintainer: Elizabeth Baskin <Elizabeth.Baskin@osumc.edu>, Rick Farouni <rfarouni@gmail.com>, Ewy Mathe <Ewy.Mathe@osumc.edu>
+Maintainer: Elizabeth Baskin <Elizabeth.Baskin@osumc.edu>, Ewy Mathe <Ewy.Mathe@osumc.edu>
 Description: This workflow takes alignment data and hotspot calls from
     assays of open chromatin (ATAC-seq, Dnase-seq, and FAIRE-seq) and identifies
     regions (enhancers and promoters) that differ based on cell and
     tissue type.
 Depends: R (>= 3.3.0)
 Imports:
+    shiny,
+    shinydashboard,
+    rmarkdown,
     methods,
     S4Vectors,
     GenomeInfoDb,
