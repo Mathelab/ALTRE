@@ -1,5 +1,5 @@
 datapath,bamfiles,peakfiles,sample,replicate
-/home/rick/Documents/AltreDataRepo,A549_ENCFF001CLE_chr21.bam,A549_ENCFF001WCZ.bed.gz,A549,I
-/home/rick/Documents/AltreDataRepo,A549_ENCFF001CLJ_chr21.bam,A549_ENCFF001WDA.bed.gz,A549,II
-/home/rick/Documents/AltreDataRepo,SAEC_ENCFF001EFI_chr21.bam,SAEC_ENCFF001WSH.bed.gz,SAEC,I
-/home/rick/Documents/AltreDataRepo,SAEC_ENCFF001EFN_chr21.bam,SAEC_ENCFF001WSI.bed.gz,SAEC,II
+/home/rick/Documents/AltreDataRepo,A549_ENCFF001CLE_chr21.bam,A549_ENCFF001WCZ.bed.gz,A549,1
+/home/rick/Documents/AltreDataRepo,A549_ENCFF001CLJ_chr21.bam,A549_ENCFF001WDA.bed.gz,A549,2
+/home/rick/Documents/AltreDataRepo,SAEC_ENCFF001EFI_chr21.bam,SAEC_ENCFF001WSH.bed.gz,SAEC,1
+/home/rick/Documents/AltreDataRepo,SAEC_ENCFF001EFN_chr21.bam,SAEC_ENCFF001WSI.bed.gz,SAEC,2

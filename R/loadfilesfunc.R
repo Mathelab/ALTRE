@@ -17,7 +17,6 @@ loadCSVFile <- function(csvPath) {
   return(csvfile)
 }
 
-
 #' Read in BED Files (internal function)
 #' @param csvfile csvfile
 #' @export
@@ -58,10 +57,18 @@ loadBamFiles <- function(csvfile) {
 
   if(!is(csvfile, "data.frame"))
     stop("csvfile must be a data.frame ")
-
-  bamfiles <- file.path(csvfile$datapath, csvfile$bamfiles,fsep="")
-  indexfiles <- file.path(csvfile$datapath, paste(csvfile$bamfiles,".bai",sep=""),fsep="")
-  bamFiles <- Rsamtools::BamFileList(bamfiles, index=indexfiles,yieldSize = 100000)
+  
+  bamfiles <- file.path(csvfile$datapath, csvfile$bamfiles)
+  if(!all(file.exists(indexfiles))) {
+    stop("bamfiles with the specified paths do not exist; fix CSV file")
+  }
+  indexfiles <- file.path(csvfile$datapath, paste(csvfile$bamfiles,".bai",sep=""))
+  if(!all(file.exists(indexfiles))) {
+    bamFiles <- Rsamtools::BamFileList(bamfiles,yieldSize = 100000)
+  }
+  else {
+    bamFiles <- Rsamtools::BamFileList(bamfiles, index=indexfiles,yieldSize = 100000)
+  }
 
 return(bamFiles)
 }
