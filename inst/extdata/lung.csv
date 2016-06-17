@@ -1,5 +1,5 @@
 datapath,bamfiles,peakfiles,sample,replicate
-/Users/ewymathe/Downloads/rfarouni-AltreDataRepo-3da020f/,A549_ENCFF001CLE_chr21.bam,A549_ENCFF001WCZ.bed.gz,A549,1
-/Users/ewymathe/Downloads/rfarouni-AltreDataRepo-3da020f/,A549_ENCFF001CLJ_chr21.bam,A549_ENCFF001WDA.bed.gz,A549,2
-/Users/ewymathe/Downloads/rfarouni-AltreDataRepo-3da020f/,SAEC_ENCFF001EFI_chr21.bam,SAEC_ENCFF001WSH.bed.gz,SAEC,1
-/Users/ewymathe/Downloads/rfarouni-AltreDataRepo-3da020f/,SAEC_ENCFF001EFN_chr21.bam,SAEC_ENCFF001WSI.bed.gz,SAEC,2
+/Users/ewymathe/Downloads/rfarouni-AltreDataRepo-3da020f,A549_ENCFF001CLE_chr21.bam,A549_ENCFF001WCZ.bed.gz,A549,1
+/Users/ewymathe/Downloads/rfarouni-AltreDataRepo-3da020f,A549_ENCFF001CLJ_chr21.bam,A549_ENCFF001WDA.bed.gz,A549,2
+/Users/ewymathe/Downloads/rfarouni-AltreDataRepo-3da020f,SAEC_ENCFF001EFI_chr21.bam,SAEC_ENCFF001WSH.bed.gz,SAEC,1
+/Users/ewymathe/Downloads/rfarouni-AltreDataRepo-3da020f,SAEC_ENCFF001EFN_chr21.bam,SAEC_ENCFF001WSI.bed.gz,SAEC,2
