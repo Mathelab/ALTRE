@@ -9,9 +9,9 @@ countanalysis(counts, pval = 0.01, lfcvalue = 1)
 \arguments{
 \item{counts}{counts for each region}
 
-\item{pval}{pvalue considered signifigant (0.05, 0.01, etc.).}
+\item{pval}{optional, pvalue considered significant (0.05, 0.01, etc.)}
 
-\item{lfcvalue}{logfold change value considered significant (value reported on a
+\item{lfcvalue}{optional, logfold change value considered significant (value reported on a
 log scale base 2 so log2fold change of 1.5 means difference in peaks
 increased by 2^1.5)}
 }

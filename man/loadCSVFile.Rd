@@ -2,11 +2,14 @@
 % Please edit documentation in R/loadfilesfunc.R
 \name{loadCSVFile}
 \alias{loadCSVFile}
-\title{Read in CSV}
+\title{Read in CSV (internal function)}
 \usage{
 loadCSVFile(csvPath)
 }
+\arguments{
+\item{csvPath}{csvPath}
+}
 \description{
-Read in CSV
+Read in CSV (internal function)
 }
 

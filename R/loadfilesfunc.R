@@ -1,4 +1,5 @@
-#' Read in CSV
+#' Read in CSV (internal function)
+#' @param csvPath csvPath
 #' @export
 loadCSVFile <- function(csvPath) {
 
@@ -17,7 +18,8 @@ loadCSVFile <- function(csvPath) {
 }
 
 
-#' Read in BED Files
+#' Read in BED Files (internal function)
+#' @param csvfile csvfile
 #' @export
 loadBedFiles <- function(csvfile) {
 
@@ -49,7 +51,8 @@ loadBedFiles <- function(csvfile) {
   return(GRangesList(hotspots))
 }
 
-#' Read in BAM files
+#' Read in BAM files (internal function)
+#' @param csvfile csvfile
 #' @export
 loadBamFiles <- function(csvfile) {
 

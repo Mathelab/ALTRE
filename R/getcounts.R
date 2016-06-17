@@ -31,7 +31,7 @@ getcounts<-function(annotpeaks, csvfile, reference, chrom = NULL){
    sampleinfo <- loadCSVFile(csvfile)
    bamfileslist=loadBamFiles(sampleinfo)  
 
-  if (!is.null(chrom) == FALSE){
+  if (is.null(chrom) == FALSE){
     inputgranges=annotpeaks[[1]][seqnames(annotpeaks[[1]]) == chrom,]
   }
 
