@@ -9,7 +9,7 @@ getConsensusPeaks(samplepeaks, minreps)
 \arguments{
 \item{samplepeaks}{A GRangesList object comprising one GRanges object (peaks) for each sample (output of loadPeaks() function)}
 
-\item{minreps}{vector with minimum number of replicates that a peak should be contained in to be called as a consensus peak. This cutoff will be applied to both samples.}
+\item{minreps}{minimum number of replicate samples that a peak should be contained in to be called as a consensus peak. This cutoff will be applied to both samples.}
 }
 \value{
 a list comprising:

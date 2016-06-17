@@ -23,7 +23,7 @@
 #' csvfile <- file.path(dir, "lung.csv")
 #' samplePeaks <- loadPeaks(csvfile)
 #' consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
-#' consPeaksAnnotated=CombineAnnotatePeaks(conspeaks=consPeaks, TSS=TSSannot)
+#' consPeaksAnnotated=combineAnnotatePeaks(conspeaks=consPeaks, TSS=TSSannot)
 #' counts_consPeaks=getcounts(annotpeaks=consPeaksAnnotated, csvfile=csvfile, reference="SAEC", chrom="chr21")
 #' @export
 
@@ -31,7 +31,7 @@ getcounts<-function(annotpeaks, csvfile, reference, chrom = NULL){
    sampleinfo <- loadCSVFile(csvfile)
    bamfileslist=loadBamFiles(sampleinfo)  
 
-  if (!is.null(chrom) == FALSE){
+  if (is.null(chrom) == FALSE){
     inputgranges=annotpeaks[[1]][seqnames(annotpeaks[[1]]) == chrom,]
   }
 

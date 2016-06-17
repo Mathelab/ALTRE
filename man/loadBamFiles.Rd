@@ -2,11 +2,14 @@
 % Please edit documentation in R/loadfilesfunc.R
 \name{loadBamFiles}
 \alias{loadBamFiles}
-\title{Read in BAM files}
+\title{Read in BAM files (internal function)}
 \usage{
 loadBamFiles(csvfile)
 }
+\arguments{
+\item{csvfile}{csvfile}
+}
 \description{
-Read in BAM files
+Read in BAM files (internal function)
 }
 

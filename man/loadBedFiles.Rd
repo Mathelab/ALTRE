@@ -2,11 +2,14 @@
 % Please edit documentation in R/loadfilesfunc.R
 \name{loadBedFiles}
 \alias{loadBedFiles}
-\title{Read in BED Files}
+\title{Read in BED Files (internal function)}
 \usage{
 loadBedFiles(csvfile)
 }
+\arguments{
+\item{csvfile}{csvfile}
+}
 \description{
-Read in BED Files
+Read in BED Files (internal function)
 }
 

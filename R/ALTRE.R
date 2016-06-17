@@ -19,7 +19,7 @@
 #' Takes in a sample peaks list (output from loadPeaks in step 1), and outputs consensus peaks.  Consensus peaks are those present in at least N replicates, where is defined by the user.
 #' The function outputs a list with the following slots: 1) GRangesList with consensus peaks for each sample type; 2) A statistics table summarizing how many peaks are in replicate samples and are called as consensus peaks.
 #'
-#' 3.\code{\link{combineannotatepeaks}}
+#' 3.\code{\link{combineAnnotatePeaks}}
 #'
 #' The GRanges for all sample types are combined and annotated with
 #' type specificity (which cell types the hotspot is present in) and
@@ -27,3 +27,13 @@
 #' a transcription start site) or an enhancer (>1500bp from a transcription
 #' start site). Function can also merge regulatory regions that are within a specified
 #' distance from each other. 
+#'
+#/ 4.\code{\link{getcounts}}
+#'
+#' The number of reads overlapping all regions for each cell type is calculated.
+#' The function outputs a DESeq object, summary statistics, and a density plot of the size of regulatory elements
+#' 
+#' 5.\code{\link{countanalysis}}
+#' 
+#' Identify significantly altered regulatory elements (promoters or enhancers)
+#' The function outputs a DESeq object, a summary statistics table, and a volcano plot (log2fold change vs. log2(adjusted pvalues))

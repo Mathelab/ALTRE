@@ -14,9 +14,11 @@
 #' @param conspeaks list of GRanges objects for each sample type (output by getConsensusPeaks() function)
 #' @param TSS file of transcription start sites
 #' @param distancefromTSS in bp; peaks within distFromTSS of an annotated Transcription Start Site (TSS) will be annotated as a promoter (default=1500bp)
-#' @param mergedistprom merge promoters if they are < mergedistprom apart
-#' @param mergedistenh merge enhancers peaks if they are < mergedistenh apart
-#' @param regregionspecific logical to if TRUE, merging occurs within same type peaks (e.g. merge promoters, then merge enhancers) 
+#' @param merge whether or not regions should be merged if they are within a user set distance to each other (default is FALSE)
+#' @param regionspecific logical to if TRUE, merging occurs within same type peaks (e.g. merge promoters, then merge enhancers)
+#' @param mergedist merge promoters and enhancers if they are < mergedist apart (set when regionspecific is FALSE)
+#' @param mergedistprom merge promoters if they are < mergedistprom apart (set when regionspecific is TRUE)
+#' @param mergedistenh merge enhancers peaks if they are < mergedistenh apart (set when regionspecific is TRUE)
 #'
 #' @return List containing two items:
 #' (1) GRanges object:  all sample types combined, regions annotated as type-specific
@@ -33,13 +35,14 @@
 #' csvfile <- file.path(dir, "lung.csv")
 #' samplePeaks <- loadPeaks(csvfile)
 #' consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
-#' consPeaksAnnotated=CombineAnnotatePeaks(conspeaks=consPeaks, TSS=TSSannot)
+#' consPeaksAnnotated=combineAnnotatePeaks(conspeaks=consPeaks, TSS=TSSannot,merge=TRUE, 
+#'	regionspecific=TRUE,mergedistenh=1500,mergedistprom=1000)
 #'
 #' @export
 
-CombineAnnotatePeaks<-function(conspeaks, TSS, mergedistenh=1000, mergedistprom=1000, 
-	regregionspecific=TRUE, distancefromTSS=1500){
-	
+combineAnnotatePeaks<-function(conspeaks, TSS, merge=FALSE, mergedistenh=NA, mergedistprom=NA, mergedist=NA,
+	regionspecific=NA, distancefromTSS=1500){
+
   if (class(conspeaks[[1]])[1]!="GRangesList")
   	{stop("The input conspeaks is not in the correct format!  (try to rerun getConsensusPeaks())")}
 
@@ -58,8 +61,8 @@ CombineAnnotatePeaks<-function(conspeaks, TSS, mergedistenh=1000, mergedistprom=
   #################################
   # Annotate combined peaks (TSSgranges) by the cell type they came from
 
-  # When enhancers and promoters are not merged if they're within a user set distance  
-  if(mergedistenh == 0 & mergedistprom== 0){
+  # If merge is set to false, don't merge
+  if(merge == FALSE){
     namesvector=c()
     for (i in 1:length(peaklist)){
       newgranges=peaklist[[i]]
@@ -78,14 +81,20 @@ CombineAnnotatePeaks<-function(conspeaks, TSS, mergedistenh=1000, mergedistprom=
     #this will annotate the regions with type-specificity
     notmerging=grangestodataframe(TSSgranges)
     listtoreturn = list(consPeaksAnnotated=GRanges(notmerging,meta=notmerging[,4:ncol(notmerging)]),
-	mergestats="No merging because mergedistenh and mergedistprom were set to zero")
-  } # end if mergedistenh and mergedistprom are zero
+	mergestats=as.data.frame("No merging because mergedistenh and mergedistprom were set to zero"))
+  } # end if no merging
 
-  else {
-
-    #if merging enhancer and promoter regions seperately then run the merging function on them
+  else { # Do the merging
+    if (is.na(regionspecific)) {
+	stop("If merging, then the regionspecific paramater must be set to TRUE or FALSE")
+    }
+    # if merging enhancer and promoter regions seperately,
+    # then run the merging function on them
     # seperately and then combine them (WITHOUT reducing or you will lose the annotation)
-    if (regregionspecific == TRUE){
+    if (regionspecific == TRUE){
+      if(is.na(mergedistprom) || is.na(mergedistenh)) {
+	stop("If regionspecific is true, then mergedistprom and mergedistenh must be set")
+      }
       dataframeformerge=grangestodataframe(TSSgranges)
       enhancerbeforemergedata=dataframeformerge[dataframeformerge$region=="enhancer",]
       promoterbeforemergedata=dataframeformerge[dataframeformerge$region=="promoter",]
@@ -97,11 +106,16 @@ CombineAnnotatePeaks<-function(conspeaks, TSS, mergedistenh=1000, mergedistprom=
       bothafter=sort(sortSeqlevels(c(enhancerafter,promoterafter)))
     }
 
-    #if merging enhancer and promoter regions at the same time then you just need to run the function once
-    if (regregionspecific == FALSE){
+    # if merging enhancer and promoter regions at the same time,
+    # then you just need to run the function once
+    if (regionspecific == FALSE){
+      if(is.na(mergedist)) {
+	stop("If regionspecific is FALSE, then mergedist must be set")
+      }
       dataframeformerge=grangestodataframe(TSSgranges)
       #create grange from dataframe
-      bothafter=mergeclosepeaks(dataframeformerge)
+
+      bothafter=mergeclosepeaks(peaklist,dataframeformerge,mergedist,TSS, distancefromTSS)
     }
 
     # Create matrix for comparison:
@@ -116,7 +130,8 @@ CombineAnnotatePeaks<-function(conspeaks, TSS, mergedistenh=1000, mergedistprom=
     tableofinfo=statscombineannotate(tableofinfo,result0,1,3)
     tableofinfo=statscombineannotate(tableofinfo,resultuserinput,2,4)
 
-    listtoreturn=list(GRanges(resultuserinput,meta=resultuserinput[,4:ncol(resultuserinput)]),tableofinfo)
+    listtoreturn=list(consPeaksAnnotated=GRanges(resultuserinput,meta=resultuserinput[,4:ncol(resultuserinput)]),
+	mergestats=as.data.frame(tableofinfo))
   }
 return(listtoreturn)
 }
