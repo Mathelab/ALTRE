@@ -4,17 +4,22 @@
 \alias{combineAnnotatePeaks}
 \title{Combine and annotate peaks from different sample types. Optionally merge nearby regions.}
 \usage{
-combineAnnotatePeaks(conspeaks, TSS, mergedistenh = 1000,
-  mergedistprom = 1000, regionspecific = TRUE, distancefromTSS = 1500)
+combineAnnotatePeaks(conspeaks, TSS, merge = FALSE, mergedistenh = NA,
+  mergedistprom = NA, mergedist = NA, regionspecific = NA,
+  distancefromTSS = 1500)
 }
 \arguments{
 \item{conspeaks}{list of GRanges objects for each sample type (output by getConsensusPeaks() function)}
 
 \item{TSS}{file of transcription start sites}
 
-\item{mergedistenh}{merge enhancers peaks if they are < mergedistenh apart}
+\item{merge}{whether or not regions should be merged if they are within a user set distance to each other (default is FALSE)}
 
-\item{mergedistprom}{merge promoters if they are < mergedistprom apart}
+\item{mergedistenh}{merge enhancers peaks if they are < mergedistenh apart (set when regionspecific is TRUE)}
+
+\item{mergedistprom}{merge promoters if they are < mergedistprom apart (set when regionspecific is TRUE)}
+
+\item{mergedist}{merge promoters and enhancers if they are < mergedist apart (set when regionspecific is FALSE)}
 
 \item{regionspecific}{logical to if TRUE, merging occurs within same type peaks (e.g. merge promoters, then merge enhancers)}
 
@@ -46,7 +51,8 @@ dir <- system.file("extdata", package="ALTRE", mustWork=TRUE)
 csvfile <- file.path(dir, "lung.csv")
 samplePeaks <- loadPeaks(csvfile)
 consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
-consPeaksAnnotated=combineAnnotatePeaks(conspeaks=consPeaks, TSS=TSSannot)
+consPeaksAnnotated=combineAnnotatePeaks(conspeaks=consPeaks, TSS=TSSannot,merge=TRUE, 
+regionspecific=TRUE,mergedistenh=1500,mergedistprom=1000)
 
 }
 

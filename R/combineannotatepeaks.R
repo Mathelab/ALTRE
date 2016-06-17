@@ -36,7 +36,7 @@
 #' samplePeaks <- loadPeaks(csvfile)
 #' consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
 #' consPeaksAnnotated=combineAnnotatePeaks(conspeaks=consPeaks, TSS=TSSannot,merge=TRUE, 
-#'	mergedistenh=1500,mergedistprom=1000)
+#'	regionspecific=TRUE,mergedistenh=1500,mergedistprom=1000)
 #'
 #' @export
 
@@ -81,7 +81,7 @@ combineAnnotatePeaks<-function(conspeaks, TSS, merge=FALSE, mergedistenh=NA, mer
     #this will annotate the regions with type-specificity
     notmerging=grangestodataframe(TSSgranges)
     listtoreturn = list(consPeaksAnnotated=GRanges(notmerging,meta=notmerging[,4:ncol(notmerging)]),
-	mergestats="No merging because mergedistenh and mergedistprom were set to zero")
+	mergestats=as.data.frame("No merging because mergedistenh and mergedistprom were set to zero"))
   } # end if no merging
 
   else { # Do the merging
@@ -131,7 +131,7 @@ combineAnnotatePeaks<-function(conspeaks, TSS, merge=FALSE, mergedistenh=NA, mer
     tableofinfo=statscombineannotate(tableofinfo,resultuserinput,2,4)
 
     listtoreturn=list(consPeaksAnnotated=GRanges(resultuserinput,meta=resultuserinput[,4:ncol(resultuserinput)]),
-	mergestats=tableofinfo)
+	mergestats=as.data.frame(tableofinfo))
   }
 return(listtoreturn)
 }
