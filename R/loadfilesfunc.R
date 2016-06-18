@@ -20,7 +20,6 @@ loadCSVFile <- function(csvPath) {
   return(csvfile)
 }
 
-
 #' Read in BED Files (internal function)
 #' @param csvfile csvfile
 #' @export
