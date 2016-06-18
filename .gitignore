@@ -2,4 +2,4 @@
 .Rhistory
 .RData
 .Ruserdata
-inst/extdata/lung.csv
+/inst/extdata/lung.csv
