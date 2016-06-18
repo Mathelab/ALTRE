@@ -123,9 +123,8 @@ body <- dashboardBody(
                  actionButton("buttonmerge", strong("Merge Replicates")),
                  hr(),
                  dataTableOutput("table2")
-               )
-               #,
-               #box(width = 7, plotOutput('barplot'))
+               ),
+               box(width = 7, plotOutput('barplot'))
              )
 
     )

@@ -72,11 +72,17 @@ shinyServer(function(input, output, session) {
                  })
   })
 
+  peaksdf <- reactive({
+
+    mergedpeaks <-cbind(PeaksFile = c("Consensus","Rep I","Rep II"),
+          as.data.frame(mergedPeaks()$consPeaksStats))
+    return(mergedpeaks)
+
+  })
 
   output$table2 <- renderDataTable({
 
-    cbind(PeaksFile = c("Consensus","Rep I","Rep II"),
-        as.data.frame(mergedPeaks()$consPeaksStats))
+    peaksdf()
 
   }, options = list(searching = FALSE,
                     paging = FALSE))
@@ -84,6 +90,8 @@ shinyServer(function(input, output, session) {
   ####################################
   #  tabPanel "plot"
 
-
+  output$barplot <- renderPlot({
+    plotCountSummary( peaksdf())
+  })
 
 })
