@@ -62,7 +62,7 @@ loadBamFiles <- function(csvfile) {
     stop("csvfile must be a data.frame ")
 
   bamfiles <- file.path(csvfile$datapath, csvfile$bamfiles)
-  if(!all(file.exists(indexfiles))) {
+  if(!all(file.exists(bamfiles))) {
 	stop("bamfiles with the specified paths do not exist; fix CSV file")
   }
   indexfiles <- file.path(csvfile$datapath, paste(csvfile$bamfiles,".bai",sep=""))
