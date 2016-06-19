@@ -20,13 +20,11 @@ dataframe containing logfold2 changes and p-values of all regions
 analyzed
 }
 \description{
-Altered regions are those that show differences in chromatin accessibility 
+Altered regions are those that show differences in chromatin accessibility
 (using DESeq2 algorithm)
 }
 \examples{
-dir=system.file("extdata", package="ALTRE", mustWork=TRUE)
-TSSpath=file.path(dir,"Homosapiens_GRCh37.75_TSS.bed")
-TSSannot=read.table(TSSpath, header=TRUE)
+TSSannot <- getTSS()
 dir <- system.file("extdata", package="ALTRE", mustWork=TRUE)
 csvfile <- file.path(dir, "lung.csv")
 samplePeaks <- loadPeaks(csvfile)

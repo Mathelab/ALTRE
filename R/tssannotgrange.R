@@ -1,19 +1,18 @@
-#' Internal function: annotates peaks as promoters or enhancers 
+#' Internal function: annotates peaks as promoters or enhancers
 #'
 #' Takes a Grange input
 #' Not for use by package user
 #'
 #' @param grange GRanges object
-#' @param TSS data frame of Transcription Start Site Locations
+#' @param TSS GRanges of Transcription Start Site Locations
 #' @param distancefromTSS distancefromTSS
 #' @return GRanges object
 #'
 
 tssannotgrange <- function(grange,TSS,distancefromTSS) {
     #read in TSS, make column header, change to Granges
-    TSSgrange <- with(TSS, GRanges(chr, IRanges(start, end)))
     #Find distance to transcription start site
-    distancetoTSS <- distanceToNearest(grange, TSSgrange)
+    distancetoTSS <- distanceToNearest(grange, TSS)
     #make dataframe from grange
     newdataframe=grangestodataframe(grange)
     newdataframe$distance=mcols(distancetoTSS)$distance
