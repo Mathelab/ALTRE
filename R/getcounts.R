@@ -102,3 +102,4 @@ getcounts<-function(annotpeaks, csvfile, reference, chrom = NULL){
 
    return(list(regioncounts=countssedds, regioncountstats=statdf, regioncountsplot=densityplot))
 }
+
