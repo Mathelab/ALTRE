@@ -32,7 +32,8 @@ dir <- system.file("extdata", package="ALTRE", mustWork=TRUE)
 csvfile <- file.path(dir, "lung.csv")
 samplePeaks <- loadPeaks(csvfile)
 consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
-consPeaksAnnotated=combineAnnotatePeaks(conspeaks=consPeaks, TSS=TSSannot)
-counts_consPeaks=getcounts(annotpeaks=consPeaksAnnotated, csvfile=csvfile, reference="SAEC", chrom="chr21")
+consPeaksAnnotated <- combineAnnotatePeaks(conspeaks=consPeaks, TSS=TSSannot)
+counts_consPeaks <- getcounts(annotpeaks=consPeaksAnnotated,
+csvfile=csvfile, reference="SAEC", chrom="chr21")
 }
 
