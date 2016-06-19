@@ -6,6 +6,9 @@
 \usage{
 plotCountSummary(sizePeaks)
 }
+\arguments{
+\item{sizePeaks}{consPeaksStats}
+}
 \description{
 plot barplot
 }

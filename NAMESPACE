@@ -3,6 +3,7 @@
 export(combineAnnotatePeaks)
 export(countanalysis)
 export(getConsensusPeaks)
+export(getTSS)
 export(getcounts)
 export(loadBamFiles)
 export(loadBedFiles)

@@ -29,6 +29,8 @@ Imports:
     tidyr,
     org.Hs.eg.db,
     clusterProfiler
+    ensembldb,
+    EnsDb.Hsapiens.v75
 License: GPL-3
 LazyData: TRUE
 RoxygenNote: 5.0.1

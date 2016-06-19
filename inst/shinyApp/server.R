@@ -5,7 +5,6 @@
 ################################################################
 
 shinyServer(function(input, output, session) {
-
   ## tabName"definerep"
 
   #  tabPanel "Load CSV"
@@ -26,8 +25,8 @@ shinyServer(function(input, output, session) {
   })
 
   output$table1 <- renderDataTable({
-    if (!is.null(input$file)){
-      csvFile()[,-1]
+    if (!is.null(input$file)) {
+      csvFile()[, -1]
     }
   }, options = list(searching = FALSE,
                     paging = FALSE))
@@ -48,9 +47,16 @@ shinyServer(function(input, output, session) {
   })
 
   mergedPeaks <- eventReactive(input$buttonmerge, {
-    object <-  peaks()
-    object2 <- getConsensusPeaks(object, input$numOverlap)
-    return(object2)
+    peaks <-  peaks()
+    mergedpeaks <- getConsensusPeaks(peaks, input$numOverlap)
+
+    mergedpeaks$consPeaksStats <-
+      cbind(
+        PeaksFile = c("Consensus", "Rep I", "Rep II"),
+        as.data.frame(mergedpeaks$consPeaksStats)
+      )
+
+    return(mergedpeaks)
   })
 
   observeEvent(input$buttonmerge, {
@@ -72,17 +78,16 @@ shinyServer(function(input, output, session) {
                  })
   })
 
-  peaksdf <- reactive({
-
-    mergedpeaks <-cbind(PeaksFile = c("Consensus","Rep I","Rep II"),
-          as.data.frame(mergedPeaks()$consPeaksStats))
-    return(mergedpeaks)
-
-  })
+  # peaksdf <- reactive({
+  #
+  #   mergedpeaks <-cbind(PeaksFile = c("Consensus","Rep I","Rep II"),
+  #         as.data.frame(mergedPeaks()$consPeaksStats))
+  #   return(mergedpeaks)
+  #
+  # })
 
   output$table2 <- renderDataTable({
-
-    peaksdf()
+    mergedPeaks()$consPeaksStats
 
   }, options = list(searching = FALSE,
                     paging = FALSE))
@@ -91,7 +96,7 @@ shinyServer(function(input, output, session) {
   #  tabPanel "plot"
 
   output$barplot <- renderPlot({
-    plotCountSummary( peaksdf())
+    plotCountSummary(mergedPeaks()$consPeaksStats)
   })
 
 })

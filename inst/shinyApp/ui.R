@@ -1,7 +1,6 @@
 # App ui
 
 headerbar <- dashboardHeader(
-
   title = "ALTRE Analysis Workflow",
   titleWidth = 270,
   dropdownMenu(
@@ -15,11 +14,9 @@ headerbar <- dashboardHeader(
 sidebar <- dashboardSidebar(
   width = 270,
   sidebarMenu(
-    menuItem(
-      "About",
-      tabName = "about",
-      icon = icon("info")
-    ),
+    menuItem("About",
+             tabName = "about",
+             icon = icon("info")),
     menuItem(
       "Load Data",
       tabName = "loaddata",
@@ -76,59 +73,64 @@ sidebar <- dashboardSidebar(
   )
 )
 
-body <- dashboardBody(
-  tags$head(
-    tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
-  ),
+body <- dashboardBody(tags$head(
+  tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
+),
 
-  tabItems(
-    tabItem(
-      tabName = "about",
-      tabPanel("About",
-               box(
-                 width = 12,includeMarkdown("include.md"))
+tabItems(
+  tabItem(tabName = "about",
+          tabPanel("About",
+                   box(
+                     width = 12, includeMarkdown("include.md")
+                   ))),
+  tabItem(tabName = "loaddata",
+          fluidRow(
+            HTML("<div class='col-sm-6' style='min-width: 700px !important;'>"),
+            box(
+              title = "Load Datapaths File",
+              width = NULL,
+              solidHeader = TRUE,
+              fileInput(
+                "file",
+                accept = c('text/csv',
+                           'text/comma-separated-values,text/plain',
+                           '.csv'),
+                "Provide CSV File to Load Data:"
+              ),
+              dataTableOutput("table1")
+            ),
+            HTML("</div>")
+          ))
+  ,
 
-      )
-    ),
-    tabItem(
-      tabName = "loaddata",
-      tabPanel("Load CSV",
-               fluidRow(
-                 box(
-                   fileInput(
-                     "file",
-                     accept = c('text/csv',
-                                'text/comma-separated-values,text/plain',
-                                '.csv'),
-                     "Provide CSV File to Load Data:"
-                   ),
-                   dataTableOutput("table1")
-                 )
-               )
-      )
-    ),
-
-  tabItem(
-    tabName = "definerep",
-
-    tabPanel(" Merge and Find Consensus Peaks",
-             fluidRow(
-               box(
-                 width = 5,
-                 numericInput("numOverlap",
-                              "Minimum Number of Overlaps to Determine Consensus Region ",
-                              2,
-                              min = 2,
-                              max = 10),
-                 actionButton("buttonmerge", strong("Merge Replicates")),
-                 hr(),
-                 dataTableOutput("table2")
-               ),
-               box(width = 7, plotOutput('barplot'))
-             )
-
-    )
-  ),
+  tabItem(tabName = "definerep",
+          fluidRow(
+            HTML("<div class='col-sm-4' style='min-width: 600px !important;'>"),
+            box(
+              title = "Load and Merge Peak Files",
+              width = NULL,
+              solidHeader = TRUE,
+              numericInput(
+                "numOverlap",
+                "Minimum Number of Overlaps to Determine Consensus Region ",
+                2,
+                min = 2,
+                max = 10
+              ),
+              actionButton("buttonmerge", strong("Merge Replicates")),
+              hr(),
+              dataTableOutput("table2")
+            ),
+            HTML("</div>"),
+            HTML("<div class='col-sm-6' style='min-width: 500px !important;'>"),
+            box(
+              title = "Barplot",
+              width = NULL,
+              solidHeader = TRUE,
+              plotOutput('barplot')
+            ),
+            HTML("</div>")
+          )),
   tabItem(
     tabName = "mergetrks",
     tabBox(
@@ -136,20 +138,12 @@ body <- dashboardBody(
       id = "mcoltabset",
       width = 12,
       tabPanel("Heat",
-               fluidRow(
-
-               )
-      )
+               fluidRow())
     )
   )
 
-)
-)
+))
 
-shinyUI(
-  dashboardPage(
-    headerbar,
-    sidebar,
-    body
-  )
-)
+shinyUI(dashboardPage(headerbar,
+                      sidebar,
+                      body))
