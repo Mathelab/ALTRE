@@ -27,9 +27,7 @@ read count is derived from user-input BAM filex, and regions of interest
 are supplied in a Granges object, ideally output of combineannotatepeaks.R.
 }
 \examples{
-dir=system.file("extdata", package="ALTRE", mustWork=TRUE)
-TSSpath=file.path(dir,"Homosapiens_GRCh37.75_TSS.bed")
-TSSannot=read.table(TSSpath, header=TRUE)
+TSSannot <- getTSS()
 dir <- system.file("extdata", package="ALTRE", mustWork=TRUE)
 csvfile <- file.path(dir, "lung.csv")
 samplePeaks <- loadPeaks(csvfile)
