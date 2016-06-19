@@ -9,7 +9,7 @@ tssannotgrange(grange, TSS, distancefromTSS)
 \arguments{
 \item{grange}{GRanges object}
 
-\item{TSS}{data frame of Transcription Start Site Locations}
+\item{TSS}{GRanges of Transcription Start Site Locations}
 
 \item{distancefromTSS}{distancefromTSS}
 }

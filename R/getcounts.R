@@ -16,9 +16,7 @@
 #'
 #'
 #' @examples
-#' dir=system.file("extdata", package="ALTRE", mustWork=TRUE)
-#' TSSpath=file.path(dir,"Homosapiens_GRCh37.75_TSS.bed")
-#' TSSannot=read.table(TSSpath, header=TRUE)
+#' TSSannot <- getTSS()
 #' dir <- system.file("extdata", package="ALTRE", mustWork=TRUE)
 #' csvfile <- file.path(dir, "lung.csv")
 #' samplePeaks <- loadPeaks(csvfile)
@@ -29,7 +27,7 @@
 
 getcounts<-function(annotpeaks, csvfile, reference, chrom = NULL){
    sampleinfo <- loadCSVFile(csvfile)
-   bamfileslist=loadBamFiles(sampleinfo)  
+   bamfileslist=loadBamFiles(sampleinfo)
 
   if (is.null(chrom) == FALSE){
     inputgranges=annotpeaks[[1]][seqnames(annotpeaks[[1]]) == chrom,]
@@ -76,7 +74,7 @@ getcounts<-function(annotpeaks, csvfile, reference, chrom = NULL){
   colnames(originaldata)=unlist(lapply(colnames(originaldata), gsub, pattern="meta.", replacement=""))
   enhancernum=length(which(originaldata$region=="enhancer"))
   promoternum=length(which(originaldata$region=="promoter"))
- 
+
   statdf=data.frame(Num_Enhancers=enhancernum,
 	Num_Promoters=promoternum)
 
@@ -94,7 +92,7 @@ getcounts<-function(annotpeaks, csvfile, reference, chrom = NULL){
         theme(legend.title=element_blank()) +
         scale_x_continuous(expand = c(0, 0)) +
         scale_y_continuous(expand = c(0, 0)) +
-        theme(panel.border = element_blank(), panel.grid.major = element_blank(), 
+        theme(panel.border = element_blank(), panel.grid.major = element_blank(),
 		panel.grid.minor = element_blank()) +
         labs(x = "log2 read counts \n(normalized by library and region sizes)" )
 

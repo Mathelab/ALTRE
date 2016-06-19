@@ -28,14 +28,12 @@
 #'
 #'
 #' @examples
-#' dir=system.file("extdata", package="ALTRE", mustWork=TRUE)
-#' TSSpath=file.path(dir,"Homosapiens_GRCh37.75_TSS.bed")
-#' TSSannot=read.table(TSSpath, header=TRUE)
+#' TSSannot <- getTSS()
 #' dir <- system.file("extdata", package="ALTRE", mustWork=TRUE)
 #' csvfile <- file.path(dir, "lung.csv")
 #' samplePeaks <- loadPeaks(csvfile)
 #' consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
-#' consPeaksAnnotated=combineAnnotatePeaks(conspeaks=consPeaks, TSS=TSSannot,merge=TRUE, 
+#' consPeaksAnnotated=combineAnnotatePeaks(conspeaks=consPeaks, TSS=TSSannot,merge=TRUE,
 #'	regionspecific=TRUE,mergedistenh=1500,mergedistprom=1000)
 #'
 #' @export
@@ -55,7 +53,7 @@ combineAnnotatePeaks<-function(conspeaks, TSS, merge=FALSE, mergedistenh=NA, mer
     allregregions=c(allregregions, peaklist[[i]])
   }
   reducedallregregions=reduce(allregregions)
-  
+
   TSSgranges=tssannotgrange(reducedallregregions,TSS,distancefromTSS)
 
   #################################
@@ -122,7 +120,7 @@ combineAnnotatePeaks<-function(conspeaks, TSS, merge=FALSE, mergedistenh=NA, mer
     resultuserinput=grangestodataframe(bothafter)
     result0=dataframeformerge
     tableofinfo=matrix(nrow=4, ncol=2)
-    rownames(tableofinfo)=c("enhancers_before_merging","enhancers_after_merging", 
+    rownames(tableofinfo)=c("enhancers_before_merging","enhancers_after_merging",
 	"promoters_before_merging", "promoters_after_merging")
     colnames(tableofinfo)=c("total_number", "mean_length")
 
