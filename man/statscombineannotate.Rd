@@ -19,7 +19,7 @@ statscombineannotate(tableofinfo, input, row1, row2)
 matrix
 }
 \description{
-Takes a data frame of GRanges 
+Takes a data frame of GRanges
 Not for use by package user
 }
 

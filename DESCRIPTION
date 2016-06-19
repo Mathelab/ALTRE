@@ -29,6 +29,8 @@ Imports:
     tidyr,
     ensembldb,
     EnsDb.Hsapiens.v75
+Suggests: knitr
+VignetteBuilder: knitr
 License: GPL-3
 LazyData: TRUE
 RoxygenNote: 5.0.1
