@@ -12,8 +12,7 @@
 #' @export
 
 loadPeaks <- function(csvfile) {
-	sampleinfo <- loadCSVFile(csvfile)
-	samplepeaks <- loadBedFiles(sampleinfo)
-	return(samplepeaks)
+  sampleinfo <- loadCSVFile(csvfile)
+  samplepeaks <- loadBedFiles(sampleinfo)
+  return(samplepeaks)
 }
-

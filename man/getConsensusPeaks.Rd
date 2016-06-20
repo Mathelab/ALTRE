@@ -24,6 +24,6 @@ dir <- system.file("extdata", package="ALTRE", mustWork=TRUE)
 csvfile <- file.path(dir, "lung.csv")
 samplePeaks <- loadPeaks(csvfile)
 consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
- 
+
 }
 

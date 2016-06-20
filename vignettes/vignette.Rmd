@@ -1,13 +1,16 @@
 ---
-title: "RRDESeq2 Vignette"
-author: "Elizabeth Baskin, Wolfgang Resch, and Ewy Mathe"
-date: "April 7, 2016"
+author: "Ewy Mathe,.."
+title: "ALTRE: vignette"
+date: "`r Sys.Date()`"
 output: pdf_document
+vignette: >
+  %\VignetteIndexEntry{ALTRE: vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
-```{r global_options, include=FALSE}
-knitr::opts_chunk$set(fig.width=15, fig.height=8)
-```
+
+
 
 ##Introduction
 
@@ -44,36 +47,34 @@ To demonstrate the abilities of RRDESeq2, we have provided an example dataset (B
 The first step in the workflow is the function “hotspotreproduc”, which processes an input of two or more hotspot files per sample and returns one GRanges object per sample. Only reproducible hotspots are kept -- reproducible hotspots are hotspots present in every sample replicate. At least two replicates are required in order to differentiate sample noise from robust, reproducible peaks. Hotspot files must be formatted as "chr", "start", "stop" in the first three columns. Additional columns are allowed, but will be ignored. 
 
 The example data is provided with the R package. Here is the command to find the directory of example data: 
-```{r}
-dir=system.file("extdata", package="RRDESeq2", mustWork=TRUE)
-dir
-```
 
 A csv file with the names of the hotspot file replicates (and the sample each replicate corresponds to) is the only argument to the "hotspotreproduc" function. The csv file must be in the current directory, or there must be a clear path to it's location:
 ```{r}
-csvpath=file.path(dir, "lung.csv")
-csvpath
+library(ALTRE)
+dir <- system.file("extdata", package="ALTRE", mustWork=TRUE)
+csvfile <- file.path(dir, "lung.csv")
+csvfile
 ```
 
 The csv also contains the names of the bam files for later use in the workflow. To see the correct format of the file:
 ```{r}
-lungcsv=read.table(csvpath)
-lungcsv
+samplePeaks <- loadPeaks(csvfile)
+samplePeaks
 ```
 
 The hotspot files must be in the same directory as the csv file.
 ```{r}
-hotspots_lung=hotspotreproduc(csvpath)
+consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
 ```
 
 A list of GRanges objects will be returned. One GRanges object per sample. Each Granges object contains only the reproducible hotspots for that sample type. To see the list of GRanges use the "results" function: 
 ```{r}
-getresults(hotspots_lung)
+#getresults(consPeaks)
 ```
 
 To see the number of hotspots in each replicate and the number considered "reproducible", use the metrics function.
 ```{r}
-metrics(hotspots_lung)
+#metrics(consPeaks)
 ```
 
 #Regulatory region annotation 
@@ -88,25 +89,23 @@ The output of “hotspotreproduc” is then further processed by the “annotate
 
 This function requires a list of TSSs for the promoter/enhancer annotation: 
 ```{r}
-dir=system.file("extdata", package="RRDESeq2", mustWork=TRUE)
-TSSpath=file.path(dir,"Homosapiens_GRCh37.75_TSS.bed")
-TSSannot=read.table(TSSpath, header=TRUE)
+TSSannot <- getTSS()
 ```
 
 The output of the previous function, "hotspotreproduc", is fed into this function:
 ```{r}
-allregionsannotated_lung=annotateandmerge(hotspots_lung, TSS=TSSannot)
+consPeaksAnnotated <- combineAnnotatePeaks(conspeaks=consPeaks, TSS=TSSannot)
 ```
 
 The function produces a GRanges object containing the annotated, merged hotspots -- all hotspots present in cancerous or normal lung. To see this GRanges object
 use the function "results":
 ```{r}
-getresults(allregionsannotated_lung)
+#getresults(consPeaksAnnotated)
 ```
 
 Additionally, this function keeps track of the changes in the number and size of enhancers and promoters before and after merging close-by regulatory regions. To see this analysis of how the regulatory regions changed due to merging use the "metrics" function:
 ```{r}
-getmetrics(allregionsannotated_lung)
+#getmetrics(consPeaksAnnotated)
 ```
 
 The number of regulatory regions decreases and the size of the regions increases, as expected.
@@ -121,28 +120,25 @@ The next function, "getcounts", has two purposes:
 
 Read count information across regions of interest is only available in the BAM file format – BAM files must be supplied to this function for each sample type. At least two replicates per sample type are required in order to distinguish reproducible peaks from sample noise. The names of the BAM files are not supplied to the function directly. Instead, a CSV file is created with the file names and sample type information. That CSV file and the directory location of the BAM files is supplied to the function. 
 
-```{r}
-dir=system.file("extdata", package="RRDESeq2", mustWork=TRUE)
-csvpath=file.path(dir, "lung.csv")
-```
+
 
 One cell type must be designated as the "reference type", to which the other cell types will be compared. In this example, it is the normal lung cell line (SAEC). 
 ```{r}
-counts_lung=getcounts(hotspot=allregionsannotated_lung, csv=csvpath, percentile=0.5, normal="SAEC")
+counts_consPeaks <-getcounts(annotpeaks=consPeaksAnnotated, csvfile=csvfile, reference="SAEC", chrom="chr21")
 ```
 
 This function produces a dataframe containing count information for all replicates of all samples. To access this information use the "results" function:
 ```{r eval=FALSE}
-getresults(counts_lung)
+#getresults(counts_consPeaks)
 ```
 
 ```{r echo=FALSE}
-head(results(counts_lung))
+#head(results(counts_consPeaks))
 ```
 
 Additionally, this function keeps track of the number of enhancers and promoters before and after filtering. To access this information use the "metrics" function:
 ```{r}
-getmetrics(counts_lung)
+#getmetrics(counts_consPeaks)
 ```
 
 At the 50th percentile, the number of enhancers and promoters decreased ~20-25%. 
@@ -151,7 +147,7 @@ Finally, this function creates a density plot of counts (after standardizing sam
 
 
 ```{r}
-seeplot(counts_lung)
+#seeplot(counts_lung)
 ```
 Here, the samples have very similar distributions, with enhancers and promoters differing only slightly.
 
@@ -160,17 +156,18 @@ Here, the samples have very similar distributions, with enhancers and promoters 
 The count information from "getcounts" is then processed by "countanalysis" -- this is the point in the pathway where the altered enhancers and promoters are identified. The function  uses an algorithm from the DESeq2 R package for identification of altered regulatory regions.
 
 ```{r}
-analysisresults_lung=countanalysis(counts_lung, alphavalue=0.01, lfcvalue=1, normal="SAEC")
+altre_peaks=countanalysis(counts=counts_consPeaks, pval=0.01, lfcvalue=1)
+
 ```
 
 The results are p-values, log2fold, and other statistics for every region. 
 
 ```{r eval=FALSE}
-getresults(analysisresults_lung)
+#getresults(altre_peaks)
 ```
 
 ```{r echo=FALSE}
-head(results(analysisresults_lung))
+#head(results(altre_peaks))
 ```
 
 Regulatory regions with large, positive log2fold changes and small p-values are more open in the lung cancer cell type, and therefore, their activity is associated with the cancer phenotype. Regulatory regions with large, negative log2fold changes and small p-values are more open in the normal lung cell type, and may therefore be associated with tumor suppressive properties. Regulatory regions with minimal log2fold change and high p-values are equally open in both cell types, and therefore, their activity is more likely to contribute to the house-keeping functions required in every cell. 
@@ -188,23 +185,16 @@ The "offspring" argument limits how many offspring a pathway can contain. Genera
 
 In order to link regulatory regions to genes, TSSs must be supplied for this function as well. The TSSs file was previously used in the "annotateandmerge" function, and therefore, should already exist in the R environment. 
 
-If not:
-
-```{r}
-dir=system.file("extdata", package="RRDESeq2", mustWork=TRUE)
-TSSpath=file.path(dir,"Homosapiens_GRCh37.75_TSS.bed")
-TSSannot=read.table(TSSpath, header=TRUE)
-```
 
 Pathways fall into three categories (Molecular Function (MF), Biological Process (BP), and Cellular Component (CC)), and each category must be analyzed separately. The category is selected by supplying an argument to "ontoltype"
 
 ```{r}
-lung_MF=enrichment(TSSannot, analysisresults_lung, ontoltype="MF", pvalfilt=0.01)
+#lung_MF=enrichment(TSSannot, analysisresults_lung, ontoltype="MF", pvalfilt=0.01)
 ```
 
 The result is a list of dataframes containing the enriched pathways with p-values and some additional information. The first dataframe contains regulatory regions that are cancer-specific, the second dataframe is normal-specific regions, and the third is shared regions. Here we take a look at the first line of the cancer-specific regions. To see these dataframes, use the results function:
 ```{r}
-getresults(lung_MF)
+#getresults(lung_MF)
 ```
 
 ##Post-processing summerization and visualization 
@@ -214,33 +204,33 @@ Once results have been obtained, there are a number of additional functions in R
 “resultscomparison” creates a table to compare the two methods of identifying altered regulatory regions – one based on peak intensity, the other on peak presence or absence as determined by hotspot calling algorithms. The intensity-based method identifies much fewer type-specific regions. 
 
 ```{r}
-resultscomparison(analysisresults_lung, normal="SAEC")
+#resultscomparison(analysisresults_lung, normal="SAEC")
 
 ```
 
 "plotallvenn" takes the results from "resultscomparison" and translates the table into proportional venn diagrams.
 
 ```{r}
-plotallvenn(lung_summary)
+#plotallvenn(lung_summary)
 ```
 
 "createboxplot" enables users to view the raw count data in regions identified as type-specific or shared. The log2 transformation of reads per kilobase of regulatory region per million is plotted. As expected, for regulatory regions identified as higher log-fold change than normal, the lung cancer cell line has much higher counts than he normal lung cell line. The opposite is true for the lower log-fold change regions. For regions with little log-fold change between cell types, the counts are similar. This visual depiction confirms the results of "countanalysis" and enables users to change parameters if needed. 
 
 ```{r}
-createboxplot(counts_lung, analysisresults_lung)
+#createboxplot(counts_lung, analysisresults_lung)
 
 ```
 
 "genomebrowservis" allows raw data to be visualized as tracks in the UCSC by creating wig files as well as HOTSPOT files color-coded by type-specificity. Wig file creation involves translation of count data into a peak width and height, which allows easier visualization of count-differences. A bed file will be created in the working directory, there is no output to the function that can be saved as an object.
 
 ```{r}
-genomebrowvisual(analysisresults_lung)
+#genomebrowvisual(analysisresults_lung)
 ```
 
 
 "enrichmentheatmap” creates a heatmap of the analysis for all three regulatory region types (SAEC-specific, A549-specific, and shared), with the color-coding corresponding to the significance of the pathway – the lighter the blue, the lower the p-value. 
 ```{r}
-enrichheatmap(lung_MF, title="GO:MF, p<0.01")
+#enrichheatmap(lung_MF, title="GO:MF, p<0.01")
 
 ```
 

@@ -13,67 +13,72 @@
 #' csvfile <- file.path(dir, "lung.csv")
 #' samplePeaks <- loadPeaks(csvfile)
 #' consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
-#'  
+#'
 #' @export
 
 getConsensusPeaks <- function(samplepeaks, minreps) {
-  if(class(samplepeaks)!="GRangesList")
-	stop("Peaks must be a GRangesList Object")
+  if (class(samplepeaks) != "GRangesList")
+    stop("Peaks must be a GRangesList Object")
 
-  sampnames=names(samplepeaks)
-  sampletypes=sort(unique(gsub("_.*","",sampnames)) )
+  sampnames = names(samplepeaks)
+  sampletypes = sort(unique(gsub("_.*", "", sampnames)))
 
-  conspeaks=GRangesList()
-  conspeaks_stats=list()
+  conspeaks = GRangesList()
+  conspeaks_stats = list()
 
   for (mytype in order(sampletypes)) {
-	mytypepeaks <- samplepeaks[grep(sampletypes[mytype],sampnames)]
+    mytypepeaks <- samplepeaks[grep(sampletypes[mytype], sampnames)]
 
-	 # Concatenate all peaks pertaining to the same sample type and merge peaks:
-	 allregregions=c(mytypepeaks[[1]])
-	 for (i in 2:length(mytypepeaks)){
-     		 allregregions=c(allregregions, mytypepeaks[[i]])
-    	 }
-    	 reducedallregregions=reduce(allregregions)
-	
-	# For each reduced peak, determine whether it was present in each sample type
-	for (i in 1:length(mytypepeaks)){
-	   typespecific=findOverlaps(reducedallregregions, mytypepeaks[[i]])
-	   newdataframe=data.frame(i=matrix(nrow=length(reducedallregregions)))
-	   newdataframe[queryHits(typespecific),1]="present"
-	   values(reducedallregregions)=cbind(values(reducedallregregions),newdataframe)
-        }
-	colnames(values(reducedallregregions))=names(mytypepeaks)
+    # Concatenate all peaks pertaining to the same sample type and merge peaks:
+    allregregions = c(mytypepeaks[[1]])
+    for (i in 2:length(mytypepeaks)) {
+      allregregions = c(allregregions, mytypepeaks[[i]])
+    }
+    reducedallregregions = reduce(allregregions)
 
-	# Find regions that are present in at least N replicates (from user in put minreps)
-	reducedallregionsdata=grangestodataframe(reducedallregregions)
-	applymatrix=as.matrix(reducedallregionsdata[4:ncol(reducedallregionsdata)])
-	keepers=which(apply(applymatrix, 1, function(x) length(which(x=="present")) >= minreps))
+    # For each reduced peak, determine whether it was present in each sample type
+    for (i in 1:length(mytypepeaks)) {
+      typespecific = findOverlaps(reducedallregregions, mytypepeaks[[i]])
+      newdataframe = data.frame(i = matrix(nrow = length(reducedallregregions)))
+      newdataframe[queryHits(typespecific), 1] = "present"
+      values(reducedallregregions) = cbind(values(reducedallregregions), newdataframe)
+    }
+    colnames(values(reducedallregregions)) = names(mytypepeaks)
 
-	reducedallregionsdatakeepers=reducedallregionsdata[keepers,]
+    # Find regions that are present in at least N replicates (from user in put minreps)
+    reducedallregionsdata = grangestodataframe(reducedallregregions)
+    applymatrix = as.matrix(reducedallregionsdata[4:ncol(reducedallregionsdata)])
+    keepers = which(apply(applymatrix, 1, function(x)
+      length(which(x == "present")) >= minreps))
 
-	# Convert back to GRanges object
-	finalgranges=GRanges(reducedallregionsdatakeepers$chr, 
-		IRanges(reducedallregionsdatakeepers$start, reducedallregionsdatakeepers$stop))
-	mcols(finalgranges)[1]=sampletypes[mytype]
-	colnames(mcols(finalgranges))="sampletype"
-	
-	# Construct output
-	conspeaks$mytype=finalgranges
-	names(conspeaks)[mytype]=sampletypes[mytype]
+    reducedallregionsdatakeepers = reducedallregionsdata[keepers, ]
 
-	# Get some stats for the peaks (before/after merging)
-	totconspeaks=NROW(finalgranges)
-	names(totconspeaks)=sampletypes[mytype]
-	totreppeaks=c()
-	for (numreps in 1:length(mytypepeaks)) {
-		totreppeaks=c(totreppeaks,NROW(mytypepeaks[[numreps]]))
-		names(totreppeaks)[numreps]=names(mytypepeaks)[numreps]
-	}
-	conspeaks_stats[[mytype]]=c(totconspeaks, totreppeaks) 
-	names(conspeaks_stats)[[mytype]]=sampletypes[mytype]
+    # Convert back to GRanges object
+    finalgranges = GRanges(
+      reducedallregionsdatakeepers$chr,
+      IRanges(
+        reducedallregionsdatakeepers$start,
+        reducedallregionsdatakeepers$stop
+      )
+    )
+    mcols(finalgranges)[1] = sampletypes[mytype]
+    colnames(mcols(finalgranges)) = "sampletype"
+
+    # Construct output
+    conspeaks$mytype = finalgranges
+    names(conspeaks)[mytype] = sampletypes[mytype]
+
+    # Get some stats for the peaks (before/after merging)
+    totconspeaks = NROW(finalgranges)
+    names(totconspeaks) = sampletypes[mytype]
+    totreppeaks = c()
+    for (numreps in 1:length(mytypepeaks)) {
+      totreppeaks = c(totreppeaks, NROW(mytypepeaks[[numreps]]))
+      names(totreppeaks)[numreps] = names(mytypepeaks)[numreps]
+    }
+    conspeaks_stats[[mytype]] = c(totconspeaks, totreppeaks)
+    names(conspeaks_stats)[[mytype]] = sampletypes[mytype]
   } # end looping through sampletypes
 
-  return(list(consPeaks=conspeaks,consPeaksStats=conspeaks_stats))
+  return(list(consPeaks = conspeaks, consPeaksStats = conspeaks_stats))
 }
-
