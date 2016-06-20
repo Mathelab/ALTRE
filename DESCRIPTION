@@ -28,7 +28,7 @@ Imports:
     readr,
     tidyr,
     org.Hs.eg.db,
-    clusterProfiler
+    clusterProfiler,
     ensembldb,
     EnsDb.Hsapiens.v75
 License: GPL-3
