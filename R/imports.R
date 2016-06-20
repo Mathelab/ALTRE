@@ -10,7 +10,6 @@
 #' @importFrom SummarizedExperiment assay colData
 #' @importFrom Rsamtools BamFileList
 #' @import readr
-#' @import tidyr
 #' @import org.Hs.eg.db
 #' @importFrom clusterProfiler enrichGO
 NULL
