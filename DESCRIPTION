@@ -27,6 +27,8 @@ Imports:
     Rsamtools,
     readr,
     tidyr,
+    org.Hs.eg.db,
+    clusterProfiler,
     ensembldb,
     EnsDb.Hsapiens.v75
 Suggests: knitr
