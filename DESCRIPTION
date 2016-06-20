@@ -26,7 +26,6 @@ Imports:
     GenomicRanges,
     Rsamtools,
     readr,
-    tidyr,
     org.Hs.eg.db,
     clusterProfiler,
     ensembldb,
