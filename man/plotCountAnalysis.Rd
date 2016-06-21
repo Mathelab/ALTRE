@@ -7,7 +7,7 @@
 plotCountAnalysis(altrepeaks)
 }
 \arguments{
-\item{countsconspeaks}{output generated from getcounts}
+\item{altrepeaks}{output generated from getcounts}
 }
 \value{
 a ggplot
