@@ -16,8 +16,10 @@ log scale base 2 so log2fold change of 1.5 means difference in peaks
 increased by 2^1.5)}
 }
 \value{
-dataframe containing logfold2 changes and p-values of all regions
-analyzed
+list containing:
+	1) DESeq2 results table
+2) some statistics
+3) data.frame used for plotting
 }
 \description{
 Altered regions are those that show differences in chromatin accessibility

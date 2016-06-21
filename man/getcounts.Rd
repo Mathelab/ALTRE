@@ -19,7 +19,7 @@ getcounts(annotpeaks, csvfile, reference, chrom = NULL)
 List containing three items:
 (1) DESeqDataSet: contains count information for all replicates of all samples
 (2) Matrix: contains number of enhancers and promoters before and after filtering (if applicable)
-(3) Plot: contains density plot
+(3) Data frame for creating a density plot (use function plotgetcounts()
 }
 \description{
 Counts the number of reads in each regulatory region for each sample type --
