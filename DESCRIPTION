@@ -29,7 +29,9 @@ Imports:
     org.Hs.eg.db,
     clusterProfiler,
     ensembldb,
-    EnsDb.Hsapiens.v75
+    EnsDb.Hsapiens.v75,
+    tidyr,
+    GO.db
 Suggests: knitr
 VignetteBuilder: knitr
 License: GPL-3
