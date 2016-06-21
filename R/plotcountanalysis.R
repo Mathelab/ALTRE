@@ -1,6 +1,6 @@
 #' Given the output from getcounts, plot a density plot of log2 RPKM values of regulation regions
 #'
-#' @param countsconspeaks output generated from getcounts
+#' @param altrepeaks output generated from getcounts
 #'
 #' @return a ggplot
 #'
@@ -10,6 +10,7 @@
 #' samplePeaks <- loadPeaks(csvfile)
 #' consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
 #' plotConsensusPeaks(samplepeaks=consPeaks)
+#' TSSannot=getTSS()
 #' consPeaksAnnotated <- combineAnnotatePeaks(conspeaks=consPeaks, TSS=TSSannot)
 #' counts_consPeaks <-getcounts(annotpeaks=consPeaksAnnotated, csvfile=csvfile,
 #'	reference="SAEC", chrom="chr21")
