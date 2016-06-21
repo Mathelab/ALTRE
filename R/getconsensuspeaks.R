@@ -84,15 +84,15 @@ getConsensusPeaks <- function(samplepeaks, minreps) {
   samp1=conspeaks_stats[[1]]
   samp2=conspeaks_stats[[2]]
   if (length(samp1) != maxreps) {
-	samp1=c(samp1,rep(NA,maxreps-length(samp1)))
+	samp1=c(samp1,rep(0,maxreps-length(samp1)))
   }
   if (length(samp2) != maxreps) {
-        samp2=c(samp2,rep(NA,maxreps-length(samp2)))
+        samp2=c(samp2,rep(0,maxreps-length(samp2)))
   }
 
   dfstats=as.data.frame(cbind(samp1,samp2))
   colnames(dfstats)=names(conspeaks_stats)
   rownames(dfstats)=paste("rep",1:maxreps,sep="")
 
-  return(list(consPeaks = conspeaks, consPeaksStats = dfstats))
+  return(list(consPeaks = conspeaks, consPeaksStats = data.frame(dfstats)))
 }
