@@ -9,8 +9,10 @@
 #' log scale base 2 so log2fold change of 1.5 means difference in peaks
 #' increased by 2^1.5)
 #'
-#' @return dataframe containing logfold2 changes and p-values of all regions
-#' analyzed
+#' @return list containing:
+#' 	1) DESeq2 results table
+#'	2) some statistics
+#'	3) data.frame used for plotting
 #'
 #' @examples
 #' TSSannot <- getTSS()
@@ -77,24 +79,10 @@ countanalysis <- function(counts,
                       which(abs(toplot$log2FoldChange) > lfcvalue))
   toplot$col = rep("non-altered", nrow(toplot))
   toplot$col[keepers] = "altered"
-  plot = ggplot(toplot, aes(toplot$log2FoldChange, -log2(toplot$padj))) +
-    geom_point(aes(col = factor(toplot$col))) +
-    scale_colour_manual(values = c("red", "dark grey")) +
-    theme_bw(base_size = 15) +
-    theme(legend.title = element_blank()) +
-    scale_x_continuous(expand = c(0, 0)) +
-    scale_y_continuous(expand = c(0, 0)) +
-    theme(panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank()) +
-    labs(x = "log2FC", y = "-log2(pvalue)") +
-    geom_hline(aes(yintercept = -log2(pval)), linetype = "dashed") +
-    geom_vline(aes(xintercept = (-lfcvalue)), linetype = "dashed") +
-    geom_vline(aes(xintercept = (lfcvalue)), linetype = "dashed")
-
 
   return(list(
     results = fulldataframe,
     stats = stats,
-    plot = plot
+    dftoplot = list(toplot=toplot,pval=pval,lfcvalue=lfcvalue)
   ))
 }
