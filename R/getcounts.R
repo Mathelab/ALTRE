@@ -12,7 +12,7 @@
 #' @return List containing three items:
 #' (1) DESeqDataSet: contains count information for all replicates of all samples
 #' (2) Matrix: contains number of enhancers and promoters before and after filtering (if applicable)
-#' (3) Plot: contains density plot
+#' (3) Data frame for creating a density plot (use function plotgetcounts()
 #'
 #'
 #' @examples
@@ -95,36 +95,13 @@ getcounts <-
     ##########################################
     # Create densityplot
     region = originaldata$region
-    alldata = cbind(myrpkmlog2, as.data.frame(region))
-    graphics::par(mar = c(5.1, 4.1, 4.1, 8.1), xpd = TRUE)
-    varstack = suppressMessages(melt(alldata))
-    varstack$concat = paste(varstack$region, varstack$variable, sep = ": ")
-    varstack$concat = sub("librarysize.*", "", varstack$concat)
-    densityplot = ggplot(varstack, aes(x = varstack$value)) +
-      geom_density(aes(
-        group = varstack$concat,
-        color = varstack$concat,
-        fill = varstack$concat
-      ),
-      alpha = 0.3) +
-      theme_bw(base_size = 15, base_family = "") +
-      theme(legend.title = element_blank()) +
-      scale_x_continuous(expand = c(0, 0)) +
-      scale_y_continuous(expand = c(0, 0)) +
-      theme(
-        panel.border = element_blank(),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank()
-      ) +
-      labs(x = "log2 read counts \n(normalized by library and region sizes)")
-
-
+    forplotdf = cbind(myrpkmlog2, as.data.frame(region))
 
     return(
       list(
         regioncounts = countssedds,
         regioncountstats = statdf,
-        regioncountsplot = densityplot
+        regioncountsforplot = forplotdf
       )
     )
   }
