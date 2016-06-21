@@ -12,7 +12,9 @@
 #' plotConsensusPeaks(samplepeaks=consPeaks)
 #' TSSannot=getTSS()
 #' consPeaksAnnotated <- combineAnnotatePeaks(conspeaks=consPeaks, TSS=TSSannot)
-#' counts_consPeaks <-getcounts(annotpeaks=consPeaksAnnotated, csvfile=csvfile,
+#' consPeaksAnnotated <- combineAnnotatePeaks(conspeaks=consPeaks, TSS=TSSannot,
+#'	regionspecific=TRUE,mergedistenh=1500,mergedistprom=1000 )
+#' counts_consPeaks <- getcounts(annotpeaks=consPeaksAnnotated, csvfile=csvfile,
 #'	reference="SAEC", chrom="chr21")
 #' plotgetcounts(counts_consPeaks)
 #'
