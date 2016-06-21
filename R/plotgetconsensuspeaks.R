@@ -23,7 +23,7 @@ plotConsensusPeaks <- function(samplepeaks) {
 	geom_text(aes(label = mydf$value,x=mydf$variable, y=mydf$value,ymax=mydf$value),
 		position=position_dodge(width=1),size=3,hjust=0.5,vjust=-1.5) +
 	scale_colour_manual(values = c("red", "dark grey")) +
-	theme(legend.title = element_blank()) +
+	labs(fill="") +
 	theme_bw(base_size = 15) +
 	theme(panel.grid.major = element_blank(),
           panel.grid.minor = element_blank()) +

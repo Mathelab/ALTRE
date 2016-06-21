@@ -20,7 +20,8 @@
 #' csvfile <- file.path(dir, "lung.csv")
 #' samplePeaks <- loadPeaks(csvfile)
 #' consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
-#' consPeaksAnnotated <- combineAnnotatePeaks(conspeaks=consPeaks, TSS=TSSannot)
+#' consPeaksAnnotated <- combineAnnotatePeaks(conspeaks=consPeaks, TSS=TSSannot,
+#'	regionspecific=TRUE,mergedistenh=1500,mergedistprom=1000 )
 #' counts_consPeaks <-getcounts(annotpeaks=consPeaksAnnotated, csvfile=csvfile,
 #' reference="SAEC", chrom="chr21")
 #' altre_peaks=countanalysis(counts=counts_consPeaks, pval=0.01, lfcvalue=1)

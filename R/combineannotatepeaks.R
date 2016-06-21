@@ -69,6 +69,13 @@ combineAnnotatePeaks <-
 
     # If merge is set to false, don't merge
     if (merge == FALSE) {
+      if(mergedistenh>0 || mergedistprom>0) {
+	mergestats=as.data.frame("No merging because merge is set to FALSE")
+      }
+      else {
+	mergestats = as.data.frame(
+          "No merging because mergedistenh and mergedistprom were set to zero")
+      }
       namesvector = c()
       for (i in 1:length(peaklist)) {
         newgranges = peaklist[[i]]
@@ -88,10 +95,8 @@ combineAnnotatePeaks <-
       notmerging = grangestodataframe(TSSgranges)
       listtoreturn = list(
         consPeaksAnnotated = GRanges(notmerging, meta = notmerging[, 4:ncol(notmerging)]),
-        mergestats = as.data.frame(
-          "No merging because mergedistenh and mergedistprom were set to zero"
+        mergestats = mergestats
         )
-      )
     } # end if no merging
 
     else {
