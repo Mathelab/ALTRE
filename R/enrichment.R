@@ -79,23 +79,32 @@ pathenrich<-function(analysisresults,
   names(subsets)=c("up","down","shared","all")
 
   message("finding expt-specific...")
-  if(nrow(subsets[["up"]])==0) {expt="No REs higher in experiment group"}
+  if(nrow(subsets[["up"]])==0) {expt=as.data.frame("No REs higher in experiment group")}
 
   else {
 	expt=rundose(set=subsets[["up"]], background=subsets[["all"]],log2FoldChange=lfctypespecific,
 	ontoltype=ontoltype, pvalfilt=pvalfilt, genes=genes, offspring=offspring)
+        if(nrow(shared)==0) {
+               expt=as.data.frame("No enrichment found for experiment REs")
+	}
   }
   message("finding reference-specific...")
-  if(nrow(subsets[["down"]])==0) {expt="No REs higher in reference group"}
+  if(nrow(subsets[["down"]])==0) {expt=as.data.frame("No REs higher in reference group")}
   else {
 	reference=rundose(set=subsets[["down"]], background=subsets[["all"]],log2FoldChange=lfctypespecific,
         ontoltype=ontoltype, pvalfilt=pvalfilt, genes=genes, offspring=offspring)
+        if(nrow(expt)==0) {
+                reference=as.data.frame("No enrichment found for reference REs")
+	}
   }
   message("finding shared...")
-  if(nrow(subsets[["shared"]])==0) {expt="No shared REs"}
+  if(nrow(subsets[["shared"]])==0) {expt=as.data.frame("No shared REs")}
   else {
 	shared=rundose(set=subsets[["shared"]], background=subsets[["all"]],log2FoldChange=lfcshared,
         ontoltype=ontoltype, pvalfilt=pvalfilt, genes=genes, offspring=offspring)
+	if(nrow(shared)==0) {
+		shared=as.data.frame("No enrichment found for shared REs")
+	}
   }
   
 #  enrichstats=data.frame(

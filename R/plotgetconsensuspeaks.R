@@ -14,13 +14,15 @@
 #' @export
 
 plotConsensusPeaks <- function(samplepeaks) {
-  dfstats=samplepeaks[[2]]
-  dfstats$Replicate=rownames(dfstats)
-  mydf=na.omit(reshape2::melt(dfstats))
+  dfstats=samplepeaks$consPeaksStats
+#  dfstats$Replicate=dfstats$PeakType
+#  dfstats=dfstats[,-which(colnames(dfstats)=="PeakType")]
+#  mydf=na.omit(reshape2::melt(dfstats))
+  mydf=tidyr::gather(dfstats,CellType,count,2:3)
 
-  p <- ggplot(data=mydf,aes(x=mydf$variable, y=mydf$value,fill=mydf$Replicate)) +
+  p <- ggplot(data=mydf,aes(x=mydf$CellType, y=mydf$count,fill=mydf$PeakType)) +
 	geom_bar(stat="identity",position=position_dodge()) +
-	geom_text(aes(label = mydf$value,x=mydf$variable, y=mydf$value,ymax=mydf$value),
+	geom_text(aes(label = mydf$count,x=mydf$CellType, y=mydf$count,ymax=mydf$count),
 		position=position_dodge(width=1),size=3,hjust=0.5,vjust=-1.5) +
 	scale_colour_manual(values = c("red", "dark grey")) +
 	labs(fill="") +

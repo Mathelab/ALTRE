@@ -90,9 +90,8 @@ getConsensusPeaks <- function(samplepeaks, minreps) {
         samp2=c(samp2,rep(0,maxreps-length(samp2)+1))
   }
 
-  dfstats=as.data.frame(cbind(samp1,samp2))
-  colnames(dfstats)=names(conspeaks_stats)
-  rownames(dfstats)=c("ConsensusPeaks",paste0("rep",1:maxreps))
+  dfstats=as.data.frame(cbind(c("ConsensusPeaks",paste0("rep",1:maxreps)),samp1,samp2))
+  colnames(dfstats)=c("PeakType",names(conspeaks_stats))
 
   return(list(consPeaks = conspeaks, consPeaksStats = data.frame(dfstats)))
 }

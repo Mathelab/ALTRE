@@ -42,9 +42,9 @@ combineAnnotatePeaks <-
   function(conspeaks,
            TSS,
            merge = FALSE,
-           mergedistenh = NA,
-           mergedistprom = NA,
-           mergedist = NA,
+           mergedistenh = 0,
+           mergedistprom = 0,
+           mergedist = 0,
            regionspecific = NA,
            distancefromTSS = 1500) {
     if (class(conspeaks[[1]])[1] != "GRangesList")
