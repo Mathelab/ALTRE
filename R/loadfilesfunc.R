@@ -17,6 +17,8 @@ loadCSVFile <- function(csvPath) {
       replicate = col_character()
     )
   )
+
+  csvfile=csvfile[order(csvfile$replicate,csvfile$sample),]
   return(csvfile)
 }
 
