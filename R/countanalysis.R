@@ -69,7 +69,9 @@ countanalysis <- function(counts,
   stats = matrix(c(upproms, downproms,
                    upenh, downenh), nrow = 2)
   colnames(stats) = c("Promoters", "Enhancers")
-  rownames(stats) = c("UP", "DOWN")
+  stats=as.data.frame(stats)
+  stats=cbind(c("UP","DOWN"),stats)
+  names(stats)[1]="REtype"
 
   #######################
   # Produce a volcano plot and a barplot showing differential REs

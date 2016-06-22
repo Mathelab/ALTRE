@@ -31,7 +31,8 @@ Imports:
     ensembldb,
     EnsDb.Hsapiens.v75,
     tidyr,
-    GO.db
+    GO.db,
+    grid
 Suggests: knitr
 VignetteBuilder: knitr
 License: GPL-3

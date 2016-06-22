@@ -87,7 +87,8 @@ shinyServer(function(input, output, session) {
                  {
                    setProgress(value = .1, detail = "running")
                    consPeaksAnnotated <- annotatePeaks()
-                   csvfile <- csvFile()
+                   #csvfile <- csvFile()
+		   csvfile <- inputFilePath()$datapath
                    setProgress(value = 0.5, detail = "annotating peaks")
                    counts_consPeaks <-
                      getcounts(
@@ -138,8 +139,7 @@ shinyServer(function(input, output, session) {
                     paging = FALSE))
 
   output$table3 <- renderDataTable({
-    as.data.frame(annotatePeaks()$consPeaksAnnotated)
-
+	annotatePeaks()$mergestats
   }, options = list(searching = FALSE))
 
 
@@ -147,7 +147,7 @@ shinyServer(function(input, output, session) {
   # plots
 
   output$barplot <- renderPlot({
-    plotConsensusPeaks(mergedPeaks()$consPeaksStats)
+    plotConsensusPeaks(mergedPeaks())
   })
 
   output$densityplot <- renderPlot({

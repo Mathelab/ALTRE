@@ -12,5 +12,6 @@
 #' @import readr
 #' @import org.Hs.eg.db
 #' @importFrom clusterProfiler enrichGO
+#' @import grid
 NULL
 
