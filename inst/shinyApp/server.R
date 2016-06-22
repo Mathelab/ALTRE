@@ -26,13 +26,10 @@ shinyServer(function(input, output, session) {
 
   output$table1 <- renderDataTable({
     if (!is.null(input$file)) {
-      csvFile()[, -1]
+      csvFile()[,-1]
     }
   }, options = list(searching = FALSE,
                     paging = FALSE))
-
-
-
 
   #####################################################
 
@@ -47,36 +44,84 @@ shinyServer(function(input, output, session) {
   })
 
   mergedPeaks <- eventReactive(input$buttonmerge, {
-    peaks <-  peaks()
-    mergedpeaks <- getConsensusPeaks(peaks, input$numOverlap)
-
-    mergedpeaks$consPeaksStats <-
-      cbind(
-        PeaksFile = c("Consensus", "Rep I", "Rep II"),
-        as.data.frame(mergedpeaks$consPeaksStats)
-      )
-
-    return(mergedpeaks)
-  })
-
-  observeEvent(input$buttonmerge, {
-    withProgress(message = 'Merging in progress',
+    withProgress(message = 'In progress:',
                  detail = 'This may take a while...',
                  value = 0,
                  {
-                   setProgress(value = 0, detail = "loading new dataset")
-                   for (i in 1:2) {
-                     incProgress(1 / 4)
-                     Sys.sleep(0.05)
-                   }
-                   mergedPeaks()
-                   for (i in 1:2) {
-                     incProgress(1 / 4)
-                     Sys.sleep(0.1)
-                   }
-                   setProgress(value = 1, detail = "Done!")
+                   setProgress(value = .1, detail = "loading peak files")
+                   peaks <-  peaks()
+                   setProgress(value = 0.5, detail = "merging replicates")
+                   consenpeaks <-
+                     getConsensusPeaks(peaks, input$numOverlap)
+                   setProgress(value = 1, detail = "done!")
+                   Sys.sleep(0.5)
                  })
+    return(consenpeaks)
   })
+
+  annotatePeaks <- eventReactive(input$buttonannot, {
+    withProgress(message = 'In progress',
+                 detail = 'This may take a while...',
+                 value = 0,
+                 {
+                   setProgress(value = .1, detail = "running")
+                   consPeaks <- mergedPeaks()
+                   setProgress(value = .3, detail = "retrieving TSS file")
+                   TSSannot <- getTSS()
+                   setProgress(value = 0.5, detail = "annotating peaks")
+                   consPeaksAnnotated <-
+                     combineAnnotatePeaks(conspeaks = consPeaks,
+                                          TSS = TSSannot)
+                   setProgress(value = 1, detail = "done!")
+                   Sys.sleep(0.5)
+                 })
+
+    return(consPeaksAnnotated)
+  })
+
+
+  countsPeaks <- eventReactive(input$buttoncounts, {
+    withProgress(message = 'In progress',
+                 detail = 'This may take a while...',
+                 value = 0,
+                 {
+                   setProgress(value = .1, detail = "running")
+                   consPeaksAnnotated <- annotatePeaks()
+                   csvfile <- csvFile()
+                   setProgress(value = 0.5, detail = "annotating peaks")
+                   counts_consPeaks <-
+                     getcounts(
+                       annotpeaks = consPeaksAnnotated,
+                       csvfile = csvfile,
+                       reference = "SAEC",
+                       chrom = "chr21"
+                     )
+                   setProgress(value = 1, detail = "done!")
+                   Sys.sleep(0.5)
+                 })
+    return(counts_consPeaks)
+  })
+
+
+  alteredPeaks <- eventReactive(input$buttondefine, {
+    withProgress(message = 'In progress',
+                 detail = 'This may take a while...',
+                 value = 0,
+                 {
+                   setProgress(value = .1, detail = "running")
+                   counts_consPeaks <- countsPeaks()
+                   setProgress(value = 0.5, detail = "annotating peaks")
+                   altred_peaks <-
+                     countanalysis(counts = counts_consPeaks,
+                                   pval = 0.01,
+                                   lfcvalue = 1)
+                   setProgress(value = 1, detail = "done!")
+                   Sys.sleep(0.5)
+                 })
+
+    return(altred_peaks)
+  })
+
 
   # peaksdf <- reactive({
   #
@@ -92,11 +137,26 @@ shinyServer(function(input, output, session) {
   }, options = list(searching = FALSE,
                     paging = FALSE))
 
+  output$table3 <- renderDataTable({
+    as.data.frame(annotatePeaks()$consPeaksAnnotated)
+
+  }, options = list(searching = FALSE))
+
+
   ####################################
-  #  tabPanel "plot"
+  # plots
 
   output$barplot <- renderPlot({
-    plotCountSummary(mergedPeaks()$consPeaksStats)
+    plotConsensusPeaks(mergedPeaks()$consPeaksStats)
   })
+
+  output$densityplot <- renderPlot({
+    plotgetcounts(countsPeaks())
+  })
+
+  output$volcanoplot <- renderPlot({
+    plotCountAnalysis(alteredPeaks())
+  })
+
 
 })
