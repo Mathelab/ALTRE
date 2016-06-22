@@ -24,7 +24,7 @@ samplePeaks <- loadPeaks(csvfile)
 consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
 plotConsensusPeaks(samplepeaks=consPeaks)
 TSSannot=getTSS()
- consPeaksAnnotated <- combineAnnotatePeaks(conspeaks=consPeaks, TSS=TSSannot,
+ consPeaksAnnotated <- combineAnnotatePeaks(conspeaks=consPeaks, TSS=TSSannot,merge=TRUE,
 regionspecific=TRUE,mergedistenh=1500,mergedistprom=1000 )
 plotCombineAnnotatePeaks(consPeaksAnnotated)
 
