@@ -9,11 +9,12 @@
 #'	2) a summary statistic table
 #'
 #' @examples
+#' \dontrun{
 #' dir <- system.file("extdata", package="ALTRE", mustWork=TRUE)
 #' csvfile <- file.path(dir, "lung.csv")
 #' samplePeaks <- loadPeaks(csvfile)
 #' consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
-#'
+#'}
 #' @export
 
 getConsensusPeaks <- function(samplepeaks, minreps) {
