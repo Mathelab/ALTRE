@@ -11,12 +11,12 @@
 #' ************CHANGE ANALYSISRESULTS TO ALTREPEAKS!!!!******************
 #' ****************CHANGE REGIONSUBSET TO REGIONTYPE!!!!*****************
 #' @param analysisresults results from analysis of counts
-#' @param pvalfilt pval to filter on (adjusted for multiple testing)
+#' @param enrichpvalfilt adjusted pval for enrichment to filter on (adjusted for multiple testing)
 #' @param ontoltype one of three categories: "MF" (molecular function), "CC" (cellular component), "BP" (biological process)
-#' @param lfctypespecific log2fold change for type specific enhancers/promoters
-#' @param lfcshared log2fold chance for shared enhancers/promoters
-#' @param pvaltypespecific p-value for type specific enhancers/promoters
-#' @param pvalshared p-value for shared enhancers/promoters
+#' @param lfctypespecific log2fold change (of chromatin accessibility) for type specific enhancers/promoters
+#' @param lfcshared log2fold change (of chromatin accessibility) for shared enhancers/promoters
+#' @param pvaltypespecific p-value (of chromatin accessibility) for type specific enhancers/promoters
+#' @param pvalshared p-value (of chromatin accessibility) for shared enhancers/promoters
 #' @param regionsubset "promoter" or "enhancer"
 #' @param genes minimum number of genes allowable in a pathway
 #' @param offspring maximum number of offspring allowable in a pathway
@@ -28,9 +28,10 @@
 #' TSSannot <- getTSS()
 #' consPeaksAnnotated <- combineAnnotatePeaks(conspeaks=consPeaks, TSS=TSSannot,merge=TRUE,
 #'	regionspecific=TRUE,mergedistenh=1500,mergedistprom=1000 )
+#' # Need to run getcounts on all chromosomes
 #' counts_consPeaks=getcounts(annotpeaks=consPeaksAnnotated, csvfile=csvfile, reference="SAEC")
 #' altre_peaks=countanalysis(counts=counts_consPeaks, pval=0.01, lfcvalue=1)
-#' MFenrich=pathenrich(analysisresults=altre_peaks, ontoltype="MF", pvalfilt=0.01)
+#' MFenrich=pathenrich(analysisresults=altre_peaks, ontoltype="MF", pvalfilt=0.01,)
 #' BPenrich=pathenrich(analysisresults=altre_peaks, ontoltype="BP", pvalfilt=0.01)
 #'
 #' @return dataframe identifying p-values for enriched pathways -- pathways also annotated with additional information
@@ -79,29 +80,28 @@ pathenrich<-function(analysisresults,
   names(subsets)=c("up","down","shared","all")
 
   message("finding expt-specific...")
-  if(nrow(subsets[["up"]])==0) {expt=as.data.frame("No REs higher in experiment group")}
-
-  else {
+  if(nrow(subsets[["up"]])==0) {expt=as.data.frame("No REs higher in experiment group")}  else {
 	expt=rundose(set=subsets[["up"]], background=subsets[["all"]],log2FoldChange=lfctypespecific,
 	ontoltype=ontoltype, pvalfilt=pvalfilt, genes=genes, offspring=offspring)
         if(nrow(shared)==0) {
                expt=as.data.frame("No enrichment found for experiment REs")
 	}
   }
+
   message("finding reference-specific...")
-  if(nrow(subsets[["down"]])==0) {expt=as.data.frame("No REs higher in reference group")}
-  else {
+  if(nrow(subsets[["down"]])==0) {reference=as.data.frame("No REs higher in reference group")} else {
 	reference=rundose(set=subsets[["down"]], background=subsets[["all"]],log2FoldChange=lfctypespecific,
         ontoltype=ontoltype, pvalfilt=pvalfilt, genes=genes, offspring=offspring)
         if(nrow(expt)==0) {
                 reference=as.data.frame("No enrichment found for reference REs")
 	}
   }
+
   message("finding shared...")
-  if(nrow(subsets[["shared"]])==0) {expt=as.data.frame("No shared REs")}
-  else {
+  if(nrow(subsets[["shared"]])==0) {shared=as.data.frame("No shared REs")} else {
 	shared=rundose(set=subsets[["shared"]], background=subsets[["all"]],log2FoldChange=lfcshared,
-        ontoltype=ontoltype, pvalfilt=pvalfilt, genes=genes, offspring=offspring)
+	        ontoltype=ontoltype, pvalfilt=pvalfilt, genes=genes, offspring=offspring)
+	print(paste("Number of rows", nrow(shared)))
 	if(nrow(shared)==0) {
 		shared=as.data.frame("No enrichment found for shared REs")
 	}
