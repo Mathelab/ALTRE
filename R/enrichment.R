@@ -10,16 +10,16 @@
 #' their more precise offspring is the more interesting question.
 #' ************CHANGE ANALYSISRESULTS TO ALTREPEAKS!!!!******************
 #' ****************CHANGE REGIONSUBSET TO REGIONTYPE!!!!*****************
-#' @param analysisresults results from analysis of counts
-#' @param enrichpvalfilt adjusted pval for enrichment to filter on (adjusted for multiple testing)
-#' @param ontoltype one of three categories: "MF" (molecular function), "CC" (cellular component), "BP" (biological process)
-#' @param lfctypespecific log2fold change (of chromatin accessibility) for type specific enhancers/promoters
-#' @param lfcshared log2fold change (of chromatin accessibility) for shared enhancers/promoters
-#' @param pvaltypespecific p-value (of chromatin accessibility) for type specific enhancers/promoters
-#' @param pvalshared p-value (of chromatin accessibility) for shared enhancers/promoters
-#' @param regionsubset "promoter" or "enhancer"
-#' @param genes minimum number of genes allowable in a pathway
-#' @param offspring maximum number of offspring allowable in a pathway
+#' @param analysisresults Results from analysis of counts.
+#' @param ontoltype One of three categories: "MF" (molecular function), "CC" (cellular component), "BP" (biological process).
+#' @param enrichpvalfilt Adjusted pval for enrichment to filter on (adjusted for multiple testing).
+#' @param lfctypespecific Log2fold change (of chromatin accessibility) for type specific enhancers/promoters.
+#' @param lfcshared Log2fold change (of chromatin accessibility) for shared enhancers/promoters.
+#' @param pvaltypespecific P-value (of chromatin accessibility) for type specific enhancers/promoters.
+#' @param pvalshared P-value (of chromatin accessibility) for shared enhancers/promoters.
+#' @param genes Minimum number of genes allowable in a pathway.
+#' @param offspring Maximum number of offspring allowable in a pathway.
+#' @param regionsubset  A "promoter" or "enhancer".
 #' @examples
 #' \dontrun{
 #' dir <- system.file("extdata", package="ALTRE", mustWork=TRUE)
@@ -40,78 +40,111 @@
 #'
 #' @export
 
-pathenrich<-function(analysisresults,
-	ontoltype="MF",
-	enrichpvalfilt=0.01,
-	lfctypespecific=1.5,
-	lfcshared=1.2,
-	pvaltypespecific=0.01,
-	pvalshared=0.05,
-	genes=20,
-	offspring=300,
-	regionsubset="promoter"){
+pathenrich <- function(analysisresults,
+                       ontoltype = "MF",
+                       enrichpvalfilt = 0.01,
+                       lfctypespecific = 1.5,
+                       lfcshared = 1.2,
+                       pvaltypespecific = 0.01,
+                       pvalshared = 0.05,
+                       genes = 20,
+                       offspring = 300,
+                       regionsubset = "promoter") {
+  analysisresults = analysisresults[[1]]
 
-  analysisresults=analysisresults[[1]]
-
-  if (is.data.frame(analysisresults)==FALSE) {
-	stop("analysisresults parameter is not in the correct format, make sure you are using the output from countanalysis()")
+  if (is.data.frame(analysisresults) == FALSE) {
+    stop(
+      "analysisresults parameter is not in the correct format, make sure you are using the output from countanalysis()"
+    )
   }
-  analysisresultsdata=as.data.frame(analysisresults)
+  analysisresultsdata = as.data.frame(analysisresults)
 
 
-  if ( regionsubset == "all" ){
-	newanalysisresults=analysisresultsdata
+  if (regionsubset == "all") {
+    newanalysisresults = analysisresultsdata
   }
   else {
-	newanalysisresults=analysisresultsdata[analysisresultsdata$meta.region==regionsubset,]
+    newanalysisresults = analysisresultsdata[analysisresultsdata$meta.region ==
+                                               regionsubset, ]
   }
 
   # Define regions that are more open, less open, or shared
-  up=newanalysisresults[!(is.na(newanalysisresults$padj)) &
-	newanalysisresults$log2FoldChange > lfctypespecific &
-	newanalysisresults$padj < pvaltypespecific,]
-  down=newanalysisresults[!(is.na(newanalysisresults$padj)) &
-	newanalysisresults$log2FoldChange < -lfctypespecific &
-	newanalysisresults$padj < pvaltypespecific,]
-  shared=newanalysisresults[(newanalysisresults$log2FoldChange <= lfcshared &
-	newanalysisresults$log2FoldChange >= -lfcshared) &
-	(newanalysisresults$padj >= pvalshared | is.na(newanalysisresults$padj)), ]
-  all=rbind(up,down,shared)
-  subsets=list(up,down,shared,newanalysisresults)
-  names(subsets)=c("up","down","shared","all")
+  up = newanalysisresults[!(is.na(newanalysisresults$padj)) &
+                            newanalysisresults$log2FoldChange > lfctypespecific &
+                            newanalysisresults$padj < pvaltypespecific, ]
+  down = newanalysisresults[!(is.na(newanalysisresults$padj)) &
+                              newanalysisresults$log2FoldChange < -lfctypespecific &
+                              newanalysisresults$padj < pvaltypespecific, ]
+  shared = newanalysisresults[(
+    newanalysisresults$log2FoldChange <= lfcshared &
+      newanalysisresults$log2FoldChange >= -lfcshared
+  ) &
+    (newanalysisresults$padj >= pvalshared |
+       is.na(newanalysisresults$padj)),]
+  all = rbind(up, down, shared)
+  subsets = list(up, down, shared, newanalysisresults)
+  names(subsets) = c("up", "down", "shared", "all")
 
   message("finding expt-specific...")
-  if(nrow(subsets[["up"]])==0) {expt=as.data.frame("No REs higher in experiment group")}  else {
-	expt=rundose(set=subsets[["up"]], background=subsets[["all"]],log2FoldChange=lfctypespecific,
-	ontoltype=ontoltype, pvalfilt=enrichpvalfilt, genes=genes, offspring=offspring)
-        if(nrow(shared)==0) {
-               expt=as.data.frame("No enrichment found for experiment REs")
-	}
+  if (nrow(subsets[["up"]]) == 0) {
+    expt = as.data.frame("No REs higher in experiment group")
+  }  else {
+    expt = rundose(
+      set = subsets[["up"]],
+      background = subsets[["all"]],
+      log2FoldChange = lfctypespecific,
+      ontoltype = ontoltype,
+      pvalfilt = enrichpvalfilt,
+      genes = genes,
+      offspring = offspring
+    )
+    if (nrow(shared) == 0) {
+      expt = as.data.frame("No enrichment found for experiment REs")
+    }
   }
 
   message("finding reference-specific...")
-  if(nrow(subsets[["down"]])==0) {reference=as.data.frame("No REs higher in reference group")} else {
-	reference=rundose(set=subsets[["down"]], background=subsets[["all"]],log2FoldChange=lfctypespecific,
-        ontoltype=ontoltype, pvalfilt=enrichpvalfilt, genes=genes, offspring=offspring)
-        if(nrow(expt)==0) {
-                reference=as.data.frame("No enrichment found for reference REs")
-	}
+  if (nrow(subsets[["down"]]) == 0) {
+    reference = as.data.frame("No REs higher in reference group")
+  } else {
+    reference = rundose(
+      set = subsets[["down"]],
+      background = subsets[["all"]],
+      log2FoldChange = lfctypespecific,
+      ontoltype = ontoltype,
+      pvalfilt = enrichpvalfilt,
+      genes = genes,
+      offspring = offspring
+    )
+    if (nrow(expt) == 0) {
+      reference = as.data.frame("No enrichment found for reference REs")
+    }
   }
 
   message("finding shared...")
-  if(nrow(subsets[["shared"]])==0) {shared=as.data.frame("No shared REs")} else {
-	shared=rundose(set=subsets[["shared"]], background=subsets[["all"]],log2FoldChange=lfcshared,
-	        ontoltype=ontoltype, pvalfilt=enrichpvalfilt, genes=genes, offspring=offspring)
-	print(paste("Number of rows", nrow(shared)))
-	if(nrow(shared)==0) {
-		shared=as.data.frame("No enrichment found for shared REs")
-	}
+  if (nrow(subsets[["shared"]]) == 0) {
+    shared = as.data.frame("No shared REs")
+  } else {
+    shared = rundose(
+      set = subsets[["shared"]],
+      background = subsets[["all"]],
+      log2FoldChange = lfcshared,
+      ontoltype = ontoltype,
+      pvalfilt = enrichpvalfilt,
+      genes = genes,
+      offspring = offspring
+    )
+    print(paste("Number of rows", nrow(shared)))
+    if (nrow(shared) == 0) {
+      shared = as.data.frame("No enrichment found for shared REs")
+    }
   }
 
-#  enrichstats=data.frame(
+  #  enrichstats=data.frame(
 
-  allthree=list(expt=expt, reference=reference, shared=shared)
+  allthree = list(expt = expt,
+                  reference = reference,
+                  shared = shared)
 
   return(allthree)
 }
-

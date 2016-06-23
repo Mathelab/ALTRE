@@ -16,6 +16,7 @@
 #'
 #'
 #' @examples
+#' \dontrun{
 #' TSSannot <- getTSS()
 #' dir <- system.file("extdata", package="ALTRE", mustWork=TRUE)
 #' csvfile <- file.path(dir, "lung.csv")
@@ -25,6 +26,7 @@
 #'	regionspecific=TRUE,mergedistenh=1500,mergedistprom=1000 )
 #' counts_consPeaks <- getcounts(annotpeaks=consPeaksAnnotated,
 #' csvfile=csvfile, reference="SAEC", chrom="chr21")
+#' }
 #' @export
 
 getcounts <-
@@ -33,7 +35,7 @@ getcounts <-
     bamfileslist = loadBamFiles(sampleinfo)
 
     if (is.null(chrom) == FALSE) {
-      inputgranges = annotpeaks[[1]][seqnames(annotpeaks[[1]]) == chrom,]
+      inputgranges = annotpeaks[[1]][seqnames(annotpeaks[[1]]) == chrom, ]
     }
 
     else {

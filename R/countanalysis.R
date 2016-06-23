@@ -15,6 +15,7 @@
 #'	3) data.frame used for plotting
 #'
 #' @examples
+#' \dontrun{
 #' TSSannot <- getTSS()
 #' dir <- system.file("extdata", package="ALTRE", mustWork=TRUE)
 #' csvfile <- file.path(dir, "lung.csv")
@@ -25,7 +26,7 @@
 #' counts_consPeaks <-getcounts(annotpeaks=consPeaksAnnotated, csvfile=csvfile,
 #' reference="SAEC", chrom="chr21")
 #' altre_peaks=countanalysis(counts=counts_consPeaks, pval=0.01, lfcvalue=1)
-#'
+#' }
 #' @export
 
 countanalysis <- function(counts,
@@ -53,7 +54,7 @@ countanalysis <- function(counts,
   grangesdataframe = grangestodataframe(originalgranges)
 
   #create a dataframe with results and position
-  fulldataframe = cbind(resultsdataframe[keepers, ], grangesdataframe[keepers, ])
+  fulldataframe = cbind(resultsdataframe[keepers,], grangesdataframe[keepers,])
 
   #######################
   # Get some stats
@@ -69,15 +70,15 @@ countanalysis <- function(counts,
   stats = matrix(c(upproms, downproms,
                    upenh, downenh), nrow = 2)
   colnames(stats) = c("Promoters", "Enhancers")
-  stats=as.data.frame(stats)
-  stats=cbind(c("UP","DOWN"),stats)
-  names(stats)[1]="REtype"
+  stats = as.data.frame(stats)
+  stats = cbind(c("UP", "DOWN"), stats)
+  names(stats)[1] = "REtype"
 
   #######################
   # Produce a volcano plot and a barplot showing differential REs
   # Find NAs to remove them, thereby avoiding printing warnings
   nonas = which(!is.na(resultsdataframe$padj))
-  toplot = resultsdataframe[nonas, ]
+  toplot = resultsdataframe[nonas,]
   keepers = intersect(which(toplot$padj < pval),
                       which(abs(toplot$log2FoldChange) > lfcvalue))
   toplot$col = rep("non-altered", nrow(toplot))
@@ -86,6 +87,10 @@ countanalysis <- function(counts,
   return(list(
     results = fulldataframe,
     stats = stats,
-    dftoplot = list(toplot=toplot,pval=pval,lfcvalue=lfcvalue)
+    dftoplot = list(
+      toplot = toplot,
+      pval = pval,
+      lfcvalue = lfcvalue
+    )
   ))
 }

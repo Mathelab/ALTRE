@@ -27,6 +27,7 @@ read count is derived from user-input BAM filex, and regions of interest
 are supplied in a Granges object, ideally output of combineannotatepeaks.R.
 }
 \examples{
+\dontrun{
 TSSannot <- getTSS()
 dir <- system.file("extdata", package="ALTRE", mustWork=TRUE)
 csvfile <- file.path(dir, "lung.csv")
@@ -36,5 +37,6 @@ consPeaksAnnotated <- combineAnnotatePeaks(conspeaks=consPeaks, TSS=TSSannot,mer
 regionspecific=TRUE,mergedistenh=1500,mergedistprom=1000 )
 counts_consPeaks <- getcounts(annotpeaks=consPeaksAnnotated,
 csvfile=csvfile, reference="SAEC", chrom="chr21")
+}
 }
 

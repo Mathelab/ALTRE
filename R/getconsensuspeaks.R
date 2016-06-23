@@ -51,7 +51,7 @@ getConsensusPeaks <- function(samplepeaks, minreps) {
     keepers = which(apply(applymatrix, 1, function(x)
       length(which(x == "present")) >= minreps))
 
-    reducedallregionsdatakeepers = reducedallregionsdata[keepers, ]
+    reducedallregionsdatakeepers = reducedallregionsdata[keepers,]
 
     # Convert back to GRanges object
     finalgranges = GRanges(
@@ -80,18 +80,21 @@ getConsensusPeaks <- function(samplepeaks, minreps) {
     names(conspeaks_stats)[[mytype]] = sampletypes[mytype]
   } # end looping through sampletypes
 
-  maxreps=max(c(length(conspeaks_stats[[1]])-1,length(conspeaks_stats[[2]])-1))
-  samp1=conspeaks_stats[[1]]
-  samp2=conspeaks_stats[[2]]
-  if (length(samp1)-1 != maxreps) {
-	samp1=c(samp1,rep(0,maxreps-length(samp1)+1))
+  maxreps = max(c(length(conspeaks_stats[[1]]) - 1, length(conspeaks_stats[[2]]) -
+                    1))
+  samp1 = conspeaks_stats[[1]]
+  samp2 = conspeaks_stats[[2]]
+  if (length(samp1) - 1 != maxreps) {
+    samp1 = c(samp1, rep(0, maxreps - length(samp1) + 1))
   }
-  if (length(samp2)-1 != maxreps) {
-        samp2=c(samp2,rep(0,maxreps-length(samp2)+1))
+  if (length(samp2) - 1 != maxreps) {
+    samp2 = c(samp2, rep(0, maxreps - length(samp2) + 1))
   }
 
-  dfstats=as.data.frame(cbind(c("ConsensusPeaks",paste0("rep",1:maxreps)),samp1,samp2))
-  colnames(dfstats)=c("PeakType",names(conspeaks_stats))
+  dfstats = as.data.frame(cbind(c(
+    "ConsensusPeaks", paste0("rep", 1:maxreps)
+  ), samp1, samp2))
+  colnames(dfstats) = c("PeakType", names(conspeaks_stats))
 
   return(list(consPeaks = conspeaks, consPeaksStats = data.frame(dfstats)))
 }

@@ -28,6 +28,7 @@
 #'
 #'
 #' @examples
+#' \dontrun{
 #' TSSannot <- getTSS()
 #' dir <- system.file("extdata", package="ALTRE", mustWork=TRUE)
 #' csvfile <- file.path(dir, "lung.csv")
@@ -35,7 +36,7 @@
 #' consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
 #' consPeaksAnnotated=combineAnnotatePeaks(conspeaks=consPeaks, TSS=TSSannot,merge=TRUE,
 #'	regionspecific=TRUE,mergedistenh=1500,mergedistprom=1000)
-#'
+#'}
 #' @export
 
 combineAnnotatePeaks <-
@@ -69,12 +70,11 @@ combineAnnotatePeaks <-
 
     # If merge is set to false, don't merge
     if (merge == FALSE) {
-      if(mergedistenh>0 || mergedistprom>0) {
-	mergestats=as.data.frame("No merging because merge is set to FALSE")
+      if (mergedistenh > 0 || mergedistprom > 0) {
+        mergestats = as.data.frame("No merging because merge is set to FALSE")
       }
       else {
-	mergestats = as.data.frame(
-          "No merging because mergedistenh and mergedistprom were set to zero")
+        mergestats = as.data.frame("No merging because mergedistenh and mergedistprom were set to zero")
       }
       namesvector = c()
       for (i in 1:length(peaklist)) {
@@ -96,7 +96,7 @@ combineAnnotatePeaks <-
       listtoreturn = list(
         consPeaksAnnotated = GRanges(notmerging, meta = notmerging[, 4:ncol(notmerging)]),
         mergestats = mergestats
-        )
+      )
     } # end if no merging
 
     else {
@@ -113,9 +113,9 @@ combineAnnotatePeaks <-
         }
         dataframeformerge = grangestodataframe(TSSgranges)
         enhancerbeforemergedata = dataframeformerge[dataframeformerge$region ==
-                                                      "enhancer", ]
+                                                      "enhancer",]
         promoterbeforemergedata = dataframeformerge[dataframeformerge$region ==
-                                                      "promoter", ]
+                                                      "promoter",]
 
         # Merge enhancers and promoters independently if they're within user defined distances
         enhancerafter = mergeclosepeaks(peaklist,

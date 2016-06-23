@@ -1,5 +1,6 @@
 
 
+
 #' Given the output from getConsensusPeaks, generate a barplot of count statistics
 #'
 #' @param samplepeaks output generated from getConsensusPeaks
@@ -183,7 +184,7 @@ plotCountAnalysis <- function(altrepeaks) {
   toplot = altrepeaks$dftoplot$toplot
   pval = altrepeaks$dftoplot$pval
   lfcvalue = altrepeaks$dftoplot$lfcvalue
-  plot = ggplot(toplot, aes(toplot$log2FoldChange,-log2(toplot$padj))) +
+  plot = ggplot(toplot, aes(toplot$log2FoldChange, -log2(toplot$padj))) +
     geom_point(aes(col = factor(toplot$col))) +
     scale_colour_manual(values = c("red", "dark grey")) +
     theme_bw(base_size = 15) +
@@ -287,95 +288,134 @@ plotgetcounts <- function(countsconspeaks) {
 #' }
 #' @export
 
-enrichHeatmap <- function(input, title, pvalfilt=0.001, removeonlyshared=FALSE){
-  #input=input[[1]]
+enrichHeatmap <-
+  function(input,
+           title,
+           pvalfilt = 0.001,
+           removeonlyshared = FALSE) {
+    #input=input[[1]]
 
-  if (is.list(input)==FALSE)
-  {stop("The input is not a list! Please make sure you are using the output from the enrichment analysis")}
+    if (is.list(input) == FALSE)
+    {
+      stop(
+        "The input is not a list! Please make sure you are using the output from the enrichment analysis"
+      )
+    }
 
-  if (is.data.frame(input$expt)==FALSE | is.data.frame(input$reference)==FALSE |
-      is.data.frame(input$shared)==FALSE | length(input) != 3 |
-      all(names(input) != c("expt","reference","shared"))){
-    stop("The input is not a list of three dataframes! Please make sure you are using the output from the enrichment analysis")
+    if (is.data.frame(input$expt) == FALSE |
+        is.data.frame(input$reference) == FALSE |
+        is.data.frame(input$shared) == FALSE | length(input) != 3 |
+        all(names(input) != c("expt", "reference", "shared"))) {
+      stop(
+        "The input is not a list of three dataframes! Please make sure you are using the output from the enrichment analysis"
+      )
+    }
+
+    up = input$expt
+    if (length(up) <= 1) {
+      up$Description = NA
+    } else
+    {
+      up = up[up$p.adjust < pvalfilt, ]
+    }
+    reference = input$reference
+    if (length(reference) <= 1) {
+      reference$Description = NA
+    } else
+    {
+      reference = reference[reference$p.adjust < pvalfilt, ]
+    }
+    shared = input$shared
+    if (length(shared) <= 1) {
+      shared$Description = NA
+    } else {
+      shared = shared[shared$p.adjust < pvalfilt, ]
+    }
+
+    pathways = unique(c(up$Description, reference$Description, shared$Description))
+    print(paste("Pathways", pathways))
+    pathways = pathways[!is.na(pathways)]
+    if (is.na(pathways) || length(pathways) == 0) {
+      stop("No pathways are significant (with adjusted pvalues < user input cutoff)")
+    }
+    #make a list of all the pathways in up, down, and shared
+    heatmapmatrix = matrix(data = NA,
+                           nrow = length(pathways),
+                           ncol = 3)
+    #make a matrix with as many row as there are pathways
+    row.names(heatmapmatrix) = pathways
+    #name the rows with the pathway names
+
+    colnames(heatmapmatrix) = c("up", "down", "shared")
+    #put up, down, and shared as the pathway names
+
+    print(paste("Dim heatmapmatrix", dim(heatmapmatrix)))
+
+    for (i in 1:length(row.names(heatmapmatrix))) {
+      print(row.names(heatmapmatrix)[i])
+      if (row.names(heatmapmatrix)[i] %in% up$Description) {
+        num1 = which(up$Description == row.names(heatmapmatrix)[i])
+        heatmapmatrix[i, 1] = up[num1, 6]
+      }
+
+      if (row.names(heatmapmatrix)[i] %in% reference$Description) {
+        num2 = which(reference$Description == row.names(heatmapmatrix)[i])
+        heatmapmatrix[i, 2] = reference[num2, 6]
+      }
+
+      if (row.names(heatmapmatrix)[i] %in% shared$Description) {
+        num3 = which(shared$Description == row.names(heatmapmatrix)[i])
+        heatmapmatrix[i, 3] = shared[num3, 6]
+      }
+    }
+
+    #places the adjusted p-value in the matrix is there is one
+
+    if (removeonlyshared == TRUE) {
+      mycounts = as.numeric(apply(heatmapmatrix, 1, function(x)
+        is.na(x[1]) &  is.na(x[2])))
+      #finds the shared pathways the are not present in up or down
+      heatmapinput = heatmapmatrix[mycounts == 0, ]
+      #keeps those that are not only shared
+    }
+    if (removeonlyshared == FALSE) {
+      heatmapinput = heatmapmatrix
+    }
+
+
+    heatmapdata = as.data.frame(heatmapinput)
+    heatmapdata = heatmapdata[order(heatmapdata$down,
+                                    heatmapdata$up,
+                                    heatmapdata$shared,
+                                    decreasing = TRUE), ]
+    #sorts matrix
+    heatmapdata$id = rownames(heatmapdata)
+    #makes id
+    rownames(heatmapdata) = c(1:nrow(heatmapdata))
+    meltedheatmapdata = melt(heatmapdata)
+
+    meltedheatmapdata$id = factor(meltedheatmapdata$id, levels = unique(meltedheatmapdata$id))
+
+    p1 = ggplot(meltedheatmapdata,
+                aes(y = meltedheatmapdata$id, x = meltedheatmapdata$variable)) +
+      geom_tile(aes(fill = meltedheatmapdata$value), colour = "black") +
+      scale_fill_continuous(
+        low = "turquoise1",
+        high = "navy",
+        na.value = 'white',
+        guide = guide_legend(title = "Pvalue")
+      ) +
+      theme(text = element_text(size = 13)) + ggtitle(title)
+    p2 = p1 + scale_x_discrete(
+      expand = c(0, 0),
+      labels = c("High in Expt",
+                 "High in Reference", "Shared")
+    ) +
+      scale_y_discrete(expand = c(0, 0)) +
+      theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+
+    return(p2)
   }
-
-  up=input$expt
-  if (length(up)<=1) {up$Description=NA} else
-  {up=up[up$p.adjust<pvalfilt,]}
-  reference=input$reference
-  if (length(reference)<=1) {reference$Description=NA} else
-  {reference=reference[reference$p.adjust<pvalfilt,]}
-  shared=input$shared
-  if(length(shared)<=1) {shared$Description=NA} else {
-    shared=shared[shared$p.adjust<pvalfilt,]}
-
-  pathways=unique(c(up$Description, reference$Description, shared$Description))
-  print(paste("Pathways",pathways))
-  pathways=pathways[!is.na(pathways)]
-  if(is.na(pathways) || length(pathways)==0) {
-    stop("No pathways are significant (with adjusted pvalues < user input cutoff)")
-  }
-  #make a list of all the pathways in up, down, and shared
-  heatmapmatrix=matrix(data=NA, nrow=length(pathways), ncol=3)
-  #make a matrix with as many row as there are pathways
-  row.names(heatmapmatrix)=pathways
-  #name the rows with the pathway names
-
-  colnames(heatmapmatrix)=c("up","down","shared")
-  #put up, down, and shared as the pathway names
-
-  print(paste("Dim heatmapmatrix",dim(heatmapmatrix)))
-
-  for (i in 1:length(row.names(heatmapmatrix))){
-    print(row.names(heatmapmatrix)[i])
-    if (row.names(heatmapmatrix)[i] %in% up$Description){
-      num1=which(up$Description==row.names(heatmapmatrix)[i])
-      heatmapmatrix[i,1]=up[num1,6]}
-
-    if (row.names(heatmapmatrix)[i] %in% reference$Description){
-      num2=which(reference$Description==row.names(heatmapmatrix)[i])
-      heatmapmatrix[i,2]=reference[num2,6]}
-
-    if (row.names(heatmapmatrix)[i] %in% shared$Description){
-      num3=which(shared$Description==row.names(heatmapmatrix)[i])
-      heatmapmatrix[i,3]=shared[num3,6]}
-  }
-
-  #places the adjusted p-value in the matrix is there is one
-
-  if (removeonlyshared == TRUE){
-    mycounts=as.numeric(apply(heatmapmatrix,1,function(x) is.na(x[1]) &  is.na(x[2]) ))
-    #finds the shared pathways the are not present in up or down
-    heatmapinput=heatmapmatrix[mycounts == 0,]
-    #keeps those that are not only shared
-  }
-  if (removeonlyshared == FALSE){
-    heatmapinput=heatmapmatrix
-  }
-
-
-  heatmapdata=as.data.frame(heatmapinput)
-  heatmapdata=heatmapdata[order(heatmapdata$down, heatmapdata$up, heatmapdata$shared, decreasing = TRUE),]
-  #sorts matrix
-  heatmapdata$id=rownames(heatmapdata)
-  #makes id
-  rownames(heatmapdata)=c(1:nrow(heatmapdata))
-  meltedheatmapdata=melt(heatmapdata)
-
-  meltedheatmapdata$id=factor(meltedheatmapdata$id, levels=unique(meltedheatmapdata$id))
-
-  p1=ggplot(meltedheatmapdata, aes(y=meltedheatmapdata$id, x=meltedheatmapdata$variable)) +
-    geom_tile(aes(fill=meltedheatmapdata$value), colour = "black") +
-    scale_fill_continuous(low="turquoise1", high="navy", na.value = 'white',
-                          guide=guide_legend(title="Pvalue")) +
-    theme(text = element_text(size=13)) + ggtitle(title)
-  p2=p1 + scale_x_discrete(expand = c(0, 0), labels=c("High in Expt",
-                                                      "High in Reference","Shared")) +
-    scale_y_discrete(expand = c(0, 0)) +
-    theme(axis.title.x = element_blank(), axis.title.y = element_blank())
-
-  return(p2)
-}
 
 
 
@@ -448,7 +488,8 @@ multiplot <-
       # Make each plot, in the correct location
       for (i in 1:numPlots) {
         # Get the i,j matrix positions of the regions that contain this subplot
-        matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
+        matchidx <-
+          as.data.frame(which(layout == i, arr.ind = TRUE))
 
         print(plots[[i]],
               vp = viewport(
