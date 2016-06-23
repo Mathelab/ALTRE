@@ -17,7 +17,8 @@ enrichHeatmap(input, title, pvalfilt = 0.001, removeonlyshared = FALSE)
 
 \item{pvalfilt}{p-value cut-off for inclusion in heatmap}
 
-\item{removeonlyshared}{removes regions that come up signifigant only shared regulatory regions when set to TRUE. Default is FALSE.}
+\item{removeonlyshared}{removes regions that come up signifigant only shared 
+regulatory regions when set to TRUE. Default is FALSE.}
 }
 \value{
 heatmap
@@ -41,10 +42,10 @@ regionspecific=TRUE,mergedistenh=1500,mergedistprom=1000 )
 counts_consPeaks <- getcounts(annotpeaks=consPeaksAnnotated, csvfile=csvfile,
 reference="SAEC")
  altre_peaks=countanalysis(counts=counts_consPeaks, pval=0.01, lfcvalue=1)
-MFenrich=pathenrich(analysisresults=altre_peaks, ontoltype="MF", pvalfilt=0.01)
-BPenrich=pathenrich(analysisresults=altre_peaks, ontoltype="BP", pvalfilt=0.01)
-plot1=enrichheatmap(MFenrich, title="GO:MF, p<0.01")
-plot2=enrichheatmap(BPenrich, title="GO:BP, p<0.01")
+MFenrich=pathenrich(analysisresults=altre_peaks, ontoltype="MF", enrichpvalfilt=0.01)
+BPenrich=pathenrich(analysisresults=altre_peaks, ontoltype="BP", enrichpvalfilt=0.01)
+plot1=enrichHeatmap(MFenrich, title="GO:MF, p<0.01")
+plot2=enrichHeatmap(BPenrich, title="GO:BP, p<0.01")
 multiplot(plot1,plot2,cols=1)
 }
 
