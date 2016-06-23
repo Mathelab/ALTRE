@@ -9,6 +9,10 @@ multiplot(..., plotlist = NULL, file, cols = 1, layout = NULL)
 \arguments{
 \item{...}{list of plots}
 
+\item{plotlist}{plotlist}
+
+\item{file}{file}
+
 \item{cols}{number of columns in layout}
 
 \item{layout}{matrix specifying layout, if present cols is ignored}

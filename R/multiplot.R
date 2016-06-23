@@ -10,7 +10,8 @@
 #' @param ... list of plots
 #' @param cols number of columns in layout
 #' @param layout matrix specifying layout, if present cols is ignored
-#'
+#' @param plotlist plotlist
+#' @param file file
 
 multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
 

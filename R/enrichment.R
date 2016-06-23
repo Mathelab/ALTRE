@@ -31,8 +31,8 @@
 #' # Need to run getcounts on all chromosomes
 #' counts_consPeaks=getcounts(annotpeaks=consPeaksAnnotated, csvfile=csvfile, reference="SAEC")
 #' altre_peaks=countanalysis(counts=counts_consPeaks, pval=0.01, lfcvalue=1)
-#' MFenrich=pathenrich(analysisresults=altre_peaks, ontoltype="MF", pvalfilt=0.01,)
-#' BPenrich=pathenrich(analysisresults=altre_peaks, ontoltype="BP", pvalfilt=0.01)
+#' MFenrich=pathenrich(analysisresults=altre_peaks, ontoltype="MF", enrichpvalfilt=0.01,)
+#' BPenrich=pathenrich(analysisresults=altre_peaks, ontoltype="BP", enrichpvalfilt=0.01)
 #'
 #' @return dataframe identifying p-values for enriched pathways -- pathways also annotated with additional information
 #'
@@ -41,7 +41,7 @@
 
 pathenrich<-function(analysisresults, 
 	ontoltype="MF", 
-	pvalfilt=0.01, 
+	enrichpvalfilt=0.01, 
 	lfctypespecific=1.5, 
 	lfcshared=1.2, 
 	pvaltypespecific=0.01, 
@@ -82,7 +82,7 @@ pathenrich<-function(analysisresults,
   message("finding expt-specific...")
   if(nrow(subsets[["up"]])==0) {expt=as.data.frame("No REs higher in experiment group")}  else {
 	expt=rundose(set=subsets[["up"]], background=subsets[["all"]],log2FoldChange=lfctypespecific,
-	ontoltype=ontoltype, pvalfilt=pvalfilt, genes=genes, offspring=offspring)
+	ontoltype=ontoltype, pvalfilt=enrichpvalfilt, genes=genes, offspring=offspring)
         if(nrow(shared)==0) {
                expt=as.data.frame("No enrichment found for experiment REs")
 	}
@@ -91,7 +91,7 @@ pathenrich<-function(analysisresults,
   message("finding reference-specific...")
   if(nrow(subsets[["down"]])==0) {reference=as.data.frame("No REs higher in reference group")} else {
 	reference=rundose(set=subsets[["down"]], background=subsets[["all"]],log2FoldChange=lfctypespecific,
-        ontoltype=ontoltype, pvalfilt=pvalfilt, genes=genes, offspring=offspring)
+        ontoltype=ontoltype, pvalfilt=enrichpvalfilt, genes=genes, offspring=offspring)
         if(nrow(expt)==0) {
                 reference=as.data.frame("No enrichment found for reference REs")
 	}
@@ -100,7 +100,7 @@ pathenrich<-function(analysisresults,
   message("finding shared...")
   if(nrow(subsets[["shared"]])==0) {shared=as.data.frame("No shared REs")} else {
 	shared=rundose(set=subsets[["shared"]], background=subsets[["all"]],log2FoldChange=lfcshared,
-	        ontoltype=ontoltype, pvalfilt=pvalfilt, genes=genes, offspring=offspring)
+	        ontoltype=ontoltype, pvalfilt=enrichpvalfilt, genes=genes, offspring=offspring)
 	print(paste("Number of rows", nrow(shared)))
 	if(nrow(shared)==0) {
 		shared=as.data.frame("No enrichment found for shared REs")
