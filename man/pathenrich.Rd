@@ -89,7 +89,7 @@ regionspecific=TRUE,mergedistenh=1500,mergedistprom=1000 )
 # Need to run getcounts on all chromosomes
 counts_consPeaks=getcounts(annotpeaks=consPeaksAnnotated, csvfile=csvfile, reference="SAEC")
 altre_peaks=countanalysis(counts=counts_consPeaks, pval=0.01, lfcvalue=1)
-MFenrich=pathenrich(analysisresults=altre_peaks, ontoltype="MF", enrichpvalfilt=0.01,)
+MFenrich=pathenrich(analysisresults=altre_peaks, ontoltype="MF", enrichpvalfilt=0.01)
 BPenrich=pathenrich(analysisresults=altre_peaks, ontoltype="BP", enrichpvalfilt=0.01)
 
 }

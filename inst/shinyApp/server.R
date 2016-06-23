@@ -31,6 +31,13 @@ shinyServer(function(input, output, session) {
   }, options = list(searching = FALSE,
                     paging = FALSE))
 
+
+  output$chooseref <- renderUI({
+    reflist <- unique(csvFile()$sample)
+    selectInput("reference", "Reference Cell Type",reflist , selected = reflist[1] )
+  })
+
+
   #####################################################
 
   #  tabPanel "merge"
@@ -69,9 +76,16 @@ shinyServer(function(input, output, session) {
                    setProgress(value = .3, detail = "retrieving TSS file")
                    TSSannot <- getTSS()
                    setProgress(value = 0.5, detail = "annotating peaks")
+
                    consPeaksAnnotated <-
                      combineAnnotatePeaks(conspeaks = consPeaks,
-                                          TSS = TSSannot)
+                                          TSS = TSSannot,
+                                          merge=input$mergeradio,
+                                          regionspecific=input$regionradio,
+                                          mergedist = input$dist,
+                                          mergedistenh= input$distenh,
+                                          mergedistprom=input$distprom,
+                                          distancefromTSS=input$distTSS)
                    setProgress(value = 1, detail = "done!")
                    Sys.sleep(0.5)
                  })
@@ -94,7 +108,7 @@ shinyServer(function(input, output, session) {
                      getcounts(
                        annotpeaks = consPeaksAnnotated,
                        csvfile = csvfile,
-                       reference = "SAEC",
+                       reference = input$reference,
                        chrom = "chr21"
                      )
                    setProgress(value = 1, detail = "done!")
@@ -114,14 +128,40 @@ shinyServer(function(input, output, session) {
                    setProgress(value = 0.5, detail = "annotating peaks")
                    altred_peaks <-
                      countanalysis(counts = counts_consPeaks,
-                                   pval = 0.01,
-                                   lfcvalue = 1)
+                                   pval = input$alpha,
+                                   lfcvalue = input$lfcThreshold)
                    setProgress(value = 1, detail = "done!")
                    Sys.sleep(0.5)
                  })
 
     return(altred_peaks)
   })
+
+  pathewayOutput <- eventReactive(input$buttonpathway, {
+    withProgress(message = 'In progress',
+                 detail = 'This may take a while...',
+                 value = 0,
+                 {
+                   setProgress(value = .1, detail = "running")
+                   altre_peaks <- alteredPeaks()
+                   setProgress(value = 0.3, detail = "GO Enrichment Analysis MF")
+                   MFenrich <-
+                     pathenrich(analysisresults=altre_peaks,
+                                ontoltype="MF",
+                                enrichpvalfilt= input$pathpvaluecutoff)
+                   setProgress(value = 0.6, detail = "GO Enrichment Analysis BP")
+                   BPenrich <-
+                     pathenrich(analysisresults=altre_peaks,
+                                ontoltype="BP",
+                                enrichpvalfilt= input$pathpvaluecutoff)
+
+                   setProgress(value = 1, detail = "done!")
+                   Sys.sleep(0.5)
+                 })
+
+    return(list(MFenrich=MFenrich, BPenrich=BPenrich))
+  })
+
 
 
   # peaksdf <- reactive({
@@ -140,7 +180,8 @@ shinyServer(function(input, output, session) {
 
   output$table3 <- renderDataTable({
 	annotatePeaks()$mergestats
-  }, options = list(searching = FALSE))
+  }, options = list(searching = FALSE,
+                    paging = FALSE))
 
 
   ####################################
@@ -150,12 +191,23 @@ shinyServer(function(input, output, session) {
     plotConsensusPeaks(mergedPeaks())
   })
 
+  output$annotatebarplot <- renderPlot({
+    plotCombineAnnotatePeaks(annotatePeaks())
+  })
+
+
   output$densityplot <- renderPlot({
     plotgetcounts(countsPeaks())
   })
 
   output$volcanoplot <- renderPlot({
     plotCountAnalysis(alteredPeaks())
+  })
+
+  output$heatplot <- renderPlot({
+    multiplot(enrichHeatmap(pathewayOutput()$MFenrich, title="GO:MF, p<0.01"),
+              enrichHeatmap(pathewayOutput()$BPenrich, title="GO:BP, p<0.01"))
+
   })
 
 
