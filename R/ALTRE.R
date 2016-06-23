@@ -28,7 +28,7 @@
 #' start site). Function can also merge regulatory regions that are within a specified
 #' distance from each other. 
 #'
-#/ 4.\code{\link{getcounts}}
+# / 4.\code{\link{getcounts}}
 #'
 #' The number of reads overlapping all regions for each cell type is calculated.
 #' The function outputs a DESeq object, summary statistics, and a density plot of the size of regulatory elements

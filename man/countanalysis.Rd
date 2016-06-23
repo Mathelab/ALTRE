@@ -17,7 +17,7 @@ increased by 2^1.5 or 2.8)}
 }
 \value{
 list containing:
-	1) DESeq2 results table
+1) DESeq2 results table
 2) some statistics
 3) data.frame used for plotting
 }
@@ -28,14 +28,14 @@ Altered regions are those that show differences in chromatin accessibility
 \examples{
 \dontrun{
 TSSannot <- getTSS()
-dir <- system.file("extdata", package="ALTRE", mustWork=TRUE)
-csvfile <- file.path(dir, "lung.csv")
+dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
+csvfile <- file.path(dir, 'lung.csv')
 samplePeaks <- loadPeaks(csvfile)
 consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
-consPeaksAnnotated <- combineAnnotatePeaks(conspeaks=consPeaks, TSS=TSSannot,merge=TRUE,
-regionspecific=TRUE,mergedistenh=1500,mergedistprom=1000 )
+consPeaksAnnotated <- combineAnnotatePeaks(conspeaks=consPeaks, TSS=TSSannot,
+merge=TRUE, regionspecific=TRUE,mergedistenh=1500,mergedistprom=1000 )
 counts_consPeaks <-getcounts(annotpeaks=consPeaksAnnotated, csvfile=csvfile,
-reference="SAEC", chrom="chr21")
+reference='SAEC', chrom='chr21')
 altre_peaks=countanalysis(counts=counts_consPeaks, pval=0.01, lfcvalue=1)
 }
 }

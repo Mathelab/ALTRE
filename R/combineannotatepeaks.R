@@ -30,144 +30,105 @@
 #' @examples
 #' \dontrun{
 #' TSSannot <- getTSS()
-#' dir <- system.file("extdata", package="ALTRE", mustWork=TRUE)
-#' csvfile <- file.path(dir, "lung.csv")
+#' dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
+#' csvfile <- file.path(dir, 'lung.csv')
 #' samplePeaks <- loadPeaks(csvfile)
 #' consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
 #' consPeaksAnnotated=combineAnnotatePeaks(conspeaks=consPeaks, TSS=TSSannot,merge=TRUE,
-#'	regionspecific=TRUE,mergedistenh=1500,mergedistprom=1000)
+#' regionspecific=TRUE,mergedistenh=1500,mergedistprom=1000)
 #'}
 #' @export
 
-combineAnnotatePeaks <-
-  function(conspeaks,
-           TSS,
-           merge = FALSE,
-           mergedistenh = 0,
-           mergedistprom = 0,
-           mergedist = 0,
-           regionspecific = NA,
-           distancefromTSS = 1500) {
-    if (class(conspeaks[[1]])[1] != "GRangesList")
-    {
-      stop("The input conspeaks is not in the correct format!  (try to rerun getConsensusPeaks())")
+combineAnnotatePeaks <- function(conspeaks, TSS, merge = FALSE, mergedistenh = 0, mergedistprom = 0, mergedist = 0, regionspecific = NA, distancefromTSS = 1500) {
+    if (class(conspeaks[[1]])[1] != "GRangesList") {
+        stop("The input conspeaks is not in the correct format!  (try to rerun getConsensusPeaks())")
     }
 
     peaklist = conspeaks[[1]]
 
-    #################################
-    # Aggregate and combine consensus peaks from all sample types
+    ################################# Aggregate and combine consensus peaks from all sample types
     allregregions = c(peaklist[[1]])
     for (i in 2:length(peaklist)) {
-      allregregions = c(allregregions, peaklist[[i]])
+        allregregions = c(allregregions, peaklist[[i]])
     }
     reducedallregregions = reduce(allregregions)
 
     TSSgranges = tssannotgrange(reducedallregregions, TSS, distancefromTSS)
 
-    #################################
-    # Annotate combined peaks (TSSgranges) by the cell type they came from
+    ################################# Annotate combined peaks (TSSgranges) by the cell type they came from
 
     # If merge is set to false, don't merge
-    if (merge == FALSE) {
-      if (mergedistenh > 0 || mergedistprom > 0) {
-        mergestats = as.data.frame("No merging because merge is set to FALSE")
-      }
-      else {
-        mergestats = as.data.frame("No merging because mergedistenh and mergedistprom were set to zero")
-      }
-      namesvector = c()
-      for (i in 1:length(peaklist)) {
-        newgranges = peaklist[[i]]
-        name = as.character(unique(mcols(newgranges)[1])[1, 1])
-        namesvector = c(namesvector, name)
-      }
+    if (merge == FALSE)
+        {
+            if (mergedistenh > 0 || mergedistprom > 0) {
+                mergestats = as.data.frame("No merging because merge is set to FALSE")
+            } else {
+                mergestats = as.data.frame("No merging because mergedistenh and mergedistprom were set to zero")
+            }
+            namesvector = c()
+            for (i in 1:length(peaklist)) {
+                newgranges = peaklist[[i]]
+                name = as.character(unique(mcols(newgranges)[1])[1, 1])
+                namesvector = c(namesvector, name)
+            }
 
-      for (i in 1:length(peaklist)) {
-        typespecific = findOverlaps(TSSgranges, peaklist[[i]])
-        newdataframe = data.frame(matrix(nrow = length(TSSgranges)))
-        newdataframe[queryHits(typespecific), 1] = namesvector[i]
-        values(TSSgranges) = cbind(values(TSSgranges), newdataframe)
-        colnames(mcols(TSSgranges))[i + 1] = c(namesvector[i])
-      }
+            for (i in 1:length(peaklist)) {
+                typespecific = findOverlaps(TSSgranges, peaklist[[i]])
+                newdataframe = data.frame(matrix(nrow = length(TSSgranges)))
+                newdataframe[queryHits(typespecific), 1] = namesvector[i]
+                values(TSSgranges) = cbind(values(TSSgranges), newdataframe)
+                colnames(mcols(TSSgranges))[i + 1] = c(namesvector[i])
+            }
 
-      #this will annotate the regions with type-specificity
-      notmerging = grangestodataframe(TSSgranges)
-      listtoreturn = list(
-        consPeaksAnnotated = GRanges(notmerging, meta = notmerging[, 4:ncol(notmerging)]),
-        mergestats = mergestats
-      )
-    } # end if no merging
-
-    else {
-      # Do the merging
-      if (is.na(regionspecific)) {
-        stop("If merging, then the regionspecific paramater must be set to TRUE or FALSE")
-      }
-      # if merging enhancer and promoter regions seperately,
-      # then run the merging function on them
-      # seperately and then combine them (WITHOUT reducing or you will lose the annotation)
-      if (regionspecific == TRUE) {
-        if (is.na(mergedistprom) || is.na(mergedistenh)) {
-          stop("If regionspecific is true, then mergedistprom and mergedistenh must be set")
+            # this will annotate the regions with type-specificity
+            notmerging = grangestodataframe(TSSgranges)
+            listtoreturn = list(consPeaksAnnotated = GRanges(notmerging, meta = notmerging[, 4:ncol(notmerging)]), mergestats = mergestats)
+        }  # end if no merging
+ else {
+        # Do the merging
+        if (is.na(regionspecific)) {
+            stop("If merging, then the regionspecific paramater must be set to TRUE or FALSE")
         }
-        dataframeformerge = grangestodataframe(TSSgranges)
-        enhancerbeforemergedata = dataframeformerge[dataframeformerge$region ==
-                                                      "enhancer",]
-        promoterbeforemergedata = dataframeformerge[dataframeformerge$region ==
-                                                      "promoter",]
+        # if merging enhancer and promoter regions seperately, then run the merging function on them seperately and then combine them (WITHOUT reducing or
+        # you will lose the annotation)
+        if (regionspecific == TRUE) {
+            if (is.na(mergedistprom) || is.na(mergedistenh)) {
+                stop("If regionspecific is true, then mergedistprom and mergedistenh must be set")
+            }
+            dataframeformerge = grangestodataframe(TSSgranges)
+            enhancerbeforemergedata = dataframeformerge[dataframeformerge$region == "enhancer", ]
+            promoterbeforemergedata = dataframeformerge[dataframeformerge$region == "promoter", ]
 
-        # Merge enhancers and promoters independently if they're within user defined distances
-        enhancerafter = mergeclosepeaks(peaklist,
-                                        enhancerbeforemergedata,
-                                        mergedist = mergedistenh,
-                                        TSS,
-                                        distancefromTSS)
-        promoterafter = mergeclosepeaks(peaklist,
-                                        promoterbeforemergedata,
-                                        mergedist = mergedistprom,
-                                        TSS,
-                                        distancefromTSS)
+            # Merge enhancers and promoters independently if they're within user defined distances
+            enhancerafter = mergeclosepeaks(peaklist, enhancerbeforemergedata, mergedist = mergedistenh, TSS, distancefromTSS)
+            promoterafter = mergeclosepeaks(peaklist, promoterbeforemergedata, mergedist = mergedistprom, TSS, distancefromTSS)
 
-        bothafter = sort(sortSeqlevels(c(enhancerafter, promoterafter)))
-      }
-
-      # if merging enhancer and promoter regions at the same time,
-      # then you just need to run the function once
-      if (regionspecific == FALSE) {
-        if (is.na(mergedist)) {
-          stop("If regionspecific is FALSE, then mergedist must be set")
+            bothafter = sort(sortSeqlevels(c(enhancerafter, promoterafter)))
         }
-        dataframeformerge = grangestodataframe(TSSgranges)
-        #create grange from dataframe
 
-        bothafter = mergeclosepeaks(peaklist,
-                                    dataframeformerge,
-                                    mergedist,
-                                    TSS,
-                                    distancefromTSS)
-      }
+        # if merging enhancer and promoter regions at the same time, then you just need to run the function once
+        if (regionspecific == FALSE) {
+            if (is.na(mergedist)) {
+                stop("If regionspecific is FALSE, then mergedist must be set")
+            }
+            dataframeformerge = grangestodataframe(TSSgranges)
+            # create grange from dataframe
 
-      # Create matrix for comparison:
-      resultuserinput = grangestodataframe(bothafter)
-      result0 = dataframeformerge
-      tableofinfo = matrix(nrow = 4, ncol = 2)
-      rownames(tableofinfo) = c(
-        "enhancers_before_merging",
-        "enhancers_after_merging",
-        "promoters_before_merging",
-        "promoters_after_merging"
-      )
-      colnames(tableofinfo) = c("total_number", "mean_length")
+            bothafter = mergeclosepeaks(peaklist, dataframeformerge, mergedist, TSS, distancefromTSS)
+        }
 
-      # Callstatscombineannotate internal function to create table:
-      tableofinfo = statscombineannotate(tableofinfo, result0, 1, 3)
-      tableofinfo = statscombineannotate(tableofinfo, resultuserinput, 2, 4)
+        # Create matrix for comparison:
+        resultuserinput = grangestodataframe(bothafter)
+        result0 = dataframeformerge
+        tableofinfo = matrix(nrow = 4, ncol = 2)
+        rownames(tableofinfo) = c("enhancers_before_merging", "enhancers_after_merging", "promoters_before_merging", "promoters_after_merging")
+        colnames(tableofinfo) = c("total_number", "mean_length")
 
-      listtoreturn = list(
-        consPeaksAnnotated = GRanges(resultuserinput, meta = resultuserinput[, 4:ncol(resultuserinput)]),
-        mergestats = as.data.frame(tableofinfo)
-      )
+        # Callstatscombineannotate internal function to create table:
+        tableofinfo = statscombineannotate(tableofinfo, result0, 1, 3)
+        tableofinfo = statscombineannotate(tableofinfo, resultuserinput, 2, 4)
+
+        listtoreturn = list(consPeaksAnnotated = GRanges(resultuserinput, meta = resultuserinput[, 4:ncol(resultuserinput)]), mergestats = as.data.frame(tableofinfo))
     }
     return(listtoreturn)
-  }
+}
