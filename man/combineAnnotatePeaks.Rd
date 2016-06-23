@@ -44,6 +44,7 @@ can be changed with the distancefromTSS argument)
 can be merged to form a larger regulatory region.
 }
 \examples{
+\dontrun{
 TSSannot <- getTSS()
 dir <- system.file("extdata", package="ALTRE", mustWork=TRUE)
 csvfile <- file.path(dir, "lung.csv")
@@ -51,6 +52,6 @@ samplePeaks <- loadPeaks(csvfile)
 consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
 consPeaksAnnotated=combineAnnotatePeaks(conspeaks=consPeaks, TSS=TSSannot,merge=TRUE,
 regionspecific=TRUE,mergedistenh=1500,mergedistprom=1000)
-
+}
 }
 

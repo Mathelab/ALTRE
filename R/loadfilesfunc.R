@@ -2,10 +2,9 @@
 #' @param csvPath csvPath
 #' @export
 loadCSVFile <- function(csvPath) {
-
   stopifnot(is.character(csvPath))
-  if(!file.exists(csvPath)) {
-	stop("CSV input file does not exist")
+  if (!file.exists(csvPath)) {
+    stop("CSV input file does not exist")
   }
   csvfile <- read_csv(
     csvPath,
@@ -18,7 +17,7 @@ loadCSVFile <- function(csvPath) {
     )
   )
 
-  csvfile=csvfile[order(csvfile$replicate,csvfile$sample),]
+  csvfile <- csvfile[order(csvfile$replicate, csvfile$sample), ]
   return(csvfile)
 }
 
@@ -26,8 +25,7 @@ loadCSVFile <- function(csvPath) {
 #' @param csvfile csvfile
 #' @export
 loadBedFiles <- function(csvfile) {
-
-  if(!is(csvfile, "data.frame"))
+  if (!is(csvfile, "data.frame"))
     stop("csvfile must be a data.frame ")
 
   readBed <- function(bedPath, ind) {
@@ -38,7 +36,8 @@ loadBedFiles <- function(csvfile) {
       na = "."
     ))[, 1:3]
     colnames(bed) <- c("seqnames", "start", "end")
-    bed           <- DataFrame(bed, csvfile[ind, c("sample","replicate")])
+    bed           <-
+      DataFrame(bed, csvfile[ind, c("sample", "replicate")])
     bed <- within(bed, {
       start      <- start + 1L
       sample     <- factor(sample)
@@ -48,9 +47,12 @@ loadBedFiles <- function(csvfile) {
   }
 
   bedFilesPath    <- file.path(csvfile$datapath, csvfile$peakfiles)
-  bedFiles        <- mapply(readBed, bedFilesPath, seq_along(bedFilesPath))
-  names(bedFiles) <- paste(csvfile$sample, csvfile$replicate,sep="_")
-  hotspots        <- lapply(bedFiles, function(x) as(x, "GRanges"))
+  bedFiles        <-
+    mapply(readBed, bedFilesPath, seq_along(bedFilesPath))
+  names(bedFiles) <-
+    paste(csvfile$sample, csvfile$replicate, sep = "_")
+  hotspots        <- lapply(bedFiles, function(x)
+    as(x, "GRanges"))
 
   return(GRangesList(hotspots))
 }
@@ -59,21 +61,23 @@ loadBedFiles <- function(csvfile) {
 #' @param csvfile csvfile
 #' @export
 loadBamFiles <- function(csvfile) {
-  if(!is(csvfile, "data.frame"))
+  if (!is(csvfile, "data.frame"))
     stop("csvfile must be a data.frame ")
 
   bamfiles <- file.path(csvfile$datapath, csvfile$bamfiles)
-  if(!all(file.exists(bamfiles))) {
-	stop("bamfiles with the specified paths do not exist; fix CSV file")
+  if (!all(file.exists(bamfiles))) {
+    stop("bamfiles with the specified paths do not exist; fix CSV file")
   }
-  indexfiles <- file.path(csvfile$datapath, paste(csvfile$bamfiles,".bai",sep=""))
-  if(!all(file.exists(indexfiles))) {
-	bamFiles <- Rsamtools::BamFileList(bamfiles,yieldSize = 100000)
+  indexfiles <-
+    file.path(csvfile$datapath, paste(csvfile$bamfiles, ".bai", sep = ""))
+  if (!all(file.exists(indexfiles))) {
+    bamFiles <- Rsamtools::BamFileList(bamfiles, yieldSize = 100000)
   }
   else {
-  	bamFiles <- Rsamtools::BamFileList(bamfiles, index=indexfiles,yieldSize = 100000)
+    bamFiles <-
+      Rsamtools::BamFileList(bamfiles, index = indexfiles, yieldSize = 100000)
   }
-return(bamFiles)
+  return(bamFiles)
 }
 
 

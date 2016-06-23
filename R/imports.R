@@ -8,7 +8,6 @@
 #' @importFrom GenomicAlignments summarizeOverlaps
 #' @importFrom DESeq2 DESeqDataSet results counts DESeq results
 #' @importFrom SummarizedExperiment assay colData
-#' @importFrom Rsamtools BamFileList
 #' @import readr
 #' @import org.Hs.eg.db
 #' @importFrom clusterProfiler enrichGO

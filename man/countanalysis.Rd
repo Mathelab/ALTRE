@@ -26,6 +26,7 @@ Altered regions are those that show differences in chromatin accessibility
 (using DESeq2 algorithm)
 }
 \examples{
+\dontrun{
 TSSannot <- getTSS()
 dir <- system.file("extdata", package="ALTRE", mustWork=TRUE)
 csvfile <- file.path(dir, "lung.csv")
@@ -36,6 +37,6 @@ regionspecific=TRUE,mergedistenh=1500,mergedistprom=1000 )
 counts_consPeaks <-getcounts(annotpeaks=consPeaksAnnotated, csvfile=csvfile,
 reference="SAEC", chrom="chr21")
 altre_peaks=countanalysis(counts=counts_consPeaks, pval=0.01, lfcvalue=1)
-
+}
 }
 
