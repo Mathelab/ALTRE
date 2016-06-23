@@ -4,8 +4,8 @@
 \alias{combineAnnotatePeaks}
 \title{Combine and annotate peaks from different sample types. Optionally merge nearby regions.}
 \usage{
-combineAnnotatePeaks(conspeaks, TSS, merge = FALSE, mergedistenh = NA,
-  mergedistprom = NA, mergedist = NA, regionspecific = NA,
+combineAnnotatePeaks(conspeaks, TSS, merge = FALSE, mergedistenh = 0,
+  mergedistprom = 0, mergedist = 0, regionspecific = NA,
   distancefromTSS = 1500)
 }
 \arguments{
