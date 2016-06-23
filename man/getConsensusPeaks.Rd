@@ -13,17 +13,18 @@ getConsensusPeaks(samplepeaks, minreps)
 }
 \value{
 a list comprising:
-	1) a GRangeslist with one GRange for each sample type which contains consensus peaks
+1) a GRangeslist with one GRange for each sample type which contains consensus peaks
 2) a summary statistic table
 }
 \description{
 Given a GRangeslist object with peaks for each samples, determine the consensus peaks (found in at least N replicates, where N is input by the user) for each sample type
 }
 \examples{
-dir <- system.file("extdata", package="ALTRE", mustWork=TRUE)
-csvfile <- file.path(dir, "lung.csv")
+\dontrun{
+dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
+csvfile <- file.path(dir, 'lung.csv')
 samplePeaks <- loadPeaks(csvfile)
 consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
-
+}
 }
 

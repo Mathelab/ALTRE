@@ -11,7 +11,7 @@ getcounts(annotpeaks, csvfile, reference, chrom = NULL)
 
 \item{csvfile}{name of CSV file, with complete path, that contains the following 4 columns for each sample 1) complete filepath; 2) name of bamfiles; 3) name of peak files; 4) name or type of sample; 5) name of replicate}
 
-\item{reference}{name of sample type to be considered "reference" in DESeq2 analysis}
+\item{reference}{name of sample type to be considered 'reference' in DESeq2 analysis}
 
 \item{chrom}{optional, only chromosome chrom will be evaluated}
 }
@@ -29,14 +29,14 @@ are supplied in a Granges object, ideally output of combineannotatepeaks.R.
 \examples{
 \dontrun{
 TSSannot <- getTSS()
-dir <- system.file("extdata", package="ALTRE", mustWork=TRUE)
-csvfile <- file.path(dir, "lung.csv")
+dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
+csvfile <- file.path(dir, 'lung.csv')
 samplePeaks <- loadPeaks(csvfile)
 consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
 consPeaksAnnotated <- combineAnnotatePeaks(conspeaks=consPeaks, TSS=TSSannot,merge=TRUE,
-regionspecific=TRUE,mergedistenh=1500,mergedistprom=1000 )
+\\tregionspecific=TRUE,mergedistenh=1500,mergedistprom=1000 )
 counts_consPeaks <- getcounts(annotpeaks=consPeaksAnnotated,
-csvfile=csvfile, reference="SAEC", chrom="chr21")
+csvfile=csvfile, reference='SAEC', chrom='chr21')
 }
 }
 
