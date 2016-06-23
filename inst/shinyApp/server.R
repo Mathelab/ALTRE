@@ -26,7 +26,7 @@ shinyServer(function(input, output, session) {
 
   output$table1 <- renderDataTable({
     if (!is.null(input$file)) {
-      csvFile()[,-1]
+      csvFile()[, -1]
     }
   }, options = list(searching = FALSE,
                     paging = FALSE))
@@ -34,7 +34,7 @@ shinyServer(function(input, output, session) {
 
   output$chooseref <- renderUI({
     reflist <- unique(csvFile()$sample)
-    selectInput("reference", "Reference Cell Type",reflist , selected = reflist[1] )
+    selectInput("reference", "Reference Cell Type", reflist , selected = reflist[1])
   })
 
 
@@ -78,14 +78,16 @@ shinyServer(function(input, output, session) {
                    setProgress(value = 0.5, detail = "annotating peaks")
 
                    consPeaksAnnotated <-
-                     combineAnnotatePeaks(conspeaks = consPeaks,
-                                          TSS = TSSannot,
-                                          merge=input$mergeradio,
-                                          regionspecific=input$regionradio,
-                                          mergedist = input$dist,
-                                          mergedistenh= input$distenh,
-                                          mergedistprom=input$distprom,
-                                          distancefromTSS=input$distTSS)
+                     combineAnnotatePeaks(
+                       conspeaks = consPeaks,
+                       TSS = TSSannot,
+                       merge = input$mergeradio,
+                       regionspecific = input$regionradio,
+                       mergedist = input$dist,
+                       mergedistenh = input$distenh,
+                       mergedistprom = input$distprom,
+                       distancefromTSS = input$distTSS
+                     )
                    setProgress(value = 1, detail = "done!")
                    Sys.sleep(0.5)
                  })
@@ -102,7 +104,7 @@ shinyServer(function(input, output, session) {
                    setProgress(value = .1, detail = "running")
                    consPeaksAnnotated <- annotatePeaks()
                    #csvfile <- csvFile()
-		   csvfile <- inputFilePath()$datapath
+                   csvfile <- inputFilePath()$datapath
                    setProgress(value = 0.5, detail = "annotating peaks")
                    counts_consPeaks <-
                      getcounts(
@@ -127,9 +129,11 @@ shinyServer(function(input, output, session) {
                    counts_consPeaks <- countsPeaks()
                    setProgress(value = 0.5, detail = "annotating peaks")
                    altred_peaks <-
-                     countanalysis(counts = counts_consPeaks,
-                                   pval = input$alpha,
-                                   lfcvalue = input$lfcThreshold)
+                     countanalysis(
+                       counts = counts_consPeaks,
+                       pval = input$alpha,
+                       lfcvalue = input$lfcThreshold
+                     )
                    setProgress(value = 1, detail = "done!")
                    Sys.sleep(0.5)
                  })
@@ -146,20 +150,24 @@ shinyServer(function(input, output, session) {
                    altre_peaks <- alteredPeaks()
                    setProgress(value = 0.3, detail = "GO Enrichment Analysis MF")
                    MFenrich <-
-                     pathenrich(analysisresults=altre_peaks,
-                                ontoltype="MF",
-                                enrichpvalfilt= input$pathpvaluecutoff)
+                     pathenrich(
+                       analysisresults = altre_peaks,
+                       ontoltype = "MF",
+                       enrichpvalfilt = input$pathpvaluecutoff
+                     )
                    setProgress(value = 0.6, detail = "GO Enrichment Analysis BP")
                    BPenrich <-
-                     pathenrich(analysisresults=altre_peaks,
-                                ontoltype="BP",
-                                enrichpvalfilt= input$pathpvaluecutoff)
+                     pathenrich(
+                       analysisresults = altre_peaks,
+                       ontoltype = "BP",
+                       enrichpvalfilt = input$pathpvaluecutoff
+                     )
 
                    setProgress(value = 1, detail = "done!")
                    Sys.sleep(0.5)
                  })
 
-    return(list(MFenrich=MFenrich, BPenrich=BPenrich))
+    return(list(MFenrich = MFenrich, BPenrich = BPenrich))
   })
 
 
@@ -179,7 +187,7 @@ shinyServer(function(input, output, session) {
                     paging = FALSE))
 
   output$table3 <- renderDataTable({
-	annotatePeaks()$mergestats
+    annotatePeaks()$mergestats
   }, options = list(searching = FALSE,
                     paging = FALSE))
 
@@ -205,8 +213,10 @@ shinyServer(function(input, output, session) {
   })
 
   output$heatplot <- renderPlot({
-    multiplot(enrichHeatmap(pathewayOutput()$MFenrich, title="GO:MF, p<0.01"),
-              enrichHeatmap(pathewayOutput()$BPenrich, title="GO:BP, p<0.01"))
+    multiplot(
+      enrichHeatmap(pathewayOutput()$MFenrich, title = "GO:MF, p<0.01"),
+      enrichHeatmap(pathewayOutput()$BPenrich, title = "GO:BP, p<0.01")
+    )
 
   })
 
