@@ -25,4 +25,25 @@ then plot 1 will go in the upper left, 2 will go in the upper right, and
 This function was not written by the authours of this package; it was found here:
 http://www.cookbook-r.com/Graphs/Multiple_graphs_on_one_page_(ggplot2)/
 }
+\examples{
+\dontrun{
+dir <- system.file("extdata", package="ALTRE", mustWork=TRUE)
+csvfile <- file.path(dir, "lung.csv")
+samplePeaks <- loadPeaks(csvfile)
+consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
+plotConsensusPeaks(samplepeaks=consPeaks)
+TSSannot=getTSS()
+consPeaksAnnotated <- combineAnnotatePeaks(conspeaks=consPeaks, TSS=TSSannot,merge=TRUE,
+regionspecific=TRUE,mergedistenh=1500,mergedistprom=1000 )
+counts_consPeaks <- getcounts(annotpeaks=consPeaksAnnotated, csvfile=csvfile,
+reference="SAEC")
+ altre_peaks=countanalysis(counts=counts_consPeaks, pval=0.01, lfcvalue=1)
+MFenrich=pathenrich(analysisresults=altre_peaks, ontoltype="MF", enrichpvalfilt=0.01)
+BPenrich=pathenrich(analysisresults=altre_peaks, ontoltype="BP", enrichpvalfilt=0.01)
+plot1=enrichHeatmap(MFenrich, title="GO:MF, p<0.01")
+plot2=enrichHeatmap(BPenrich, title="GO:BP, p<0.01")
+multiplot(plot1,plot2,cols=1)
+}
+
+}
 

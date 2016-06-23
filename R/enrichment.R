@@ -21,6 +21,7 @@
 #' @param genes minimum number of genes allowable in a pathway
 #' @param offspring maximum number of offspring allowable in a pathway
 #' @examples
+#' \dontrun{
 #' dir <- system.file("extdata", package="ALTRE", mustWork=TRUE)
 #' csvfile <- file.path(dir, "lung.csv")
 #' samplePeaks <- loadPeaks(csvfile)
@@ -31,23 +32,23 @@
 #' # Need to run getcounts on all chromosomes
 #' counts_consPeaks=getcounts(annotpeaks=consPeaksAnnotated, csvfile=csvfile, reference="SAEC")
 #' altre_peaks=countanalysis(counts=counts_consPeaks, pval=0.01, lfcvalue=1)
-#' MFenrich=pathenrich(analysisresults=altre_peaks, ontoltype="MF", enrichpvalfilt=0.01,)
+#' MFenrich=pathenrich(analysisresults=altre_peaks, ontoltype="MF", enrichpvalfilt=0.01)
 #' BPenrich=pathenrich(analysisresults=altre_peaks, ontoltype="BP", enrichpvalfilt=0.01)
-#'
+#'}
 #' @return dataframe identifying p-values for enriched pathways -- pathways also annotated with additional information
 #'
 #'
 #' @export
 
-pathenrich<-function(analysisresults, 
-	ontoltype="MF", 
-	enrichpvalfilt=0.01, 
-	lfctypespecific=1.5, 
-	lfcshared=1.2, 
-	pvaltypespecific=0.01, 
-	pvalshared=0.05, 
-	genes=20, 
-	offspring=300, 
+pathenrich<-function(analysisresults,
+	ontoltype="MF",
+	enrichpvalfilt=0.01,
+	lfctypespecific=1.5,
+	lfcshared=1.2,
+	pvaltypespecific=0.01,
+	pvalshared=0.05,
+	genes=20,
+	offspring=300,
 	regionsubset="promoter"){
 
   analysisresults=analysisresults[[1]]
@@ -60,20 +61,20 @@ pathenrich<-function(analysisresults,
 
   if ( regionsubset == "all" ){
 	newanalysisresults=analysisresultsdata
-  } 
+  }
   else {
 	newanalysisresults=analysisresultsdata[analysisresultsdata$meta.region==regionsubset,]
   }
 
   # Define regions that are more open, less open, or shared
-  up=newanalysisresults[!(is.na(newanalysisresults$padj)) & 
-	newanalysisresults$log2FoldChange > lfctypespecific & 
+  up=newanalysisresults[!(is.na(newanalysisresults$padj)) &
+	newanalysisresults$log2FoldChange > lfctypespecific &
 	newanalysisresults$padj < pvaltypespecific,]
-  down=newanalysisresults[!(is.na(newanalysisresults$padj)) & 
-	newanalysisresults$log2FoldChange < -lfctypespecific & 
+  down=newanalysisresults[!(is.na(newanalysisresults$padj)) &
+	newanalysisresults$log2FoldChange < -lfctypespecific &
 	newanalysisresults$padj < pvaltypespecific,]
-  shared=newanalysisresults[(newanalysisresults$log2FoldChange <= lfcshared & 
-	newanalysisresults$log2FoldChange >= -lfcshared) & 
+  shared=newanalysisresults[(newanalysisresults$log2FoldChange <= lfcshared &
+	newanalysisresults$log2FoldChange >= -lfcshared) &
 	(newanalysisresults$padj >= pvalshared | is.na(newanalysisresults$padj)), ]
   all=rbind(up,down,shared)
   subsets=list(up,down,shared,newanalysisresults)
@@ -106,7 +107,7 @@ pathenrich<-function(analysisresults,
 		shared=as.data.frame("No enrichment found for shared REs")
 	}
   }
-  
+
 #  enrichstats=data.frame(
 
   allthree=list(expt=expt, reference=reference, shared=shared)
