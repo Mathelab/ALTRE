@@ -1,5 +1,5 @@
   .shiny-progress .bar {
-    background-color: #E6A900;
+    background-color: #FFB719;
       .opacity = 0.9;
   }
   .shiny-progress .progress {
@@ -12,7 +12,7 @@
   right: 10px;
   height: 32px;
   width: 240px;
-  background-color: #E6A900;
+  background-color: #FFB719;
   margin: 0px;
   padding: 2px 3px;
   opacity: 0.7;

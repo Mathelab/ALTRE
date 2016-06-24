@@ -2,7 +2,8 @@
 % Please edit documentation in R/plottingfunctions.R
 \name{plotgetcounts}
 \alias{plotgetcounts}
-\title{Given the output from getcounts, plot a density plot of log2 RPKM values of regulation regions}
+\title{Given the output from getcounts, plot a density plot of
+log2 RPKM values of regulation regions}
 \usage{
 plotgetcounts(countsconspeaks)
 }
@@ -13,20 +14,28 @@ plotgetcounts(countsconspeaks)
 a ggplot
 }
 \description{
-Given the output from getcounts, plot a density plot of log2 RPKM values of regulation regions
+Given the output from getcounts, plot a density plot of
+log2 RPKM values of regulation regions
 }
 \examples{
 \dontrun{
 dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
 csvfile <- file.path(dir, 'lung.csv')
 samplePeaks <- loadPeaks(csvfile)
-consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
-plotConsensusPeaks(samplepeaks=consPeaks)
-TSSannot=getTSS()
-consPeaksAnnotated <- combineAnnotatePeaks(conspeaks=consPeaks, TSS=TSSannot,merge=TRUE,
-regionspecific=TRUE,mergedistenh=1500,mergedistprom=1000 )
-counts_consPeaks <- getcounts(annotpeaks=consPeaksAnnotated, csvfile=csvfile,
-reference='SAEC', chrom='chr21')
+consPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps=2)
+plotConsensusPeaks(samplepeaks = consPeaks)
+TSSannot <- getTSS()
+consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
+                                          TSS = TSSannot,
+                                          merge = TRUE,
+                                          regionspecific = TRUE,
+                                          mergedistenh = 1500,
+                                          mergedistprom = 1000 )
+
+counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
+                             csvfile = csvfile,
+                             reference = 'SAEC',
+                             chrom = 'chr21')
 plotgetcounts(counts_consPeaks)
 }
 }

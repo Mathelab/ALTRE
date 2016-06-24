@@ -2,7 +2,8 @@
 % Please edit documentation in R/plottingfunctions.R
 \name{plotCountAnalysis}
 \alias{plotCountAnalysis}
-\title{Given the output from getcounts, plot a density plot of log2 RPKM values of regulation regions}
+\title{Given the output from getcounts, plot a density plot
+ of log2 RPKM values of regulation regions}
 \usage{
 plotCountAnalysis(altrepeaks)
 }
@@ -13,7 +14,8 @@ plotCountAnalysis(altrepeaks)
 a ggplot
 }
 \description{
-Given the output from getcounts, plot a density plot of log2 RPKM values of regulation regions
+Given the output from getcounts, plot a density plot
+ of log2 RPKM values of regulation regions
 }
 \examples{
 \dontrun{
@@ -22,12 +24,20 @@ csvfile <- file.path(dir, 'lung.csv')
 samplePeaks <- loadPeaks(csvfile)
 consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
 plotConsensusPeaks(samplepeaks=consPeaks)
-TSSannot=getTSS()
-consPeaksAnnotated <- combineAnnotatePeaks(conspeaks=consPeaks, TSS=TSSannot,
-regionspecific=TRUE,mergedistenh=1500,mergedistprom=1000 )
-counts_consPeaks <-getcounts(annotpeaks=consPeaksAnnotated, csvfile=csvfile,
-reference='SAEC', chrom='chr21')
-altre_peaks=countanalysis(counts=counts_consPeaks, pval=0.01, lfcvalue=1)
+TSSannot<- getTSS()
+consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
+                                          TSS = TSSannot,
+                                          merge = TRUE,
+                                          regionspecific = TRUE,
+                                          mergedistenh = 1500,
+                                          mergedistprom = 1000)
+counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
+                              csvfile = csvfile,
+                              reference = 'SAEC',
+                              chrom = 'chr21')
+altre_peaks <- countanalysis(counts=counts_consPeaks,
+                             pval=0.01,
+                             lfcvalue=1)
 plotCountAnalysis(altre_peaks)
 }
 }

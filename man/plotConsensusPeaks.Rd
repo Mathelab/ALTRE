@@ -2,7 +2,8 @@
 % Please edit documentation in R/plottingfunctions.R
 \name{plotConsensusPeaks}
 \alias{plotConsensusPeaks}
-\title{Given the output from getConsensusPeaks, generate a barplot of count statistics}
+\title{Given the output from getConsensusPeaks, generate a barplot
+of countstatistics}
 \usage{
 plotConsensusPeaks(samplepeaks)
 }
@@ -13,14 +14,15 @@ plotConsensusPeaks(samplepeaks)
 a ggplot
 }
 \description{
-Given the output from getConsensusPeaks, generate a barplot of count statistics
+Given the output from getConsensusPeaks, generate a barplot
+of countstatistics
 }
 \examples{
 \dontrun{
 dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
 csvfile <- file.path(dir, 'lung.csv')
 samplePeaks <- loadPeaks(csvfile)
-consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
+consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks, minreps=2)
 plotConsensusPeaks(samplepeaks=consPeaks)
 }
 }
