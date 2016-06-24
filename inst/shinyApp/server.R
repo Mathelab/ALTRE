@@ -104,7 +104,7 @@ shinyServer(function(input, output, session) {
                    consPeaksAnnotated <- annotatePeaks()
                    #csvfile <- csvFile()
                    csvfile <- inputFilePath()$datapath
-                   setProgress(value = 0.5, detail = "annotating peaks")
+                   setProgress(value = 0.5, detail = "Retrieving counts")
                    counts_consPeaks <-
                      getcounts(
                        annotpeaks = consPeaksAnnotated,
@@ -221,6 +221,117 @@ shinyServer(function(input, output, session) {
 
   output$heatplotBP <- renderPlot({
         enrichHeatmap(pathewayOutputBP(), title = "GO:BP, p<0.01")
+  })
+
+
+
+  output$statusbox1 <- renderInfoBox({
+    if(is.null(input$file)){
+      infoBox(
+        "Status", "File Not Loaded", icon = icon("import", lib = "glyphicon"),
+        color = "aqua", fill = TRUE
+      )}
+    else if(!is.null(input$file)) {
+    infoBox(
+      "Status", "File Loaded", icon = icon("thumbs-up", lib = "glyphicon"),
+      color = "yellow", fill = TRUE
+    )
+    }
+  })
+
+
+  output$statusbox2 <- renderInfoBox({
+    if(input$buttonmerge==0){
+      infoBox(
+        "Status", "Merge Button Not Clicked Yet", icon = icon("flag", lib = "glyphicon"),
+        color = "aqua", fill = TRUE
+      )}
+    else if(input$buttonmerge > 0) {
+      infoBox(
+        "Status", "Replicates Have Been Merged ", icon = icon("thumbs-up", lib = "glyphicon"),
+        color = "yellow", fill = TRUE
+      )
+    }
+  })
+
+  output$statusbox3 <- renderInfoBox({
+    if(input$buttonannot==0){
+      infoBox(
+        "Status", "Annotate Button Not Clicked Yet",
+        icon = icon("flag", lib = "glyphicon"),
+        color = "aqua", fill = TRUE
+      )}
+    else if(input$buttonannot > 0) {
+      infoBox(
+        "Status", "Peaks Have Been Annotated",
+        icon = icon("thumbs-up", lib = "glyphicon"),
+        color = "yellow", fill = TRUE
+      )
+    }
+  })
+
+  output$statusbox4 <- renderInfoBox({
+    if(input$buttoncounts==0){
+      infoBox(
+        "Status", "Retrieve Counts Button Not Clicked Yet",
+        icon = icon("flag", lib = "glyphicon"),
+        color = "aqua", fill = TRUE
+      )}
+    else if(input$buttoncounts > 0) {
+      infoBox(
+        "Status", "Counts Have Been Retrieved",
+        icon = icon("thumbs-up", lib = "glyphicon"),
+        color = "yellow", fill = TRUE
+      )
+    }
+  })
+
+  output$statusbox5 <- renderInfoBox({
+    if(input$buttondefine==0){
+      infoBox(
+        "Status", "Define Altered Regions Button Not Clicked Yet",
+        icon = icon("flag", lib = "glyphicon"),
+        color = "aqua", fill = TRUE
+      )}
+    else if(input$buttondefine> 0) {
+      infoBox(
+        "Status", "Altered Regions Have Been Defined",
+        icon = icon("thumbs-up", lib = "glyphicon"),
+        color = "yellow", fill = TRUE
+      )
+    }
+  })
+
+  output$statusbox6 <- renderInfoBox({
+    if(input$buttonpathwayMF==0){
+      infoBox(
+        "Status", "Enrichment Analysis Button Not Clicked Yet",
+        icon = icon("flag", lib = "glyphicon"),
+        color = "aqua", fill = TRUE
+      )}
+    else if(input$buttonpathwayMF > 0) {
+      infoBox(
+        "Status", "Enrichment Analysis Has Been Run",
+        icon = icon("thumbs-up", lib = "glyphicon"),
+        color = "yellow", fill = TRUE
+      )
+    }
+  })
+
+  output$statusbox7 <- renderInfoBox({
+    if(input$buttonpathwayBP==0){
+      infoBox(
+        "Status", "Enrichment Analysis BP Button Not Clicked Yet",
+        icon = icon("flag", lib = "glyphicon"),
+        color = "aqua", fill = TRUE
+      )}
+    else if(input$buttonpathwayBP > 0) {
+      infoBox(
+        "Status", "BP Enrichment Analysis Completed",
+        icon = icon("thumbs-up", lib = "glyphicon"),
+        color = "yellow", fill = TRUE
+      )
+    }
   })
 
   })
