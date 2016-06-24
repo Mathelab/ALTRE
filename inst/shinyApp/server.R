@@ -1,10 +1,8 @@
-# utility functions
-################################################################
 
 shinyServer(function(input, output, session) {
-  ## tabName"definerep"
 
-  #  tabPanel "Load CSV"
+  ############################################################################
+  # Load data
 
   inputFilePath <- reactive({
     if (!is.null(input$file)) {
@@ -21,26 +19,6 @@ shinyServer(function(input, output, session) {
     }
   })
 
-  output$table1 <- renderDataTable({
-    if (!is.null(input$file)) {
-      csvFile()[, -1]
-    }
-  }, options = list(searching = FALSE,
-                    paging = FALSE))
-
-
-  output$chooseref <- renderUI({
-    reflist <- unique(csvFile()$sample)
-    selectInput("reference",
-                "Reference Cell Type",
-                reflist ,
-                selected = reflist[1])
-  })
-
-#####################################################
-
-  #  tabPanel "merge"
-
   peaks <- reactive({
     if (!is.null(input$file)) {
       fileIn <- csvFile()
@@ -48,6 +26,9 @@ shinyServer(function(input, output, session) {
       return(outputBed)
     }
   })
+
+  ############################################################################
+  # function calls
 
   mergedPeaks <- eventReactive(input$buttonmerge, {
     withProgress(message = 'In progress:',
@@ -94,7 +75,6 @@ shinyServer(function(input, output, session) {
     return(consPeaksAnnotated)
   })
 
-
   countsPeaks <- eventReactive(input$buttoncounts, {
     withProgress(message = 'In progress',
                  detail = 'This may take a while...',
@@ -117,7 +97,6 @@ shinyServer(function(input, output, session) {
     return(counts_consPeaks)
   })
 
-
   alteredPeaks <- eventReactive(input$buttondefine, {
     withProgress(message = 'In progress',
                  detail = 'This may take a while...',
@@ -137,6 +116,25 @@ shinyServer(function(input, output, session) {
                  })
 
     return(altred_peaks)
+  })
+
+
+  compareMethods <- eventReactive(input$buttoncompare, {
+    withProgress(message = 'In progress',
+                 detail = 'This may take a while...',
+                 value = 0,
+                 {
+                   setProgress(value = .1, detail = "running")
+                   altre_peaks <- alteredPeaks()
+                   setProgress(value = 0.5, detail = "annotating peaks")
+
+                   analysisresults <- resultsComparison(altre_peaks,
+                                                        reference= "A549")
+                   setProgress(value = 1, detail = "done!")
+                   Sys.sleep(0.5)
+                 })
+
+    return(analysisresults)
   })
 
   pathewayOutputMF <- eventReactive(input$buttonpathwayMF, {
@@ -160,8 +158,6 @@ shinyServer(function(input, output, session) {
     return(MFenrich)
   })
 
-
-
   pathewayOutputBP <- eventReactive(input$buttonpathwayBP, {
     withProgress(message = 'In progress',
                  detail = 'This may take a while...',
@@ -169,7 +165,7 @@ shinyServer(function(input, output, session) {
                  {
                    setProgress(value = .1, detail = "running")
                    altre_peaks <- alteredPeaks()
-                   setProgress(value = 0.3, detail = "GO Enrichment Analysis BP")
+                   setProgress(value = 0.3, detail = "BP: GO Enrichment Analysis")
                    BPenrich <-
                      pathenrich(
                        analysisresults = altre_peaks,
@@ -183,6 +179,28 @@ shinyServer(function(input, output, session) {
     return(BPenrich)
   })
 
+
+  ############################################################################
+   #  get input
+
+  output$chooseref <- renderUI({
+    reflist <- unique(csvFile()$sample)
+    selectInput("reference",
+                "Reference Cell Type",
+                reflist ,
+                selected = reflist[1])
+  })
+
+  ############################################################################
+  #tables
+
+  output$table1 <- renderDataTable({
+    if (!is.null(input$file)) {
+      csvFile()[, -1]
+    }
+  }, options = list(searching = FALSE,
+                    paging = FALSE))
+
   output$table2 <- renderDataTable({
     mergedPeaks()$consPeaksStats
 
@@ -194,8 +212,13 @@ shinyServer(function(input, output, session) {
   }, options = list(searching = FALSE,
                     paging = FALSE))
 
+  output$table4 <- renderDataTable({
+    compareMethods()
+  }, options = list(searching = FALSE,
+                    paging = FALSE))
 
-  ####################################
+
+  ############################################################################
   # plots
 
   output$barplot <- renderPlot({
@@ -205,7 +228,6 @@ shinyServer(function(input, output, session) {
   output$annotatebarplot <- renderPlot({
     plotCombineAnnotatePeaks(annotatePeaks())
   })
-
 
   output$densityplot <- renderPlot({
     plotgetcounts(countsPeaks())
@@ -223,7 +245,12 @@ shinyServer(function(input, output, session) {
         enrichHeatmap(pathewayOutputBP(), title = "GO:BP, p<0.01")
   })
 
+  output$vennplot <- renderPlot({
+    plotallvenn(compareMethods())
+  })
 
+  ############################################################################
+  # info boxes
 
   output$statusbox1 <- renderInfoBox({
     if(is.null(input$file)){
@@ -239,16 +266,17 @@ shinyServer(function(input, output, session) {
     }
   })
 
-
   output$statusbox2 <- renderInfoBox({
     if(input$buttonmerge==0){
       infoBox(
-        "Status", "Merge Button Not Clicked Yet", icon = icon("flag", lib = "glyphicon"),
+        "Status", "Merge Button Not Clicked Yet",
+        icon = icon("flag", lib = "glyphicon"),
         color = "aqua", fill = TRUE
       )}
     else if(input$buttonmerge > 0) {
       infoBox(
-        "Status", "Replicates Have Been Merged ", icon = icon("thumbs-up", lib = "glyphicon"),
+        "Status", "Replicates Have Been Merged ",
+        icon = icon("thumbs-up", lib = "glyphicon"),
         color = "yellow", fill = TRUE
       )
     }
@@ -333,6 +361,24 @@ shinyServer(function(input, output, session) {
       )
     }
   })
+
+  output$statusbox8 <- renderInfoBox({
+    if(input$buttoncompare==0){
+      infoBox(
+        "Status", "Compare Methods Button Not Clicked Yet",
+        icon = icon("flag", lib = "glyphicon"),
+        color = "aqua", fill = TRUE
+      )}
+    else if(input$buttoncompare > 0) {
+      infoBox(
+        "Status", "Method Comparison Completed",
+        icon = icon("thumbs-up", lib = "glyphicon"),
+        color = "yellow", fill = TRUE
+      )
+    }
+  })
+
+  ##########################################################
 
   })
 

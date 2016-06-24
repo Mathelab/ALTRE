@@ -39,7 +39,6 @@ consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
                                           regionspecific = TRUE,
                                           mergedistenh = 1500,
                                           mergedistprom = 1000 )
-
 counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
                              csvfile = csvfile,
                              reference = 'SAEC',

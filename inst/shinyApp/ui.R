@@ -281,7 +281,27 @@ body <- dashboardBody(
                 plotOutput('heatplotBP')
             )
             )
-    )
+    ),
+    tabItem(tabName = "compare",
+            fluidRow(
+              HTML("<div class='col-sm-4' style='min-width: 300px !important;'>"),
+              box(
+                width = NULL,
+                title = "Compare methods of identifying altered regulatory regions",
+                actionButton("buttoncompare", strong("Compare Methods")),
+                hr(),
+                dataTableOutput("table4")
+              ),
+              HTML("</div>"),
+              infoBoxOutput("statusbox8", width = 7),
+              HTML("<div class='col-sm-7' style='min-width: 500px !important;'>"),
+              box(
+                width = NULL,
+                title = "Venn Plot",
+                plotOutput('vennplot')
+              ),
+              HTML("</div>")
+            ))
   )
 )
 
