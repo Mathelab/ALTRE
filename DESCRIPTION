@@ -32,7 +32,8 @@ Imports:
     EnsDb.Hsapiens.v75,
     tidyr,
     GO.db,
-    grid
+    grid,
+    venneuler
 Suggests: knitr
 VignetteBuilder: knitr
 License: GPL-3
