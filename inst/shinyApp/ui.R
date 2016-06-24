@@ -211,11 +211,11 @@ body <- dashboardBody(
               box(
                 width = NULL,
                 title = "Define Altered Regions",
-                actionButton("buttondefine", strong("Define")),
+                actionButton("buttondefine", strong("Define Altered Regions")),
                 hr(),
                 sliderInput(
                   "alpha",
-                  label = h4("The Significance Cutoff Alpha"),
+                  label = h4("Alpha: Significance Cutoff"),
                   min = 0,
                   max = 1,
                   value = 0.01
@@ -240,27 +240,28 @@ body <- dashboardBody(
     tabItem(tabName = "pathways",
             fluidRow(
               box(
-                title = "Pathway enrichment",
+                title = "Pathway enrichment MF",
                 actionButton("buttonpathwayMF",
                              strong("Run Pathway Enrichment MF")),
                 hr(),
                 sliderInput(
                   "pathpvaluecutoffMF",
-                  label = h4("PValue Cutoff"),
+                  label = h4("P-value Cutoff"),
                   min = 0,
                   max = 1,
                   value = 0.01
                 ),
+                hr(),
                 plotOutput('heatplotMF')
             ),
             box(
-                title = "Pathway enrichment",
+                title = "Pathway enrichment BP",
                 actionButton("buttonpathwayBP",
                              strong("Run Pathway Enrichment BP")),
                 hr(),
                 sliderInput(
                   "pathpvaluecutoffBP",
-                  label = h4("PValue Cutoff"),
+                  label = h4("P-value Cutoff"),
                   min = 0,
                   max = 1,
                   value = 0.01

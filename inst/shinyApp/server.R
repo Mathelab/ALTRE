@@ -162,7 +162,7 @@ shinyServer(function(input, output, session) {
 
 
 
-  pathewayOutputBP <- eventReactive(input$buttonpathway, {
+  pathewayOutputBP <- eventReactive(input$buttonpathwayBP, {
     withProgress(message = 'In progress',
                  detail = 'This may take a while...',
                  value = 0,
