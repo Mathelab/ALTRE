@@ -2,7 +2,8 @@
 % Please edit documentation in R/plottingfunctions.R
 \name{plotConsensusPeaks}
 \alias{plotConsensusPeaks}
-\title{Given the output from getConsensusPeaks, generate a barplot of count statistics}
+\title{Given the output from getConsensusPeaks, generate a barplot
+of countstatistics}
 \usage{
 plotConsensusPeaks(samplepeaks)
 }
@@ -13,7 +14,8 @@ plotConsensusPeaks(samplepeaks)
 a ggplot
 }
 \description{
-Given the output from getConsensusPeaks, generate a barplot of count statistics
+Given the output from getConsensusPeaks, generate a barplot
+of countstatistics
 }
 \examples{
 \dontrun{
