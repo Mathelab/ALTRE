@@ -9,49 +9,60 @@ combineAnnotatePeaks(conspeaks, TSS, merge = FALSE, mergedistenh = 0,
   distancefromTSS = 1500)
 }
 \arguments{
-\item{conspeaks}{list of GRanges objects for each sample type (output by getConsensusPeaks() function)}
+\item{conspeaks}{list of GRanges objects for each sample type
+(output by getConsensusPeaks() function)}
 
 \item{TSS}{file of transcription start sites}
 
-\item{merge}{whether or not regions should be merged if they are within a user set distance to each other (default is FALSE)}
+\item{merge}{whether or not regions should be merged if they are within a
+user set distance to each other (default is FALSE)}
 
-\item{mergedistenh}{merge enhancers peaks if they are < mergedistenh apart (set when regionspecific is TRUE)}
+\item{mergedistenh}{merge enhancers peaks if they are < mergedistenh apart
+(set when regionspecific is TRUE)}
 
-\item{mergedistprom}{merge promoters if they are < mergedistprom apart (set when regionspecific is TRUE)}
+\item{mergedistprom}{merge promoters if they are < mergedistprom apart
+(set when regionspecific is TRUE)}
 
-\item{mergedist}{merge promoters and enhancers if they are < mergedist apart (set when regionspecific is FALSE)}
+\item{mergedist}{merge promoters and enhancers if they are < mergedist apart
+(set when regionspecific is FALSE)}
 
-\item{regionspecific}{logical to if TRUE, merging occurs within same type peaks (e.g. merge promoters, then merge enhancers)}
+\item{regionspecific}{logical to if TRUE, merging occurs within same type
+peaks (e.g. merge promoters, then merge enhancers)}
 
-\item{distancefromTSS}{in bp; peaks within distFromTSS of an annotated Transcription Start Site (TSS) will be annotated as a promoter (default=1500bp)}
+\item{distancefromTSS}{in bp; peaks within distFromTSS of an annotated
+Transcription Start Site (TSS) will be annotated as promoter (default=1500bp)}
 }
 \value{
 List containing two items:
-(1) GRanges object:  all sample types combined, regions annotated as type-specific
-and enhancer/promoter specific.
-(2) Matrix: number and size of enhancers and promoters before and after merging
-nearby regulatory regions
+(1) GRanges object:  all sample types combined, regions annotated as
+ type-specific and enhancer/promoter specific.
+(2) Matrix: number and size of enhancers and promoters before and
+ after merging nearby regulatory regions
 }
 \description{
 This function accomplishes three tasks:
-(1) Combines peaks from different sample types into one master list, and annotates
-each peak with it's sample type-specificity (which cell or tissue types the peak can
-be found in)
+(1) Combines peaks from different sample types into one master list,
+ and annotates each peak with it's sample type-specificity (which cell or
+  tissue types the peak can be found in)
 (2) Categorizes peaks as either a promoter or enhancer (promoter distance
-is defined as 1500bp away from a transcription start site (TSS) by default, but the distance
-can be changed with the distancefromTSS argument)
-(3) Optionally, regulatory regions that are within a certain distance of each other
-can be merged to form a larger regulatory region.
+is defined as 1500bp away from a transcription start site (TSS) by default,
+but the distance can be changed with the distancefromTSS argument)
+(3) Optionally, regulatory regions that are within a certain distance of
+ each other can be merged to form a larger regulatory region.
 }
 \examples{
 \dontrun{
-TSSannot <- getTSS()
 dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
 csvfile <- file.path(dir, 'lung.csv')
 samplePeaks <- loadPeaks(csvfile)
 consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
-consPeaksAnnotated=combineAnnotatePeaks(conspeaks=consPeaks, TSS=TSSannot,merge=TRUE,
-regionspecific=TRUE,mergedistenh=1500,mergedistprom=1000)
+TSSannot <- getTSS()
+consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
+                                          TSS = TSSannot,
+                                          merge = TRUE,
+                                          regionspecific = TRUE,
+                                          mergedistenh = 1500,
+                                          mergedistprom = 1000)
 }
 }
 

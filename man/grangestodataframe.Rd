@@ -12,7 +12,7 @@ grangestodataframe(grange)
 \value{
 dataframe
 
-Dataframe1=grangestodataframe(Grange1)
+Dataframe1 <- grangestodataframe(Grange1)
 }
 \description{
 Takes a Grange input and converts it into a dataframe

@@ -2,29 +2,37 @@
 % Please edit documentation in R/getconsensuspeaks.R
 \name{getConsensusPeaks}
 \alias{getConsensusPeaks}
-\title{Given a GRangeslist object with peaks for each samples, determine the consensus peaks (found in at least N replicates, where N is input by the user) for each sample type}
+\title{Given a GRangeslist object with peaks for each samples, determine
+the consensus peaks (found in at least N replicates, where N is input
+ by the user) for each sample type}
 \usage{
 getConsensusPeaks(samplepeaks, minreps)
 }
 \arguments{
-\item{samplepeaks}{A GRangesList object comprising one GRanges object (peaks) for each sample (output of loadPeaks() function)}
+\item{samplepeaks}{A GRangesList object comprising one GRanges object (peaks)
+for each sample (output of loadPeaks() function)}
 
-\item{minreps}{minimum number of replicate samples that a peak should be contained in to be called as a consensus peak. This cutoff will be applied to both samples.}
+\item{minreps}{minimum number of replicate samples that a peak should be
+contained in to be called as a consensus peak. This cutoff will be
+ applied to both samples.}
 }
 \value{
 a list comprising:
-1) a GRangeslist with one GRange for each sample type which contains consensus peaks
+1) a GRangeslist with one GRange for each sample type
+ which contains consensus peaks
 2) a summary statistic table
 }
 \description{
-Given a GRangeslist object with peaks for each samples, determine the consensus peaks (found in at least N replicates, where N is input by the user) for each sample type
+Given a GRangeslist object with peaks for each samples, determine
+the consensus peaks (found in at least N replicates, where N is input
+ by the user) for each sample type
 }
 \examples{
 \dontrun{
 dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
 csvfile <- file.path(dir, 'lung.csv')
 samplePeaks <- loadPeaks(csvfile)
-consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
+consPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps=2)
 }
 }
 

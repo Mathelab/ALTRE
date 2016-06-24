@@ -2,7 +2,8 @@
 % Please edit documentation in R/enrichment.R
 \name{pathenrich}
 \alias{pathenrich}
-\title{Enrichment analysis to identify putative pathways of interest for further investigation}
+\title{Enrichment analysis to identify putative pathways of interest for further
+investigation}
 \usage{
 pathenrich(analysisresults, ontoltype = "MF", enrichpvalfilt = 0.01,
   lfctypespecific = 1.5, lfcshared = 1.2, pvaltypespecific = 0.01,
@@ -12,17 +13,23 @@ pathenrich(analysisresults, ontoltype = "MF", enrichpvalfilt = 0.01,
 \arguments{
 \item{analysisresults}{Results from analysis of counts.}
 
-\item{ontoltype}{One of three categories: 'MF' (molecular function), 'CC' (cellular component), 'BP' (biological process).}
+\item{ontoltype}{One of three categories: 'MF' (molecular function),
+'CC' (cellular component), 'BP' (biological process).}
 
-\item{enrichpvalfilt}{Adjusted pval for enrichment to filter on (adjusted for multiple testing).}
+\item{enrichpvalfilt}{Adjusted pval for enrichment to filter on
+(adjusted for multiple testing).}
 
-\item{lfctypespecific}{Log2fold change (of chromatin accessibility) for type specific enhancers/promoters.}
+\item{lfctypespecific}{Log2fold change (of chromatin accessibility)
+for type specific enhancers/promoters.}
 
-\item{lfcshared}{Log2fold change (of chromatin accessibility) for shared enhancers/promoters.}
+\item{lfcshared}{Log2fold change (of chromatin accessibility) for
+shared enhancers/promoters.}
 
-\item{pvaltypespecific}{P-value (of chromatin accessibility) for type specific enhancers/promoters.}
+\item{pvaltypespecific}{P-value (of chromatin accessibility) for
+type specific enhancers/promoters.}
 
-\item{pvalshared}{P-value (of chromatin accessibility) for shared enhancers/promoters.}
+\item{pvalshared}{P-value (of chromatin accessibility) for
+shared enhancers/promoters.}
 
 \item{genes}{Minimum number of genes allowable in a pathway.}
 
@@ -31,17 +38,21 @@ pathenrich(analysisresults, ontoltype = "MF", enrichpvalfilt = 0.01,
 \item{regionsubset}{A 'promoter' or 'enhancer'.}
 }
 \value{
-dataframe identifying p-values for enriched pathways -- pathways also annotated with additional information
+dataframe identifying p-values for enriched pathways --
+pathways also annotated with additional information
 }
 \description{
 Determine which pathways are overrepresented in the
 altered promoters and enhancers. Pathways are determined by linking
-the enhancer/promoter to the nearest gene, and then linking genes to pathways using
-the gene ontology database. The 'gene' argument limits how few genes a pathway can contain,
-while the 'offspring' argument limits how many offspring a pathway can contain.
-Pathways with low gene counts are less reliable (often false positives), while pathways
-with many offspring are vague and unlikely to be of much use -- the enrichment of
-their more precise offspring is the more interesting question.
+the enhancer/promoter to the nearest gene, and then linking genes to pathways
+using the gene ontology database. The 'gene' argument limits how few genes
+a pathway can contain, while the 'offspring' argument limits how many
+offspring a pathway can contain. Pathways with low gene counts are less
+reliable (often false positives), while pathways with many offspring are
+vague and unlikely to be of much use -- the enrichment of their more precise
+ offspring is the more interesting question.
+}
+\details{
 ************CHANGE ANALYSISRESULTS TO ALTREPEAKS!!!!******************
 ****************CHANGE REGIONSUBSET TO REGIONTYPE!!!!*****************
 }
@@ -52,13 +63,25 @@ csvfile <- file.path(dir, 'lung.csv')
 samplePeaks <- loadPeaks(csvfile)
 consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
 TSSannot <- getTSS()
-consPeaksAnnotated <- combineAnnotatePeaks(conspeaks=consPeaks, TSS=TSSannot,merge=TRUE,
-regionspecific=TRUE,mergedistenh=1500,mergedistprom=1000 )
-# Need to run getcounts on all chromosomes
-counts_consPeaks=getcounts(annotpeaks=consPeaksAnnotated, csvfile=csvfile, reference='SAEC')
-altre_peaks=countanalysis(counts=counts_consPeaks, pval=0.01, lfcvalue=1)
-MFenrich=pathenrich(analysisresults=altre_peaks, ontoltype='MF', enrichpvalfilt=0.01)
-BPenrich=pathenrich(analysisresults=altre_peaks, ontoltype='BP', enrichpvalfilt=0.01)
+consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
+                                          TSS = TSSannot,
+                                          merge = TRUE,
+                                          regionspecific = TRUE,
+                                          mergedistenh = 1500,
+                                          mergedistprom = 1000 )
+#Need to run getcounts on all chromosomes
+counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
+                             csvfile = csvfile,
+                             reference = 'SAEC')
+altre_peaks <- countanalysis(counts=counts_consPeaks,
+                             pval=0.01,
+                             lfcvalue=1)
+MFenrich <- pathenrich(analysisresults = altre_peaks,
+                       ontoltype = 'MF',
+                       enrichpvalfilt = 0.01)
+BPenrich <- pathenrich(analysisresults=altre_peaks,
+                       ontoltype='BP',
+                       enrichpvalfilt=0.01)
 }
 }
 
