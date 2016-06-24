@@ -16,6 +16,5 @@ getTSS <- function() {
                     "gene_name"),
         upstream = 0,
         downstream = 2)
-
     return(TSSdb)
 }

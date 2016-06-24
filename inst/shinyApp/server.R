@@ -34,7 +34,10 @@ shinyServer(function(input, output, session) {
 
   output$chooseref <- renderUI({
     reflist <- unique(csvFile()$sample)
-    selectInput("reference", "Reference Cell Type", reflist , selected = reflist[1])
+    selectInput("reference",
+                "Reference Cell Type",
+                reflist ,
+                selected = reflist[1])
   })
 
 
@@ -141,7 +144,7 @@ shinyServer(function(input, output, session) {
     return(altred_peaks)
   })
 
-  pathewayOutput <- eventReactive(input$buttonpathway, {
+  pathewayOutputMF <- eventReactive(input$buttonpathwayMF, {
     withProgress(message = 'In progress',
                  detail = 'This may take a while...',
                  value = 0,
@@ -153,22 +156,38 @@ shinyServer(function(input, output, session) {
                      pathenrich(
                        analysisresults = altre_peaks,
                        ontoltype = "MF",
-                       enrichpvalfilt = input$pathpvaluecutoff
+                       enrichpvalfilt = input$pathpvaluecutoffMF
                      )
-                   setProgress(value = 0.6, detail = "GO Enrichment Analysis BP")
-                   BPenrich <-
-                     pathenrich(
-                       analysisresults = altre_peaks,
-                       ontoltype = "BP",
-                       enrichpvalfilt = input$pathpvaluecutoff
-                     )
-
                    setProgress(value = 1, detail = "done!")
                    Sys.sleep(0.5)
                  })
 
-    return(list(MFenrich = MFenrich, BPenrich = BPenrich))
+    return(MFenrich)
   })
+
+
+
+  pathewayOutputBP <- eventReactive(input$buttonpathway, {
+    withProgress(message = 'In progress',
+                 detail = 'This may take a while...',
+                 value = 0,
+                 {
+                   setProgress(value = .1, detail = "running")
+                   altre_peaks <- alteredPeaks()
+                   setProgress(value = 0.3, detail = "GO Enrichment Analysis BP")
+                   BPenrich <-
+                     pathenrich(
+                       analysisresults = altre_peaks,
+                       ontoltype = "BP",
+                       enrichpvalfilt = input$pathpvaluecutoffBP
+                     )
+                   setProgress(value = 1, detail = "done!")
+                   Sys.sleep(0.5)
+                 })
+
+    return(BPenrich)
+  })
+
 
 
 
@@ -212,13 +231,13 @@ shinyServer(function(input, output, session) {
     plotCountAnalysis(alteredPeaks())
   })
 
-  output$heatplot <- renderPlot({
-    multiplot(
-      enrichHeatmap(pathewayOutput()$MFenrich, title = "GO:MF, p<0.01"),
-      enrichHeatmap(pathewayOutput()$BPenrich, title = "GO:BP, p<0.01")
-    )
-
+  output$heatplotMF <- renderPlot({
+      enrichHeatmap(pathewayOutputMF(), title = "GO:MF, p<0.01")
   })
 
+  output$heatplotBP <- renderPlot({
+        enrichHeatmap(pathewayOutputBP(), title = "GO:BP, p<0.01")
+  })
 
-})
+  }
+

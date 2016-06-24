@@ -241,20 +241,34 @@ body <- dashboardBody(
             fluidRow(
               box(
                 title = "Pathway enrichment",
-                actionButton("buttonpathway", strong("Run Pathway Enrichment")),
+                actionButton("buttonpathwayMF",
+                             strong("Run Pathway Enrichment MF")),
                 hr(),
                 sliderInput(
-                  "pathpvaluecutoff",
+                  "pathpvaluecutoffMF",
                   label = h4("PValue Cutoff"),
                   min = 0,
                   max = 1,
                   value = 0.01
-                )
-              ),
-              box(title = "Enrichment Heatmap",
-                  plotOutput('heatplot'))
-            ))
-
+                ),
+                plotOutput('heatplotMF')
+            ),
+            box(
+                title = "Pathway enrichment",
+                actionButton("buttonpathwayBP",
+                             strong("Run Pathway Enrichment BP")),
+                hr(),
+                sliderInput(
+                  "pathpvaluecutoffBP",
+                  label = h4("PValue Cutoff"),
+                  min = 0,
+                  max = 1,
+                  value = 0.01
+                ),
+                plotOutput('heatplotBP')
+            )
+            )
+    )
   )
 )
 
