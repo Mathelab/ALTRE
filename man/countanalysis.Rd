@@ -2,7 +2,8 @@
 % Please edit documentation in R/countanalysis.R
 \name{countanalysis}
 \alias{countanalysis}
-\title{Determines which regulatory regions are signifigantly altered between sample types}
+\title{Determines which regulatory regions are signifigantly altered
+between sample types}
 \usage{
 countanalysis(counts, pval = 0.01, lfcvalue = 1)
 }
@@ -11,9 +12,9 @@ countanalysis(counts, pval = 0.01, lfcvalue = 1)
 
 \item{pval}{optional, pvalue considered significant (0.05, 0.01, etc.)}
 
-\item{lfcvalue}{optional, logfold change value considered significant (value reported on a
-log scale base 2 so log2fold change of 1.5 means difference in peaks
-increased by 2^1.5 or 2.8)}
+\item{lfcvalue}{optional, logfold change value considered significant
+(value reported on a log scale base 2 so log2fold change of 1.5 means
+difference in peaks increased by 2^1.5 or 2.8)}
 }
 \value{
 list containing:
@@ -27,16 +28,24 @@ Altered regions are those that show differences in chromatin accessibility
 }
 \examples{
 \dontrun{
-TSSannot <- getTSS()
 dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
 csvfile <- file.path(dir, 'lung.csv')
 samplePeaks <- loadPeaks(csvfile)
 consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
-consPeaksAnnotated <- combineAnnotatePeaks(conspeaks=consPeaks, TSS=TSSannot,
-merge=TRUE, regionspecific=TRUE,mergedistenh=1500,mergedistprom=1000 )
-counts_consPeaks <-getcounts(annotpeaks=consPeaksAnnotated, csvfile=csvfile,
-reference='SAEC', chrom='chr21')
-altre_peaks=countanalysis(counts=counts_consPeaks, pval=0.01, lfcvalue=1)
+TSSannot <- getTSS()
+consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
+                                          TSS = TSSannot,
+                                          merge = TRUE,
+                                          regionspecific = TRUE,
+                                          mergedistenh = 1500,
+                                          mergedistprom = 1000)
+counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
+                              csvfile = csvfile,
+                              reference = 'SAEC',
+                              chrom = 'chr21')
+altre_peaks <- countanalysis(counts=counts_consPeaks,
+                             pval=0.01,
+                             lfcvalue=1)
 }
 }
 
