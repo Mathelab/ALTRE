@@ -1,7 +1,4 @@
 # utility functions
-
-
-
 ################################################################
 
 shinyServer(function(input, output, session) {
@@ -40,8 +37,7 @@ shinyServer(function(input, output, session) {
                 selected = reflist[1])
   })
 
-
-  #####################################################
+#####################################################
 
   #  tabPanel "merge"
 
@@ -113,8 +109,7 @@ shinyServer(function(input, output, session) {
                      getcounts(
                        annotpeaks = consPeaksAnnotated,
                        csvfile = csvfile,
-                       reference = input$reference,
-                       chrom = "chr21"
+                       reference = input$reference
                      )
                    setProgress(value = 1, detail = "done!")
                    Sys.sleep(0.5)
@@ -188,17 +183,6 @@ shinyServer(function(input, output, session) {
     return(BPenrich)
   })
 
-
-
-
-  # peaksdf <- reactive({
-  #
-  #   mergedpeaks <-cbind(PeaksFile = c("Consensus","Rep I","Rep II"),
-  #         as.data.frame(mergedPeaks()$consPeaksStats))
-  #   return(mergedpeaks)
-  #
-  # })
-
   output$table2 <- renderDataTable({
     mergedPeaks()$consPeaksStats
 
@@ -239,5 +223,5 @@ shinyServer(function(input, output, session) {
         enrichHeatmap(pathewayOutputBP(), title = "GO:BP, p<0.01")
   })
 
-  }
+  })
 
