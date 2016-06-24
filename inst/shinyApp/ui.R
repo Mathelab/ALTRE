@@ -93,16 +93,18 @@ body <- dashboardBody(
                 ),
                 dataTableOutput("table1")
               ),
-              HTML("</div>")
+              HTML("</div>"),
+              infoBoxOutput("statusbox1", width=6)
             ))
     ,
     tabItem(tabName = "definerep",
             fluidRow(
-              HTML("<div class='col-sm-4' style='min-width: 600px !important;'>"),
+              HTML("<div class='col-sm-5' style='min-width: 600px !important;'>"),
               box(
                 title = "Load and Merge Peak Files",
                 width = NULL,
                 solidHeader = TRUE,
+
                 numericInput(
                   "numOverlap",
                   "Minimum Number of Overlaps to Determine Consensus Region ",
@@ -115,7 +117,8 @@ body <- dashboardBody(
                 dataTableOutput("table2")
               ),
               HTML("</div>"),
-              HTML("<div class='col-sm-6' style='min-width: 500px !important;'>"),
+              infoBoxOutput("statusbox2", width = 7),
+              HTML("<div class='col-sm-7' style='min-width: 500px !important;'>"),
               box(
                 title = "Barplot",
                 width = NULL,
@@ -123,7 +126,8 @@ body <- dashboardBody(
                 plotOutput('barplot')
               ),
               HTML("</div>")
-            )),
+            )
+            ),
     tabItem(tabName = "combine",
             fluidRow(
               HTML("<div class='col-sm-4' style='min-width: 300px !important;'>"),
@@ -176,6 +180,7 @@ body <- dashboardBody(
                 )
               ),
               HTML("</div>"),
+              infoBoxOutput("statusbox3", width = 7),
               HTML("<div class='col-sm-7' style='min-width: 500px !important;'>"),
               box(
                 title = "Barplot",
@@ -197,6 +202,7 @@ body <- dashboardBody(
                 uiOutput("chooseref")
               ),
               HTML("</div>"),
+              infoBoxOutput("statusbox4", width = 7),
               HTML("<div class='col-sm-7' style='min-width: 500px !important;'>"),
               box(
                 width = NULL,
@@ -229,6 +235,7 @@ body <- dashboardBody(
                 )
               ),
               HTML("</div>"),
+              infoBoxOutput("statusbox5", width=7),
               HTML("<div class='col-sm-7' style='min-width: 500px !important;'>"),
               box(
                 width = NULL,
@@ -238,6 +245,10 @@ body <- dashboardBody(
               HTML("</div>")
             )),
     tabItem(tabName = "pathways",
+            fluidRow(
+              infoBoxOutput("statusbox6", width = 6),
+              infoBoxOutput("statusbox7", width = 6)
+            ),
             fluidRow(
               box(
                 title = "Pathway enrichment MF",
@@ -266,6 +277,7 @@ body <- dashboardBody(
                   max = 1,
                   value = 0.01
                 ),
+                hr(),
                 plotOutput('heatplotBP')
             )
             )
