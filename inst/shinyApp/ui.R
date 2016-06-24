@@ -277,6 +277,7 @@ body <- dashboardBody(
                   max = 1,
                   value = 0.01
                 ),
+                hr(),
                 plotOutput('heatplotBP')
             )
             )
