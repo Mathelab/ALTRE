@@ -312,13 +312,12 @@ enrichHeatmap <- function(input,
          using the output from the enrichment analysis")
   }
 
-  if (is.data.frame(input$expt) == FALSE |
-      is.data.frame(input$reference) == FALSE |
-      is.data.frame(input$shared) == FALSE |
+  if (is.data.frame(input$expt) == FALSE | nrow(input$expt) ==1 |
+      is.data.frame(input$reference) == FALSE | nrow(input$reference) ==1 |
+      is.data.frame(input$shared) == FALSE | nrow(input$shared) ==1 |
       length(input) != 3 |
       all(names(input) != c("expt", "reference", "shared"))) {
-    stop("The input is not a list of three dataframes!Please make
-         sure you are using the output from the enrichment analysis")
+    stop("The input is not a list of three dataframes or there are no enriched pathways to plot")
   }
 
   up <- input$expt
