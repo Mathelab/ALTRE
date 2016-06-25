@@ -4,75 +4,53 @@ shinyServer(function(input, output, session) {
   ############################################################################
   # Load data
 
-  inputFilePath <- reactive({
-    if (!is.null(input$file)) {
-      # User has not uploaded a file
-      return(input$file)
-    }
-  })
-
   csvFile <- reactive({
-    if (!is.null(input$file)) {
-      inputPathObj <- inputFilePath()
-      outputCSV <- loadCSVFile(inputPathObj$datapath)
-      return(outputCSV)
-    }
+      loadCSVFile(req(input$file)$datapath)
   })
 
   peaks <- reactive({
-    if (!is.null(input$file)) {
-      fileIn <- csvFile()
-      outputBed <- loadBedFiles(fileIn)
-      return(outputBed)
-    }
+      loadBedFiles(req(csvFile()))
   })
 
   ############################################################################
   # function calls
 
   mergedPeaks <- eventReactive(input$buttonmerge, {
-    withProgress(message = 'In progress:',
+    withProgress(message = 'In Progress:',
                  detail = 'This may take a while...',
                  value = 0,
                  {
-                   setProgress(value = .1, detail = "loading peak files")
-                   peaks <-  peaks()
-                   setProgress(value = 0.5, detail = "merging replicates")
-                   consenpeaks <-
-                     getConsensusPeaks(peaks, input$numOverlap)
-                   setProgress(value = 1, detail = "done!")
+                   setProgress(value = .1, detail = "Loading Peak Files")
+                   peaks <-  req(peaks())
+                   setProgress(value = 0.5, detail = "Merging Replicates")
+                   consensusPeaks <- getConsensusPeaks(peaks, req(input$numOverlap))
+                   setProgress(value = 1, detail = "Done!")
                    Sys.sleep(0.5)
                  })
-    return(consenpeaks)
+    return(consensusPeaks)
   })
 
   annotatePeaks <- eventReactive(input$buttonannot, {
-    withProgress(message = 'In progress',
+    withProgress(message = 'In Progress',
                  detail = 'This may take a while...',
                  value = 0,
                  {
-                   setProgress(value = .1, detail = "running")
-                   consPeaks <- mergedPeaks()
-                   setProgress(value = .3, detail = "retrieving TSS file")
+                   setProgress(value = .1, detail = "Retrieving TSS File")
                    TSSannot <- getTSS()
-                   setProgress(value = 0.5, detail = "annotating peaks")
-
-                   consPeaksAnnotated <-
-                     combineAnnotatePeaks(
-                       conspeaks = consPeaks,
-                       TSS = TSSannot,
-                       merge = input$mergeradio,
-                       regionspecific = input$regionradio,
-                       mergedist = input$dist,
-                       mergedistenh = input$distenh,
-                       mergedistprom = input$distprom,
-                       distancefromTSS = input$distTSS
-                     )
-                   setProgress(value = 1, detail = "done!")
+                   setProgress(value = 0.2, detail = "Annotating Peaks")
+                   annotatedPeaks <- combineAnnotatePeaks(
+                     conspeaks = mergedPeaks(),
+                     TSS = TSSannot,
+                     merge = input$mergeradio,
+                     regionspecific = input$regionradio,
+                     mergedist = input$dist,
+                     mergedistenh = input$distenh,
+                     mergedistprom = input$distprom,
+                     distancefromTSS = input$distTSS)
+                   setProgress(value = 1, detail = "Done!")
                    Sys.sleep(0.5)
                  })
-
-    return(consPeaksAnnotated)
+    return(annotatedPeaks)
   })
 
   countsPeaks <- eventReactive(input$buttoncounts, {
@@ -80,21 +58,15 @@ shinyServer(function(input, output, session) {
                  detail = 'This may take a while...',
                  value = 0,
                  {
-                   setProgress(value = .1, detail = "running")
-                   consPeaksAnnotated <- annotatePeaks()
-                   #csvfile <- csvFile()
-                   csvfile <- inputFilePath()$datapath
-                   setProgress(value = 0.5, detail = "Retrieving counts")
-                   counts_consPeaks <-
-                     getcounts(
-                       annotpeaks = consPeaksAnnotated,
-                       csvfile = csvfile,
-                       reference = input$reference
-                     )
+                   setProgress(value = 0.1, detail = "Retrieving counts")
+                   countsSummary <- getcounts(
+                     annotpeaks = annotatePeaks(),
+                     csvfile = req(input$file)$datapath,
+                     reference = req(input$reference))
                    setProgress(value = 1, detail = "done!")
                    Sys.sleep(0.5)
                  })
-    return(counts_consPeaks)
+    return(countsSummary)
   })
 
   alteredPeaks <- eventReactive(input$buttondefine, {
@@ -102,20 +74,17 @@ shinyServer(function(input, output, session) {
                  detail = 'This may take a while...',
                  value = 0,
                  {
-                   setProgress(value = .1, detail = "running")
-                   counts_consPeaks <- countsPeaks()
-                   setProgress(value = 0.5, detail = "annotating peaks")
-                   altred_peaks <-
+                   setProgress(value = 0.2, detail = "annotating peaks")
+                   altred <-
                      countanalysis(
-                       counts = counts_consPeaks,
-                       pval = input$alpha,
-                       lfcvalue = input$lfcThreshold
+                       counts = countsPeaks(),
+                       pval = req(input$alpha),
+                       lfcvalue = req(input$lfcThreshold)
                      )
                    setProgress(value = 1, detail = "done!")
                    Sys.sleep(0.5)
                  })
-
-    return(altred_peaks)
+    return(altred)
   })
 
 
@@ -124,17 +93,13 @@ shinyServer(function(input, output, session) {
                  detail = 'This may take a while...',
                  value = 0,
                  {
-                   setProgress(value = .1, detail = "running")
-                   altre_peaks <- alteredPeaks()
-                   setProgress(value = 0.5, detail = "annotating peaks")
-
-                   analysisresults <- resultsComparison(altre_peaks,
-                                                        reference= "A549")
-                   setProgress(value = 1, detail = "done!")
+                   setProgress(value = 0.2, detail = "Comparing Methods")
+                   compareResults <- resultsComparison(alteredPeaks(),
+                                                        reference = "A549")
+                   setProgress(value = 1, detail = "Done!")
                    Sys.sleep(0.5)
                  })
-
-    return(analysisresults)
+    return(compareResults)
   })
 
   pathewayOutputMF <- eventReactive(input$buttonpathwayMF, {
@@ -142,19 +107,16 @@ shinyServer(function(input, output, session) {
                  detail = 'This may take a while...',
                  value = 0,
                  {
-                   setProgress(value = .1, detail = "running")
-                   altre_peaks <- alteredPeaks()
-                   setProgress(value = 0.3, detail = "GO Enrichment Analysis MF")
+                   setProgress(value = 0.2, detail = "MF: GO Enrichment Analysis")
                    MFenrich <-
                      pathenrich(
-                       analysisresults = altre_peaks,
+                       analysisresults = alteredPeaks(),
                        ontoltype = "MF",
-                       enrichpvalfilt = input$pathpvaluecutoffMF
+                       enrichpvalfilt = req(input$pathpvaluecutoffMF)
                      )
-                   setProgress(value = 1, detail = "done!")
+                   setProgress(value = 1, detail = "Done!")
                    Sys.sleep(0.5)
                  })
-
     return(MFenrich)
   })
 
@@ -163,23 +125,18 @@ shinyServer(function(input, output, session) {
                  detail = 'This may take a while...',
                  value = 0,
                  {
-                   setProgress(value = .1, detail = "running")
-                   altre_peaks <- alteredPeaks()
-                   setProgress(value = 0.3, detail = "BP: GO Enrichment Analysis")
+                   setProgress(value = 0.2, detail = "BP: GO Enrichment Analysis")
                    BPenrich <-
                      pathenrich(
-                       analysisresults = altre_peaks,
+                       analysisresults = alteredPeaks(),
                        ontoltype = "BP",
-                       enrichpvalfilt = input$pathpvaluecutoffBP
+                       enrichpvalfilt = req(input$pathpvaluecutoffBP)
                      )
-                   setProgress(value = 1, detail = "done!")
+                   setProgress(value = 1, detail = "Done!")
                    Sys.sleep(0.5)
                  })
-
     return(BPenrich)
   })
-
-
   ############################################################################
    #  get input
 
@@ -190,10 +147,8 @@ shinyServer(function(input, output, session) {
                 reflist ,
                 selected = reflist[1])
   })
-
   ############################################################################
   #tables
-
   output$table1 <- renderDataTable({
     if (!is.null(input$file)) {
       csvFile()[, -1]
@@ -203,7 +158,6 @@ shinyServer(function(input, output, session) {
 
   output$table2 <- renderDataTable({
     mergedPeaks()$consPeaksStats
-
   }, options = list(searching = FALSE,
                     paging = FALSE))
 
@@ -216,7 +170,6 @@ shinyServer(function(input, output, session) {
     compareMethods()
   }, options = list(searching = FALSE,
                     paging = FALSE))
-
 
   ############################################################################
   # plots
@@ -253,132 +206,155 @@ shinyServer(function(input, output, session) {
   # info boxes
 
   output$statusbox1 <- renderInfoBox({
-    if(is.null(input$file)){
+    if (is.null(input$file)) {
       infoBox(
-        "Status", "File Not Loaded", icon = icon("import", lib = "glyphicon"),
-        color = "aqua", fill = TRUE
+        "Status",
+        "File Not Loaded",
+        icon = icon("import", lib = "glyphicon"),
+        color = "aqua",
+        fill = TRUE
       )}
-    else if(!is.null(input$file)) {
+    else if (!is.null(input$file)) {
     infoBox(
-      "Status", "File Loaded", icon = icon("thumbs-up", lib = "glyphicon"),
-      color = "yellow", fill = TRUE
-    )
+      "Status",
+      "File Loaded",
+      icon = icon("thumbs-up", lib = "glyphicon"),
+      color = "yellow", fill = TRUE)
     }
   })
 
-  output$statusbox2 <- renderInfoBox({
-    if(input$buttonmerge==0){
+  output$statusbox2 <- renderInfoBox ({
+    if (input$buttonmerge == 0) {
       infoBox(
-        "Status", "Merge Button Not Clicked Yet",
+        "Status",
+        "Merge Button Not Clicked Yet",
         icon = icon("flag", lib = "glyphicon"),
-        color = "aqua", fill = TRUE
-      )}
+        color = "aqua",
+        fill = TRUE)
+      }
     else if(input$buttonmerge > 0) {
       infoBox(
-        "Status", "Replicates Have Been Merged ",
+        "Status",
+        "Replicates Have Been Merged ",
         icon = icon("thumbs-up", lib = "glyphicon"),
-        color = "yellow", fill = TRUE
-      )
+        color = "yellow",
+        fill = TRUE)
     }
   })
 
   output$statusbox3 <- renderInfoBox({
-    if(input$buttonannot==0){
+    if (input$buttonannot == 0) {
       infoBox(
-        "Status", "Annotate Button Not Clicked Yet",
+        "Status",
+        "Annotate Button Not Clicked Yet",
         icon = icon("flag", lib = "glyphicon"),
-        color = "aqua", fill = TRUE
-      )}
-    else if(input$buttonannot > 0) {
+        color = "aqua",
+        fill = TRUE)
+      }
+    else if (input$buttonannot > 0) {
       infoBox(
-        "Status", "Peaks Have Been Annotated",
-        icon = icon("thumbs-up", lib = "glyphicon"),
-        color = "yellow", fill = TRUE
-      )
+        "Status",
+        "Peaks Have Been Annotated",
+        icon = icon("thumbs-up",lib = "glyphicon"),
+        color = "yellow",
+        fill = TRUE)
     }
   })
 
   output$statusbox4 <- renderInfoBox({
-    if(input$buttoncounts==0){
+    if (input$buttoncounts == 0){
       infoBox(
-        "Status", "Retrieve Counts Button Not Clicked Yet",
+        "Status",
+        "Retrieve Counts Button Not Clicked Yet",
         icon = icon("flag", lib = "glyphicon"),
-        color = "aqua", fill = TRUE
-      )}
-    else if(input$buttoncounts > 0) {
+        color = "aqua",
+        fill = TRUE)
+      }
+    else if (input$buttoncounts > 0) {
       infoBox(
-        "Status", "Counts Have Been Retrieved",
+        "Status",
+        "Counts Have Been Retrieved",
         icon = icon("thumbs-up", lib = "glyphicon"),
-        color = "yellow", fill = TRUE
-      )
+        color = "yellow",
+        fill = TRUE)
     }
   })
 
   output$statusbox5 <- renderInfoBox({
-    if(input$buttondefine==0){
+    if (input$buttondefine == 0) {
       infoBox(
         "Status", "Define Altered Regions Button Not Clicked Yet",
         icon = icon("flag", lib = "glyphicon"),
-        color = "aqua", fill = TRUE
+        color = "aqua",
+        fill = TRUE
       )}
-    else if(input$buttondefine> 0) {
+    else if (input$buttondefine > 0) {
       infoBox(
         "Status", "Altered Regions Have Been Defined",
         icon = icon("thumbs-up", lib = "glyphicon"),
-        color = "yellow", fill = TRUE
+        color = "yellow",
+        fill = TRUE
       )
     }
   })
 
   output$statusbox6 <- renderInfoBox({
-    if(input$buttonpathwayMF==0){
+    if (input$buttonpathwayMF == 0){
       infoBox(
-        "Status", "Enrichment Analysis Button Not Clicked Yet",
+        "Status",
+        "Enrichment Analysis Button Not Clicked Yet",
         icon = icon("flag", lib = "glyphicon"),
-        color = "aqua", fill = TRUE
-      )}
-    else if(input$buttonpathwayMF > 0) {
+        color = "aqua",
+        fill = TRUE)
+      }
+    else if (input$buttonpathwayMF > 0) {
       infoBox(
-        "Status", "Enrichment Analysis Has Been Run",
+        "Status",
+        "Enrichment Analysis Has Been Run",
         icon = icon("thumbs-up", lib = "glyphicon"),
-        color = "yellow", fill = TRUE
-      )
+        color = "yellow",
+        fill = TRUE)
     }
   })
 
   output$statusbox7 <- renderInfoBox({
-    if(input$buttonpathwayBP==0){
+    if (input$buttonpathwayBP == 0) {
       infoBox(
-        "Status", "Enrichment Analysis BP Button Not Clicked Yet",
+        "Status",
+        "Enrichment Analysis BP Button Not Clicked Yet",
         icon = icon("flag", lib = "glyphicon"),
-        color = "aqua", fill = TRUE
-      )}
+        color = "aqua",
+        fill = TRUE)
+      }
     else if(input$buttonpathwayBP > 0) {
       infoBox(
-        "Status", "BP Enrichment Analysis Completed",
+        "Status",
+        "BP Enrichment Analysis Completed",
         icon = icon("thumbs-up", lib = "glyphicon"),
-        color = "yellow", fill = TRUE
+        color = "yellow",
+        fill = TRUE
       )
     }
   })
 
   output$statusbox8 <- renderInfoBox({
-    if(input$buttoncompare==0){
+    if (input$buttoncompare == 0) {
       infoBox(
-        "Status", "Compare Methods Button Not Clicked Yet",
+        "Status",
+        "Compare Methods Button Not Clicked Yet",
         icon = icon("flag", lib = "glyphicon"),
-        color = "aqua", fill = TRUE
-      )}
-    else if(input$buttoncompare > 0) {
+        color = "aqua",
+        fill = TRUE)
+      }
+    else if (input$buttoncompare > 0) {
       infoBox(
-        "Status", "Method Comparison Completed",
+        "Status",
+        "Method Comparison Completed",
         icon = icon("thumbs-up", lib = "glyphicon"),
-        color = "yellow", fill = TRUE
-      )
+        color = "yellow",
+        fill = TRUE)
     }
   })
-
   ##########################################################
-
   })
 
