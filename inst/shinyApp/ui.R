@@ -50,16 +50,16 @@ sidebar <- dashboardSidebar(
       badgeColor = "green"
     ),
     menuItem(
-      "Find Enriched Pathways",
-      icon = icon("gears"),
-      tabName = "pathways",
+      "Compare Altered Regions",
+      icon = icon("balance-scale"),
+      tabName = "compare",
       badgeLabel = "step 6",
       badgeColor = "green"
     ),
     menuItem(
-      "Compare Altered Regions",
-      icon = icon("balance-scale"),
-      tabName = "compare",
+      "Find Enriched Pathways",
+      icon = icon("gears"),
+      tabName = "pathways",
       badgeLabel = "step 7",
       badgeColor = "green"
     )
@@ -75,7 +75,8 @@ body <- dashboardBody(
     tabItem(tabName = "about",
             tabPanel("About",
                      box(
-                       width = 12, includeMarkdown("include.md")
+                       width = 12,
+                       includeMarkdown("include.md")
                      ))),
     tabItem(tabName = "loaddata",
             fluidRow(
@@ -244,6 +245,26 @@ body <- dashboardBody(
               ),
               HTML("</div>")
             )),
+    tabItem(tabName = "compare",
+            fluidRow(
+              HTML("<div class='col-sm-4' style='min-width: 300px !important;'>"),
+              box(
+                width = NULL,
+                title = "Compare methods of identifying altered regulatory regions",
+                actionButton("buttoncompare", strong("Compare Methods")),
+                hr(),
+                dataTableOutput("table4")
+              ),
+              HTML("</div>"),
+              infoBoxOutput("statusbox8", width = 7),
+              HTML("<div class='col-sm-7' style='min-width: 500px !important;'>"),
+              box(
+                width = NULL,
+                title = "Venn Plot",
+                plotOutput('vennplot')
+              ),
+              HTML("</div>")
+            )),
     tabItem(tabName = "pathways",
             fluidRow(
               infoBoxOutput("statusbox6", width = 6),
@@ -281,27 +302,7 @@ body <- dashboardBody(
                 plotOutput('heatplotBP')
             )
             )
-    ),
-    tabItem(tabName = "compare",
-            fluidRow(
-              HTML("<div class='col-sm-4' style='min-width: 300px !important;'>"),
-              box(
-                width = NULL,
-                title = "Compare methods of identifying altered regulatory regions",
-                actionButton("buttoncompare", strong("Compare Methods")),
-                hr(),
-                dataTableOutput("table4")
-              ),
-              HTML("</div>"),
-              infoBoxOutput("statusbox8", width = 7),
-              HTML("<div class='col-sm-7' style='min-width: 500px !important;'>"),
-              box(
-                width = NULL,
-                title = "Venn Plot",
-                plotOutput('vennplot')
-              ),
-              HTML("</div>")
-            ))
+    )
   )
 )
 

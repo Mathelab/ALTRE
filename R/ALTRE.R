@@ -5,35 +5,66 @@
 #' regions (enhancers and promoters) that differ based on cell and
 #' tissue type.
 #'
-#' \pkg{ALTRE} requires sample information CSV file, peak files (bed format), and alignment bam files (BAM) as input
+#' ALTRE requires sample information CSV file, peak files (bed format),
+#' and alignment bam files (BAM) as input
 #'
-#' The following is the order in which the functions should be used:
-#' (Click on function to get more detailed information.)
+#' Workflow Steps: The following is the order in which the functions should be used:
+#' (Click on function to get more detailed information)
+#' \enumerate{
 #'
-#' 1. \code{\link{loadPeaks}}
+#' \item  \code{\link{loadPeaks}}
 #'
-#' Takes in a sample information file (CSV), loads peak files, and outputs a GRangesList object that holds all peaks for each sample type.  
+#' Takes in a sample information file (CSV), loads peak files, and outputs a
+#' GRangesList object that holds all peaks for each sample type.
 #'
-#' 2.\code{\link{getConsensusPeaks}}
+#' \item  \code{\link{getConsensusPeaks}}
 #'
-#' Takes in a sample peaks list (output from loadPeaks in step 1), and outputs consensus peaks.  Consensus peaks are those present in at least N replicates, where is defined by the user.
-#' The function outputs a list with the following slots: 1) GRangesList with consensus peaks for each sample type; 2) A statistics table summarizing how many peaks are in replicate samples and are called as consensus peaks.
+#' Takes in a sample peaks list (output from loadPeaks in step 1), and outputs
+#' consensus peaks. Consensus peaks are those present in at least N replicates.
 #'
-#' 3.\code{\link{combineAnnotatePeaks}}
+#' The function outputs a list with the following slots:
+#'
+#' \enumerate{
+#' \item  GRangesList with consensus peaks for each sample type
+#' \item  A statistics table summarizing how many peaks are in replicate samples
+#'  and are called as consensus peaks
+#'  }
+#'
+#' \item \code{\link{combineAnnotatePeaks}}
 #'
 #' The GRanges for all sample types are combined and annotated with
 #' type specificity (which cell types the hotspot is present in) and
 #' whether each region represented in the GRanges is a promoter (default: <1500bp from
 #' a transcription start site) or an enhancer (>1500bp from a transcription
 #' start site). Function can also merge regulatory regions that are within a specified
-#' distance from each other. 
+#' distance from each other.
 #'
-# / 4.\code{\link{getcounts}}
+#' \item \code{\link{getcounts}}
 #'
 #' The number of reads overlapping all regions for each cell type is calculated.
 #' The function outputs a DESeq object, summary statistics, and a density plot of the size of regulatory elements
-#' 
-#' 5.\code{\link{countanalysis}}
-#' 
+#'
+#' \item \code{\link{countanalysis}}
+#'
 #' Identify significantly altered regulatory elements (promoters or enhancers)
 #' The function outputs a DESeq object, a summary statistics table, and a volcano plot (log2fold change vs. log2(adjusted pvalues))
+#' }
+#'
+#'
+#' @docType package
+#' @name ALTRE
+#' @import methods
+#' @import IRanges
+#' @import GenomeInfoDb
+#' @import S4Vectors
+#' @import GenomicRanges
+#' @import ggplot2
+#' @importFrom reshape2 melt
+#' @importFrom GenomicAlignments summarizeOverlaps
+#' @importFrom DESeq2 DESeqDataSet results counts DESeq results
+#' @importFrom SummarizedExperiment assay colData
+#' @import readr
+#' @import org.Hs.eg.db
+#' @importFrom clusterProfiler enrichGO
+#' @import grid
+NULL
