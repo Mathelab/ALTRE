@@ -42,7 +42,7 @@ dataframe identifying p-values for enriched pathways --
 pathways also annotated with additional information
 }
 \description{
-Determine which pathways are overrepresented in the
+Determine which pathways are overrepresented in
 altered promoters and enhancers. Pathways are determined by linking
 the enhancer/promoter to the nearest gene, and then linking genes to pathways
 using the gene ontology database. The 'gene' argument limits how few genes

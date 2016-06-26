@@ -141,7 +141,7 @@ body <- dashboardBody(
                   "mergeradio",
                   label = h4("Merge"),
                   choices = list("TRUE" = "TRUE", "FALSE" = "FALSE"),
-                  selected = "TRUE"
+                  selected = "FALSE"
                 ),
                 sliderInput(
                   "distTSS",
@@ -153,31 +153,33 @@ body <- dashboardBody(
                 hr(),
                 radioButtons(
                   "regionradio",
-                  label = h4("Region Specific"),
-                  choices = list("TRUE" = "TRUE", "FALSE" = "FALSE"),
-                  selected = "TRUE"
+                  label = h4("Region specific merging?"),
+                  choices = list("TRUE" = "TRUE", "FALSE" = "FALSE")
                 ),
+                conditionalPanel("input.regionradio == 'FALSE'",
                 sliderInput(
                   "dist",
-                  label = h4("merge promoters and enhancers"),
+                  label = h4("Merge promoters and enhancers if distance is less than "),
                   min = 0,
                   max = 3000,
                   value = 0
+                )
                 ),
-                hr(),
+                conditionalPanel("input.regionradio == 'TRUE'",
                 sliderInput(
                   "distenh",
-                  label = h4("Merge Enhancers Distance Threshold"),
+                  label = h4("Merge enhancers distance threshold"),
                   min = 0,
                   max = 3000,
                   value = 1500
                 ),
                 sliderInput(
                   "distprom",
-                  label = h4("Merge Promoters Distance Threshold"),
+                  label = h4("Merge promoters distance threshold"),
                   min = 0,
                   max = 3000,
                   value = 1000
+                )
                 )
               ),
               HTML("</div>"),

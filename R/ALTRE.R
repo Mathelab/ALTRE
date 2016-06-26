@@ -12,17 +12,17 @@
 #' (Click on function to get more detailed information)
 #' \enumerate{
 #'
-#' \item  \code{\link{1_loadPeaks}}
+#' \item  \code{\link{loadPeaks}}
 #'
 #' Takes in a sample information file (CSV), loads peak files, and outputs a
 #' GRangesList object that holds all peaks for each sample type.
 #'
-#' \item  \code{\link{2_getConsensusPeaks}}
+#' \item  \code{\link{getConsensusPeaks}}
 #'
 #' Takes in a sample peaks list (output from loadPeaks in step 2), and outputs
 #' consensus peaks. Consensus peaks are those present in at least N replicates. A barplot summary of the number of consensus peaks and those in each replicates, use plotConsensusPeaks().
 #'
-#' \item \code{\link{3_combineAnnotatePeaks}}
+#' \item \code{\link{combineAnnotatePeaks}}
 #'
 #' The GRanges for all sample types from the previous step are combined and annotated with
 #' type specificity (which cell types the hotspot is present in) and
@@ -31,23 +31,23 @@
 #' start site). Function can also merge regulatory regions that are within a specified
 #' distance from each other.  This function requires the annotation of transcription start sites (e.g. to retrieve from Ensembl, run TSS <- getTSS()))
 #'
-#' \item \code{\link{4_getcounts}}
+#' \item \code{\link{getcounts}}
 #'
 #' The number of reads overlapping all regions for each cell type is calculated.
 #' To view a density plot of the sizes of the regions, use the function plotgetcounts().
 #'
-#' \item \code{\link{5_countanalysis}}
+#' \item \code{\link{countanalysis}}
 #'
 #' Identify significantly altered regulatory elements (promoters or enhancers).  A volcano plot of these significantly altered regulatory elements can be viewed by running the function plotCountAnalysis().
 #'
-#' \item \code{\link{6_enrichment}}
+#' \item \code{\link{resultsComparison}}
 #'
 #' This function compares the number of regulatory regions identified as altered or shared between two sample types.  The two methods compared are: 1) using peak presence and associated intensity (e.g. amount of chromatin accessibility); 2) using peak presence only as determined by peak/hotspot caller.
 #'
-#' \item \code{\link{7_enrichment}}
+#' \item \code{\link{pathenrich}}
 #'
 #' Determine which pathways are overrepresented in altered promoters and enhancers.
-#' 
+#' }
 #' @docType package
 #' @name ALTRE
 #' @import methods
