@@ -1,7 +1,7 @@
 #' Enrichment analysis to identify putative pathways of interest for further
 #' investigation
 #'
-#' Determine which pathways are overrepresented in the
+#' Determine which pathways are overrepresented in
 #' altered promoters and enhancers. Pathways are determined by linking
 #' the enhancer/promoter to the nearest gene, and then linking genes to pathways
 #' using the gene ontology database. The 'gene' argument limits how few genes
@@ -161,9 +161,9 @@ pathenrich <- function(analysisresults,
 
   # enrichstats=data.frame(
 
-  allthree <- list(expt = expt,
-                   reference = reference,
-                   shared = shared)
+  allthree <- list(expt = as.data.frame(expt),
+                   reference = as.data.frame(reference),
+                   shared = as.data.frame(shared))
 
   return(allthree)
 }
