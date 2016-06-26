@@ -168,19 +168,21 @@ plotCombineAnnotatePeaks <- function(conspeaks) {
 #' altre_peaks <- countanalysis(counts=counts_consPeaks,
 #'                              pval=0.01,
 #'                              lfcvalue=1)
-#' plotCountAnalysis(altre_peaks)
+#' categaltre_peaks=categAltrePeaks(altre_peaks, lfctypespecific=1.5,lfcshared=1.2,
+#' 	pvaltypespecific=0.01,pvalshared=0.05)
+#' plotCountAnalysis(categaltre_peaks)
 #' }
 #' @export
 
-plotCountAnalysis <- function(altrepeaks) {
-  toplot <- altrepeaks$dftoplot$toplot
-  pval <- altrepeaks$dftoplot$pval
-  lfcvalue <- altrepeaks$dftoplot$lfcvalue
-  plot <- ggplot(toplot,
-                 aes(toplot$log2FoldChange,
-                     -log2(toplot$padj))) +
-    geom_point(aes(col = factor(toplot$col))) +
-    scale_colour_manual(values = c("red","dark grey")) +
+plotCountAnalysis <- function(altrepeakscateg) {
+  toplot <- altrepeakscateg$analysisresults[,c("region","log2FoldChange","padj","REaltrecateg")]
+  enh <- toplot[which(toplot$region=="enhancer"),]
+  prom <- toplot[which(toplot$region=="promoter"),]
+  plot1 <- ggplot(enh,
+                 aes(enh$log2FoldChange,
+                     -log2(enh$padj))) +
+    geom_point(aes(col = factor(enh$REaltrecateg))) +
+    scale_colour_manual(values = c("dark grey","salmon","dark green","blue")) +
     theme_bw(base_size = 15) +
     theme(legend.title = element_blank()) +
     scale_x_continuous(expand = c(0, 0)) +
@@ -188,11 +190,28 @@ plotCountAnalysis <- function(altrepeaks) {
     theme(panel.grid.major = element_blank(),
           panel.grid.minor = element_blank()) +
     labs(x = "log2FC", y = "-log2(pvalue)") +
-    geom_hline(aes(yintercept = -log2(pval)), linetype = "dashed") +
-    geom_vline(aes(xintercept = (-lfcvalue)), linetype = "dashed") +
-    geom_vline(aes(xintercept =  (lfcvalue)), linetype = "dashed")
+    ggtitle("Enhancers")
+    plot2 <- ggplot(prom,
+                 aes(prom$log2FoldChange,
+                     -log2(prom$padj))) +
+    geom_point(aes(col = factor(prom$REaltrecateg))) +
+    scale_colour_manual(values = c("dark grey","salmon","dark green","blue")) +
+    theme_bw(base_size = 15) +
+    theme(legend.title = element_blank()) +
+    scale_x_continuous(expand = c(0, 0)) +
+    scale_y_continuous(expand = c(0, 0)) +
+    theme(panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank()) +
+    labs(x = "log2FC", y = "-log2(pvalue)") +
+    ggtitle("Promoters")
 
-  return(plot)
+    multiplot(plot1,plot2)
+
+#    geom_hline(aes(yintercept = -log2(pval)), linetype = "dashed") +
+#    geom_vline(aes(xintercept = (-lfcvalue)), linetype = "dashed") +
+#    geom_vline(aes(xintercept =  (lfcvalue)), linetype = "dashed")
+
+  return(NULL)
 }
 
 
