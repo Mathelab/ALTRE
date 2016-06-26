@@ -82,59 +82,53 @@ plotCombineAnnotatePeaks <- function(conspeaks) {
     stop("No plot to show since merging was not performed
          when calling combineAnnotatePeaks function")
   } else {
-    graphics::par(mfrow = c(1, 2),
-                  oma = c(4, 1, 1, 1),
-                  mar = c(1,3, 3, 3))
-    toplot <- data.frame(Enhancers = mydf$total_number[1:2],
-                         Promoters = mydf$total_number[3:4])
-    rownames(toplot) <- c("NoMerge", "Merge")
+    numreg=as.data.frame(mydf$total_number);colnames(numreg)="total_number"
+    numreg$REtype=gsub("_.*","",rownames(mydf))
+    numreg$REmerge=rownames(mydf)
+    numreg$REmerge=gsub("enhancers_","",numreg$REmerge)
+    numreg$REmerge=gsub("promoters_","",numreg$REmerge)
+    numreg$REmerge=factor(numreg$REmerge,levels=c("before_merging","after_merging"))
 
-    b <- graphics::barplot(as.matrix(toplot),
-                           ylab = "Number of Regulatory Regions",
-                           beside = TRUE,
-                           main = "Number of Regulatory Regions \n
-                           Before/After merging",
-                           ylim = c(0, max(toplot) + max(toplot) * 0.05),
-                           col = c("blue4", "coral2"))
-    graphics::text(x = b, y = as.matrix(toplot),
-                   label = as.matrix(toplot),
-                   pos = 3,
-                   cex = 0.8)
+    plot1=ggplot(numreg,aes_string(x="REtype",y="total_number",fill="REmerge")) +
+	geom_bar(stat="identity",position=position_dodge()) + 
+	geom_text(aes_string(label = "total_number",
+		x = "REtype",
+                y = "total_number",
+                ymax = "total_number"),position = position_dodge(width = 1),
+                size = 3,
+                hjust = 0.5,
+                vjust = -1.5) +
+	scale_colour_manual(values = c("red","dark grey")) +
+	theme_bw(base_size = 12) +
+	theme(panel.grid.major = element_blank(),
+		panel.grid.minor = element_blank()) +
+	labs(x = "", y="Number of Regulatory Regions") +
+	ggtitle("Number of REs\nBefore/After merging")
 
-    toplot <- data.frame(Enhancers = mydf$mean_length[1:2],
-                         Promoters = mydf$mean_length[3:4])
-    rownames(toplot) <- c("NoMerge", "Merge")
+    meanlength=as.data.frame(mydf$mean_length);colnames(meanlength)="mean_length"
+    meanlength$REtype=gsub("_.*","",rownames(mydf))
+    meanlength$REmerge=rownames(mydf)
+    meanlength$REmerge=gsub("enhancers_","",meanlength$REmerge)
+    meanlength$REmerge=gsub("promoters_","",meanlength$REmerge)
+    meanlength$REmerge=factor(meanlength$REmerge,levels=c("before_merging","after_merging"))
+    
+    plot2=ggplot(meanlength,aes_string(x="REtype",y="mean_length",fill="REmerge")) +
+        geom_bar(stat="identity",position=position_dodge()) +
+        geom_text(aes_string(label = "mean_length",
+                x = "REtype",
+                y = "mean_length",
+                ymax = "mean_length"),position = position_dodge(width = 1),
+                size = 3,
+                hjust = 0.5,
+                vjust = -1.5) +
+        scale_colour_manual(values = c("red","dark grey")) +
+        theme_bw(base_size = 12) +
+        theme(panel.grid.major = element_blank(),
+                panel.grid.minor = element_blank()) +
+        labs(x = "", y="Mean length of Regulatory Regions") +
+        ggtitle("Mean length of REs\nBefore/After merging")
 
-    b <- graphics::barplot(as.matrix(toplot),
-                           ylab = "Mean Length of Regulatory Regions",
-                           beside = TRUE,
-                           main = "Mean length of Regulatory Regions \n
-                           Before/After merging",
-                           ylim = c(0, max(toplot) + max(toplot) * 0.05),
-                           col = c("blue4", "coral2"))
-    graphics::text(x = b,
-                   y = as.matrix(toplot),
-                   label = as.matrix(toplot),
-                   pos = 3,
-                   cex = 0.8)
-
-    graphics::par(fig = c(0, 1, 0, 1),
-                  oma = c(0, 0, 0, 0),
-                  mar = c(0, 0, 0, 0),
-                  new = TRUE)
-    graphics::plot(0,
-                   0,
-                   type = "n",
-                   bty = "n",
-                   xaxt = "n",
-                   yaxt = "n")
-    graphics::legend("bottom",
-                     c("No Merging", "After Merging"),
-                     fill = c("blue4","coral2"),
-                     horiz = TRUE,
-                     inset = c(0, 0),
-                     xpd = TRUE,
-                     bty = "n")
+    multiplot(plot1,plot2)
   }
 }
 
