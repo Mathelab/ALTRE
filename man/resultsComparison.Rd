@@ -5,7 +5,7 @@
 \title{Comparison of methods for identifying altered regulatory regions.
 Creates a table to compare two methods of identifying altered regulatory
 regions: one based on peak intensity, the other on peak presence as
-determined by hotspot calling algorithms.}
+determined by peak/hotspot calling algorithms.}
 \usage{
 resultsComparison(analysisresults, reference, lfctypespecific = 1.5,
   lfcshared = 1.2, pvaltypespecific = 0.01, pvalshared = 0.05)
@@ -33,7 +33,7 @@ determined by hotspot calling algorithms.
 Comparison of methods for identifying altered regulatory regions.
 Creates a table to compare two methods of identifying altered regulatory
 regions: one based on peak intensity, the other on peak presence as
-determined by hotspot calling algorithms.
+determined by peak/hotspot calling algorithms.
 }
 \examples{
 \dontrun{
