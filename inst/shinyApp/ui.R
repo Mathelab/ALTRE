@@ -5,11 +5,13 @@ headerbar <- dashboardHeader(
   titleWidth = 270,
   dropdownMenu(
     type = "notifications",
-    notificationItem(text = "Plots take some time to display",
-                     icon("truck"),
-                     status = "warning")
+    notificationItem(
+      text = "Plots take some time to display",
+      icon("truck"),
+      status = "warning"
+      )
+    )
   )
-)
 
 sidebar <- dashboardSidebar(
   width = 270,
@@ -77,10 +79,13 @@ body <- dashboardBody(
                      box(
                        width = 12,
                        includeMarkdown("include.md")
-                     ))),
+                       )
+                     )
+            ),
     tabItem(tabName = "loaddata",
             fluidRow(
-              HTML("<div class='col-sm-6' style='min-width: 700px !important;'>"),
+              HTML("<div class='col-sm-6' style='min-width:
+                   700px !important;'>"),
               box(
                 title = "Load Datapaths File",
                 width = NULL,
@@ -91,21 +96,21 @@ body <- dashboardBody(
                              'text/comma-separated-values,text/plain',
                              '.csv'),
                   "Provide CSV File to Load Data:"
-                ),
+                  ),
                 dataTableOutput("table1")
-              ),
+                ),
               HTML("</div>"),
-              infoBoxOutput("statusbox1", width=6)
-            ))
-    ,
+              infoBoxOutput("statusbox1", width = 6)
+              )
+            ),
     tabItem(tabName = "definerep",
             fluidRow(
-              HTML("<div class='col-sm-5' style='min-width: 600px !important;'>"),
+              HTML("<div class='col-sm-5' style='min-width:
+                   600px !important;'>"),
               box(
                 title = "Load and Merge Peak Files",
                 width = NULL,
                 solidHeader = TRUE,
-
                 numericInput(
                   "numOverlap",
                   "Minimum Number of Overlaps to Determine Consensus Region ",
@@ -119,7 +124,8 @@ body <- dashboardBody(
               ),
               HTML("</div>"),
               infoBoxOutput("statusbox2", width = 7),
-              HTML("<div class='col-sm-7' style='min-width: 500px !important;'>"),
+              HTML("<div class='col-sm-7' style='min-width:
+                   500px !important;'>"),
               box(
                 title = "Barplot",
                 width = NULL,
@@ -127,11 +133,12 @@ body <- dashboardBody(
                 plotOutput('barplot')
               ),
               HTML("</div>")
-            )
+              )
             ),
     tabItem(tabName = "combine",
             fluidRow(
-              HTML("<div class='col-sm-4' style='min-width: 300px !important;'>"),
+              HTML("<div class='col-sm-4' style='min-width:
+                   300px !important;'>"),
               box(
                 width = NULL,
                 solidHeader = TRUE,
@@ -157,34 +164,38 @@ body <- dashboardBody(
                   choices = list("TRUE" = "TRUE", "FALSE" = "FALSE")
                 ),
                 conditionalPanel("input.regionradio == 'FALSE'",
-                sliderInput(
-                  "dist",
-                  label = h4("Merge promoters and enhancers if distance is less than "),
-                  min = 0,
-                  max = 3000,
-                  value = 0
-                )
-                ),
+                                 sliderInput(
+                                   "dist",
+                                   label = h4("Merge promoters and enhancers if
+                                              distance is less than "),
+                                   min = 0,
+                                   max = 3000,
+                                   value = 0
+                                   )
+                                 ),
                 conditionalPanel("input.regionradio == 'TRUE'",
-                sliderInput(
-                  "distenh",
-                  label = h4("Merge enhancers distance threshold"),
-                  min = 0,
-                  max = 3000,
-                  value = 1500
+                                 sliderInput(
+                                   "distenh",
+                                   label = h4("Merge enhancers distance
+                                              threshold"),
+                                   min = 0,
+                                   max = 3000,
+                                   value = 1500
+                                   ),
+                                 sliderInput(
+                                   "distprom",
+                                   label = h4("Merge promoters distance
+                                              threshold"),
+                                   min = 0,
+                                   max = 3000,
+                                   value = 1000
+                                   )
+                                 )
                 ),
-                sliderInput(
-                  "distprom",
-                  label = h4("Merge promoters distance threshold"),
-                  min = 0,
-                  max = 3000,
-                  value = 1000
-                )
-                )
-              ),
               HTML("</div>"),
               infoBoxOutput("statusbox3", width = 7),
-              HTML("<div class='col-sm-7' style='min-width: 500px !important;'>"),
+              HTML("<div class='col-sm-7' style='min-width:
+                   500px !important;'>"),
               box(
                 title = "Barplot",
                 width = NULL,
@@ -196,7 +207,8 @@ body <- dashboardBody(
             )),
     tabItem(tabName = "retrieve",
             fluidRow(
-              HTML("<div class='col-sm-4' style='min-width: 300px !important;'>"),
+              HTML("<div class='col-sm-4' style='min-width:
+                   300px !important;'>"),
               box(
                 width = NULL,
                 title = "Retrieve Read Counts in Annotated Regions",
@@ -206,17 +218,20 @@ body <- dashboardBody(
               ),
               HTML("</div>"),
               infoBoxOutput("statusbox4", width = 7),
-              HTML("<div class='col-sm-7' style='min-width: 500px !important;'>"),
+              HTML("<div class='col-sm-7' style='min-width:
+                   500px !important;'>"),
               box(
                 width = NULL,
                 title = "Density Plot",
                 plotOutput('densityplot')
               ),
               HTML("</div>")
-            )),
+              )
+            ),
     tabItem(tabName = "definealtered",
             fluidRow(
-              HTML("<div class='col-sm-4' style='min-width: 300px !important;'>"),
+              HTML("<div class='col-sm-4' style='min-width:
+                   300px !important;'>"),
               box(
                 width = NULL,
                 title = "Define Altered Regions",
@@ -239,34 +254,40 @@ body <- dashboardBody(
               ),
               HTML("</div>"),
               infoBoxOutput("statusbox5", width=7),
-              HTML("<div class='col-sm-7' style='min-width: 500px !important;'>"),
+              HTML("<div class='col-sm-7' style='min-width:
+                   500px !important;'>"),
               box(
                 width = NULL,
                 title = "Volcano Plot",
                 plotOutput('volcanoplot')
               ),
               HTML("</div>")
-            )),
+              )
+            ),
     tabItem(tabName = "compare",
             fluidRow(
-              HTML("<div class='col-sm-4' style='min-width: 300px !important;'>"),
+              HTML("<div class='col-sm-4' style='min-width:
+                   300px !important;'>"),
               box(
                 width = NULL,
-                title = "Compare methods of identifying altered regulatory regions",
+                title = "Compare methods of identifying altered
+                regulatory regions",
                 actionButton("buttoncompare", strong("Compare Methods")),
                 hr(),
                 dataTableOutput("table4")
               ),
               HTML("</div>"),
               infoBoxOutput("statusbox8", width = 7),
-              HTML("<div class='col-sm-7' style='min-width: 500px !important;'>"),
+              HTML("<div class='col-sm-7' style='min-width:
+                   500px !important;'>"),
               box(
                 width = NULL,
                 title = "Venn Plot",
                 plotOutput('vennplot')
               ),
               HTML("</div>")
-            )),
+              )
+            ),
     tabItem(tabName = "pathways",
             fluidRow(
               infoBoxOutput("statusbox6", width = 6),
@@ -284,11 +305,11 @@ body <- dashboardBody(
                   min = 0,
                   max = 1,
                   value = 0.01
-                ),
+                  ),
                 hr(),
                 plotOutput('heatplotMF')
-            ),
-            box(
+                ),
+              box(
                 title = "Pathway enrichment BP",
                 actionButton("buttonpathwayBP",
                              strong("Run Pathway Enrichment BP")),
@@ -299,15 +320,19 @@ body <- dashboardBody(
                   min = 0,
                   max = 1,
                   value = 0.01
-                ),
+                  ),
                 hr(),
                 plotOutput('heatplotBP')
-            )
+                )
+              )
             )
     )
-  )
 )
 
-shinyUI(dashboardPage(headerbar,
-                      sidebar,
-                      body))
+shinyUI(
+  dashboardPage(
+    headerbar,
+    sidebar,
+    body
+    )
+  )
