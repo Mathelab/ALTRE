@@ -422,7 +422,7 @@ enrichHeatmap <- function(input,
   heatmapdata$id <- rownames(heatmapdata)
   # makes id
   rownames(heatmapdata) <- c(1:nrow(heatmapdata))
-  meltedheatmapdata <- melt(heatmapdata)
+  meltedheatmapdata <- reshape2::melt(heatmapdata)
 
   meltedheatmapdata$id <- factor(meltedheatmapdata$id,
                                  levels = unique(meltedheatmapdata$id))

@@ -72,39 +72,41 @@ pathenrich <- function(analysisresults,
                        genes = 20,
                        offspring = 300,
                        regionsubset = "promoter") {
-  analysisresults <- analysisresults[[1]]
+  analysisresults <- analysisresults$analysisresults
 
   if (is.data.frame(analysisresults) == FALSE) {
     stop("analysisresults parameter is not in the correct format,
          make sure you are using the output from countanalysis()")
   }
-  analysisresultsdata <- as.data.frame(analysisresults)
+#  analysisresultsdata <- as.data.frame(analysisresults)
 
 
   if (regionsubset == "all") {
-    newanalysisresults <- analysisresultsdata
+    newanalysisresults <- analysisresults
   } else {
-    newanalysisresults <- analysisresultsdata[analysisresultsdata$meta.region ==
+    newanalysisresults <- analysisresults[analysisresults$region ==
                                                 regionsubset, ]
   }
 
   # Define regions that are more open, less
   # open, or shared
-  up <- newanalysisresults[!(is.na(newanalysisresults$padj)) &
-                             newanalysisresults$log2FoldChange >
-                             lfctypespecific &
-                             newanalysisresults$padj < pvaltypespecific,
-                           ]
-  down <- newanalysisresults[!(is.na(newanalysisresults$padj)) &
-                               newanalysisresults$log2FoldChange <
-                               -lfctypespecific &
-                               newanalysisresults$padj < pvaltypespecific, ]
-  shared <- newanalysisresults[(newanalysisresults$log2FoldChange <=
-                                  lfcshared &
-                                newanalysisresults$log2FoldChange >=
-                                  -lfcshared) &
-                                (newanalysisresults$padj >= pvalshared |
-                                    is.na(newanalysisresults$padj)), ]
+#  up <- newanalysisresults[!(is.na(newanalysisresults$padj)) &
+#                             newanalysisresults$log2FoldChange >
+#                             lfctypespecific &
+#                             newanalysisresults$padj < pvaltypespecific,]
+#  down <- newanalysisresults[!(is.na(newanalysisresults$padj)) &
+#                               newanalysisresults$log2FoldChange <
+#                               -lfctypespecific &
+#                               newanalysisresults$padj < pvaltypespecific, ]
+#  shared <- newanalysisresults[(newanalysisresults$log2FoldChange <=
+#                                  lfcshared &
+#                                newanalysisresults$log2FoldChange >=
+#                                  -lfcshared) &
+#                                (newanalysisresults$padj >= pvalshared |
+#                                    is.na(newanalysisresults$padj)), ]
+  up <- newanalysisresults[which(newanalysisresults$REaltrecateg=="Experiment Specific"),]
+  down <- newanalysisresults[which(newanalysisresults$REaltrecateg=="Reference Specific"),]
+  shared <- newanalysisresults[which(newanalysisresults$REaltrecateg=="Shared"),]
   all <- rbind(up, down, shared)
   subsets <- list(up, down, shared, newanalysisresults)
   names(subsets) <- c("up", "down", "shared",
