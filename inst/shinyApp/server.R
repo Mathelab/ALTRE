@@ -77,14 +77,18 @@ shinyServer(function(input, output, session) {
                    setProgress(value = 0.2, detail = "annotating peaks")
                    altred <-
                      countanalysis(
-                       counts = countsPeaks(),
-                       pval = req(input$alpha),
-                       lfcvalue = req(input$lfcThreshold)
+                       counts = req(countsPeaks()),
+                       pval = input$alpha,
+                       lfcvalue = input$lfcThreshold
                      )
                    setProgress(value = 1, detail = "done!")
                    Sys.sleep(0.5)
                  })
     return(altred)
+  })
+
+  observeEvent(input$buttondefine, {
+    alteredPeaks()
   })
 
 
@@ -97,16 +101,16 @@ shinyServer(function(input, output, session) {
                    setProgress(value = 0.2, detail = "categorizing altered peaks")
                    catAltred <-
                      categAltrePeaks(
-                       analysisresults = alteredPeaks(),
-                       lfctypespecific = req(input$lfcSpecific),
-                       lfcshared = req(input$lfcShared),
-                       pvaltypespecific = req(input$pvalueSpecific),
-                       pvalshared = req(input$pvalueShared)
+                       analysisresults = req(alteredPeaks()),
+                       lfctypespecific = input$lfcSpecific,
+                       lfcshared = input$lfcShared,
+                       pvaltypespecific = input$pvalueSpecific,
+                       pvalshared = input$pvalueShared
                      )
                    setProgress(value = 1, detail = "done!")
                    Sys.sleep(0.5)
                  })
-    return(altred)
+    return(catAltred)
   })
 
 
@@ -116,8 +120,9 @@ shinyServer(function(input, output, session) {
                  value = 0,
                  {
                    setProgress(value = 0.2, detail = "Comparing Methods")
-                   compareResults <- comparePeaksAltre(alteredPeaks(),
-                                                        reference = "A549")
+                   compareResults <- comparePeaksAltre(req(alteredPeaks()),
+                                                       samplenames = NA ,
+                                                        reference = "SAEC")
                    setProgress(value = 1, detail = "Done!")
                    Sys.sleep(0.5)
                  })
@@ -132,7 +137,7 @@ shinyServer(function(input, output, session) {
                    setProgress(value = 0.2, detail = "MF: GO Enrichment Analysis")
                    MFenrich <-
                      pathenrich(
-                       analysisresults = alteredPeaks(),
+                       analysisresults = req(alteredPeaks()),
                        ontoltype = "MF",
                        enrichpvalfilt = req(input$pathpvaluecutoffMF)
                      )
@@ -189,7 +194,7 @@ shinyServer(function(input, output, session) {
                     paging = FALSE))
 
   output$table4 <- renderDataTable({
-    categAltrePeaks()$stats
+    req(catAltredPeaks()$stats)
   }, options = list(searching = FALSE,
                     paging = FALSE))
 
@@ -214,7 +219,7 @@ shinyServer(function(input, output, session) {
   })
 
   output$volcanoplot <- renderPlot({
-    plotCountAnalysis(catAlteredPeaks())
+    plotCountAnalysis(req(catAlteredPeaks()))
   })
 
   output$heatplotMF <- renderPlot({
