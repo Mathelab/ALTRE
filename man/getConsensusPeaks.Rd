@@ -10,7 +10,7 @@ getConsensusPeaks(samplepeaks, minreps)
 }
 \arguments{
 \item{samplepeaks}{A GRangesList object comprising one GRanges object (peaks)
-for each sample (output of loadPeaks() function)}
+for each sample (output of loadBEDFiles() function)}
 
 \item{minreps}{minimum number of replicate samples that a peak should be
 contained in to be called as a consensus peak. This cutoff will be
@@ -31,7 +31,8 @@ the consensus peaks (found in at least N replicates, where N is input
 \dontrun{
 dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
 csvfile <- file.path(dir, 'lung.csv')
-samplePeaks <- loadPeaks(csvfile)
+sampleinfo <- loadCSVFile(csvfile)
+samplePeaks <- loadBedFiles(sampleinfo)
 consPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps=2)
 }
 }

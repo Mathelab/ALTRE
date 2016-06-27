@@ -3,7 +3,7 @@
 #'  by the user) for each sample type
 #'
 #' @param samplepeaks A GRangesList object comprising one GRanges object (peaks)
-#'  for each sample (output of loadPeaks() function)
+#'  for each sample (output of loadBEDFiles() function)
 
 #' @param minreps minimum number of replicate samples that a peak should be
 #'  contained in to be called as a consensus peak. This cutoff will be
@@ -18,7 +18,8 @@
 #' \dontrun{
 #' dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
 #' csvfile <- file.path(dir, 'lung.csv')
-#' samplePeaks <- loadPeaks(csvfile)
+#' sampleinfo <- loadCSVFile(csvfile)
+#' samplePeaks <- loadBedFiles(sampleinfo)
 #' consPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps=2)
 #'}
 #' @export
