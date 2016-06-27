@@ -15,7 +15,7 @@
 #' sampleinfo <- loadCSVFile(csvfile)
 #' samplePeaks <- loadBedFiles(sampleinfo)
 #' consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks, minreps=2)
-#' plotConsensusPeaks(samplepeaks=consPeaks)
+#' plotConsensusPeaks(samplepeaks = consPeaks)
 #' }
 #' @export
 #'
@@ -80,60 +80,72 @@ plotConsensusPeaks <- function(samplepeaks) {
 
 plotCombineAnnotatePeaks <- function(conspeaks) {
   mydf <- conspeaks$mergestats
+
   if (nrow(mydf) == 1) {
     stop("No plot to show since merging was not performed
          when calling combineAnnotatePeaks function")
   } else {
-    numreg=as.data.frame(mydf$total_number);colnames(numreg)="total_number"
-    numreg$REtype=gsub("_.*","",rownames(mydf))
-    numreg$REmerge=rownames(mydf)
-    numreg$REmerge=gsub("enhancers_","",numreg$REmerge)
-    numreg$REmerge=gsub("promoters_","",numreg$REmerge)
-    numreg$REmerge=factor(numreg$REmerge,levels=c("before_merging","after_merging"))
+    numreg <- as.data.frame(mydf$total_number)
+    colnames(numreg) <- "total_number"
+    numreg$REtype <- gsub("_.*", "", rownames(mydf))
+    numreg$REmerge <- rownames(mydf)
+    numreg$REmerge <- gsub("enhancers_", "", numreg$REmerge)
+    numreg$REmerge <- gsub("promoters_", "", numreg$REmerge)
+    numreg$REmerge <- factor(numreg$REmerge,
+                             levels = c("before_merging", "after_merging"))
 
-    plot1=ggplot(numreg,aes_string(x="REtype",y="total_number",fill="REmerge")) +
-	geom_bar(stat="identity",position=position_dodge()) + 
-	geom_text(aes_string(label = "total_number",
-		x = "REtype",
-                y = "total_number",
-                ymax = "total_number"),position = position_dodge(width = 1),
+    plot1 <- ggplot(numreg, aes_string(x = "REtype",
+                                       y = "total_number",
+                                       fill = "REmerge")) +
+      geom_bar(stat = "identity",
+               position = position_dodge()) +
+      geom_text(aes_string(label = "total_number",
+                           x = "REtype",
+                           y = "total_number",
+                           ymax = "total_number"),
+                position = position_dodge(width = 1),
                 size = 3,
                 hjust = 0.5,
                 vjust = -1.5) +
-	scale_colour_manual(values = c("red","dark grey")) +
-	theme_bw(base_size = 12) +
-	theme(panel.grid.major = element_blank(),
-		panel.grid.minor = element_blank()) +
-	labs(x = "", y="Number of Regulatory Regions") +
-	ggtitle("Number of REs\nBefore/After merging")
+      scale_colour_manual(values = c("red",
+                                     "dark grey")) +
+      theme_bw(base_size = 12) +
+      theme(panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank()) +
+      labs(x = "", y = "Number of Regulatory Regions") +
+      ggtitle("Number of REs\nBefore/After merging")
+    meanlength <- as.data.frame(mydf$mean_length)
+    colnames(meanlength) <- "mean_length"
+    meanlength$REtype <- gsub("_.*", "", rownames(mydf))
+    meanlength$REmerge <- rownames(mydf)
+    meanlength$REmerge <- gsub("enhancers_", "", meanlength$REmerge)
+    meanlength$REmerge <- gsub("promoters_", "", meanlength$REmerge)
+    meanlength$REmerge <- factor(meanlength$REmerge,
+                                 levels = c("before_merging", "after_merging"))
 
-    meanlength=as.data.frame(mydf$mean_length);colnames(meanlength)="mean_length"
-    meanlength$REtype=gsub("_.*","",rownames(mydf))
-    meanlength$REmerge=rownames(mydf)
-    meanlength$REmerge=gsub("enhancers_","",meanlength$REmerge)
-    meanlength$REmerge=gsub("promoters_","",meanlength$REmerge)
-    meanlength$REmerge=factor(meanlength$REmerge,levels=c("before_merging","after_merging"))
-    
-    plot2=ggplot(meanlength,aes_string(x="REtype",y="mean_length",fill="REmerge")) +
-        geom_bar(stat="identity",position=position_dodge()) +
-        geom_text(aes_string(label = "mean_length",
-                x = "REtype",
-                y = "mean_length",
-                ymax = "mean_length"),position = position_dodge(width = 1),
+    plot2 <- ggplot(meanlength, aes_string(x = "REtype",
+                                           y = "mean_length",
+                                           fill = "REmerge")) +
+      geom_bar(stat = "identity",
+               position = position_dodge()) +
+      geom_text(aes_string(label = "mean_length",
+                           x = "REtype",
+                           y = "mean_length",
+                           ymax = "mean_length"),
+                position = position_dodge(width = 1),
                 size = 3,
                 hjust = 0.5,
                 vjust = -1.5) +
-        scale_colour_manual(values = c("red","dark grey")) +
-        theme_bw(base_size = 12) +
-        theme(panel.grid.major = element_blank(),
-                panel.grid.minor = element_blank()) +
-        labs(x = "", y="Mean length of Regulatory Regions") +
-        ggtitle("Mean length of REs\nBefore/After merging")
+      scale_colour_manual(values = c("red", "dark grey")) +
+      theme_bw(base_size = 12) +
+      theme(panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank()) +
+      labs(x = "", y = "Mean length of Regulatory Regions") +
+      ggtitle("Mean length of REs\nBefore/After merging")
 
-    multiplot(plot1,plot2)
+    multiplot(plot1, plot2)
   }
 }
-
 
 
 #' Given the output from getcounts, plot a density plot
@@ -159,22 +171,29 @@ plotCombineAnnotatePeaks <- function(conspeaks) {
 #'                                           mergedistenh = 1500,
 #'                                           mergedistprom = 1000)
 #' counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
-#'                               csvfile = csvfile,
+#'                               sampleinfo = sampleinfo,
 #'                               reference = 'SAEC',
 #'                               chrom = 'chr21')
-#' altre_peaks <- countanalysis(counts=counts_consPeaks,
-#'                              pval=0.01,
-#'                              lfcvalue=1)
-#' categaltre_peaks=categAltrePeaks(altre_peaks, lfctypespecific=1.5,lfcshared=1.2,
-#' 	pvaltypespecific=0.01,pvalshared=0.05)
+#' altre_peaks <- countanalysis(counts = counts_consPeaks,
+#'                              pval = 0.01,
+#'                              lfcvalue = 1)
+#' categaltre_peaks <- categAltrePeaks(altre_peaks,
+#'                                     lfctypespecific = 1.5,
+#'                                     lfcshared = 1.2,
+#'                                     pvaltypespecific = 0.01,
+#'                                     pvalshared = 0.05)
 #' plotCountAnalysis(categaltre_peaks)
 #' }
 #' @export
 
 plotCountAnalysis <- function(altrepeakscateg) {
-  toplot <- altrepeakscateg$analysisresults[,c("region","log2FoldChange","padj","REaltrecateg")]
-  enh <- toplot[which(toplot$region=="enhancer"),]
-  prom <- toplot[which(toplot$region=="promoter"),]
+
+  toplot <- altrepeakscateg$analysisresults[ ,c("region",
+                                                "log2FoldChange",
+                                                "padj",
+                                                "REaltrecateg")]
+  enh <- toplot[which(toplot$region == "enhancer"), ]
+  prom <- toplot[which(toplot$region == "promoter"), ]
   plot1 <- ggplot(enh,
                  aes(enh$log2FoldChange,
                      -log2(enh$padj))) +
@@ -330,12 +349,13 @@ enrichHeatmap <- function(input,
          using the output from the enrichment analysis")
   }
 
-  if (is.data.frame(input$expt) == FALSE | nrow(input$expt) ==1 |
-      is.data.frame(input$reference) == FALSE | nrow(input$reference) ==1 |
-      is.data.frame(input$shared) == FALSE | nrow(input$shared) ==1 |
+  if (is.data.frame(input$expt) == FALSE | nrow(input$expt) == 1 |
+      is.data.frame(input$reference) == FALSE | nrow(input$reference) == 1 |
+      is.data.frame(input$shared) == FALSE | nrow(input$shared) == 1 |
       length(input) != 3 |
       all(names(input) != c("expt", "reference", "shared"))) {
-    stop("The input is not a list of three dataframes or there are no enriched pathways to plot")
+    stop("The input is not a list of three dataframes or
+         there are no enriched pathways to plot")
   }
 
   up <- input$expt

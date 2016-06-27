@@ -24,7 +24,7 @@ csvfile <- file.path(dir, 'lung.csv')
 sampleinfo <- loadCSVFile(csvfile)
 samplePeaks <- loadBedFiles(sampleinfo)
 consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks, minreps=2)
-plotConsensusPeaks(samplepeaks=consPeaks)
+plotConsensusPeaks(samplepeaks = consPeaks)
 }
 }
 

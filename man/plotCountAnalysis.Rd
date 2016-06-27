@@ -33,14 +33,17 @@ consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
                                           mergedistenh = 1500,
                                           mergedistprom = 1000)
 counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
-                              csvfile = csvfile,
+                              sampleinfo = sampleinfo,
                               reference = 'SAEC',
                               chrom = 'chr21')
-altre_peaks <- countanalysis(counts=counts_consPeaks,
-                             pval=0.01,
-                             lfcvalue=1)
-categaltre_peaks=categAltrePeaks(altre_peaks, lfctypespecific=1.5,lfcshared=1.2,
-	pvaltypespecific=0.01,pvalshared=0.05)
+altre_peaks <- countanalysis(counts = counts_consPeaks,
+                             pval = 0.01,
+                             lfcvalue = 1)
+categaltre_peaks <- categAltrePeaks(altre_peaks,
+                                    lfctypespecific = 1.5,
+                                    lfcshared = 1.2,
+                                    pvaltypespecific = 0.01,
+                                    pvalshared = 0.05)
 plotCountAnalysis(categaltre_peaks)
 }
 }
