@@ -61,7 +61,7 @@ shinyServer(function(input, output, session) {
                    setProgress(value = 0.1, detail = "Retrieving counts")
                    countsSummary <- getcounts(
                      annotpeaks = annotatePeaks(),
-                     csvfile = req(input$file)$datapath,
+                     sampleinfo = csvFile(),
                      reference = req(input$reference))
                    setProgress(value = 1, detail = "done!")
                    Sys.sleep(0.5)

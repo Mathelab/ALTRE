@@ -13,7 +13,7 @@
 #'
 #' ************CHANGE ANALYSISRESULTS TO ALTREPEAKS!!!!******************
 #' ****************CHANGE REGIONSUBSET TO REGIONTYPE!!!!*****************
-#' @param analysisresults Results from analysis of counts.
+#' @param analysisresults Results from analysis of counts, categaltre_peaks.
 #' @param ontoltype One of three categories: 'MF' (molecular function),
 #'  'CC' (cellular component), 'BP' (biological process).
 #' @param enrichpvalfilt Adjusted pval for enrichment to filter on

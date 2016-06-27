@@ -215,20 +215,19 @@ In order to link regulatory regions to genes, TSSs must be supplied for this fun
 Pathways fall into three categories (Molecular Function (MF), Biological Process (BP), and Cellular Component (CC)), and each category must be analyzed separately. The category is selected by supplying an argument to "ontoltype"
 
 ```{r}
-#  MFenrich <- pathenrich(analysisresults = altre_peaks,
-#                        ontoltype = 'MF',
-#                        enrichpvalfilt = 0.01)
-# 
-# enrichHeatmap(MFenrich, title='GO:MF, p<0.01')
-
+  MFenrich <- pathenrich(analysisresults = categaltre_peaks,
+                        ontoltype = 'MF',
+                        enrichpvalfilt = 0.01)
+ 
+ enrichHeatmap(MFenrich, title='GO:MF, p<0.01')
 ```
 
 
 ```{r}
-# BPenrich <- pathenrich(analysisresults = altre_peaks,
-#                        ontoltype = 'BP',
-#                        enrichpvalfilt = 0.01)
-# enrichHeatmap(BPenrich, title = 'GO:BP, p<0.01')
+ BPenrich <- pathenrich(analysisresults = categaltre_peaks,
+                        ontoltype = 'BP',
+                        enrichpvalfilt = 0.01)
+ enrichHeatmap(BPenrich, title = 'GO:BP, p<0.01')
 ```
 The result is a list of dataframes containing the enriched pathways with p-values and some additional information. The first dataframe contains regulatory regions that are cancer-specific, the second dataframe is normal-specific regions, and the third is shared regions. Here we take a look at the first line of the cancer-specific regions. To see these dataframes, use the results function:
 ```{r}
@@ -242,7 +241,7 @@ Once results have been obtained, there are a number of additional functions in A
 “resultscomparison” creates a table to compare the two methods of identifying altered regulatory regions – one based on peak intensity, the other on peak presence or absence as determined by hotspot calling algorithms. The intensity-based method identifies much fewer type-specific regions. 
 
 ```{r}
-analysisresults <- resultsComparison(altre_peaks, reference= "SAEC")
+analysisresults <- resultsComparison(categaltre_peaks, reference= "SAEC")
 
 
 ```
