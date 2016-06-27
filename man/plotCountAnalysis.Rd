@@ -8,7 +8,7 @@
 plotCountAnalysis(altrepeakscateg)
 }
 \arguments{
-\item{altrepeaks}{output generated from getcounts}
+\item{altrepeakscateg}{output generated from getcounts}
 }
 \value{
 a ggplot

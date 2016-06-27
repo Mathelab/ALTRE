@@ -31,8 +31,7 @@
 #'                                           mergedistprom = 1000)
 #' counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
 #'                               csvfile = csvfile,
-#'                               reference = 'SAEC',
-#'                               chrom = 'chr21')
+#'                               reference = 'SAEC')
 #' altre_peaks <- countanalysis(counts=counts_consPeaks,
 #'                              pval=0.01,
 #'                              lfcvalue=1)
@@ -61,9 +60,9 @@ countanalysis <- function(counts, pval = 0.01,
 
    fulldataframe <- cbind(resultsdataframe,
 	grangesdataframe)
-   colnames(fulldataframe)[which(colnames(fulldataframe)=="meta.region")]="region"
-   colnames(fulldataframe)[which(colnames(fulldataframe)=="meta.A549")]="A549"
-   colnames(fulldataframe)[which(colnames(fulldataframe)=="meta.SAEC")]="SAEC"
+   colnames(fulldataframe)[which(colnames(fulldataframe) == "meta.region")] = "region"
+   colnames(fulldataframe)[which(colnames(fulldataframe) == "meta.A549")] = "A549"
+   colnames(fulldataframe)[which(colnames(fulldataframe) == "meta.SAEC")] = "SAEC"
 
   # create a dataframe with results and position
   # and filter by pval and lfcvalue

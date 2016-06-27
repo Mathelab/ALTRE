@@ -1,17 +1,20 @@
-#' Comparison of methods for identifying altered regulatory regions.
-#' Creates a table to compare two methods of identifying altered regulatory
-#' regions: one based on peak intensity, the other on peak presence as
-#' determined by peak/hotspot calling algorithms.
+#' Comparison of methods for identifying altered regulatory regions
+#'
+#' Creates a table to compare two methods of identifying altered regulatory regions
+#' – one based on peak intensity, the other on peak presence as determined by
+#' hotspot calling algorithms.
 #'
 #' @param analysisresults analysisresults of countanalysis.
+#' @param samplenames vector of sample types
+#' @param reference cell type to be considered "reference" or "reference" to which
+#' other cell types will be compared
 #' @param lfctypespecific log2fold change for type specific enhancers/promoters
 #' @param lfcshared log2fold chance for shared enhancers/promoters
 #' @param pvaltypespecific p-value for type specific enhancers/promoters
 #' @param pvalshared p-value for shared enhancers/promoters
-#' @param reference cell type to be considered 'reference' to which other cell
-#' types will be compared
+#'
 #' @return matrix comparing the two methods of identifying altered regulatory
-#' regions. One based on peak intensity, the other on peak presence as
+#' regions – one based on peak intensity, the other on peak presence as
 #' determined by hotspot calling algorithms.
 #' @examples
 #' \dontrun{
@@ -31,48 +34,54 @@
 #' counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
 #'                               csvfile = csvfile,
 #'                               reference = 'SAEC')
-#' altre_peaks <- countanalysis(counts=counts_consPeaks,
-#'                              pval=0.01,
-#'                              lfcvalue=1)
-#' analysisresults <- resultsComparison(altre_peaks, reference= 'SAEC')
+#' altre_peaks <- countanalysis(counts = counts_consPeaks,
+#'                              pval = 0.01,
+#'                              lfcvalue = 1)
+#' categaltre_peaks <- categAltrePeaks(altre_peaks,
+#'                                     lfctypespecific = 1.5,
+#'                                     lfcshared = 1.2,
+#'                                     pvaltypespecific = 0.01,
+#'                                     pvalshared = 0.05)
+#' analysisresults <- comparePeaksAltre(categaltre_peaks, reference= 'SAEC')
 #' }
 #' @export
 #'
-resultsComparison <- function(analysisresults,
-                              reference,
-                              lfctypespecific = 1.5,
-                              lfcshared = 1.2,
-                              pvaltypespecific = 0.01,
-                              pvalshared = 0.05) {
+comparePeaksAltre <- function(analysisresults,
+	samplenames,
+	reference,
+	lfctypespecific=1.5,
+	lfcshared=1.2,
+	pvaltypespecific=0.01,
+	pvalshared=0.05){
 
+  analysisresults = analysisresults[[1]]
 
-  # replace "meta.region" "meta.A549"   "meta.SAEC"
-  names(analysisresults$results)[10:12] <- c("region","A549","SAEC")
+  if (!is.data.frame(analysisresults) ||
+      !all.equal(
+        colnames(analysisresults),
+        c(
+          "baseMean",
+          "log2FoldChange",
+          "lfcSE",
+          "stat",
+          "pvalue",
+          "padj",
+          "chr",
+          "start",
+          "stop",
+          "region",
+          "A549",
+          "SAEC",
+          "REaltrecateg"
+        )
+      )) {
+    stop("Make sure the output of the analysis is from categAltrePeaks() function")
+  }
 
-  analysisresults <- analysisresults[[1]]
-
-  # if
-  # (is.data.frame(analysisresults)==FALSE)
-  # {stop('The input is not a dataframe!')
-
-  # }
-
-  # if (is.character(reference)==FALSE &
-  # length(reference)!=1){ stop('The
-  # reference input is not a single word!')
-
-  # }
-
-  samplenames <- colnames(analysisresults[, 11:ncol(analysisresults)])
-  analysisresultsmatrix <- matrix(nrow = 9,
-                                  ncol = 2)
-  nonreference <- samplenames[!(samplenames %in% reference)]
-
-  # if (length(samplenames) ==
-  # length(nonreference)){ stop('The
-  # reference input is not a sample in the
-  # analysisresults! Please check the
-  # samples in analysisresults.') }
+  # removed this bc prone to errors: samplenames <-
+  #colnames(analysisresults[,11:ncol(analysisresults)])
+  analysisresultsmatrix <-  matrix(nrow = 9, ncol = 2)
+  nonreference <-  samplenames[!(samplenames %in% reference)]
 
   if (length(nonreference) == 1) {
     string <- nonreference
@@ -89,7 +98,6 @@ resultsComparison <- function(analysisresults,
     }
     nonreferencestr <- substr(string, 3, nchar(string))
   }
-
 
   one <- c(rep(nonreferencestr, 3), rep(reference, 3), rep("Shared", 3))
   two <- rep(c("enhancers", "promoters", "all"), 3)
@@ -220,5 +228,4 @@ resultsComparison <- function(analysisresults,
 
   return(list(analysisresultsmatrix))
 }
-
 
