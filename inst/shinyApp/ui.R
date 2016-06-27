@@ -257,7 +257,7 @@ body <- dashboardBody(
                   min = 0,
                   max = 5,
                   value = 1,
-                  step=0.1
+                  step = 0.1
                 )
               ),
               HTML("</div>"),
@@ -292,7 +292,7 @@ body <- dashboardBody(
                   min = 0,
                   max = 5,
                   value = 1.2,
-                  step=0.1
+                  step = 0.1
                 ),
                 sliderInput(
                   "pvalueSpecific",

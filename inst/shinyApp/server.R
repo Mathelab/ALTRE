@@ -120,7 +120,7 @@ shinyServer(function(input, output, session) {
                  value = 0,
                  {
                    setProgress(value = 0.2, detail = "Comparing Methods")
-                   compareResults <- comparePeaksAltre(req(alteredPeaks()),
+                   compareResults <- comparePeaksAltre(req(catAlteredPeaks()),
                                                        samplenames = NA ,
                                                         reference = "SAEC")
                    setProgress(value = 1, detail = "Done!")
@@ -137,9 +137,9 @@ shinyServer(function(input, output, session) {
                    setProgress(value = 0.2, detail = "MF: GO Enrichment Analysis")
                    MFenrich <-
                      pathenrich(
-                       analysisresults = req(alteredPeaks()),
+                       analysisresults = req(catAlteredPeaks()),
                        ontoltype = "MF",
-                       enrichpvalfilt = req(input$pathpvaluecutoffMF)
+                       enrichpvalfilt = input$pathpvaluecutoffMF
                      )
                    setProgress(value = 1, detail = "Done!")
                    Sys.sleep(0.5)
@@ -155,9 +155,9 @@ shinyServer(function(input, output, session) {
                    setProgress(value = 0.2, detail = "BP: GO Enrichment Analysis")
                    BPenrich <-
                      pathenrich(
-                       analysisresults = alteredPeaks(),
+                       analysisresults = req(catAlteredPeaks()),
                        ontoltype = "BP",
-                       enrichpvalfilt = req(input$pathpvaluecutoffBP)
+                       enrichpvalfilt = input$pathpvaluecutoffBP
                      )
                    setProgress(value = 1, detail = "Done!")
                    Sys.sleep(0.5)
