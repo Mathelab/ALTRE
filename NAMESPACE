@@ -2,8 +2,10 @@
 
 export(categAltrePeaks)
 export(combineAnnotatePeaks)
+export(comparePeaksAltre)
 export(countanalysis)
 export(enrichHeatmap)
+export(genomebrowvisual)
 export(getConsensusPeaks)
 export(getTSS)
 export(getcounts)
