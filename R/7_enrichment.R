@@ -140,7 +140,7 @@ pathenrich <- function(analysisresults,
                          pvalfilt = enrichpvalfilt,
                          genes = genes,
                          offspring = offspring)
-    if (nrow(expt) == 0) {
+    if (nrow(reference) == 0) {
       reference <- as.data.frame("No enrichment found for reference REs")
     }
   }
