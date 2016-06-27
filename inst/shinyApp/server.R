@@ -88,6 +88,28 @@ shinyServer(function(input, output, session) {
   })
 
 
+
+  catAlteredPeaks <- eventReactive(input$buttoncat, {
+    withProgress(message = 'In progress',
+                 detail = 'This may take a while...',
+                 value = 0,
+                 {
+                   setProgress(value = 0.2, detail = "categorizing altered peaks")
+                   catAltred <-
+                     categAltrePeaks(
+                       analysisresults = alteredPeaks(),
+                       lfctypespecific = req(input$lfcSpecific),
+                       lfcshared = req(input$lfcShared),
+                       pvaltypespecific = req(input$pvalueSpecific),
+                       pvalshared = req(input$pvalueShared)
+                     )
+                   setProgress(value = 1, detail = "done!")
+                   Sys.sleep(0.5)
+                 })
+    return(altred)
+  })
+
+
   compareMethods <- eventReactive(input$buttoncompare, {
     withProgress(message = 'In progress',
                  detail = 'This may take a while...',
@@ -167,6 +189,11 @@ shinyServer(function(input, output, session) {
                     paging = FALSE))
 
   output$table4 <- renderDataTable({
+    categAltrePeaks()$stats
+  }, options = list(searching = FALSE,
+                    paging = FALSE))
+
+  output$table5 <- renderDataTable({
     compareMethods()
   }, options = list(searching = FALSE,
                     paging = FALSE))
@@ -187,7 +214,7 @@ shinyServer(function(input, output, session) {
   })
 
   output$volcanoplot <- renderPlot({
-    plotCountAnalysis(alteredPeaks())
+    plotCountAnalysis(catAlteredPeaks())
   })
 
   output$heatplotMF <- renderPlot({
@@ -291,6 +318,24 @@ shinyServer(function(input, output, session) {
     else if (input$buttondefine > 0) {
       infoBox(
         "Status", "Altered Regions Have Been Defined",
+        icon = icon("thumbs-up", lib = "glyphicon"),
+        color = "yellow",
+        fill = TRUE
+      )
+    }
+  })
+
+  output$statusbox5b <- renderInfoBox({
+    if (input$buttoncat == 0) {
+      infoBox(
+        "Status", "Categorize Altered Regions Button Not Clicked Yet",
+        icon = icon("flag", lib = "glyphicon"),
+        color = "aqua",
+        fill = TRUE
+      )}
+    else if (input$cat > 0) {
+      infoBox(
+        "Status", "Altered Regions Have Been Categorized",
         icon = icon("thumbs-up", lib = "glyphicon"),
         color = "yellow",
         fill = TRUE

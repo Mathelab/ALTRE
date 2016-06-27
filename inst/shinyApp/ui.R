@@ -52,17 +52,24 @@ sidebar <- dashboardSidebar(
       badgeColor = "green"
     ),
     menuItem(
+      "Categorize Altered Regions",
+      icon = icon("bullseye"),
+      tabName = "cataltered",
+      badgeLabel = "step 6",
+      badgeColor = "green"
+    ),
+    menuItem(
       "Compare Altered Regions",
       icon = icon("balance-scale"),
       tabName = "compare",
-      badgeLabel = "step 6",
+      badgeLabel = "step 7",
       badgeColor = "green"
     ),
     menuItem(
       "Find Enriched Pathways",
       icon = icon("gears"),
       tabName = "pathways",
-      badgeLabel = "step 7",
+      badgeLabel = "step 8",
       badgeColor = "green"
     )
   )
@@ -256,14 +263,63 @@ body <- dashboardBody(
               infoBoxOutput("statusbox5", width=7),
               HTML("<div class='col-sm-7' style='min-width:
                    500px !important;'>"),
-              box(
-                width = NULL,
-                title = "Volcano Plot",
-                plotOutput('volcanoplot')
-              ),
               HTML("</div>")
               )
             ),
+    tabItem(tabName = "cataltered",
+            fluidRow(
+              HTML("<div class='col-sm-4' style='min-width:
+                   300px !important;'>"),
+              box(
+                width = NULL,
+                title = "Categorize Altered Regions",
+                actionButton("buttoncat", strong("Categorize Altered Regions")),
+                hr(),
+                sliderInput(
+                  "lfcSpecific",
+                  label = h4("log2fold change cutoff for specific
+                             enhancers/promoters"),
+                  min = 0,
+                  max = 5,
+                  value = 1
+                ),
+                sliderInput(
+                  "lfcShared",
+                  label = h4("log2fold change cutoff for shared
+                             enhancers/promoters"),
+                  min = 0,
+                  max = 1,
+                  value = 0.01
+                ),
+                sliderInput(
+                  "pvalueSpecific",
+                  label = h4("pvalue cutoff for specific
+                             enhancers/promoters"),
+                  min = 0,
+                  max = 5,
+                  value = 1
+                ),
+                sliderInput(
+                  "pvalueShared",
+                  label = h4("value cutoff for shared enhancers/promoters"),
+                  min = 0,
+                  max = 1,
+                  value = 0.01
+                )
+              ),
+              HTML("</div>"),
+              infoBoxOutput("statusbox5b", width=7),
+              HTML("<div class='col-sm-7' style='min-width:
+                   500px !important;'>"),
+              box(
+                width = NULL,
+                title = "Volcano Plot",
+                plotOutput('volcanoplot'),
+                dataTableOutput("table4")
+              ),
+              HTML("</div>")
+              )
+  ),
     tabItem(tabName = "compare",
             fluidRow(
               HTML("<div class='col-sm-4' style='min-width:
@@ -274,7 +330,7 @@ body <- dashboardBody(
                 regulatory regions",
                 actionButton("buttoncompare", strong("Compare Methods")),
                 hr(),
-                dataTableOutput("table4")
+                dataTableOutput("table5")
               ),
               HTML("</div>"),
               infoBoxOutput("statusbox8", width = 7),
