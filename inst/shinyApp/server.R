@@ -194,7 +194,7 @@ shinyServer(function(input, output, session) {
                     paging = FALSE))
 
   output$table4 <- renderDataTable({
-    req(catAltredPeaks()$stats)
+    req(catAlteredPeaks()$stats)
   }, options = list(searching = FALSE,
                     paging = FALSE))
 

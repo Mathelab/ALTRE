@@ -246,21 +246,21 @@ body <- dashboardBody(
                 hr(),
                 sliderInput(
                   "alpha",
-                  label = h4("Alpha: Significance Cutoff"),
+                  label = h4("pvalue cutoff Cutoff"),
                   min = 0,
                   max = 1,
                   value = 0.01
                 ),
                 sliderInput(
                   "lfcThreshold",
-                  label = h4("Log2 Fold Change Threshold"),
+                  label = h4("log2fold change cutoff"),
                   min = 0,
                   max = 5,
                   value = 1
                 )
               ),
               HTML("</div>"),
-              infoBoxOutput("statusbox5", width=7),
+              infoBoxOutput("statusbox5", width = 7),
               HTML("<div class='col-sm-7' style='min-width:
                    500px !important;'>"),
               HTML("</div>")
@@ -281,30 +281,30 @@ body <- dashboardBody(
                              enhancers/promoters"),
                   min = 0,
                   max = 5,
-                  value = 1
+                  value = 1.5
                 ),
                 sliderInput(
                   "lfcShared",
                   label = h4("log2fold change cutoff for shared
                              enhancers/promoters"),
                   min = 0,
-                  max = 1,
-                  value = 0.01
+                  max = 5,
+                  value = 1.2
                 ),
                 sliderInput(
                   "pvalueSpecific",
                   label = h4("pvalue cutoff for specific
                              enhancers/promoters"),
                   min = 0,
-                  max = 5,
-                  value = 1
+                  max = 1,
+                  value = 0.01
                 ),
                 sliderInput(
                   "pvalueShared",
-                  label = h4("value cutoff for shared enhancers/promoters"),
+                  label = h4("pvalue cutoff for shared enhancers/promoters"),
                   min = 0,
                   max = 1,
-                  value = 0.01
+                  value = 0.05
                 )
               ),
               HTML("</div>"),
