@@ -5,7 +5,7 @@
 \title{Given the output from getcounts, plot a density plot
  of log2 RPKM values of regulation regions}
 \usage{
-plotCountAnalysis(altrepeaks)
+plotCountAnalysis(altrepeakscateg)
 }
 \arguments{
 \item{altrepeaks}{output generated from getcounts}
@@ -35,10 +35,15 @@ counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
                               csvfile = csvfile,
                               reference = 'SAEC',
                               chrom = 'chr21')
-altre_peaks <- countanalysis(counts=counts_consPeaks,
-                             pval=0.01,
-                             lfcvalue=1)
-plotCountAnalysis(altre_peaks)
+altre_peaks <- countanalysis(counts = counts_consPeaks,
+                             pval = 0.01,
+                             lfcvalue = 1)
+categaltre_peaks <- categAltrePeaks(altre_peaks,
+                                    lfctypespecific = 1.5,
+                                    lfcshared = 1.2,
+                                    pvaltypespecific = 0.01,
+                                    pvalshared = 0.05)
+plotCountAnalysis(categaltre_peaks)
 }
 }
 
