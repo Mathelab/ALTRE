@@ -5,7 +5,7 @@
 \title{Given the output from getcounts, plot a density plot
  of log2 RPKM values of regulation regions}
 \usage{
-plotCountAnalysis(altrepeaks)
+plotCountAnalysis(altrepeakscateg)
 }
 \arguments{
 \item{altrepeaks}{output generated from getcounts}
@@ -21,7 +21,8 @@ Given the output from getcounts, plot a density plot
 \dontrun{
 dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
 csvfile <- file.path(dir, 'lung.csv')
-samplePeaks <- loadPeaks(csvfile)
+sampleinfo <- loadCSVFile(csvfile)
+samplePeaks <- loadBedFiles(sampleinfo)
 consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
 plotConsensusPeaks(samplepeaks=consPeaks)
 TSSannot<- getTSS()
@@ -38,7 +39,9 @@ counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
 altre_peaks <- countanalysis(counts=counts_consPeaks,
                              pval=0.01,
                              lfcvalue=1)
-plotCountAnalysis(altre_peaks)
+categaltre_peaks=categAltrePeaks(altre_peaks, lfctypespecific=1.5,lfcshared=1.2,
+	pvaltypespecific=0.01,pvalshared=0.05)
+plotCountAnalysis(categaltre_peaks)
 }
 }
 

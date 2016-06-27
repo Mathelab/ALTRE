@@ -12,14 +12,14 @@
 #' (Click on function to get more detailed information)
 #' \enumerate{
 #'
-#' \item  \code{\link{loadPeaks}}
+#' \item  \code{\link{loadBedFiles}}
 #'
 #' Takes in a sample information file (CSV), loads peak files, and outputs a
 #' GRangesList object that holds all peaks for each sample type.
 #'
 #' \item  \code{\link{getConsensusPeaks}}
 #'
-#' Takes in a sample peaks list (output from loadPeaks in step 2), and outputs
+#' Takes in a sample peaks list (output from loadBedFiles in step 2), and outputs
 #' consensus peaks. Consensus peaks are those present in at least N replicates. A barplot summary of the number of consensus peaks and those in each replicates, use plotConsensusPeaks().
 #'
 #' \item \code{\link{combineAnnotatePeaks}}

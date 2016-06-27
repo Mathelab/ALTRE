@@ -12,7 +12,8 @@
 #' \dontrun{
 #' dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
 #' csvfile <- file.path(dir, 'lung.csv')
-#' samplePeaks <- loadPeaks(csvfile)
+#' sampleinfo <- loadCSVFile(csvfile)
+#' samplePeaks <- loadBedFiles(sampleinfo)
 #' consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks, minreps=2)
 #' plotConsensusPeaks(samplepeaks=consPeaks)
 #' }
@@ -62,7 +63,8 @@ plotConsensusPeaks <- function(samplepeaks) {
 #' \dontrun{
 #' dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
 #' csvfile <- file.path(dir, 'lung.csv')
-#' samplePeaks <- loadPeaks(csvfile)
+#' sampleinfo <- loadCSVFile(csvfile)
+#' samplePeaks <- loadBedFiles(sampleinfo)
 #' consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
 #' plotConsensusPeaks(samplepeaks=consPeaks)
 #' TSSannot <- getTSS()
@@ -145,7 +147,8 @@ plotCombineAnnotatePeaks <- function(conspeaks) {
 #' \dontrun{
 #' dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
 #' csvfile <- file.path(dir, 'lung.csv')
-#' samplePeaks <- loadPeaks(csvfile)
+#' sampleinfo <- loadCSVFile(csvfile)
+#' samplePeaks <- loadBedFiles(sampleinfo)
 #' consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
 #' plotConsensusPeaks(samplepeaks=consPeaks)
 #' TSSannot<- getTSS()
@@ -224,7 +227,8 @@ plotCountAnalysis <- function(altrepeakscateg) {
 #' \dontrun{
 #' dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
 #' csvfile <- file.path(dir, 'lung.csv')
-#' samplePeaks <- loadPeaks(csvfile)
+#' sampleinfo <- loadCSVFile(csvfile)
+#' samplePeaks <- loadBedFiles(sampleinfo)
 #' consPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps=2)
 #' plotConsensusPeaks(samplepeaks = consPeaks)
 #' TSSannot <- getTSS()
@@ -286,7 +290,8 @@ plotgetcounts <- function(countsconspeaks) {
 #' \dontrun{
 #' dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
 #' csvfile <- file.path(dir, 'lung.csv')
-#' samplePeaks <- loadPeaks(csvfile)
+#' sampleinfo <- loadCSVFile(csvfile)
+#' samplePeaks <- loadBedFiles(sampleinfo)
 #' consPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
 #' plotConsensusPeaks(samplepeaks = consPeaks)
 #' TSSannot <- getTSS()
@@ -463,7 +468,8 @@ enrichHeatmap <- function(input,
 #' \dontrun{
 #' dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
 #' csvfile <- file.path(dir, 'lung.csv')
-#' samplePeaks <- loadPeaks(csvfile)
+#' sampleinfo <- loadCSVFile(csvfile)
+#' samplePeaks <- loadBedFiles(sampleinfo)
 #' consPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
 #' plotConsensusPeaks(samplepeaks = consPeaks)
 #' TSSannot <- getTSS()
@@ -542,7 +548,8 @@ multiplot <- function(..., plotlist = NULL, file, cols = 1, layout = NULL) {
 #' \dontrun{
 #' dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
 #' csvfile <- file.path(dir, 'lung.csv')
-#' samplePeaks <- loadPeaks(csvfile)
+#' sampleinfo <- loadCSVFile(csvfile)
+#' samplePeaks <- loadBedFiles(sampleinfo)
 #' consPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
 #' plotConsensusPeaks(samplepeaks = consPeaks)
 #' TSSannot <- getTSS()
@@ -667,7 +674,8 @@ plotvenn <- function(analysisresultsmatrix,
 #' \dontrun{
 #' dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
 #' csvfile <- file.path(dir, 'lung.csv')
-#' samplePeaks <- loadPeaks(csvfile)
+#' sampleinfo <- loadCSVFile(csvfile)
+#' samplePeaks <- loadBedFiles(sampleinfo)
 #' consPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
 #' plotConsensusPeaks(samplepeaks = consPeaks)
 #' TSSannot <- getTSS()
