@@ -155,7 +155,7 @@ body <- dashboardBody(
                   "mergeradio",
                   label = h4("Merge"),
                   choices = list("TRUE" = "TRUE", "FALSE" = "FALSE"),
-                  selected = "FALSE"
+                  selected = "TRUE"
                 ),
                 sliderInput(
                   "distTSS",
@@ -256,7 +256,8 @@ body <- dashboardBody(
                   label = h4("log2fold change cutoff"),
                   min = 0,
                   max = 5,
-                  value = 1
+                  value = 1,
+                  step=0.1
                 )
               ),
               HTML("</div>"),
@@ -281,7 +282,8 @@ body <- dashboardBody(
                              enhancers/promoters"),
                   min = 0,
                   max = 5,
-                  value = 1.5
+                  value = 1.5,
+                  step=0.1
                 ),
                 sliderInput(
                   "lfcShared",
@@ -289,7 +291,8 @@ body <- dashboardBody(
                              enhancers/promoters"),
                   min = 0,
                   max = 5,
-                  value = 1.2
+                  value = 1.2,
+                  step=0.1
                 ),
                 sliderInput(
                   "pvalueSpecific",
@@ -357,7 +360,7 @@ body <- dashboardBody(
                 hr(),
                 sliderInput(
                   "pathpvaluecutoffMF",
-                  label = h4("P-value Cutoff"),
+                  label = h4("pvalue cutoff"),
                   min = 0,
                   max = 1,
                   value = 0.01
@@ -372,7 +375,7 @@ body <- dashboardBody(
                 hr(),
                 sliderInput(
                   "pathpvaluecutoffBP",
-                  label = h4("P-value Cutoff"),
+                  label = h4("pvalue cutoff"),
                   min = 0,
                   max = 1,
                   value = 0.01

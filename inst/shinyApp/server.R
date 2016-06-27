@@ -338,7 +338,7 @@ shinyServer(function(input, output, session) {
         color = "aqua",
         fill = TRUE
       )}
-    else if (input$cat > 0) {
+    else if (input$buttoncat > 0) {
       infoBox(
         "Status", "Altered Regions Have Been Categorized",
         icon = icon("thumbs-up", lib = "glyphicon"),
