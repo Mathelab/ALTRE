@@ -28,7 +28,8 @@
 #' TSSannot <- getTSS()
 #' dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
 #' csvfile <- file.path(dir, 'lung.csv')
-#' samplePeaks <- loadPeaks(csvfile)
+#' sampleinfo <- loadCSVFile(csvfile)
+#' samplePeaks <- loadBedFiles(sampleinfo)
 #' consPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps=2)
 #' consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
 #'                                           TSS = TSSannot,
@@ -37,14 +38,13 @@
 #'                                           mergedistenh = 1500,
 #'                                           mergedistprom = 1000 )
 #' counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
-#'                               csvfile = csvfile,
+#'                               sampleinfo = sampleinfo,
 #'                               reference = 'SAEC',
 #'                               chrom = 'chr21')
 #' }
 #' @export
 
-getcounts <- function(annotpeaks, csvfile, reference, chrom = NULL) {
-  sampleinfo <- loadCSVFile(csvfile)
+getcounts <- function(annotpeaks, sampleinfo, reference, chrom = NULL) {
   bamfileslist <- loadBamFiles(sampleinfo)
 
   if (is.null(chrom) == FALSE) {

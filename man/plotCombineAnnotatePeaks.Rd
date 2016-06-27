@@ -23,7 +23,8 @@ plot a barplot showing number of peaks before/after merging
 \dontrun{
 dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
 csvfile <- file.path(dir, 'lung.csv')
-samplePeaks <- loadPeaks(csvfile)
+sampleinfo <- loadCSVFile(csvfile)
+samplePeaks <- loadBedFiles(sampleinfo)
 consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
 plotConsensusPeaks(samplepeaks=consPeaks)
 TSSannot <- getTSS()
