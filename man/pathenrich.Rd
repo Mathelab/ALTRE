@@ -11,7 +11,7 @@ pathenrich(analysisresults, ontoltype = "MF", enrichpvalfilt = 0.01,
   regionsubset = "promoter")
 }
 \arguments{
-\item{analysisresults}{Results from analysis of counts.}
+\item{analysisresults}{Results from analysis of counts, categaltre_peaks.}
 
 \item{ontoltype}{One of three categories: 'MF' (molecular function),
 'CC' (cellular component), 'BP' (biological process).}
