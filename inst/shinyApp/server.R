@@ -94,7 +94,7 @@ shinyServer(function(input, output, session) {
                  value = 0,
                  {
                    setProgress(value = 0.2, detail = "Comparing Methods")
-                   compareResults <- resultsComparison(alteredPeaks(),
+                   compareResults <- comparePeaksAltre(alteredPeaks(),
                                                         reference = "A549")
                    setProgress(value = 1, detail = "Done!")
                    Sys.sleep(0.5)
