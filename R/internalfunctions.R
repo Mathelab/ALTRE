@@ -166,7 +166,7 @@ rundose <- function(set,
                                pvalfilt, ]
 
   if (nrow(newresultpval) == 0) {
-    return("No significant pathways")
+    return(as.data.frame(c("No significant pathways")))
   } else {
     GOtocheck <- newresultpval$ID
 
