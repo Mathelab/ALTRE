@@ -9,18 +9,18 @@ getcounts(annotpeaks, sampleinfo, reference, chrom = NULL)
 \arguments{
 \item{annotpeaks}{list output from combineannotatepeaks function}
 
-\item{reference}{name of sample type to be
-considered 'reference' in DESeq2 analysis}
-
-\item{chrom}{optional, only chromosome chrom will be evaluated}
-
-\item{csvfile}{name of CSV file, with complete path, that contains the
+\item{sampleinfo}{name of CSV file, with complete path, that contains the
 following 4 columns for each sample
 1) complete filepath;
 2) name of bamfiles;
 3) name of peak files;
 4) name or type of sample;
 5) name of replicate}
+
+\item{reference}{name of sample type to be
+considered 'reference' in DESeq2 analysis}
+
+\item{chrom}{optional, only chromosome chrom will be evaluated}
 }
 \value{
 List containing three items:

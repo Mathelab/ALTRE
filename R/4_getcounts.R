@@ -5,7 +5,7 @@
 #' are supplied in a Granges object, ideally output of combineannotatepeaks.R.
 #'
 #' @param annotpeaks list output from combineannotatepeaks function
-#' @param csvfile name of CSV file, with complete path, that contains the
+#' @param sampleinfo name of CSV file, with complete path, that contains the
 #'  following 4 columns for each sample
 #'  1) complete filepath;
 #'  2) name of bamfiles;
