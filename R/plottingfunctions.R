@@ -148,7 +148,6 @@ plotCombineAnnotatePeaks <- function(conspeaks) {
 }
 
 
-
 #' Given the output from getcounts, plot a density plot
 #'  of log2 RPKM values of regulation regions
 #'
@@ -172,7 +171,7 @@ plotCombineAnnotatePeaks <- function(conspeaks) {
 #'                                           mergedistenh = 1500,
 #'                                           mergedistprom = 1000)
 #' counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
-#'                               csvfile = csvfile,
+#'                               sampleinfo = sampleinfo,
 #'                               reference = 'SAEC',
 #'                               chrom = 'chr21')
 #' altre_peaks <- countanalysis(counts = counts_consPeaks,
