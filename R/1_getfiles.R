@@ -6,12 +6,12 @@ loadCSVFile <- function(csvPath) {
     if (!file.exists(csvPath)) {
         stop("CSV input file does not exist")
     }
-    csvfile <- read_csv(csvPath,
-                        col_types = cols_only(datapath = col_character(),
-                                              bamfiles = col_character(),
-                                              peakfiles = col_character(),
-                                              sample = col_character(),
-                                              replicate = col_character()))
+    csvfile <- readr::read_csv(csvPath,
+                        col_types = readr::cols_only(datapath = readr::col_character(),
+                                              bamfiles = readr::col_character(),
+                                              peakfiles = readr::col_character(),
+                                              sample = readr::col_character(),
+                                              replicate = readr::col_character()))
 
     csvfile <- csvfile[order(csvfile$replicate, csvfile$sample), ]
     return(csvfile)
@@ -25,7 +25,7 @@ loadBedFiles <- function(csvfile) {
         stop("csvfile must be a data.frame ")
 
     readBed <- function(bedPath, ind) {
-        bed <- DataFrame(read_delim(bedPath,
+        bed <- DataFrame(readr::read_delim(bedPath,
                                     delim = "\t",
                                     col_names = FALSE,
                                     na = "."))[, 1:3]

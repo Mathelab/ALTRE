@@ -94,7 +94,7 @@ body <- dashboardBody(
               HTML("<div class='col-sm-6' style='min-width:
                    700px !important;'>"),
               box(
-                title = "Load Datapaths File",
+                title = "Load File",
                 width = NULL,
                 solidHeader = TRUE,
                 fileInput(
@@ -102,7 +102,7 @@ body <- dashboardBody(
                   accept = c('text/csv',
                              'text/comma-separated-values,text/plain',
                              '.csv'),
-                  "Provide CSV File to Load Data:"
+                  "Locate CSV Metadata File"
                   ),
                 dataTableOutput("table1")
                 ),
@@ -112,15 +112,17 @@ body <- dashboardBody(
             ),
     tabItem(tabName = "definerep",
             fluidRow(
-              HTML("<div class='col-sm-5' style='min-width:
-                   600px !important;'>"),
+              HTML("<div class='col-sm-4' style='min-width:
+                   550px !important;'>"),
               box(
-                title = "Load and Merge Peak Files",
+                title = "Load and Merge" ,
                 width = NULL,
                 solidHeader = TRUE,
+                h5("Load peak files and for each sample type, determine
+                consensus peaks that are found in at least N bioreplicates. \n"),
                 numericInput(
                   "numOverlap",
-                  "Minimum Number of Overlaps to Determine Consensus Region ",
+                  "Minimum Number of Overlaps N",
                   2,
                   min = 2,
                   max = 10
@@ -132,7 +134,7 @@ body <- dashboardBody(
               HTML("</div>"),
               infoBoxOutput("statusbox2", width = 7),
               HTML("<div class='col-sm-7' style='min-width:
-                   500px !important;'>"),
+                   550px !important;'>"),
               box(
                 title = "Barplot",
                 width = NULL,
@@ -150,16 +152,18 @@ body <- dashboardBody(
                 width = NULL,
                 solidHeader = TRUE,
                 title = "Combine and Annotate Peaks",
+                h5("Combine and annotate peaks from different sample types.
+                   Optionally merge nearby regions."),
                 actionButton("buttonannot", strong("Combine and Annotate")),
                 radioButtons(
                   "mergeradio",
-                  label = h4("Merge"),
+                  label = h5("Merge"),
                   choices = list("TRUE" = "TRUE", "FALSE" = "FALSE"),
                   selected = "TRUE"
                 ),
                 sliderInput(
                   "distTSS",
-                  label = h4("Distance from TSS"),
+                  label = h5("Distance from TSS"),
                   min = 0,
                   max = 3000,
                   value = 1500
@@ -167,13 +171,13 @@ body <- dashboardBody(
                 hr(),
                 radioButtons(
                   "regionradio",
-                  label = h4("Region specific merging?"),
+                  label = h5("Region specific merging?"),
                   choices = list("TRUE" = "TRUE", "FALSE" = "FALSE")
                 ),
                 conditionalPanel("input.regionradio == 'FALSE'",
                                  sliderInput(
                                    "dist",
-                                   label = h4("Merge promoters and enhancers if
+                                   label = h5("Merge promoters and enhancers if
                                               distance is less than "),
                                    min = 0,
                                    max = 3000,
@@ -183,7 +187,7 @@ body <- dashboardBody(
                 conditionalPanel("input.regionradio == 'TRUE'",
                                  sliderInput(
                                    "distenh",
-                                   label = h4("Merge enhancers distance
+                                   label = h5("Merge enhancers distance
                                               threshold"),
                                    min = 0,
                                    max = 3000,
@@ -191,7 +195,7 @@ body <- dashboardBody(
                                    ),
                                  sliderInput(
                                    "distprom",
-                                   label = h4("Merge promoters distance
+                                   label = h5("Merge promoters distance
                                               threshold"),
                                    min = 0,
                                    max = 3000,
@@ -200,14 +204,15 @@ body <- dashboardBody(
                                  )
                 ),
               HTML("</div>"),
-              infoBoxOutput("statusbox3", width = 7),
-              HTML("<div class='col-sm-7' style='min-width:
+              infoBoxOutput("statusbox3", width = 8),
+              HTML("<div class='col-sm-8' style='min-width:
                    500px !important;'>"),
               box(
                 title = "Barplot",
                 width = NULL,
                 solidHeader = TRUE,
                 plotOutput('annotatebarplot'),
+                hr(),
                 dataTableOutput("table3")
               ),
               HTML("</div>")
@@ -218,10 +223,22 @@ body <- dashboardBody(
                    300px !important;'>"),
               box(
                 width = NULL,
-                title = "Retrieve Read Counts in Annotated Regions",
+                title = "Retrieve Read Counts",
+                h5("Counts the number of reads in each regulatory region
+                   for each sample type."),
                 actionButton("buttoncounts", strong("Retrieve Counts")),
                 hr(),
-                uiOutput("chooseref")
+                uiOutput("chooseref"),
+                hr(),
+                radioButtons(
+                  "chromradio",
+                  label = h5("Restrict Analysis to a Single Chromosome?"),
+                  choices = list("FALSE" = "FALSE","TRUE" = "TRUE"),
+                  selected = "FALSE"
+                ),
+                conditionalPanel("input.chromradio == 'TRUE'",
+                uiOutput("chooseChrom")
+                )
               ),
               HTML("</div>"),
               infoBoxOutput("statusbox4", width = 7),
@@ -242,18 +259,20 @@ body <- dashboardBody(
               box(
                 width = NULL,
                 title = "Define Altered Regions",
+                h5(" Determines which regulatory regions are signifigantly
+                   altered between sample types."),
                 actionButton("buttondefine", strong("Define Altered Regions")),
                 hr(),
                 sliderInput(
                   "alpha",
-                  label = h4("pvalue cutoff Cutoff"),
+                  label = h5("pvalue cutoff"),
                   min = 0,
                   max = 1,
                   value = 0.01
                 ),
                 sliderInput(
                   "lfcThreshold",
-                  label = h4("log2fold change cutoff"),
+                  label = h5("log2fold change cutoff"),
                   min = 0,
                   max = 5,
                   value = 1,
@@ -273,12 +292,15 @@ body <- dashboardBody(
                    300px !important;'>"),
               box(
                 width = NULL,
-                title = "Categorize Altered Regions",
+                title = "Categorize Regions",
+                h5("Categorize altered regulatory regions as experiment-specific,
+                reference-specific, or shared."),
                 actionButton("buttoncat", strong("Categorize Altered Regions")),
                 hr(),
+                h4("Parameters that define cell-type specific regulatory regions."),
                 sliderInput(
                   "lfcSpecific",
-                  label = h4("log2fold change cutoff for specific
+                  label = h5("log2fold change cutoff for specific
                              enhancers/promoters"),
                   min = 0,
                   max = 5,
@@ -286,8 +308,18 @@ body <- dashboardBody(
                   step = 0.1
                 ),
                 sliderInput(
+                  "pvalueSpecific",
+                  label = h5("pvalue cutoff for specific
+                             enhancers/promoters"),
+                  min = 0,
+                  max = 1,
+                  value = 0.01
+                ),
+                hr(),
+                h4("Parameters that define shared regulatory regions."),
+                sliderInput(
                   "lfcShared",
-                  label = h4("log2fold change cutoff for shared
+                  label = h5("log2fold change cutoff for shared
                              enhancers/promoters"),
                   min = 0,
                   max = 5,
@@ -295,16 +327,8 @@ body <- dashboardBody(
                   step = 0.1
                 ),
                 sliderInput(
-                  "pvalueSpecific",
-                  label = h4("pvalue cutoff for specific
-                             enhancers/promoters"),
-                  min = 0,
-                  max = 1,
-                  value = 0.01
-                ),
-                sliderInput(
                   "pvalueShared",
-                  label = h4("pvalue cutoff for shared enhancers/promoters"),
+                  label = h5("pvalue cutoff for shared enhancers/promoters"),
                   min = 0,
                   max = 1,
                   value = 0.05
@@ -329,15 +353,16 @@ body <- dashboardBody(
               ),
               HTML("</div>")
               )
-  ),
+            ),
     tabItem(tabName = "compare",
             fluidRow(
               HTML("<div class='col-sm-4' style='min-width:
                    300px !important;'>"),
               box(
                 width = NULL,
-                title = "Compare methods of identifying altered
-                regulatory regions",
+                title = "Compare Methods",
+                h5("Compare two methods of identifying altered regulatory regions,
+                   one based on peak intensity, the other on peak presence."),
                 actionButton("buttoncompare", strong("Compare Methods")),
                 hr(),
                 dataTableOutput("table5")
@@ -354,45 +379,64 @@ body <- dashboardBody(
               HTML("</div>")
               )
             ),
-    tabItem(tabName = "pathways",
-            fluidRow(
-              infoBoxOutput("statusbox6", width = 6),
-              infoBoxOutput("statusbox7", width = 6)
-            ),
-            fluidRow(
-              box(
-                title = "Pathway enrichment MF",
-                actionButton("buttonpathwayMF",
-                             strong("Run Pathway Enrichment MF")),
-                hr(),
-                sliderInput(
-                  "pathpvaluecutoffMF",
-                  label = h4("pvalue cutoff"),
-                  min = 0,
-                  max = 1,
-                  value = 0.01
-                  ),
-                hr(),
-                plotOutput('heatplotMF')
-                ),
-              box(
-                title = "Pathway enrichment BP",
-                actionButton("buttonpathwayBP",
-                             strong("Run Pathway Enrichment BP")),
-                hr(),
-                sliderInput(
-                  "pathpvaluecutoffBP",
-                  label = h4("pvalue cutoff"),
-                  min = 0,
-                  max = 1,
-                  value = 0.01
-                  ),
-                hr(),
-                plotOutput('heatplotBP')
-                )
-              )
-            )
+    tabItem(
+      tabName ="pathways",
+      tabBox(
+        title = "Pathway Enrichment Analysis",
+        width = 12,
+        tabPanel("Pathway Enrichment for Molecular Function",
+                 fluidRow(
+                   infoBoxOutput("statusbox6", width = 11)
+                   ),
+                 fluidRow(
+                   box(
+                     title = "Pathway Enrichment for Molecular Function",
+                     width = 11,
+                     h5("Determine which pathways are overrepresented in altered
+                        promoters and enhancers."),
+                     actionButton("buttonpathwayMF",
+                                  strong("Run MF Pathway Enrichment")),
+                     hr(),
+                     sliderInput(
+                       "pathpvaluecutoffMF",
+                       label = h5("pvalue cutoff"),
+                       min = 0,
+                       max = 1,
+                       value = 0.01
+                     ),
+                     hr(),
+                     plotOutput('heatplotMF')
+                     )
+                   )
+                 ),
+        tabPanel("Pathway Enrichment for Biological Process",
+               fluidRow(
+                 infoBoxOutput("statusbox7", width = 11)
+                 ),
+               fluidRow(
+                 box(
+                   title = "Pathway Enrichment for Biological Process",
+                   width = 11,
+                   h5("Determine which pathways are overrepresented in altered promoters
+                      and enhancers."),
+                   actionButton("buttonpathwayBP",
+                                strong("Run BP Pathway Enrichment")),
+                   hr(),
+                   sliderInput(
+                     "pathpvaluecutoffBP",
+                     label = h5("pvalue cutoff"),
+                     min = 0,
+                     max = 1,
+                     value = 0.01
+                   ),
+                   hr(),
+                   plotOutput('heatplotBP')
+                   )
+                 )
+               )
+      )
     )
+  )
 )
 
 shinyUI(

@@ -18,31 +18,32 @@
 #'
 plotConsensusPeaks <- function(samplepeaks) {
   dfstats <- samplepeaks$consPeaksStats
-  # dfstats$Replicate=dfstats$PeakType
-  # dfstats=dfstats[,-which(colnames(dfstats)=='PeakType')]
-  # mydf=na.omit(reshape2::melt(dfstats))
-  mydf <- tidyr::gather(dfstats, "CellType", "count", 2:3)
+  # quick fix: change to numeric
+  row.names(dfstats) <- NULL
+  dfstats[ , 2] <-  as.numeric(as.character(dfstats[[2]]))
+  dfstats[ , 3] <-  as.numeric(as.character(dfstats[[3]]))
+  ##
+  mydf <- tidyr::gather(dfstats, "CellType", "Count", 2:3)
 
   p <- ggplot(data = mydf, aes_string(x = "CellType",
-                                      y = "count",
+                                      y = "Count",
                                       fill = "PeakType")) +
     geom_bar(stat = "identity",
              position = position_dodge()) +
-    geom_text(aes_string(label = "count",
-                         x = "CellType",
-                         y = "count",
-                         ymax = "count"),
+    geom_text(aes_string(label = "Count",
+                         x = "CellType"),
               position = position_dodge(width = 1),
               size = 3,
               hjust = 0.5,
-              vjust = -1.5) +
-    scale_colour_manual(values = c("red","dark grey")) +
-    theme_bw(base_size = 15) +
-    theme(panel.grid.major = element_blank(),
+              vjust = -.3) +
+    theme_bw(base_size = 12, base_family = "Helvetica") +
+    theme(aspect.ratio = 0.8,
+          panel.grid.major = element_blank(),
           panel.grid.minor = element_blank()) +
     labs(x = "Sample Type",
-         y = "Number of Peaks (Regulatory Regions)")
-
+         y = "Number of Peaks") +
+    ggtitle("Number of Peaks for Bioreplicates  \n and their Merged Consensus") +
+    scale_fill_brewer(palette = "Set2")
   return(p)
 }
 
@@ -74,16 +75,18 @@ plotConsensusPeaks <- function(samplepeaks) {
 #' plotCombineAnnotatePeaks(consPeaksAnnotated)
 #' }
 #' @export
-
+#'
 plotCombineAnnotatePeaks <- function(conspeaks) {
   mydf <- conspeaks$mergestats
+
+  names(mydf) <- c("TotalNumber", "MeanLength")
 
   if (nrow(mydf) == 1) {
     stop("No plot to show since merging was not performed
          when calling combineAnnotatePeaks function")
   } else {
-    numreg <- as.data.frame(mydf$total_number)
-    colnames(numreg) <- "total_number"
+    numreg <- as.data.frame(mydf$TotalNumber)
+    colnames(numreg) <- "TotalNumber"
     numreg$REtype <- gsub("_.*", "", rownames(mydf))
     numreg$REmerge <- rownames(mydf)
     numreg$REmerge <- gsub("enhancers_", "", numreg$REmerge)
@@ -92,27 +95,29 @@ plotCombineAnnotatePeaks <- function(conspeaks) {
                              levels = c("before_merging", "after_merging"))
 
     plot1 <- ggplot(numreg, aes_string(x = "REtype",
-                                       y = "total_number",
+                                       y = "TotalNumber",
                                        fill = "REmerge")) +
       geom_bar(stat = "identity",
                position = position_dodge()) +
-      geom_text(aes_string(label = "total_number",
+      geom_text(aes_string(label = "TotalNumber",
                            x = "REtype",
-                           y = "total_number",
-                           ymax = "total_number"),
+                           y = "TotalNumber",
+                           ymax = "TotalNumber"),
                 position = position_dodge(width = 1),
                 size = 3,
                 hjust = 0.5,
-                vjust = -1.5) +
-      scale_colour_manual(values = c("red",
-                                     "dark grey")) +
+                vjust = -.5) +
+      scale_fill_brewer(palette = "Set2") +
       theme_bw(base_size = 12) +
-      theme(panel.grid.major = element_blank(),
+      theme(aspect.ratio = 1.7,
+            panel.grid.major = element_blank(),
             panel.grid.minor = element_blank()) +
       labs(x = "", y = "Number of Regulatory Regions") +
       ggtitle("Number of REs\nBefore/After merging")
-    meanlength <- as.data.frame(mydf$mean_length)
-    colnames(meanlength) <- "mean_length"
+
+
+    meanlength <- as.data.frame(mydf$MeanLength)
+    colnames(meanlength) <- "MeanLength"
     meanlength$REtype <- gsub("_.*", "", rownames(mydf))
     meanlength$REmerge <- rownames(mydf)
     meanlength$REmerge <- gsub("enhancers_", "", meanlength$REmerge)
@@ -121,26 +126,27 @@ plotCombineAnnotatePeaks <- function(conspeaks) {
                                  levels = c("before_merging", "after_merging"))
 
     plot2 <- ggplot(meanlength, aes_string(x = "REtype",
-                                           y = "mean_length",
+                                           y = "MeanLength",
                                            fill = "REmerge")) +
       geom_bar(stat = "identity",
                position = position_dodge()) +
-      geom_text(aes_string(label = "mean_length",
+      geom_text(aes_string(label = "MeanLength",
                            x = "REtype",
-                           y = "mean_length",
-                           ymax = "mean_length"),
+                           y = "MeanLength",
+                           ymax = "MeanLength"),
                 position = position_dodge(width = 1),
                 size = 3,
                 hjust = 0.5,
-                vjust = -1.5) +
-      scale_colour_manual(values = c("red", "dark grey")) +
+                vjust = -.5) +
+      scale_fill_brewer(palette = "Set2") +
       theme_bw(base_size = 12) +
-      theme(panel.grid.major = element_blank(),
+      theme(aspect.ratio = 1.7,
+            panel.grid.major = element_blank(),
             panel.grid.minor = element_blank()) +
       labs(x = "", y = "Mean length of Regulatory Regions") +
       ggtitle("Mean length of REs\nBefore/After merging")
 
-    multiplot(plot1, plot2)
+    multiplot(plot1, plot2, cols = 2)
   }
 }
 
@@ -208,7 +214,7 @@ plotCountAnalysis <- function(altrepeakscateg) {
                  aes(prom$log2FoldChange,
                      -log2(prom$padj))) +
     geom_point(aes(col = factor(prom$REaltrecateg))) +
-    scale_colour_manual(values = c("dark grey","salmon","dark green","blue")) +
+      scale_fill_brewer(palette = "Set2") +
     theme_bw(base_size = 15) +
     theme(legend.title = element_blank()) +
     scale_x_continuous(expand = c(0, 0)) +
