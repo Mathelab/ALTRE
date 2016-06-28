@@ -39,7 +39,7 @@ shinyServer(function(input, output, session) {
                    TSSannot <- getTSS()
                    setProgress(value = 0.2, detail = "Annotating Peaks")
                    annotatedPeaks <- combineAnnotatePeaks(
-                     conspeaks = mergedPeaks(),
+                     conspeaks = req(mergedPeaks()),
                      TSS = TSSannot,
                      merge = input$mergeradio,
                      regionspecific = input$regionradio,
@@ -60,9 +60,10 @@ shinyServer(function(input, output, session) {
                  {
                    setProgress(value = 0.1, detail = "Retrieving counts")
                    countsSummary <- getcounts(
-                     annotpeaks = annotatePeaks(),
-                     sampleinfo = csvFile(),
-                     reference = req(input$reference))
+                     annotpeaks = req(annotatePeaks()),
+                     sampleinfo = req(csvFile()),
+                     reference = input$reference,
+                     chrom = input$chr)
                    setProgress(value = 1, detail = "done!")
                    Sys.sleep(0.5)
                  })
@@ -121,7 +122,7 @@ shinyServer(function(input, output, session) {
                  {
                    setProgress(value = 0.2, detail = "Comparing Methods")
                    compareResults <- comparePeaksAltre(req(catAlteredPeaks()),
-                                                        reference = "SAEC")
+                                                        reference = req(input$reference))
                    setProgress(value = 1, detail = "Done!")
                    Sys.sleep(0.5)
                  })
@@ -172,6 +173,14 @@ shinyServer(function(input, output, session) {
                 "Reference Cell Type",
                 reflist ,
                 selected = reflist[1])
+  })
+
+
+  output$chooseChrom <- renderUI({
+    peaks <- req(annotatePeaks())
+    chroChoices <- unique(as.character(GenomeInfoDb::seqnames(peaks[[1]])))
+    selectInput("chr", "Choose Chromosome", chroChoices, selected = "chr21")
+
   })
 
   ############################################################################
@@ -241,7 +250,7 @@ shinyServer(function(input, output, session) {
     if (is.null(input$file)) {
       infoBox(
         "Status",
-        "File Not Loaded",
+        "File Not Loaded Yet!",
         icon = icon("import", lib = "glyphicon"),
         color = "aqua",
         fill = TRUE
@@ -249,9 +258,9 @@ shinyServer(function(input, output, session) {
     else if (!is.null(input$file)) {
     infoBox(
       "Status",
-      "File Loaded",
+      "File Loading Complete.",
       icon = icon("thumbs-up", lib = "glyphicon"),
-      color = "yellow", fill = TRUE)
+      color = "green", fill = TRUE)
     }
   })
 
@@ -259,7 +268,7 @@ shinyServer(function(input, output, session) {
     if (input$buttonmerge == 0) {
       infoBox(
         "Status",
-        "Merge Button Not Clicked Yet",
+        "Merge Button Not Clicked Yet!",
         icon = icon("flag", lib = "glyphicon"),
         color = "aqua",
         fill = TRUE)
@@ -267,9 +276,9 @@ shinyServer(function(input, output, session) {
     else if(input$buttonmerge > 0) {
       infoBox(
         "Status",
-        "Replicates Have Been Merged ",
+        "Replicates Have Been Merged.",
         icon = icon("thumbs-up", lib = "glyphicon"),
-        color = "yellow",
+        color = "green",
         fill = TRUE)
     }
   })
@@ -278,7 +287,7 @@ shinyServer(function(input, output, session) {
     if (input$buttonannot == 0) {
       infoBox(
         "Status",
-        "Annotate Button Not Clicked Yet",
+        "Annotate Button Not Clicked Yet!",
         icon = icon("flag", lib = "glyphicon"),
         color = "aqua",
         fill = TRUE)
@@ -286,18 +295,18 @@ shinyServer(function(input, output, session) {
     else if (input$buttonannot > 0) {
       infoBox(
         "Status",
-        "Peaks Have Been Annotated",
-        icon = icon("thumbs-up",lib = "glyphicon"),
-        color = "yellow",
+        "Peaks Have Been Annotated (If you change the parameters, please press the button again).",
+        icon = icon("thumbs-up", lib = "glyphicon"),
+        color = "green",
         fill = TRUE)
     }
   })
 
   output$statusbox4 <- renderInfoBox({
-    if (input$buttoncounts == 0){
+    if (input$buttoncounts == 0) {
       infoBox(
         "Status",
-        "Retrieve Counts Button Not Clicked Yet",
+        "Retrieve Counts Button Not Clicked Yet!",
         icon = icon("flag", lib = "glyphicon"),
         color = "aqua",
         fill = TRUE)
@@ -305,9 +314,9 @@ shinyServer(function(input, output, session) {
     else if (input$buttoncounts > 0) {
       infoBox(
         "Status",
-        "Counts Have Been Retrieved",
+        "Counts Have Been Retrieved.",
         icon = icon("thumbs-up", lib = "glyphicon"),
-        color = "yellow",
+        color = "green",
         fill = TRUE)
     }
   })
@@ -315,16 +324,16 @@ shinyServer(function(input, output, session) {
   output$statusbox5 <- renderInfoBox({
     if (input$buttondefine == 0) {
       infoBox(
-        "Status", "Define Altered Regions Button Not Clicked Yet",
+        "Status", "Define Altered Regions Button Not Clicked Yet!",
         icon = icon("flag", lib = "glyphicon"),
         color = "aqua",
         fill = TRUE
       )}
     else if (input$buttondefine > 0) {
       infoBox(
-        "Status", "Altered Regions Have Been Defined",
+        "Status", "Altered Regions Have Been Defined.",
         icon = icon("thumbs-up", lib = "glyphicon"),
-        color = "yellow",
+        color = "green",
         fill = TRUE
       )
     }
@@ -333,26 +342,26 @@ shinyServer(function(input, output, session) {
   output$statusbox5b <- renderInfoBox({
     if (input$buttoncat == 0) {
       infoBox(
-        "Status", "Categorize Altered Regions Button Not Clicked Yet",
+        "Status", "Categorize Altered Regions Button Not Clicked Yet!",
         icon = icon("flag", lib = "glyphicon"),
         color = "aqua",
         fill = TRUE
       )}
     else if (input$buttoncat > 0) {
       infoBox(
-        "Status", "Altered Regions Have Been Categorized",
+        "Status", "Altered Regions Have Been Categorized.",
         icon = icon("thumbs-up", lib = "glyphicon"),
-        color = "yellow",
+        color = "green",
         fill = TRUE
       )
     }
   })
 
   output$statusbox6 <- renderInfoBox({
-    if (input$buttonpathwayMF == 0){
+    if (input$buttonpathwayMF == 0) {
       infoBox(
         "Status",
-        "Enrichment Analysis Button Not Clicked Yet",
+        "MF Enrichment Analysis Button Not Clicked Yet!",
         icon = icon("flag", lib = "glyphicon"),
         color = "aqua",
         fill = TRUE)
@@ -360,9 +369,9 @@ shinyServer(function(input, output, session) {
     else if (input$buttonpathwayMF > 0) {
       infoBox(
         "Status",
-        "Enrichment Analysis Has Been Run",
+        "MF Enrichment Analysis Has Been Run.",
         icon = icon("thumbs-up", lib = "glyphicon"),
-        color = "yellow",
+        color = "green",
         fill = TRUE)
     }
   })
@@ -371,7 +380,7 @@ shinyServer(function(input, output, session) {
     if (input$buttonpathwayBP == 0) {
       infoBox(
         "Status",
-        "Enrichment Analysis BP Button Not Clicked Yet",
+        "BP Enrichment Analysis Button Not Clicked Yet!",
         icon = icon("flag", lib = "glyphicon"),
         color = "aqua",
         fill = TRUE)
@@ -379,9 +388,9 @@ shinyServer(function(input, output, session) {
     else if(input$buttonpathwayBP > 0) {
       infoBox(
         "Status",
-        "BP Enrichment Analysis Completed",
+        "BP Enrichment Analysis Completed.",
         icon = icon("thumbs-up", lib = "glyphicon"),
-        color = "yellow",
+        color = "green",
         fill = TRUE
       )
     }
@@ -391,7 +400,7 @@ shinyServer(function(input, output, session) {
     if (input$buttoncompare == 0) {
       infoBox(
         "Status",
-        "Compare Methods Button Not Clicked Yet",
+        "Compare Methods Button Not Clicked Yet!",
         icon = icon("flag", lib = "glyphicon"),
         color = "aqua",
         fill = TRUE)
@@ -399,9 +408,9 @@ shinyServer(function(input, output, session) {
     else if (input$buttoncompare > 0) {
       infoBox(
         "Status",
-        "Method Comparison Completed",
+        "Method Comparison Completed.",
         icon = icon("thumbs-up", lib = "glyphicon"),
-        color = "yellow",
+        color = "green",
         fill = TRUE)
     }
   })
