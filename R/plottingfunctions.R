@@ -1,6 +1,3 @@
-
-
-
 #' Given the output from getConsensusPeaks, generate a barplot
 #' of countstatistics
 #'
@@ -583,7 +580,7 @@ multiplot <- function(..., plotlist = NULL, file, cols = 1, layout = NULL) {
 #'                                            merge = TRUE,
 #'                                            regionspecific = TRUE,
 #'                                            mergedistenh = 1500,
-#'                                            mergedistprom = 1000 )
+#'                                            mergedistprom = 1000)
 #' counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
 #'                               csvfile = csvfile,
 #'                               reference = 'SAEC')
@@ -753,7 +750,7 @@ plotallvenn <- function(analysisresultsmatrix) {
 #' decreased lod2fold change/low p-value, and purple indicates regions
 #' with little to no change and insignificant p-values. Based on the log2fold
 #' change and p-value inputs, there is a possibility that some regions will not
-#' fulfill any of the supplied criteria ("in-between" shared and type-specific) –
+#' fulfill any of the supplied criteria ("in-between" shared and type-specific),
 #' they are colored grey.
 #'
 #' @param analysisresults analysisresults of count analysis
@@ -853,10 +850,9 @@ genomebrowvisual <- function(analysisresults,
   # mark reference specific with red
   bedfile$itemRgb <-
     ifelse((analysisresults$padj > pvalshared) &
-             analysisresults$log2FoldChange >
-             -lfcshared &
-             analysisresults$log2FoldChange < lfcshared & analysisresults$padj >
-             pvalshared,
+             analysisresults$log2FoldChange > -lfcshared &
+             analysisresults$log2FoldChange < lfcshared &
+             analysisresults$padj > pvalshared,
            shared,
            bedfile$itemRgb
     )
@@ -865,7 +861,7 @@ genomebrowvisual <- function(analysisresults,
     ifelse(is.na(bedfile$itemRgb), filteredout, bedfile$itemRgb)
 
   if (remove == TRUE) {
-    bedfile <- bedfile[bedfile$itemRgb != filteredout,]
+    bedfile <- bedfile[bedfile$itemRgb != filteredout, ]
   }
 
   # create the bed file in an object
@@ -880,7 +876,7 @@ genomebrowvisual <- function(analysisresults,
       )
     )
   # create the trackline
-  write.table(
+  utils::write.table(
     trackline,
     file = paste0(noquote(substitute(filename)),
                   "genomebrowser.bed"),
@@ -888,7 +884,7 @@ genomebrowvisual <- function(analysisresults,
     col.names = FALSE,
     quote = FALSE
   )
-  write.table(
+  utils::write.table(
     bedfile,
     file = paste0(noquote(substitute(filename)), "genomebrowser.bed"),
     row.names = FALSE,

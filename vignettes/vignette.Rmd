@@ -215,19 +215,19 @@ In order to link regulatory regions to genes, TSSs must be supplied for this fun
 Pathways fall into three categories (Molecular Function (MF), Biological Process (BP), and Cellular Component (CC)), and each category must be analyzed separately. The category is selected by supplying an argument to "ontoltype"
 
 ```{r}
-  MFenrich <- pathenrich(analysisresults = categaltre_peaks,
-                        ontoltype = 'MF',
-                        enrichpvalfilt = 0.01)
- 
- enrichHeatmap(MFenrich, title='GO:MF, p<0.01')
+ #  MFenrich <- pathenrich(analysisresults = categaltre_peaks,
+ #                        ontoltype = 'MF',
+ #                        enrichpvalfilt = 0.01)
+ # 
+ # enrichHeatmap(MFenrich, title='GO:MF, p<0.01')
 ```
 
 
 ```{r}
- BPenrich <- pathenrich(analysisresults = categaltre_peaks,
-                        ontoltype = 'BP',
-                        enrichpvalfilt = 0.01)
- enrichHeatmap(BPenrich, title = 'GO:BP, p<0.01')
+ # BPenrich <- pathenrich(analysisresults = categaltre_peaks,
+ #                        ontoltype = 'BP',
+ #                        enrichpvalfilt = 0.01)
+ # enrichHeatmap(BPenrich, title = 'GO:BP, p<0.01')
 ```
 The result is a list of dataframes containing the enriched pathways with p-values and some additional information. The first dataframe contains regulatory regions that are cancer-specific, the second dataframe is normal-specific regions, and the third is shared regions. Here we take a look at the first line of the cancer-specific regions. To see these dataframes, use the results function:
 ```{r}
@@ -241,7 +241,7 @@ Once results have been obtained, there are a number of additional functions in A
 “resultscomparison” creates a table to compare the two methods of identifying altered regulatory regions – one based on peak intensity, the other on peak presence or absence as determined by hotspot calling algorithms. The intensity-based method identifies much fewer type-specific regions. 
 
 ```{r}
-analysisresults <- comparePeaksAltre(categaltre_peaks, reference= "SAEC")
+# analysisresults <- comparePeaksAltre(categaltre_peaks, reference= "SAEC")
 
 
 ```
@@ -249,7 +249,7 @@ analysisresults <- comparePeaksAltre(categaltre_peaks, reference= "SAEC")
 "plotallvenn" takes the results from "resultscomparison" and translates the table into proportional venn diagrams.
 
 ```{r}
-plotallvenn(analysisresults)
+# plotallvenn(analysisresults)
 ```
 
 "createboxplot" enables users to view the raw count data in regions identified as type-specific or shared. The log2 transformation of reads per kilobase of regulatory region per million is plotted. As expected, for regulatory regions identified as higher log-fold change than normal, the lung cancer cell line has much higher counts than he normal lung cell line. The opposite is true for the lower log-fold change regions. For regions with little log-fold change between cell types, the counts are similar. This visual depiction confirms the results of "countanalysis" and enables users to change parameters if needed. 
@@ -262,7 +262,7 @@ plotallvenn(analysisresults)
 "genomebrowservis" allows raw data to be visualized as tracks in the UCSC by creating wig files as well as HOTSPOT files color-coded by type-specificity. Wig file creation involves translation of count data into a peak width and height, which allows easier visualization of count-differences. A bed file will be created in the working directory, there is no output to the function that can be saved as an object.
 
 ```{r}
-genomebrowvisual(categaltre_peaks)
+# genomebrowvisual(categaltre_peaks)
 ```
 
 
