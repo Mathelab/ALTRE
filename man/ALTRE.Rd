@@ -47,7 +47,7 @@ To view a density plot of the sizes of the regions, use the function plotgetcoun
 
 Identify significantly altered regulatory elements (promoters or enhancers).  A volcano plot of these significantly altered regulatory elements can be viewed by running the function plotCountAnalysis().
 
-\item \code{\link{resultsComparison}}
+\item \code{\link{comparePeaksAltre}}
 
 This function compares the number of regulatory regions identified as altered or shared between two sample types.  The two methods compared are: 1) using peak presence and associated intensity (e.g. amount of chromatin accessibility); 2) using peak presence only as determined by peak/hotspot caller.
 

@@ -1,8 +1,8 @@
 #' Comparison of methods for identifying altered regulatory regions
 #'
-#' Creates a table to compare two methods of identifying altered regulatory regions
-#' – one based on peak intensity, the other on peak presence as determined by
-#' hotspot calling algorithms.
+#' Creates a table to compare two methods of identifying altered regulatory
+#' regions, one based on peak intensity, the other on peak presence as
+#'  determined by hotspot calling algorithms.
 #'
 #' @param analysisresults analysisresults of countanalysis.
 #' @param samplenames vector of sample types
@@ -14,7 +14,7 @@
 #' @param pvalshared p-value for shared enhancers/promoters
 #'
 #' @return matrix comparing the two methods of identifying altered regulatory
-#' regions – one based on peak intensity, the other on peak presence as
+#' regions, one based on peak intensity, the other on peak presence as
 #' determined by hotspot calling algorithms.
 #' @examples
 #' \dontrun{

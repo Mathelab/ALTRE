@@ -38,7 +38,7 @@ browser: red indicates increased log2fold change/low p-value, blue indicates
 decreased lod2fold change/low p-value, and purple indicates regions
 with little to no change and insignificant p-values. Based on the log2fold
 change and p-value inputs, there is a possibility that some regions will not
-fulfill any of the supplied criteria ("in-between" shared and type-specific) –
+fulfill any of the supplied criteria ("in-between" shared and type-specific),
 they are colored grey.
 }
 \examples{
