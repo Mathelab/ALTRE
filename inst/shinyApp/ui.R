@@ -112,17 +112,17 @@ body <- dashboardBody(
             ),
     tabItem(tabName = "definerep",
             fluidRow(
-              HTML("<div class='col-sm-5' style='min-width:
-                   600px !important;'>"),
+              HTML("<div class='col-sm-4' style='min-width:
+                   550px !important;'>"),
               box(
                 title = "Load and Merge" ,
                 width = NULL,
                 solidHeader = TRUE,
                 h5("Load peak files and for each sample type, determine
-                consensus peaks that are found in at least N bioreplicates."),
+                consensus peaks that are found in at least N bioreplicates. \n"),
                 numericInput(
                   "numOverlap",
-                  " N: Minimum Number of Overlaps",
+                  "Minimum Number of Overlaps N",
                   2,
                   min = 2,
                   max = 10
@@ -134,7 +134,7 @@ body <- dashboardBody(
               HTML("</div>"),
               infoBoxOutput("statusbox2", width = 7),
               HTML("<div class='col-sm-7' style='min-width:
-                   500px !important;'>"),
+                   550px !important;'>"),
               box(
                 title = "Barplot",
                 width = NULL,
@@ -204,8 +204,8 @@ body <- dashboardBody(
                                  )
                 ),
               HTML("</div>"),
-              infoBoxOutput("statusbox3", width = 6),
-              HTML("<div class='col-sm-6' style='min-width:
+              infoBoxOutput("statusbox3", width = 8),
+              HTML("<div class='col-sm-8' style='min-width:
                    500px !important;'>"),
               box(
                 title = "Barplot",
