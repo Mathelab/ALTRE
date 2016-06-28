@@ -767,12 +767,12 @@ plotallvenn <- function(analysisresultsmatrix) {
 #'
 #' @examples
 #' \dontrun{
-#' genomebrowvisual(categaltre_peaks)
+#' writeTracks(categaltre_peaks)
 #' }
 #'
 #' @export
 #'
-genomebrowvisual <- function(analysisresults,
+writeTracks <- function(analysisresults,
                              lfctypespecific = 1.5,
                              lfcshared = 1.2,
                              pvaltypespecific = 0.01,
@@ -783,13 +783,17 @@ genomebrowvisual <- function(analysisresults,
                              diseasespecific = "blue",
                              shared = "purple",
                              filteredout = "grey") {
-  # if (is.data.frame(analysisresults)==FALSE) {stop('The input is not a
-  # dataframe!')
 
-  # }
+  analysisresults <- analysisresults$analysisresults
+
+   if (is.data.frame(analysisresults) == FALSE) { stop('The input is not a
+   dataframe!' ) }
 
   colors <- c()
-  for (type in c(uncatagorized, referencespecific, diseasespecific, shared,
+  for (type in c(uncatagorized,
+                 referencespecific,
+                 diseasespecific,
+                 shared,
                  filteredout)) {
     if (type == "red") {
       type <- "255,0,0"
@@ -817,7 +821,8 @@ genomebrowvisual <- function(analysisresults,
 
   filename <- deparse(substitute(analysisresults))
   bedfile <- analysisresults[, c(7:9)]
-  bedfile$name <- paste(analysisresults[, 10], ",l2fc:",
+  bedfile$name <- paste(analysisresults[, 10],
+                        ",l2fc:",
                         round(analysisresults[ , 2], digits = 4),
                         ",pval:",
                         sprintf("%0.7g", analysisresults[, 5]),
@@ -892,5 +897,4 @@ genomebrowvisual <- function(analysisresults,
     append = TRUE,
     quote = FALSE
   )
-  # create the bedfile in an ACTUAL file
 }

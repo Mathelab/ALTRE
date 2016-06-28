@@ -283,7 +283,7 @@ body <- dashboardBody(
                   min = 0,
                   max = 5,
                   value = 1.5,
-                  step=0.1
+                  step = 0.1
                 ),
                 sliderInput(
                   "lfcShared",
@@ -309,9 +309,16 @@ body <- dashboardBody(
                   max = 1,
                   value = 0.05
                 )
+                #,
+                # hr(),
+                # conditionalPanel("input.buttoncat > 0",
+                #                  downloadButton("downloadData",
+                #                               strong("Download Track")
+                #                               )
+                #                  )
               ),
               HTML("</div>"),
-              infoBoxOutput("statusbox5b", width=7),
+              infoBoxOutput("statusbox5b", width = 7),
               HTML("<div class='col-sm-7' style='min-width:
                    500px !important;'>"),
               box(

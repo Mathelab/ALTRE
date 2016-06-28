@@ -121,7 +121,6 @@ shinyServer(function(input, output, session) {
                  {
                    setProgress(value = 0.2, detail = "Comparing Methods")
                    compareResults <- comparePeaksAltre(req(catAlteredPeaks()),
-                                                       samplenames = NA ,
                                                         reference = "SAEC")
                    setProgress(value = 1, detail = "Done!")
                    Sys.sleep(0.5)
@@ -174,6 +173,7 @@ shinyServer(function(input, output, session) {
                 reflist ,
                 selected = reflist[1])
   })
+
   ############################################################################
   #tables
   output$table1 <- renderDataTable({

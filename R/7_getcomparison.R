@@ -5,7 +5,6 @@
 #'  determined by hotspot calling algorithms.
 #'
 #' @param analysisresults analysisresults of countanalysis.
-#' @param samplenames vector of sample types
 #' @param reference cell type to be considered "reference" or "reference" to which
 #' other cell types will be compared
 #' @param lfctypespecific log2fold change for type specific enhancers/promoters
@@ -47,14 +46,13 @@
 #' @export
 #'
 comparePeaksAltre <- function(analysisresults,
-	samplenames,
 	reference,
 	lfctypespecific=1.5,
 	lfcshared=1.2,
 	pvaltypespecific=0.01,
 	pvalshared=0.05){
 
-  analysisresults = analysisresults[[1]]
+  analysisresults <- analysisresults[[1]]
 
   if (!is.data.frame(analysisresults) ||
       !all.equal(
@@ -78,8 +76,7 @@ comparePeaksAltre <- function(analysisresults,
     stop("Make sure the output of the analysis is from categAltrePeaks() function")
   }
 
-  # removed this bc prone to errors: samplenames <-
-  #colnames(analysisresults[,11:ncol(analysisresults)])
+  samplenames <-colnames(analysisresults)[11:(ncol(analysisresults)-1)]
   analysisresultsmatrix <-  matrix(nrow = 9, ncol = 2)
   nonreference <-  samplenames[!(samplenames %in% reference)]
 

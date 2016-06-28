@@ -4,14 +4,11 @@
 \alias{comparePeaksAltre}
 \title{Comparison of methods for identifying altered regulatory regions}
 \usage{
-comparePeaksAltre(analysisresults, samplenames, reference,
-  lfctypespecific = 1.5, lfcshared = 1.2, pvaltypespecific = 0.01,
-  pvalshared = 0.05)
+comparePeaksAltre(analysisresults, reference, lfctypespecific = 1.5,
+  lfcshared = 1.2, pvaltypespecific = 0.01, pvalshared = 0.05)
 }
 \arguments{
 \item{analysisresults}{analysisresults of countanalysis.}
-
-\item{samplenames}{vector of sample types}
 
 \item{reference}{cell type to be considered "reference" or "reference" to which
 other cell types will be compared}

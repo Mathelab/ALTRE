@@ -105,13 +105,15 @@ pathenrich <- function(analysisresults,
 #                                  -lfcshared) &
 #                                (newanalysisresults$padj >= pvalshared |
 #                                    is.na(newanalysisresults$padj)), ]
-  up <- newanalysisresults[which(newanalysisresults$REaltrecateg=="Experiment Specific"),]
-  down <- newanalysisresults[which(newanalysisresults$REaltrecateg=="Reference Specific"),]
-  shared <- newanalysisresults[which(newanalysisresults$REaltrecateg=="Shared"),]
+  up <- newanalysisresults[which(newanalysisresults$REaltrecateg ==
+                                   "Experiment Specific"), ]
+  down <- newanalysisresults[which(newanalysisresults$REaltrecateg ==
+                                     "Reference Specific"), ]
+  shared <- newanalysisresults[which(newanalysisresults$REaltrecateg ==
+                                       "Shared"), ]
   all <- rbind(up, down, shared)
   subsets <- list(up, down, shared, newanalysisresults)
-  names(subsets) <- c("up", "down", "shared",
-                      "all")
+  names(subsets) <- c("up", "down", "shared", "all")
 
   message("finding expt-specific...")
   if (nrow(subsets[["up"]]) == 0) {
