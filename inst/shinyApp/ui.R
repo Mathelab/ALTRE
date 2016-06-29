@@ -94,15 +94,22 @@ body <- dashboardBody(
               HTML("<div class='col-sm-6' style='min-width:
                    700px !important;'>"),
               box(
-                title = "Load File",
+                title = strong("Load Metadata Spreadsheet File"),
                 width = NULL,
                 solidHeader = TRUE,
+                h5("This step does the following: "),
+                tags$ul(
+                  tags$li("Loads a metadata spreadsheet file with a csv file extention."),
+                  tags$li(" Prints out the contents of the file except for the
+                        first column (i.e. data filepaths)")
+                ),
+                hr(),
                 fileInput(
                   "file",
                   accept = c('text/csv',
                              'text/comma-separated-values,text/plain',
                              '.csv'),
-                  "Locate CSV Metadata File"
+                  "Lood CSV File"
                   ),
                 dataTableOutput("table1")
                 ),
@@ -119,12 +126,14 @@ body <- dashboardBody(
                 width = NULL,
                 solidHeader = TRUE,
                 h5("This step does the following: "),
-                tags$ol(
+                tags$ul(
                   tags$li("Loads biosample annotation files of DNase I hypersensitive
                    sites (i.e peaks)"),
                   tags$li(" Merges the bioreplicates of each biosample in order
                           to determine the consensus peaks, defined as genomic
-                          regions that overlap in at least N of the bioreplicates.")
+                          regions that overlap in at least N of the bioreplicates."),
+                  tags$li(" Outputs a barplot summary of the number of peaks in
+                          each replicate and in their merged consensus ")
                   ),
                 hr(),
                 numericInput(
@@ -134,7 +143,7 @@ body <- dashboardBody(
                   min = 2,
                   max = 10
                 ),
-                actionButton("buttonmerge", strong("Load files then Merge Replicates")),
+                actionButton("buttonmerge", strong("Load Files then Merge Replicates")),
                 hr(),
                 dataTableOutput("table2")
               ),
@@ -158,9 +167,17 @@ body <- dashboardBody(
               box(
                 width = NULL,
                 solidHeader = TRUE,
-                title = "Combine and Annotate Peaks",
-                h5("Combine and annotate peaks from different sample types.
-                   Optionally merge nearby regions."),
+                title = strong("Combine and Annotate Peaks"),
+                h5("This step does the following: "),
+                tags$ul(
+                  tags$li("Combines peaks from different sample types,
+                   optionally merging nearby regions."),
+                  tags$li(" Annotates genomic regions with type specificity based
+                          on whether each region is a candidate promoter or enhancer
+                          as determined by user-defined distance from a
+                          transcription start site")
+                ),
+                hr(),
                 actionButton("buttonannot", strong("Combine and Annotate")),
                 radioButtons(
                   "mergeradio",
@@ -230,9 +247,14 @@ body <- dashboardBody(
                    300px !important;'>"),
               box(
                 width = NULL,
-                title = "Retrieve Read Counts",
-                h5("Counts the number of reads in each regulatory region
+                title = strong("Retrieve Read Counts"),
+                h5("This step does the following: "),
+                tags$ul(
+                  tags$li("Counts the number of reads in each regulatory region
                    for each sample type."),
+                  tags$li(" Outputs a denisty plot of the lenghts of genomic regions ")
+                ),
+                hr(),
                 actionButton("buttoncounts", strong("Retrieve Counts")),
                 hr(),
                 uiOutput("chooseref"),
@@ -265,11 +287,18 @@ body <- dashboardBody(
                    300px !important;'>"),
               box(
                 width = NULL,
-                title = "Define Altered Regions",
-                h5(" Determines which regulatory regions are signifigantly
-                   altered between sample types."),
+                title = strong("Define Altered Regions"),
+                h5("This step does the following: "),
+                tags$ul(
+                  tags$li("Determines which regulatory regions are differentialy
+                   altered between sample types.")
+                ),
+                hr(),
                 actionButton("buttondefine", strong("Define Altered Regions")),
                 hr(),
+                h5(" Input function parameters used by DESeq2 to calculate
+                   adjusted p-values."),
+
                 sliderInput(
                   "alpha",
                   label = h5("pvalue cutoff"),
@@ -299,9 +328,15 @@ body <- dashboardBody(
                    300px !important;'>"),
               box(
                 width = NULL,
-                title = "Categorize Regions",
-                h5("Categorize altered regulatory regions as experiment-specific,
+                title = strong("Categorize Regions"),
+                h5("This step does the following: "),
+                tags$ul(
+                  tags$li("Categorizes altered regulatory regions as experiment-specific,
                 reference-specific, or shared."),
+                  tags$li(" Outputs a volcano plot highlighting potential
+                          altered regulatory elements.")
+                ),
+                hr(),
                 actionButton("buttoncat", strong("Categorize Altered Regions")),
                 hr(),
                 h4("Parameters that define cell-type specific regulatory regions."),
@@ -367,9 +402,17 @@ body <- dashboardBody(
                    300px !important;'>"),
               box(
                 width = NULL,
-                title = "Compare Methods",
-                h5("Compare two methods of identifying altered regulatory regions,
-                   one based on peak intensity, the other on peak presence."),
+                title = strong("Compare Methods"),
+                h5("This step does the following: "),
+                tags$ul(
+                  tags$li("Compares two methods of identifying altered regulatory
+                          regions.The first method uses peak presence and
+                          associated intensity ( i.e chromatin accessibility).
+                          The second method uses peak presence only as determined
+                          by the peak caller."),
+                  tags$li(" Outputs a venn plot")
+                ),
+                hr(),
                 actionButton("buttoncompare", strong("Compare Methods")),
                 hr(),
                 dataTableOutput("table5")
@@ -389,7 +432,7 @@ body <- dashboardBody(
     tabItem(
       tabName ="pathways",
       tabBox(
-        title = "Pathway Enrichment Analysis",
+        title = strong("Pathway Enrichment Analysis"),
         width = 12,
         tabPanel("Pathway Enrichment for Molecular Function",
                  fluidRow(
@@ -397,10 +440,18 @@ body <- dashboardBody(
                    ),
                  fluidRow(
                    box(
-                     title = "Pathway Enrichment for Molecular Function",
+                     title = strong("Pathway Enrichment for Molecular Function"),
                      width = 11,
-                     h5("Determine which pathways are overrepresented in altered
-                        promoters and enhancers."),
+                     h5("This step does the following: "),
+                     tags$ul(
+                       tags$li("Determine which pathways are overrepresented in
+                             altered promoters and enhancers as returned by
+                             GO Enrichment Analysis restricted to the Molecular
+                             Function sub-ontology"),
+                       tags$li("Outputs a heatmap plot of the enrichment analysis'
+                             results")
+                     ),
+                     hr(),
                      actionButton("buttonpathwayMF",
                                   strong("Run MF Pathway Enrichment")),
                      hr(),
@@ -422,10 +473,18 @@ body <- dashboardBody(
                  ),
                fluidRow(
                  box(
-                   title = "Pathway Enrichment for Biological Process",
+                   title = strong("Pathway Enrichment for Biological Process"),
                    width = 11,
-                   h5("Determine which pathways are overrepresented in altered promoters
-                      and enhancers."),
+                   h5("This step does the following: "),
+                   tags$ul(
+                     tags$li("Determine which pathways are overrepresented in
+                             altered promoters and enhancers as returned by
+                             GO Enrichment Analysis restricted to the Biological
+                             Process sub-ontology"),
+                     tags$li("Outputs a heatmap plot of the enrichment analysis'
+                             results")
+                   ),
+                   hr(),
                    actionButton("buttonpathwayBP",
                                 strong("Run BP Pathway Enrichment")),
                    hr(),

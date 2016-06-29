@@ -23,7 +23,8 @@ shinyServer(function(input, output, session) {
                    setProgress(value = .1, detail = "Loading Peak Files")
                    peaks <-  req(peaks())
                    setProgress(value = 0.5, detail = "Merging Replicates")
-                   consensusPeaks <- getConsensusPeaks(peaks, req(input$numOverlap))
+                   consensusPeaks <- getConsensusPeaks(peaks,
+                                                       req(input$numOverlap))
                    setProgress(value = 1, detail = "Done!")
                    Sys.sleep(0.5)
                  })
@@ -121,8 +122,10 @@ shinyServer(function(input, output, session) {
                  value = 0,
                  {
                    setProgress(value = 0.2, detail = "Comparing Methods")
-                   compareResults <- comparePeaksAltre(req(catAlteredPeaks()),
-                                                        reference = req(input$reference))
+                   compareResults <- comparePeaksAltre(
+                     req(catAlteredPeaks()),
+                     reference = req(input$reference)
+                     )
                    setProgress(value = 1, detail = "Done!")
                    Sys.sleep(0.5)
                  })
@@ -170,7 +173,7 @@ shinyServer(function(input, output, session) {
   output$chooseref <- renderUI({
     reflist <- unique(csvFile()$sample)
     selectInput("reference",
-                "Reference Cell Type",
+                "Select which Biosample to act as Reference",
                 reflist ,
                 selected = reflist[1])
   })
@@ -258,7 +261,7 @@ shinyServer(function(input, output, session) {
     else if (!is.null(input$file)) {
     infoBox(
       "Status",
-      "File Loading Complete.",
+      "File Loading Complete. You Can Proceed to Step 2.",
       icon = icon("thumbs-up", lib = "glyphicon"),
       color = "green", fill = TRUE)
     }
@@ -276,7 +279,7 @@ shinyServer(function(input, output, session) {
     else if(input$buttonmerge > 0) {
       infoBox(
         "Status",
-        "Replicates Have Been Merged.",
+        "Replicates Have Been Merged. You Can Proceed to Step 3.",
         icon = icon("thumbs-up", lib = "glyphicon"),
         color = "green",
         fill = TRUE)
@@ -295,7 +298,7 @@ shinyServer(function(input, output, session) {
     else if (input$buttonannot > 0) {
       infoBox(
         "Status",
-        "Peaks Have Been Annotated (If you change the parameters, please press the button again).",
+        "Peaks Have Been Annotated (If you change the parameters, please press the button again). You Can Proceed to Step 4.",
         icon = icon("thumbs-up", lib = "glyphicon"),
         color = "green",
         fill = TRUE)
@@ -314,7 +317,7 @@ shinyServer(function(input, output, session) {
     else if (input$buttoncounts > 0) {
       infoBox(
         "Status",
-        "Counts Have Been Retrieved.",
+        "Counts Have Been Retrieved. You Can Proceed to Step 5.",
         icon = icon("thumbs-up", lib = "glyphicon"),
         color = "green",
         fill = TRUE)
@@ -331,7 +334,8 @@ shinyServer(function(input, output, session) {
       )}
     else if (input$buttondefine > 0) {
       infoBox(
-        "Status", "Altered Regions Have Been Defined.",
+        "Status", "Altered Regions Have Been Defined.
+        You Can Proceed to Step 6.",
         icon = icon("thumbs-up", lib = "glyphicon"),
         color = "green",
         fill = TRUE
@@ -349,7 +353,7 @@ shinyServer(function(input, output, session) {
       )}
     else if (input$buttoncat > 0) {
       infoBox(
-        "Status", "Altered Regions Have Been Categorized.",
+        "Status", "Altered Regions Have Been Categorized. You Can Proceed to Step 7.",
         icon = icon("thumbs-up", lib = "glyphicon"),
         color = "green",
         fill = TRUE
