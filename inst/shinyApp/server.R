@@ -136,11 +136,11 @@ shinyServer(function(input, output, session) {
                  {
                    setProgress(value = 0.2, detail = "MF: GO Enrichment Analysis")
                    MFenrich <-
-                     pathenrich(
-                       analysisresults = req(catAlteredPeaks()),
-                       ontoltype = "MF",
-                       enrichpvalfilt = input$pathpvaluecutoffMF
-                     )
+                       pathenrich(
+                         analysisresults = req(catAlteredPeaks()),
+                         ontoltype = "MF",
+                         enrichpvalfilt = input$pathpvaluecutoffMF
+                       )
                    setProgress(value = 1, detail = "Done!")
                    Sys.sleep(0.5)
                  })

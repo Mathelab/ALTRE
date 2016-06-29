@@ -115,19 +115,26 @@ body <- dashboardBody(
               HTML("<div class='col-sm-4' style='min-width:
                    550px !important;'>"),
               box(
-                title = "Load and Merge" ,
+                title = strong("Load and Merge Annotation Files") ,
                 width = NULL,
                 solidHeader = TRUE,
-                h5("Load peak files and for each sample type, determine
-                consensus peaks that are found in at least N bioreplicates. \n"),
+                h5("This step does the following: "),
+                tags$ol(
+                  tags$li("Loads biosample annotation files of DNase I hypersensitive
+                   sites (i.e peaks)"),
+                  tags$li(" Merges the bioreplicates of each biosample in order
+                          to determine the consensus peaks, defined as genomic
+                          regions that overlap in at least N of the bioreplicates.")
+                  ),
+                hr(),
                 numericInput(
                   "numOverlap",
-                  "Minimum Number of Overlaps N",
+                  "Choose the Minimum Number of Overlaping Genomic Regions N",
                   2,
                   min = 2,
                   max = 10
                 ),
-                actionButton("buttonmerge", strong("Merge Replicates")),
+                actionButton("buttonmerge", strong("Load files then Merge Replicates")),
                 hr(),
                 dataTableOutput("table2")
               ),
