@@ -147,7 +147,7 @@ combineAnnotatePeaks <- function(conspeaks,
                                        mergedist = mergedistprom,
                                        TSS, distancefromTSS)
 
-      bothafter <- sort(sortSeqlevels(c(enhancerafter,
+      bothafter <- sort(GenomeInfoDb::sortSeqlevels(c(enhancerafter,
                                         promoterafter)))
     }
 
@@ -169,24 +169,36 @@ combineAnnotatePeaks <- function(conspeaks,
 
     # Create matrix for comparison:
     resultuserinput <- grangestodataframe(bothafter)
-    result0 <- dataframeformerge
+
     tableofinfo <- matrix(nrow = 4, ncol = 2)
     rownames(tableofinfo) <- c("enhancers_before_merging",
                                "enhancers_after_merging",
                                "promoters_before_merging",
                                "promoters_after_merging")
-    colnames(tableofinfo) <- c("total_number", "mean_length")
+    colnames(tableofinfo) <- c("TotalNumber", "MeanLength")
 
     # Callstatscombineannotate internal function
     # to create table:
-    tableofinfo <- statscombineannotate(tableofinfo, result0, 1, 3)
+    tableofinfo <- statscombineannotate(tableofinfo, dataframeformerge, 1, 3)
     tableofinfo <- statscombineannotate(tableofinfo, resultuserinput, 2, 4)
+
+    ### quick fix
+    tableofinfo <- as.data.frame(tableofinfo)
+    tableofinfo$Condition <- rownames(tableofinfo)
+    tableofinfo <- tableofinfo[ , c(3,1,2)]
+    rownames(tableofinfo) <- NULL
+    ##
+    #tableofinfo <- plyr::name_rows(as.data.frame(tableofinfo))[ , c(3,1,2)]
+    #colnames(tableofinfo)[1] <- "Condition"
+    ###
 
     listtoreturn <- list(consPeaksAnnotated =
                            GRanges(resultuserinput,
                                    meta = resultuserinput[ , 4:ncol(
                                      resultuserinput)]),
-                         mergestats = as.data.frame(tableofinfo))
+                         mergestats = tableofinfo)
   }
   return(listtoreturn)
 }
+
+

@@ -77,9 +77,11 @@ plotConsensusPeaks <- function(samplepeaks) {
 #' @export
 #'
 plotCombineAnnotatePeaks <- function(conspeaks) {
-  mydf <- conspeaks$mergestats
 
-  names(mydf) <- c("TotalNumber", "MeanLength")
+  # quick fix
+  mydf <- conspeaks$mergestats[ , c(2, 3)]
+  row.names(mydf) <- conspeaks$mergestats[ , 1]
+  ##
 
   if (nrow(mydf) == 1) {
     stop("No plot to show since merging was not performed
@@ -109,7 +111,7 @@ plotCombineAnnotatePeaks <- function(conspeaks) {
                 vjust = -.5) +
       scale_fill_brewer(palette = "Set2") +
       theme_bw(base_size = 12) +
-      theme(aspect.ratio = 1.7,
+      theme(aspect.ratio = 1.5,
             panel.grid.major = element_blank(),
             panel.grid.minor = element_blank()) +
       labs(x = "", y = "Number of Regulatory Regions") +
@@ -140,7 +142,7 @@ plotCombineAnnotatePeaks <- function(conspeaks) {
                 vjust = -.5) +
       scale_fill_brewer(palette = "Set2") +
       theme_bw(base_size = 12) +
-      theme(aspect.ratio = 1.7,
+      theme(aspect.ratio = 1.5,
             panel.grid.major = element_blank(),
             panel.grid.minor = element_blank()) +
       labs(x = "", y = "Mean length of Regulatory Regions") +
@@ -680,12 +682,12 @@ plotvenn <- function(analysisresultsmatrix,
   p$colors <- color2
   graphics::plot(p)
 
-  graphics::text(0.15, 0.6, controllabel, cex = 1.3)
-  graphics::text(0.75, 0.4, caselabel, cex = 1.3)
-  graphics::text(0.5, 0.5, shared, cex = 1.3)
+  graphics::text(0.15, 0.6, controllabel, cex = 1.1)
+  graphics::text(0.75, 0.4, caselabel, cex = 1.1)
+  graphics::text(0.5, 0.5, shared, cex = 1.1)
   title <- paste(method, region)
 
-  graphics::text(0.5, 0.99, title, cex = 1.9)
+  graphics::title(title, cex = 1.3)
 
   return(p)
 }
@@ -732,7 +734,7 @@ plotallvenn <- function(analysisresultsmatrix) {
       FALSE) {
     stop("The input is not a matrix!")
   }
-  graphics::par(mfrow = c(2, 3))
+  graphics::par(mfrow = c(2, 3), oma = c(0,0,2,0))
   plot1 <- plotvenn(analysisresultsmatrix,
                     "promoter", "intensity", "bluegreen")
   plot2 <- plotvenn(analysisresultsmatrix,
@@ -745,6 +747,10 @@ plotallvenn <- function(analysisresultsmatrix) {
                     "enhancer", "peak", "redorange")
   plot6 <- plotvenn(analysisresultsmatrix,
                     "both", "peak", "redorange")
+
+  graphics::title("Venn Diagrams Comparing the Two Methods",
+                  outer = TRUE,
+                  cex.main = 2)
 
 }
 
