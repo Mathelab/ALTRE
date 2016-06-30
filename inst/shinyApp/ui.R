@@ -91,8 +91,8 @@ body <- dashboardBody(
             ),
     tabItem(tabName = "loaddata",
             fluidRow(
-              HTML("<div class='col-sm-6' style='min-width:
-                   700px !important;'>"),
+              HTML("<div class='col-sm-4' style='min-width:
+                   600px !important;'>"),
               box(
                 title = strong("Load Metadata Spreadsheet"),
                 width = NULL,
@@ -111,16 +111,17 @@ body <- dashboardBody(
                              '.csv'),
                   "Lood CSV File"
                   ),
+                hr(),
                 dataTableOutput("table1")
                 ),
               HTML("</div>"),
-              infoBoxOutput("statusbox1", width = 6)
+              infoBoxOutput("statusbox1", width = 7)
               )
             ),
     tabItem(tabName = "definerep",
             fluidRow(
               HTML("<div class='col-sm-4' style='min-width:
-                   550px !important;'>"),
+                   400px !important;'>"),
               box(
                 title = strong("Load and Merge Annotation Files") ,
                 width = NULL,
@@ -143,14 +144,15 @@ body <- dashboardBody(
                   min = 2,
                   max = 10
                 ),
+                hr(),
                 actionButton("buttonmerge", strong("Load Files then Merge Replicates")),
                 hr(),
                 dataTableOutput("table2")
               ),
               HTML("</div>"),
-              infoBoxOutput("statusbox2", width = 7),
               HTML("<div class='col-sm-7' style='min-width:
                    550px !important;'>"),
+              infoBoxOutput("statusbox2", width = NULL),
               box(
                 title = "Barplot",
                 width = NULL,
@@ -163,7 +165,7 @@ body <- dashboardBody(
     tabItem(tabName = "combine",
             fluidRow(
               HTML("<div class='col-sm-4' style='min-width:
-                   300px !important;'>"),
+                   400px !important;'>"),
               box(
                 width = NULL,
                 solidHeader = TRUE,
@@ -178,13 +180,14 @@ body <- dashboardBody(
                           transcription start site.")
                 ),
                 hr(),
-                actionButton("buttonannot", strong("Combine and Annotate")),
+                h4(" Select Parameters"),
                 radioButtons(
                   "mergeradio",
                   label = h5("Merge"),
                   choices = list("TRUE" = "TRUE", "FALSE" = "FALSE"),
                   selected = "TRUE"
                 ),
+                hr(),
                 sliderInput(
                   "distTSS",
                   label = h5("Distance from TSS"),
@@ -225,12 +228,16 @@ body <- dashboardBody(
                                    max = 3000,
                                    value = 1000
                                    )
-                                 )
+                                 ),
+                hr(),
+                actionButton("buttonannot", strong("Combine and Annotate")),
+                hr()
                 ),
               HTML("</div>"),
-              infoBoxOutput("statusbox3", width = 8),
-              HTML("<div class='col-sm-8' style='min-width:
-                   500px !important;'>"),
+
+              HTML("<div class='col-sm-7' style='min-width:
+                   550px !important;'>"),
+              infoBoxOutput("statusbox3", width = NULL),
               box(
                 title = "Barplot",
                 width = NULL,
@@ -244,7 +251,7 @@ body <- dashboardBody(
     tabItem(tabName = "retrieve",
             fluidRow(
               HTML("<div class='col-sm-4' style='min-width:
-                   300px !important;'>"),
+                   400px !important;'>"),
               box(
                 width = NULL,
                 title = strong("Retrieve Read Counts"),
@@ -255,24 +262,27 @@ body <- dashboardBody(
                   tags$li(" Outputs a denisty plot of the lengths of genomic regions.")
                 ),
                 hr(),
-                actionButton("buttoncounts", strong("Retrieve Counts")),
-                hr(),
-                uiOutput("chooseref"),
-                hr(),
+                h4(" Select Parameters"),
                 radioButtons(
                   "chromradio",
-                  label = h5("Restrict Analysis to a Single Chromosome?"),
+                  label = strong("Restrict Analysis to a Single Chromosome?"),
                   choices = list("FALSE" = "FALSE","TRUE" = "TRUE"),
                   selected = "FALSE"
                 ),
                 conditionalPanel("input.chromradio == 'TRUE'",
-                uiOutput("chooseChrom")
-                )
+                                 uiOutput("chooseChrom")
+                ),
+                hr(),
+                uiOutput("chooseref"),
+                hr(),
+                actionButton("buttoncounts", strong("Retrieve Counts")),
+                hr()
               ),
               HTML("</div>"),
-              infoBoxOutput("statusbox4", width = 7),
               HTML("<div class='col-sm-7' style='min-width:
-                   500px !important;'>"),
+                   550px !important;'>"),
+              infoBoxOutput("statusbox4", width = NULL),
+
               box(
                 width = NULL,
                 title = "Density Plot",
@@ -284,7 +294,7 @@ body <- dashboardBody(
     tabItem(tabName = "definealtered",
             fluidRow(
               HTML("<div class='col-sm-4' style='min-width:
-                   300px !important;'>"),
+                   400px !important;'>"),
               box(
                 width = NULL,
                 title = strong("Define Altered Regions"),
@@ -294,10 +304,8 @@ body <- dashboardBody(
                    altered between sample types.")
                 ),
                 hr(),
-                actionButton("buttondefine", strong("Define Altered Regions")),
-                hr(),
-                h5(" Input function parameters used by DESeq2 to calculate
-                   adjusted p-values."),
+                h4(" Select function parameters used by DESeq2 to calculate
+                   adjusted p-values"),
 
                 sliderInput(
                   "alpha",
@@ -313,19 +321,22 @@ body <- dashboardBody(
                   max = 5,
                   value = 1,
                   step = 0.1
-                )
+                ),
+                hr(),
+                actionButton("buttondefine", strong("Define Altered Regions")),
+                hr()
               ),
               HTML("</div>"),
-              infoBoxOutput("statusbox5", width = 7),
               HTML("<div class='col-sm-7' style='min-width:
                    500px !important;'>"),
+              infoBoxOutput("statusbox5", width = NULL),
               HTML("</div>")
               )
             ),
     tabItem(tabName = "cataltered",
             fluidRow(
               HTML("<div class='col-sm-4' style='min-width:
-                   300px !important;'>"),
+                   400px !important;'>"),
               box(
                 width = NULL,
                 title = strong("Categorize Regions"),
@@ -337,9 +348,7 @@ body <- dashboardBody(
                           altered regulatory elements.")
                 ),
                 hr(),
-                actionButton("buttoncat", strong("Categorize Altered Regions")),
-                hr(),
-                h4("Parameters that define cell-type specific regulatory regions."),
+                h4("Select parameters that define cell-type specific regulatory regions"),
                 sliderInput(
                   "lfcSpecific",
                   label = h5("log2fold change cutoff for specific
@@ -358,7 +367,7 @@ body <- dashboardBody(
                   value = 0.01
                 ),
                 hr(),
-                h4("Parameters that define shared regulatory regions."),
+                h4("Select parameters that define shared regulatory regions"),
                 sliderInput(
                   "lfcShared",
                   label = h5("log2fold change cutoff for shared
@@ -374,7 +383,10 @@ body <- dashboardBody(
                   min = 0,
                   max = 1,
                   value = 0.05
-                )
+                ),
+                hr(),
+                actionButton("buttoncat", strong("Categorize Altered Regions")),
+                hr()
                 #,
                 # hr(),
                 # conditionalPanel("input.buttoncat > 0",
@@ -384,9 +396,9 @@ body <- dashboardBody(
                 #                  )
               ),
               HTML("</div>"),
-              infoBoxOutput("statusbox5b", width = 7),
               HTML("<div class='col-sm-7' style='min-width:
-                   500px !important;'>"),
+                   550px !important;'>"),
+              infoBoxOutput("statusbox5b", width = NULL),
               box(
                 width = NULL,
                 title = "Volcano Plot",
@@ -399,7 +411,7 @@ body <- dashboardBody(
     tabItem(tabName = "compare",
             fluidRow(
               HTML("<div class='col-sm-4' style='min-width:
-                   300px !important;'>"),
+                   400px !important;'>"),
               box(
                 width = NULL,
                 title = strong("Compare Methods"),
@@ -418,9 +430,9 @@ body <- dashboardBody(
                 dataTableOutput("table5")
               ),
               HTML("</div>"),
-              infoBoxOutput("statusbox8", width = 7),
               HTML("<div class='col-sm-7' style='min-width:
-                   500px !important;'>"),
+                   550px !important;'>"),
+              infoBoxOutput("statusbox8", width = NULL),
               box(
                 width = NULL,
                 title = "Venn Plot",
