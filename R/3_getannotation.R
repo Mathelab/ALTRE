@@ -183,8 +183,13 @@ combineAnnotatePeaks <- function(conspeaks,
     tableofinfo <- statscombineannotate(tableofinfo, resultuserinput, 2, 4)
 
     ### quick fix
-    tableofinfo <- plyr::name_rows(as.data.frame(tableofinfo))[ , c(3,1,2)]
-    colnames(tableofinfo)[1] <- "Condition"
+    tableofinfo <- as.data.frame(tableofinfo)
+    tableofinfo$Condition <- rownames(tableofinfo)
+    tableofinfo <- tableofinfo[ , c(3,1,2)]
+    rownames(tableofinfo) <- NULL
+    ##
+    #tableofinfo <- plyr::name_rows(as.data.frame(tableofinfo))[ , c(3,1,2)]
+    #colnames(tableofinfo)[1] <- "Condition"
     ###
 
     listtoreturn <- list(consPeaksAnnotated =
