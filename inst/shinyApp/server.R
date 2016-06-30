@@ -173,7 +173,7 @@ shinyServer(function(input, output, session) {
   output$chooseref <- renderUI({
     reflist <- unique(csvFile()$sample)
     selectInput("reference",
-                "Select which Biosample to act as Reference",
+                "Select which cell-type to act as reference",
                 reflist ,
                 selected = reflist[1])
   })
@@ -298,7 +298,7 @@ shinyServer(function(input, output, session) {
     else if (input$buttonannot > 0) {
       infoBox(
         "Status",
-        "Peaks Have Been Annotated (If you change the parameters, please press the button again). You Can Proceed to Step 4.",
+        "Peaks Have Been Annotated (If You Change the Parameters, Please Press Button Again). You Can Proceed to Step 4.",
         icon = icon("thumbs-up", lib = "glyphicon"),
         color = "green",
         fill = TRUE)

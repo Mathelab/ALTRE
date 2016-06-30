@@ -181,16 +181,17 @@ body <- dashboardBody(
                 ),
                 hr(),
                 h4(" Select Parameters"),
+                br(),
                 radioButtons(
                   "mergeradio",
-                  label = h5("Merge"),
+                  label = strong("Merge?"),
                   choices = list("TRUE" = "TRUE", "FALSE" = "FALSE"),
                   selected = "TRUE"
                 ),
                 hr(),
                 sliderInput(
                   "distTSS",
-                  label = h5("Distance from TSS"),
+                  label = strong("Select distance from TSS"),
                   min = 0,
                   max = 3000,
                   value = 1500
@@ -198,14 +199,14 @@ body <- dashboardBody(
                 hr(),
                 radioButtons(
                   "regionradio",
-                  label = h5("Region specific merging?"),
+                  label = strong("Region specific merging?"),
                   choices = list("TRUE" = "TRUE", "FALSE" = "FALSE")
                 ),
                 conditionalPanel("input.regionradio == 'FALSE'",
                                  sliderInput(
                                    "dist",
-                                   label = h5("Merge promoters and enhancers if
-                                              distance is less than "),
+                                   label = strong("Select upper threshold distance
+                                                  for merging promoters and enhancers"),
                                    min = 0,
                                    max = 3000,
                                    value = 0
@@ -214,16 +215,16 @@ body <- dashboardBody(
                 conditionalPanel("input.regionradio == 'TRUE'",
                                  sliderInput(
                                    "distenh",
-                                   label = h5("Merge enhancers distance
-                                              threshold"),
+                                   label = strong("Select distance
+                                              threshold for merging enhancers"),
                                    min = 0,
                                    max = 3000,
                                    value = 1500
                                    ),
                                  sliderInput(
                                    "distprom",
-                                   label = h5("Merge promoters distance
-                                              threshold"),
+                                   label = strong("Select distance
+                                              threshold for merging promoters"),
                                    min = 0,
                                    max = 3000,
                                    value = 1000
@@ -309,14 +310,14 @@ body <- dashboardBody(
 
                 sliderInput(
                   "alpha",
-                  label = h5("pvalue cutoff"),
+                  label = strong("Select pvalue cutoff"),
                   min = 0,
                   max = 1,
                   value = 0.01
                 ),
                 sliderInput(
                   "lfcThreshold",
-                  label = h5("log2fold change cutoff"),
+                  label = strong("Select log2fold change cutoff"),
                   min = 0,
                   max = 5,
                   value = 1,
@@ -351,7 +352,7 @@ body <- dashboardBody(
                 h4("Select parameters that define cell-type specific regulatory regions"),
                 sliderInput(
                   "lfcSpecific",
-                  label = h5("log2fold change cutoff for specific
+                  label = strong("Select log2fold change cutoff for specific
                              enhancers/promoters"),
                   min = 0,
                   max = 5,
@@ -360,7 +361,7 @@ body <- dashboardBody(
                 ),
                 sliderInput(
                   "pvalueSpecific",
-                  label = h5("pvalue cutoff for specific
+                  label = strong("Select pvalue cutoff for specific
                              enhancers/promoters"),
                   min = 0,
                   max = 1,
@@ -370,7 +371,7 @@ body <- dashboardBody(
                 h4("Select parameters that define shared regulatory regions"),
                 sliderInput(
                   "lfcShared",
-                  label = h5("log2fold change cutoff for shared
+                  label = strong("Select log2fold change cutoff for shared
                              enhancers/promoters"),
                   min = 0,
                   max = 5,
@@ -379,7 +380,7 @@ body <- dashboardBody(
                 ),
                 sliderInput(
                   "pvalueShared",
-                  label = h5("pvalue cutoff for shared enhancers/promoters"),
+                  label = strong("Select pvalue cutoff for shared enhancers/promoters"),
                   min = 0,
                   max = 1,
                   value = 0.05

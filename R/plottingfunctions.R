@@ -77,9 +77,11 @@ plotConsensusPeaks <- function(samplepeaks) {
 #' @export
 #'
 plotCombineAnnotatePeaks <- function(conspeaks) {
-  mydf <- conspeaks$mergestats
 
-  names(mydf) <- c("TotalNumber", "MeanLength")
+  # quick fix
+  mydf <- conspeaks$mergestats[ , c(2, 3)]
+  row.names(mydf) <- conspeaks$mergestats[ , 1]
+  ##
 
   if (nrow(mydf) == 1) {
     stop("No plot to show since merging was not performed
@@ -109,7 +111,7 @@ plotCombineAnnotatePeaks <- function(conspeaks) {
                 vjust = -.5) +
       scale_fill_brewer(palette = "Set2") +
       theme_bw(base_size = 12) +
-      theme(aspect.ratio = 1.7,
+      theme(aspect.ratio = 1.5,
             panel.grid.major = element_blank(),
             panel.grid.minor = element_blank()) +
       labs(x = "", y = "Number of Regulatory Regions") +
@@ -140,7 +142,7 @@ plotCombineAnnotatePeaks <- function(conspeaks) {
                 vjust = -.5) +
       scale_fill_brewer(palette = "Set2") +
       theme_bw(base_size = 12) +
-      theme(aspect.ratio = 1.7,
+      theme(aspect.ratio = 1.5,
             panel.grid.major = element_blank(),
             panel.grid.minor = element_blank()) +
       labs(x = "", y = "Mean length of Regulatory Regions") +
