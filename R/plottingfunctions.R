@@ -680,12 +680,12 @@ plotvenn <- function(analysisresultsmatrix,
   p$colors <- color2
   graphics::plot(p)
 
-  graphics::text(0.15, 0.6, controllabel, cex = 1.3)
-  graphics::text(0.75, 0.4, caselabel, cex = 1.3)
-  graphics::text(0.5, 0.5, shared, cex = 1.3)
+  graphics::text(0.15, 0.6, controllabel, cex = 1.1)
+  graphics::text(0.75, 0.4, caselabel, cex = 1.1)
+  graphics::text(0.5, 0.5, shared, cex = 1.1)
   title <- paste(method, region)
 
-  graphics::text(0.5, 0.99, title, cex = 1.9)
+  graphics::title(title, cex = 1.3)
 
   return(p)
 }
@@ -732,7 +732,7 @@ plotallvenn <- function(analysisresultsmatrix) {
       FALSE) {
     stop("The input is not a matrix!")
   }
-  graphics::par(mfrow = c(2, 3))
+  graphics::par(mfrow = c(2, 3), oma = c(0,0,2,0))
   plot1 <- plotvenn(analysisresultsmatrix,
                     "promoter", "intensity", "bluegreen")
   plot2 <- plotvenn(analysisresultsmatrix,
@@ -745,6 +745,10 @@ plotallvenn <- function(analysisresultsmatrix) {
                     "enhancer", "peak", "redorange")
   plot6 <- plotvenn(analysisresultsmatrix,
                     "both", "peak", "redorange")
+
+  graphics::title("Venn Diagrams Comparing the Two Methods",
+                  outer = TRUE,
+                  cex.main = 2)
 
 }
 

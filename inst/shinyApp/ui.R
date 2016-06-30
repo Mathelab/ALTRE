@@ -94,14 +94,14 @@ body <- dashboardBody(
               HTML("<div class='col-sm-6' style='min-width:
                    700px !important;'>"),
               box(
-                title = strong("Load Metadata Spreadsheet File"),
+                title = strong("Load Metadata Spreadsheet"),
                 width = NULL,
                 solidHeader = TRUE,
                 h5("This step does the following: "),
                 tags$ul(
-                  tags$li("Loads a metadata spreadsheet file with a csv file extention."),
-                  tags$li(" Prints out the contents of the file except for the
-                        first column (i.e. data filepaths)")
+                  tags$li("Loads a metadata spreadsheet with a csv file extention."),
+                  tags$li(" Prints out the contents of entire the file except for the
+                        first column, which contains the data filepaths")
                 ),
                 hr(),
                 fileInput(
@@ -128,12 +128,12 @@ body <- dashboardBody(
                 h5("This step does the following: "),
                 tags$ul(
                   tags$li("Loads biosample annotation files of DNase I hypersensitive
-                   sites (i.e peaks)"),
+                   sites (i.e. peaks)."),
                   tags$li(" Merges the bioreplicates of each biosample in order
                           to determine the consensus peaks, defined as genomic
                           regions that overlap in at least N of the bioreplicates."),
                   tags$li(" Outputs a barplot summary of the number of peaks in
-                          each replicate and in their merged consensus ")
+                          each replicate and in their merged consensus.")
                   ),
                 hr(),
                 numericInput(
@@ -175,7 +175,7 @@ body <- dashboardBody(
                   tags$li(" Annotates genomic regions with type specificity based
                           on whether each region is a candidate promoter or enhancer
                           as determined by user-defined distance from a
-                          transcription start site")
+                          transcription start site.")
                 ),
                 hr(),
                 actionButton("buttonannot", strong("Combine and Annotate")),
@@ -252,7 +252,7 @@ body <- dashboardBody(
                 tags$ul(
                   tags$li("Counts the number of reads in each regulatory region
                    for each sample type."),
-                  tags$li(" Outputs a denisty plot of the lenghts of genomic regions ")
+                  tags$li(" Outputs a denisty plot of the lengths of genomic regions.")
                 ),
                 hr(),
                 actionButton("buttoncounts", strong("Retrieve Counts")),
@@ -406,8 +406,8 @@ body <- dashboardBody(
                 h5("This step does the following: "),
                 tags$ul(
                   tags$li("Compares two methods of identifying altered regulatory
-                          regions.The first method uses peak presence and
-                          associated intensity ( i.e chromatin accessibility).
+                          regions. The first method uses peak presence and
+                          associated intensity (i.e chromatin accessibility).
                           The second method uses peak presence only as determined
                           by the peak caller."),
                   tags$li(" Outputs a venn plot")
@@ -444,12 +444,12 @@ body <- dashboardBody(
                      width = 11,
                      h5("This step does the following: "),
                      tags$ul(
-                       tags$li("Determine which pathways are overrepresented in
+                       tags$li("Determines which pathways are overrepresented in
                              altered promoters and enhancers as returned by
                              GO Enrichment Analysis restricted to the Molecular
-                             Function sub-ontology"),
+                             Function sub-ontology."),
                        tags$li("Outputs a heatmap plot of the enrichment analysis'
-                             results")
+                             results.")
                      ),
                      hr(),
                      actionButton("buttonpathwayMF",
@@ -477,12 +477,12 @@ body <- dashboardBody(
                    width = 11,
                    h5("This step does the following: "),
                    tags$ul(
-                     tags$li("Determine which pathways are overrepresented in
+                     tags$li("Determines which pathways are overrepresented in
                              altered promoters and enhancers as returned by
                              GO Enrichment Analysis restricted to the Biological
-                             Process sub-ontology"),
+                             Process sub-ontology."),
                      tags$li("Outputs a heatmap plot of the enrichment analysis'
-                             results")
+                             results.")
                    ),
                    hr(),
                    actionButton("buttonpathwayBP",
