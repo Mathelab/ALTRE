@@ -5,6 +5,7 @@
 The  package in the private repository can be installed from Github using the personal access token provided in the *auth_token* field
 
 ```{R}
+install.packages("devtools")
 devtools::install_github("rfarouni/PackageALTRE", auth_token ="d640aa4cfb2f3eed24af7cd5ffc8d6e486e021c3")
 ```
 
@@ -20,10 +21,10 @@ runShinyApp()
 
 ## Data
 
-A restricted subset of the data with one chromosome (i.e. chromosome 21) can be found on this [page](http://rfarouni.github.io/AltreDataRepo/). The  csv file is included and can be downloaded seperatly [here](https://raw.githubusercontent.com/rfarouni/AltreDataRepo/master/DNaseEncodeWindows.csv)
+A restricted subset of the data with one chromosome (i.e. chromosome 21) can be found on this [page](http://rfarouni.github.io/AltreDataRepo/). The  csv file is included and can be downloaded separately [here](https://raw.githubusercontent.com/rfarouni/AltreDataRepo/master/DNaseEncodeWindows.csv)
 
 
-To download the entire data, please use a *file download manager* to download the files from the links listed below. After you download the files, modify the datapath column of the csv file so that all of the rows contain the file path pointing to the location of the data files on your local machine.
+To download the entire data, please use a *file download manager* to download the files from the links listed below. After you download the files, modify the datapath column of the csv file so that all of the rows contain the file paths pointing to the location of the data files on your local machine.
 
 ## BAM files:
 
@@ -50,7 +51,7 @@ http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/wgEncod
 
 http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/wgEncodeUwDnaseSaecHotspotsRep2.broadPeak.gz
 
-## Blacklisted genomic regions for functional genomics analysis
+## Blacklisted genomic regions for functional genomics analysis (optional, not used)
 
 https://sites.google.com/site/anshulkundaje/projects/blacklists
 
@@ -63,10 +64,7 @@ https://sites.google.com/site/anshulkundaje/projects/blacklists
 To inculde the vignette in the installation package run
 
 ```{R}
-install.packages("devtools")
-biocLite("BiocCheck")
 devtools::install(build_vignettes = TRUE)
-BiocCheck("/home/rick/Documents/ALTRE")
 ```
 
 Make sure that the *vignette.Rmd*file contains the following commands in the header:
@@ -75,18 +73,11 @@ Make sure that the *vignette.Rmd*file contains the following commands in the hea
 author: "...."
 title: "ALTRE: vignette"
 date: "`r Sys.Date()`"
-output: 
-  BiocStyle::html_document:
-    toc: true
-  BiocStyle::pdf_document:
-    toc: true
+output: pdf_document
 vignette: >
   %\VignetteIndexEntry{ALTRE: vignette}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ```
 
-and the following command in the body:
-```{R}
-BiocStyle::markdown()
-```
+
