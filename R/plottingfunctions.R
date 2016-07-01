@@ -345,7 +345,7 @@ plotgetcounts <- function(countsconspeaks) {
 
 enrichHeatmap <- function(input,
                           title,
-                          pvalfilt = 0.001,
+                          pvalfilt = 0.01,
                           removeonlyshared = FALSE) {
   # input=input[[1]]
 
@@ -354,9 +354,9 @@ enrichHeatmap <- function(input,
          using the output from the enrichment analysis")
   }
 
-  if (is.data.frame(input$expt) == FALSE | nrow(input$expt) == 1 |
-      is.data.frame(input$reference) == FALSE | nrow(input$reference) == 1 |
-      is.data.frame(input$shared) == FALSE | nrow(input$shared) == 1 |
+  if (is.data.frame(input$expt) == FALSE |
+      is.data.frame(input$reference) == FALSE |
+      is.data.frame(input$shared) == FALSE |
       length(input) != 3 |
       all(names(input) != c("expt", "reference", "shared"))) {
     stop("The input is not a list of three dataframes or
@@ -595,7 +595,12 @@ multiplot <- function(..., plotlist = NULL, file, cols = 1, layout = NULL) {
 #' altre_peaks <- countanalysis(counts=counts_consPeaks,
 #'                              pval=0.01,
 #'                              lfcvalue=1)
-#' analysisresults <- resultsComparison(altre_peaks, reference= "A549")
+#' categaltre_peaks=categAltrePeaks(altre_peaks, 
+#'	lfctypespecific=1.5,
+#' 	lfcshared=1.2,
+#' 	pvaltypespecific=0.01,
+#' 	pvalshared=0.05)
+#' analysisresults <- comparePeaksAltre(categaltre_peaks, reference= "SAEC")
 #' plot1 <- plotvenn(analysisresults,
 #'                   region='enhancer',
 #'                   method='intensity')
@@ -604,6 +609,7 @@ multiplot <- function(..., plotlist = NULL, file, cols = 1, layout = NULL) {
 plotvenn <- function(analysisresultsmatrix,
                      region = "both", method = "intensity",
                      color = "redorange") {
+  analysisresultsmatrix <- analysisresultsmatrix[[1]]
   if (is.matrix(analysisresultsmatrix) ==
       FALSE) {
     stop("The input is not a matrix!")
@@ -721,16 +727,21 @@ plotvenn <- function(analysisresultsmatrix,
 #' altre_peaks <- countanalysis(counts=counts_consPeaks,
 #'                              pval=0.01,
 #'                              lfcvalue=1)
-#' analysisresults <- resultsComparison(altre_peaks, reference= "A549")
+#' categaltre_peaks=categAltrePeaks(altre_peaks,
+#'      lfctypespecific=1.5,
+#'      lfcshared=1.2,
+#'      pvaltypespecific=0.01,
+#'      pvalshared=0.05)
+#' analysisresults <- resultsComparison(altre_peaks, reference= "SAEC")
 #' plotallvenn(analysisresults)
 #' }
 #' @export
 
 
 plotallvenn <- function(analysisresultsmatrix) {
-  analysisresultsmatrix <- analysisresultsmatrix[[1]]
+#  analysisresultsmatrix <- analysisresultsmatrix[[1]]
 
-  if (is.matrix(analysisresultsmatrix) ==
+  if (is.matrix(analysisresultsmatrix[[1]]) ==
       FALSE) {
     stop("The input is not a matrix!")
   }
