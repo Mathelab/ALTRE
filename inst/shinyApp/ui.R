@@ -79,7 +79,6 @@ body <- dashboardBody(
   tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
   ),
-
   tabItems(
     tabItem(tabName = "about",
             tabPanel("About",
@@ -115,7 +114,10 @@ body <- dashboardBody(
                 dataTableOutput("table1")
                 ),
               HTML("</div>"),
-              infoBoxOutput("statusbox1", width = 7)
+              HTML("<div class='col-sm-6' style='min-width:
+                   600px !important;'>"),
+              infoBoxOutput("statusbox1", width = NULL),
+              HTML("</div>")
               )
             ),
     tabItem(tabName = "definerep",
@@ -145,7 +147,8 @@ body <- dashboardBody(
                   max = 10
                 ),
                 hr(),
-                actionButton("buttonmerge", strong("Load Files then Merge Replicates")),
+                actionButton("buttonmerge",
+                             strong("Load Files then Merge Replicates")),
                 hr(),
                 dataTableOutput("table2")
               ),
@@ -449,12 +452,11 @@ body <- dashboardBody(
         width = 12,
         tabPanel("Pathway Enrichment for Molecular Function",
                  fluidRow(
-                   infoBoxOutput("statusbox6", width = 11)
-                   ),
-                 fluidRow(
+                   HTML("<div class='col-sm-4' style='min-width:
+                   400px !important;'>"),
                    box(
+                     width = NULL,
                      title = strong("Pathway Enrichment for Molecular Function"),
-                     width = 11,
                      h5("This step does the following: "),
                      tags$ul(
                        tags$li("Determines which pathways are overrepresented in
@@ -465,57 +467,74 @@ body <- dashboardBody(
                              results.")
                      ),
                      hr(),
-                     actionButton("buttonpathwayMF",
-                                  strong("Run MF Pathway Enrichment")),
-                     hr(),
                      sliderInput(
                        "pathpvaluecutoffMF",
-                       label = h5("pvalue cutoff"),
+                       label = strong("Select pvalue cutoff"),
                        min = 0,
                        max = 1,
                        value = 0.01
                      ),
                      hr(),
+                     actionButton("buttonpathwayMF",
+                                  strong("Run MF Pathway Enrichment")),
+                     hr()
+                   ),
+                   HTML("</div>"),
+                   HTML("<div class='col-sm-7' style='min-width:
+                   550px !important;'>"),
+                   infoBoxOutput("statusbox6", width = NULL),
+                   box(
+                     width = NULL,
+                     title = "Heat Plot",
                      plotOutput('heatplotMF')
-                     )
-                   )
+                   ),
+                   HTML("</div>")
+                 )
                  ),
-        tabPanel("Pathway Enrichment for Biological Process",
-               fluidRow(
-                 infoBoxOutput("statusbox7", width = 11)
-                 ),
-               fluidRow(
-                 box(
-                   title = strong("Pathway Enrichment for Biological Process"),
-                   width = 11,
-                   h5("This step does the following: "),
-                   tags$ul(
-                     tags$li("Determines which pathways are overrepresented in
+       tabPanel("Pathway Enrichment for Biological Process",
+                fluidRow(
+                  HTML("<div class='col-sm-4' style='min-width:
+                       400px !important;'>"),
+                  box(
+                    width = NULL,
+                    title = strong("Pathway Enrichment for Biological Process"),
+                    h5("This step does the following: "),
+                    tags$ul(
+                      tags$li("Determines which pathways are overrepresented in
                              altered promoters and enhancers as returned by
                              GO Enrichment Analysis restricted to the Biological
                              Process sub-ontology."),
-                     tags$li("Outputs a heatmap plot of the enrichment analysis'
+                      tags$li("Outputs a heatmap plot of the enrichment analysis'
                              results.")
-                   ),
-                   hr(),
-                   actionButton("buttonpathwayBP",
-                                strong("Run BP Pathway Enrichment")),
-                   hr(),
-                   sliderInput(
-                     "pathpvaluecutoffBP",
-                     label = h5("pvalue cutoff"),
-                     min = 0,
-                     max = 1,
-                     value = 0.01
-                   ),
-                   hr(),
-                   plotOutput('heatplotBP')
-                   )
-                 )
-               )
+                    ),
+                    hr(),
+                    sliderInput(
+                      "pathpvaluecutoffBP",
+                      label = strong("Select pvalue cutoff"),
+                      min = 0,
+                      max = 1,
+                      value = 0.01
+                    ),
+                    hr(),
+                    actionButton("buttonpathwayBP",
+                                 strong("Run BP Pathway Enrichment")),
+                    hr()
+                  ),
+                  HTML("</div>"),
+                  HTML("<div class='col-sm-7' style='min-width:
+                       550px !important;'>"),
+                  infoBoxOutput("statusbox7", width = NULL),
+                  box(
+                    width = NULL,
+                    title = "Heat Plot",
+                    plotOutput('heatplotBP')
+                  ),
+                  HTML("</div>")
+                  )
+                )
+       )
       )
     )
-  )
 )
 
 shinyUI(
