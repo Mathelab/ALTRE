@@ -491,7 +491,7 @@ body <- dashboardBody(
                    HTML("</div>")
                  )
                  ),
-       tabPanel("Pathway Enrichment for Molecular Function",
+       tabPanel("Pathway Enrichment for Biological Process",
                 fluidRow(
                   HTML("<div class='col-sm-4' style='min-width:
                        400px !important;'>"),
