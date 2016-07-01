@@ -139,6 +139,9 @@ body <- dashboardBody(
                           each replicate and in their merged consensus.")
                   ),
                 hr(),
+                actionButton("buttonmerge",
+                             strong("Load Files then Merge Replicates")),
+                hr(),
                 numericInput(
                   "numOverlap",
                   "Choose the Minimum Number of Overlaping Genomic Regions N",
@@ -146,9 +149,6 @@ body <- dashboardBody(
                   min = 2,
                   max = 10
                 ),
-                hr(),
-                actionButton("buttonmerge",
-                             strong("Load Files then Merge Replicates")),
                 hr(),
                 dataTableOutput("table2")
               ),
@@ -182,6 +182,8 @@ body <- dashboardBody(
                           as determined by user-defined distance from a
                           transcription start site.")
                 ),
+                hr(),
+                actionButton("buttonannot", strong("Combine and Annotate")),
                 hr(),
                 h4(" Select Parameters"),
                 br(),
@@ -233,8 +235,7 @@ body <- dashboardBody(
                                    value = 1000
                                    )
                                  ),
-                hr(),
-                actionButton("buttonannot", strong("Combine and Annotate")),
+
                 hr()
                 ),
               HTML("</div>"),
@@ -266,6 +267,8 @@ body <- dashboardBody(
                   tags$li(" Outputs a denisty plot of the lengths of genomic regions.")
                 ),
                 hr(),
+                actionButton("buttoncounts", strong("Retrieve Counts")),
+                hr(),
                 h4(" Select Parameters"),
                 radioButtons(
                   "chromradio",
@@ -278,8 +281,6 @@ body <- dashboardBody(
                 ),
                 hr(),
                 uiOutput("chooseref"),
-                hr(),
-                actionButton("buttoncounts", strong("Retrieve Counts")),
                 hr()
               ),
               HTML("</div>"),
@@ -308,6 +309,8 @@ body <- dashboardBody(
                    altered between sample types.")
                 ),
                 hr(),
+                actionButton("buttondefine", strong("Define Altered Regions")),
+                hr(),
                 h4(" Select function parameters used by DESeq2 to calculate
                    adjusted p-values"),
 
@@ -326,8 +329,6 @@ body <- dashboardBody(
                   value = 1,
                   step = 0.1
                 ),
-                hr(),
-                actionButton("buttondefine", strong("Define Altered Regions")),
                 hr()
               ),
               HTML("</div>"),
@@ -351,6 +352,8 @@ body <- dashboardBody(
                   tags$li(" Outputs a volcano plot highlighting potential
                           altered regulatory elements.")
                 ),
+                hr(),
+                actionButton("buttoncat", strong("Categorize Altered Regions")),
                 hr(),
                 h4("Select parameters that define cell-type specific regulatory regions"),
                 sliderInput(
@@ -388,8 +391,6 @@ body <- dashboardBody(
                   max = 1,
                   value = 0.05
                 ),
-                hr(),
-                actionButton("buttoncat", strong("Categorize Altered Regions")),
                 hr()
                 #,
                 # hr(),
@@ -467,6 +468,9 @@ body <- dashboardBody(
                              results.")
                      ),
                      hr(),
+                     actionButton("buttonpathwayMF",
+                                  strong("Run MF Pathway Enrichment")),
+                     hr(),
                      sliderInput(
                        "pathpvaluecutoffMF",
                        label = strong("Select pvalue cutoff"),
@@ -474,9 +478,6 @@ body <- dashboardBody(
                        max = 1,
                        value = 0.01
                      ),
-                     hr(),
-                     actionButton("buttonpathwayMF",
-                                  strong("Run MF Pathway Enrichment")),
                      hr()
                    ),
                    HTML("</div>"),
@@ -508,6 +509,9 @@ body <- dashboardBody(
                              results.")
                     ),
                     hr(),
+                    actionButton("buttonpathwayBP",
+                                 strong("Run BP Pathway Enrichment")),
+                    hr(),
                     sliderInput(
                       "pathpvaluecutoffBP",
                       label = strong("Select pvalue cutoff"),
@@ -515,9 +519,6 @@ body <- dashboardBody(
                       max = 1,
                       value = 0.01
                     ),
-                    hr(),
-                    actionButton("buttonpathwayBP",
-                                 strong("Run BP Pathway Enrichment")),
                     hr()
                   ),
                   HTML("</div>"),
