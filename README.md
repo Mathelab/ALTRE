@@ -2,9 +2,21 @@
 
 ## Install From Github
 
+The  package in the private repository can be installed from Github using the personal access token provided in the *auth_token* field
+
 ```{R}
-devtools::install_github("rfarouni/PackageALTRE")
+devtools::install_github("rfarouni/PackageALTRE", auth_token ="d640aa4cfb2f3eed24af7cd5ffc8d6e486e021c3")
 ```
+
+### To Run
+
+To launch the Shiny app inside R, run
+
+```{R}
+library(ALTRE)
+runShinyApp()
+```
+
 
 ## Data
 
@@ -44,12 +56,7 @@ https://sites.google.com/site/anshulkundaje/projects/blacklists
 
 
 
-### To Run
 
-To run the shiny app inside R Package type-in
-```{R}
-runShinyApp()
-```
 
 ##  To build from source (Optional)
 
