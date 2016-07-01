@@ -10,10 +10,10 @@ ALTRE(ALTered Regulatory Elements) is a software package that streamlines and si
 
 Chromatin accessibility data maps the location of regulatory elements (REs), including enhancers and promoters.  REs are involved in regulating gene transcription – they control genes and pathways that can be investigated as putative therapeutic targets, or they may serve as targets themselves. Chromatin accessibility assays such as FAIRE-seq, ATAC-seq, and DHS-seq can identify the location of regulatory regions genome-wide by identifying “open” chromatin (e.g. euchromatin).  Identifying regulatory regions that differ between cell types, such as cancerous and noncancerous cell lines and tissues, holds promise for identifying new mechanisms involved in cellular development and disease progression. While assays for defining regulatory regions are well established, there are currently few workflows that guide newcomers from aligned reads and peak calls to meaningful results (putative pathways and genes for further investigation). 
 
-#### Questions
+### Questions
 For any questions or issues that arise from using ALTRE, please contact XXX
 
-#### How to Get Started and Load Data
+### How to Get Started and Load Data
 
 To get started, load in a CSV (comma-separated-values) in step 1 on the left hand side.
 The CSV file should contain the following five columns:
@@ -28,33 +28,30 @@ For convenience and to test out ALTRE, we have created a restricted subset of th
 
 To download the corresponding data in its entirety, please use a *file download manager* to download the files from the links listed below. After you download the files, modify the datapath column of the csv file so that all of the rows contain the file paths pointing to the location of the data files on your local machine.
 
-## BAM files:
+#### *BAM files:*
 
-### A549:
+#### A549:
 https://www.encodeproject.org/files/ENCFF001CLE/@@download/ENCFF001CLE.bam
 
 https://www.encodeproject.org/files/ENCFF001CLJ/@@download/ENCFF001CLJ.bam
 
-### SAEC:
+#### SAEC:
 https://www.encodeproject.org/files/ENCFF001EFI/@@download/ENCFF001EFI.bam
 
 https://www.encodeproject.org/files/ENCFF001EFN/@@download/ENCFF001EFN.bam
 
-## BED files:
+#### *BED files:*
 
-### A549:
+#### A549:
 http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/wgEncodeUwDnaseA549HotspotsRep1.broadPeak.gz
 
 http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/wgEncodeUwDnaseA549HotspotsRep2.broadPeak.gz
 
 
-### SAEC:
+#### SAEC:
 http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/wgEncodeUwDnaseSaecHotspotsRep1.broadPeak.gz
 
 http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/wgEncodeUwDnaseSaecHotspotsRep2.broadPeak.gz
 
-## Blacklisted genomic regions for functional genomics analysis (optional, not used)
-
-https://sites.google.com/site/anshulkundaje/projects/blacklists
 
 
