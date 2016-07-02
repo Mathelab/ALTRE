@@ -8,7 +8,7 @@ the pathway in enrichment of both type-specific (increased or decreased
 log2fold change, low p-value) and shared (no change, higher p-value)
 regulatory regions is plotted.}
 \usage{
-enrichHeatmap(input, title, pvalfilt = 0.001, removeonlyshared = FALSE)
+enrichHeatmap(input, title, pvalfilt = 0.01, removeonlyshared = FALSE)
 }
 \arguments{
 \item{input}{results from enrichment analysis}

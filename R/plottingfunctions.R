@@ -277,24 +277,66 @@ plotCountAnalysis <- function(altrepeakscateg) {
 #' }
 #' @export
 #'
-#plotDistCountAnalysis <- function(analysisresults, counts) {
-#	readcounts=counts$regioncounts
-#	errortest=try(SummarizedExperiment::assay(readcounts), silent=TRUE)
-#	if (inherits(errortest, 'try-error')==TRUE){
-#	  stop("The input for the readcounts arguement is not a summerized experiment object!")
-#	}
+plotDistCountAnalysis <- function(analysisresults, counts) {
+	readcounts=counts$regioncounts
+	analysisresults=analysisresults[[1]]
+	errortest=try(SummarizedExperiment::assay(readcounts), silent=TRUE)
+	if (inherits(errortest, 'try-error')==TRUE){
+	  stop("The input for the readcounts arguement is not a summerized experiment object!")
+	}
 
-#	if (is.data.frame(analysisresults)==FALSE)
-#	{stop("The input for the analysisresults arguement is not a dataframe!")
-#
-#	}
-#
-#	# Check that counts and analysisresults are in the same order
-#	countnames=rowRanges(readcounts)$seqnames
-#
-#	
-#	sampleinfo=as.data.frame(rowRanges(readcounts))
+	if (is.data.frame(analysisresults)==FALSE)
+	{stop("The input for the analysisresults arguement is not a dataframe!")
 
+	}
+
+	# Check that counts and analysisresults are in the same order
+	countsinfo=as.data.frame(rowRanges(readcounts))
+	countcoord=paste0(countsinfo$seqnames,countsinfo$start,countsinfo$end)
+	analcoord=paste0(analysisresults$chr,analysisresults$start,analysisresults$stop)
+	
+	if(!all.equal(analcoord,countcoord)) {
+	    stop("The peaks in the analysisresults and counts are not the same")
+	}
+
+	PEcateg=analysisresults$region
+	altrecateg=analysisresults$REaltrecateg
+	samplecateg=
+
+	# Get log2FPM values:
+	log2FPM=log2(fpkm(readcounts,robust=TRUE)+0.001)
+	# Average log2FPM values over replicats:
+	sampletypes=colData(readcounts)$sample
+	meanlog2FPM=c()
+	for (i in unique(sampletypes)) {
+		samp=which(sampletypes==i)
+		meanlog2FPM=cbind(meanlog2FPM,
+			as.numeric(apply(log2FPM[,samp],1,mean)))
+	}
+	colnames(meanlog2FPM)=unique(sampletypes)
+
+	mydf=data.frame(meanlog2FPM=meanlog2FPM,
+	    PEcateg=PEcateg,
+	    altrecateg=altrecateg)
+
+        meltdf=reshape2::melt(mydf)
+	meltdf$variable=gsub("meanlog2FPM.","",meltdf$variable)
+
+	boxplot=ggplot(meltdf, aes_string(x="PEcateg", y="value")) +
+             geom_boxplot(aes_string(fill="altrecateg"),position = position_dodge(width = .8)) +
+	     facet_grid(.~variable) +
+	     scale_fill_manual(values=c("grey","salmon","darkgreen","blue")) +
+             theme_bw() + ggtitle("Distribution of Normalized Counts") +
+             xlab("") + ylab("log2(FPKM)") +
+        	theme(axis.line = element_line(colour = "black"),
+                        axis.title=element_text(size=12,face="bold"),
+                        plot.title=element_text(size=14,face="bold"),
+                        panel.grid.major = element_blank(),
+                        panel.grid.minor = element_blank(),
+                        panel.background = element_blank(),
+                        legend.key=element_blank())
+    return(boxplot)
+}
 
 ###############################################################################
 

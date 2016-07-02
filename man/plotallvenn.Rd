@@ -40,7 +40,12 @@ counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
 altre_peaks <- countanalysis(counts=counts_consPeaks,
                              pval=0.01,
                              lfcvalue=1)
-analysisresults <- resultsComparison(altre_peaks, reference= "A549")
+categaltre_peaks=categAltrePeaks(altre_peaks,
+     lfctypespecific=1.5,
+     lfcshared=1.2,
+     pvaltypespecific=0.01,
+     pvalshared=0.05)
+analysisresults <- resultsComparison(altre_peaks, reference= "SAEC")
 plotallvenn(analysisresults)
 }
 }
