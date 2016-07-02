@@ -156,7 +156,7 @@ plotCombineAnnotatePeaks <- function(conspeaks) {
 #' Given the output from getcounts, plot a density plot
 #'  of log2 RPKM values of regulation regions
 #'
-#' @param altrepeakscateg output generated from getcounts
+#' @param altrepeakscateg output generated from countanalysis() then categAltrePeaks()
 #'
 #' @return a ggplot
 #'
@@ -235,6 +235,65 @@ plotCountAnalysis <- function(altrepeakscateg) {
   return(NULL)
 }
 
+###############################################################################
+#' Creates a boxplot to see the distribution of read counts in type-specific and shared enhancers
+#'
+#' Takes the rlog transformation of the RRKM (Reads Per Kilobase of transcript per Million)
+#' of the read counts of type-specific and shared regulatory regions and plots
+#' the distribution of those read counts in all sample types analyzed in the workflow.
+#'
+#' @param altrepeakscateg output generated from countanalysis() then categAltrePeaks()
+#'
+#' @return a ggplot
+#'
+#' @examples
+#' \dontrun{
+#' dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
+#' csvfile <- file.path(dir, 'lung.csv')
+#' sampleinfo <- loadCSVFile(csvfile)
+#' samplePeaks <- loadBedFiles(sampleinfo)
+#' consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
+#' plotConsensusPeaks(samplepeaks=consPeaks)
+#' TSSannot<- getTSS()
+#' consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
+#'                                           TSS = TSSannot,
+#'                                           merge = TRUE,
+#'                                           regionspecific = TRUE,
+#'                                           mergedistenh = 1500,
+#'                                           mergedistprom = 1000)
+#' counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
+#'                               sampleinfo = sampleinfo,
+#'                               reference = 'SAEC',
+#'                               chrom = 'chr21')
+#' altre_peaks <- countanalysis(counts = counts_consPeaks,
+#'                              pval = 0.01,
+#'                              lfcvalue = 1)
+#' categaltre_peaks <- categAltrePeaks(altre_peaks,
+#'                                     lfctypespecific = 1.5,
+#'                                     lfcshared = 1.2,
+#'                                     pvaltypespecific = 0.01,
+#'                                     pvalshared = 0.05)
+#' plotDistCountAnalysis(categaltre_peaks, counts_consPeaks)
+#' }
+#' @export
+#'
+#plotDistCountAnalysis <- function(analysisresults, counts) {
+#	readcounts=counts$regioncounts
+#	errortest=try(SummarizedExperiment::assay(readcounts), silent=TRUE)
+#	if (inherits(errortest, 'try-error')==TRUE){
+#	  stop("The input for the readcounts arguement is not a summerized experiment object!")
+#	}
+
+#	if (is.data.frame(analysisresults)==FALSE)
+#	{stop("The input for the analysisresults arguement is not a dataframe!")
+#
+#	}
+#
+#	# Check that counts and analysisresults are in the same order
+#	countnames=rowRanges(readcounts)$seqnames
+#
+#	
+#	sampleinfo=as.data.frame(rowRanges(readcounts))
 
 
 ###############################################################################
