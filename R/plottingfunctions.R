@@ -242,7 +242,7 @@ plotCountAnalysis <- function(altrepeakscateg) {
 #' of the read counts of type-specific and shared regulatory regions and plots
 #' the distribution of those read counts in all sample types analyzed in the workflow.
 #'
-#' @param altrepeakscateg output generated from countanalysis() then categAltrePeaks()
+#' @param analysisresults output generated from countanalysis() then categAltrePeaks()
 #' @param counts output generated from getcounts()
 #'
 #' @return a ggplot
@@ -292,7 +292,7 @@ plotDistCountAnalysis <- function(analysisresults, counts) {
 	}
 
 	# Check that counts and analysisresults are in the same order
-	countsinfo=as.data.frame(rowRanges(readcounts))
+	countsinfo=as.data.frame(SummarizedExperiment::rowRanges(readcounts))
 	countcoord=paste0(countsinfo$seqnames,countsinfo$start,countsinfo$end)
 	analcoord=paste0(analysisresults$chr,analysisresults$start,analysisresults$stop)
 	
@@ -305,7 +305,7 @@ plotDistCountAnalysis <- function(analysisresults, counts) {
 	samplecateg=
 
 	# Get log2FPM values:
-	log2FPM=log2(fpkm(readcounts,robust=TRUE)+0.001)
+	log2FPM=log2(DESeq2::fpkm(readcounts,robust=TRUE)+0.001)
 	# Average log2FPM values over replicats:
 	sampletypes=colData(readcounts)$sample
 	meanlog2FPM=c()
@@ -867,159 +867,3 @@ plotallvenn <- function(analysisresultsmatrix) {
 
 }
 
-
-#' Creates a custom track for visualization on genome browser
-#'
-#' Creates a colors coded HOTSPOT (bed) file for visualization in UCSC genome
-#' browser: red indicates increased log2fold change/low p-value, blue indicates
-#' decreased lod2fold change/low p-value, and purple indicates regions
-#' with little to no change and insignificant p-values. Based on the log2fold
-#' change and p-value inputs, there is a possibility that some regions will not
-#' fulfill any of the supplied criteria ("in-between" shared and type-specific),
-#' they are colored grey.
-#'
-#' @param analysisresults analysisresults of count analysis
-#' @param lfctypespecific log2fold change for type specific enhancers/promoters
-#' @param lfcshared log2fold chance for shared enhancers/promoters
-#' @param pvaltypespecific p-value for type specific enhancers/promoters
-#' @param pvalshared p-value for shared enhancers/promoters
-#' @param remove removes filtered out regions
-#' @param uncatagorized color of track for uncategorized regions
-#' @param referencespecific color of track for reference specific regions
-#' @param diseasespecific color of track for disease specific regions
-#' @param shared color of track for shared regions
-#' @param filteredout color of track for regions that are filtered out
-#'
-#' @examples
-#' \dontrun{
-#' writeTracks(categaltre_peaks)
-#' }
-#'
-#' @export
-#'
-writeTracks <- function(analysisresults,
-                             lfctypespecific = 1.5,
-                             lfcshared = 1.2,
-                             pvaltypespecific = 0.01,
-                             pvalshared = 0.05,
-                             remove = FALSE,
-                             uncatagorized = "turquoise",
-                             referencespecific = "red",
-                             diseasespecific = "blue",
-                             shared = "purple",
-                             filteredout = "grey") {
-
-  analysisresults <- analysisresults$analysisresults
-
-   if (is.data.frame(analysisresults) == FALSE) { stop('The input is not a
-   dataframe!' ) }
-
-  colors <- c()
-  for (type in c(uncatagorized,
-                 referencespecific,
-                 diseasespecific,
-                 shared,
-                 filteredout)) {
-    if (type == "red") {
-      type <- "255,0,0"
-    } else if (type == "orange") {
-      type <- "255,165,0"
-    } else if (type == "yellow")
-      type <- "255,255,0" else if (type == "green")
-        type <- "0,255,0" else if (type == "blue")
-          type <- "0,0,255" else if (type == "purple")
-            type <- "160,32,240" else if (type == "pink")
-              type <- "255,192,203" else if (type == "salmon")
-                type <- "250,128,114" else if (type == "turquoise")
-                  type <- "64,224,208" else if (type == "grey")
-                    type <- "190,190,190" else if (type == "black")
-                      type <- "0,0,0" else if (type == "white")
-                        type <- "255,255,255"
-                      colors <- c(colors, type)
-  }
-
-  uncatagorized <- colors[1]
-  referencespecific <- colors[2]
-  diseasespecific <- colors[3]
-  shared <- colors[4]
-  filteredout <- colors[5]
-
-  filename <- deparse(substitute(analysisresults))
-  bedfile <- analysisresults[, c(7:9)]
-  bedfile$name <- paste(analysisresults[, 10],
-                        ",l2fc:",
-                        round(analysisresults[ , 2], digits = 4),
-                        ",pval:",
-                        sprintf("%0.7g", analysisresults[, 5]),
-                        sep = "")
-  bedfile$score <- "0"
-  bedfile$strand <- "+"
-  bedfile$thickStart <- analysisresults$start
-  bedfile$thickEnd <- analysisresults$start
-  # create the columns necessary for bed files
-  bedfile$itemRgb <- uncatagorized
-  bedfile$itemRgb <-
-    ifelse((!(is.na(
-      analysisresults$padj
-    ))) & analysisresults$log2FoldChange >
-      lfctypespecific &
-      analysisresults$padj < pvaltypespecific,
-    diseasespecific,
-    bedfile$itemRgb
-    )
-  # mark cancer specific with blue
-  bedfile$itemRgb <-
-    ifelse((!(is.na(
-      analysisresults$padj
-    ))) & analysisresults$log2FoldChange <
-      -lfctypespecific &
-      analysisresults$padj < pvaltypespecific,
-    referencespecific,
-    bedfile$itemRgb
-    )
-  # mark reference specific with red
-  bedfile$itemRgb <-
-    ifelse((analysisresults$padj > pvalshared) &
-             analysisresults$log2FoldChange > -lfcshared &
-             analysisresults$log2FoldChange < lfcshared &
-             analysisresults$padj > pvalshared,
-           shared,
-           bedfile$itemRgb
-    )
-  # mark shared regions with purple
-  bedfile$itemRgb <-
-    ifelse(is.na(bedfile$itemRgb), filteredout, bedfile$itemRgb)
-
-  if (remove == TRUE) {
-    bedfile <- bedfile[bedfile$itemRgb != filteredout, ]
-  }
-
-  # create the bed file in an object
-  trackline <-
-    c(
-      paste0(
-        "track name=\"",
-        substitute(filename),
-        "\" description=\"",
-        substitute(filename),
-        "demonstration\" visibility=2 itemRgb=\"On\""
-      )
-    )
-  # create the trackline
-  utils::write.table(
-    trackline,
-    file = paste0(noquote(substitute(filename)),
-                  "genomebrowser.bed"),
-    row.names = FALSE,
-    col.names = FALSE,
-    quote = FALSE
-  )
-  utils::write.table(
-    bedfile,
-    file = paste0(noquote(substitute(filename)), "genomebrowser.bed"),
-    row.names = FALSE,
-    col.names = FALSE,
-    append = TRUE,
-    quote = FALSE
-  )
-}
