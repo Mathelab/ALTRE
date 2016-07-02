@@ -55,24 +55,7 @@ comparePeaksAltre <- function(analysisresults,
   analysisresults <- analysisresults[[1]]
 
   if (!is.data.frame(analysisresults) ||
-      !all.equal(
-        colnames(analysisresults),
-        c(
-          "baseMean",
-          "log2FoldChange",
-          "lfcSE",
-          "stat",
-          "pvalue",
-          "padj",
-          "chr",
-          "start",
-          "stop",
-          "region",
-          "A549",
-          "SAEC",
-          "REaltrecateg"
-        )
-      )) {
+      !(reference %in% colnames(analysisresults))  ){
     stop("Make sure the output of the analysis is from categAltrePeaks() function")
   }
 

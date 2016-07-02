@@ -156,7 +156,7 @@ plotCombineAnnotatePeaks <- function(conspeaks) {
 #' Given the output from getcounts, plot a density plot
 #'  of log2 RPKM values of regulation regions
 #'
-#' @param altrepeakscateg output generated from getcounts
+#' @param altrepeakscateg output generated from countanalysis() then categAltrePeaks()
 #'
 #' @return a ggplot
 #'
@@ -235,7 +235,109 @@ plotCountAnalysis <- function(altrepeakscateg) {
   return(NULL)
 }
 
+###############################################################################
+#' Creates a boxplot to see the distribution of read counts in type-specific and shared enhancers
+#'
+#' Takes the rlog transformation of the RRKM (Reads Per Kilobase of transcript per Million)
+#' of the read counts of type-specific and shared regulatory regions and plots
+#' the distribution of those read counts in all sample types analyzed in the workflow.
+#'
+#' @param altrepeakscateg output generated from countanalysis() then categAltrePeaks()
+#' @param counts output generated from getcounts()
+#'
+#' @return a ggplot
+#'
+#' @examples
+#' \dontrun{
+#' dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
+#' csvfile <- file.path(dir, 'lung.csv')
+#' sampleinfo <- loadCSVFile(csvfile)
+#' samplePeaks <- loadBedFiles(sampleinfo)
+#' consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
+#' plotConsensusPeaks(samplepeaks=consPeaks)
+#' TSSannot<- getTSS()
+#' consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
+#'                                           TSS = TSSannot,
+#'                                           merge = TRUE,
+#'                                           regionspecific = TRUE,
+#'                                           mergedistenh = 1500,
+#'                                           mergedistprom = 1000)
+#' counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
+#'                               sampleinfo = sampleinfo,
+#'                               reference = 'SAEC',
+#'                               chrom = 'chr21')
+#' altre_peaks <- countanalysis(counts = counts_consPeaks,
+#'                              pval = 0.01,
+#'                              lfcvalue = 1)
+#' categaltre_peaks <- categAltrePeaks(altre_peaks,
+#'                                     lfctypespecific = 1.5,
+#'                                     lfcshared = 1.2,
+#'                                     pvaltypespecific = 0.01,
+#'                                     pvalshared = 0.05)
+#' plotDistCountAnalysis(categaltre_peaks, counts_consPeaks)
+#' }
+#' @export
+#'
+plotDistCountAnalysis <- function(analysisresults, counts) {
+	readcounts=counts$regioncounts
+	analysisresults=analysisresults[[1]]
+	errortest=try(SummarizedExperiment::assay(readcounts), silent=TRUE)
+	if (inherits(errortest, 'try-error')==TRUE){
+	  stop("The input for the readcounts arguement is not a summerized experiment object!")
+	}
 
+	if (is.data.frame(analysisresults)==FALSE)
+	{stop("The input for the analysisresults arguement is not a dataframe!")
+
+	}
+
+	# Check that counts and analysisresults are in the same order
+	countsinfo=as.data.frame(rowRanges(readcounts))
+	countcoord=paste0(countsinfo$seqnames,countsinfo$start,countsinfo$end)
+	analcoord=paste0(analysisresults$chr,analysisresults$start,analysisresults$stop)
+	
+	if(!all.equal(analcoord,countcoord)) {
+	    stop("The peaks in the analysisresults and counts are not the same")
+	}
+
+	PEcateg=analysisresults$region
+	altrecateg=analysisresults$REaltrecateg
+	samplecateg=
+
+	# Get log2FPM values:
+	log2FPM=log2(fpkm(readcounts,robust=TRUE)+0.001)
+	# Average log2FPM values over replicats:
+	sampletypes=colData(readcounts)$sample
+	meanlog2FPM=c()
+	for (i in unique(sampletypes)) {
+		samp=which(sampletypes==i)
+		meanlog2FPM=cbind(meanlog2FPM,
+			as.numeric(apply(log2FPM[,samp],1,mean)))
+	}
+	colnames(meanlog2FPM)=unique(sampletypes)
+
+	mydf=data.frame(meanlog2FPM=meanlog2FPM,
+	    PEcateg=PEcateg,
+	    altrecateg=altrecateg)
+
+        meltdf=reshape2::melt(mydf)
+	meltdf$variable=gsub("meanlog2FPM.","",meltdf$variable)
+
+	boxplot=ggplot(meltdf, aes_string(x="PEcateg", y="value")) +
+             geom_boxplot(aes_string(fill="altrecateg"),position = position_dodge(width = .8)) +
+	     facet_grid(.~variable) +
+	     scale_fill_manual(values=c("grey","salmon","darkgreen","blue")) +
+             theme_bw() + ggtitle("Distribution of Normalized Counts") +
+             xlab("") + ylab("log2(FPKM)") +
+        	theme(axis.line = element_line(colour = "black"),
+                        axis.title=element_text(size=12,face="bold"),
+                        plot.title=element_text(size=14,face="bold"),
+                        panel.grid.major = element_blank(),
+                        panel.grid.minor = element_blank(),
+                        panel.background = element_blank(),
+                        legend.key=element_blank())
+    return(boxplot)
+}
 
 ###############################################################################
 

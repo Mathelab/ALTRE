@@ -60,49 +60,9 @@ countanalysis <- function(counts, pval = 0.01,
 
    fulldataframe <- cbind(resultsdataframe,
 	grangesdataframe)
-   colnames(fulldataframe)[which(colnames(fulldataframe) == "meta.region")] = "region"
-   colnames(fulldataframe)[which(colnames(fulldataframe) == "meta.A549")] = "A549"
-   colnames(fulldataframe)[which(colnames(fulldataframe) == "meta.SAEC")] = "SAEC"
-
-  # create a dataframe with results and position
-  # and filter by pval and lfcvalue
-#  resultsdataframe <- as.data.frame(countsresultsalphalfc)
-#  keepers <- intersect(which(resultsdataframe$padj < pval),
-#                       which(abs(resultsdataframe$log2FoldChange) > lfcvalue))
-#
-#  # change row labels to dataframe
-#  originalgranges <- SummarizedExperiment::rowRanges(countsdds)
-#  grangesdataframe <- grangestodataframe(originalgranges)
-#
-#  # create a dataframe with results and position
-#  fulldataframe <- cbind(resultsdataframe[keepers, ],
-#                         grangesdataframe[keepers, ])
-#
-#  ####################### Get some stats
-#  tempstats <- table(fulldataframe$meta.region[
-#    which(fulldataframe$log2FoldChange < 0)])
-#  downproms <- as.numeric(tempstats["promoter"])
-#  downenh <- as.numeric(tempstats["enhancer"])
-#  tempstats <- table(fulldataframe$meta.region[
-#    which(fulldataframe$log2FoldChange > 0)])
-#  upproms <- as.numeric(tempstats["promoter"])
-#  upenh <- as.numeric(tempstats["enhancer"])
-#
-#  stats <- matrix(c(upproms, downproms, upenh,
-#                    downenh), nrow = 2)
-#  colnames(stats) <- c("Promoters", "Enhancers")
-#  stats <- as.data.frame(stats)
-#  stats <- cbind(c("UP", "DOWN"), stats)
-#  names(stats)[1] <- "REtype"
-#
-#  ####################### differential REs Find NAs to remove them,
-#  ####################### thereby avoiding printing warnings
-#  nonas <- which(!is.na(resultsdataframe$padj))
-#  toplot <- resultsdataframe[nonas, ]
-#  keepers <- intersect(which(toplot$padj < pval),
-#                       which(abs(toplot$log2FoldChange) > lfcvalue))
-#  toplot$col <- rep("non-altered", nrow(toplot))
-#  toplot$col[keepers] <- "altered"
+   #Rename some columns
+   metacols=grep("meta",colnames(fulldataframe))
+   colnames(fulldataframe)[metacols]=gsub("metab.","",colnames(fulldataframe)[metacols])   
 
   return(list(results = as.data.frame(fulldataframe)))  #,
    #           stats = stats,
