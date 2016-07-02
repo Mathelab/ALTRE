@@ -243,6 +243,7 @@ plotCountAnalysis <- function(altrepeakscateg) {
 #' the distribution of those read counts in all sample types analyzed in the workflow.
 #'
 #' @param altrepeakscateg output generated from countanalysis() then categAltrePeaks()
+#' @param counts output generated from getcounts()
 #'
 #' @return a ggplot
 #'
