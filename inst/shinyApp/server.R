@@ -186,6 +186,13 @@ shinyServer(function(input, output, session) {
 
   })
 
+  output$downloadData <- downloadHandler(
+    filename = "ALTREtrack.bed",
+    content = function(con) {
+      writeBedFile(req(catAlteredPeaks()), con)
+    }
+  )
+
   ############################################################################
   #tables
   output$table1 <- renderDataTable({
@@ -234,16 +241,20 @@ shinyServer(function(input, output, session) {
     plotCountAnalysis(req(catAlteredPeaks()))
   })
 
+  output$boxplot <- renderPlot({
+    plotDistCountAnalysis(req(catAlteredPeaks()), req(countsPeaks()))
+  })
+
   output$heatplotMF <- renderPlot({
-      enrichHeatmap(pathewayOutputMF(), title = "GO:MF, p<0.01")
+      enrichHeatmap(req(pathewayOutputMF()), title = "GO:MF, p<0.01")
   })
 
   output$heatplotBP <- renderPlot({
-        enrichHeatmap(pathewayOutputBP(), title = "GO:BP, p<0.01")
+        enrichHeatmap(req(pathewayOutputBP()), title = "GO:BP, p<0.01")
   })
 
   output$vennplot <- renderPlot({
-    plotallvenn(compareMethods())
+    plotallvenn(req(compareMethods()))
   })
 
   ############################################################################
@@ -268,7 +279,7 @@ shinyServer(function(input, output, session) {
   })
 
   output$statusbox2 <- renderInfoBox ({
-    if (input$buttonmerge == 0) {
+   if (input$buttonmerge == 0) {
       infoBox(
         "Status",
         "Merge Button Not Clicked Yet!",
@@ -276,7 +287,7 @@ shinyServer(function(input, output, session) {
         color = "aqua",
         fill = TRUE)
       }
-    else if(input$buttonmerge > 0) {
+    else if(input$buttonmerge > 0 && !is.null(mergedPeaks())) {
       infoBox(
         "Status",
         "Replicates Have Been Merged. You Can Proceed to Step 3.",
@@ -295,7 +306,7 @@ shinyServer(function(input, output, session) {
         color = "aqua",
         fill = TRUE)
       }
-    else if (input$buttonannot > 0) {
+    else if (input$buttonannot > 0 && !is.null(annotatePeaks())) {
       infoBox(
         "Status",
         "Peaks Have Been Annotated (If You Change the Parameters, Please Press Button Again). You Can Proceed to Step 4.",
@@ -314,7 +325,7 @@ shinyServer(function(input, output, session) {
         color = "aqua",
         fill = TRUE)
       }
-    else if (input$buttoncounts > 0) {
+    else if (input$buttoncounts > 0 && !is.null(countsPeaks())) {
       infoBox(
         "Status",
         "Counts Have Been Retrieved. You Can Proceed to Step 5.",
@@ -332,7 +343,7 @@ shinyServer(function(input, output, session) {
         color = "aqua",
         fill = TRUE
       )}
-    else if (input$buttondefine > 0) {
+    else if (input$buttondefine > 0 && !is.null(alteredPeaks())) {
       infoBox(
         "Status", "Altered Regions Have Been Defined.
         You Can Proceed to Step 6.",
@@ -351,7 +362,7 @@ shinyServer(function(input, output, session) {
         color = "aqua",
         fill = TRUE
       )}
-    else if (input$buttoncat > 0) {
+    else if (input$buttoncat > 0 && !is.null(catAlteredPeaks())) {
       infoBox(
         "Status", "Altered Regions Have Been Categorized. You Can Proceed to Step 7.",
         icon = icon("thumbs-up", lib = "glyphicon"),
@@ -370,7 +381,7 @@ shinyServer(function(input, output, session) {
         color = "aqua",
         fill = TRUE)
       }
-    else if (input$buttonpathwayMF > 0) {
+    else if (input$buttonpathwayMF > 0 && !is.null(pathewayOutputMF())) {
       infoBox(
         "Status",
         "MF Enrichment Analysis Has Been Run.",
@@ -389,7 +400,7 @@ shinyServer(function(input, output, session) {
         color = "aqua",
         fill = TRUE)
       }
-    else if(input$buttonpathwayBP > 0) {
+    else if(input$buttonpathwayBP > 0 && !is.null(pathewayOutputBP())) {
       infoBox(
         "Status",
         "BP Enrichment Analysis Completed.",
@@ -409,7 +420,7 @@ shinyServer(function(input, output, session) {
         color = "aqua",
         fill = TRUE)
       }
-    else if (input$buttoncompare > 0) {
+    else if (input$buttoncompare > 0 && !is.null(compareMethods())) {
       infoBox(
         "Status",
         "Method Comparison Completed.",
