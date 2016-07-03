@@ -65,7 +65,7 @@ getcounts <- function(annotpeaks, sampleinfo, reference, chrom = NULL) {
   countsse$sample <- as.factor(countsse$sample)
 
   countsse$status <- stats::relevel(countsse$sample, reference)
-  countssedds <- DESeqDataSet(countsse, design = ~sample)
+  countssedds <- DESeq2::DESeqDataSet(countsse, design = ~sample)
 
   # Optional filtering out of lowcount regions As part of the DESeq2
   # algorithm, more stringent filtering will be applied subsequently
