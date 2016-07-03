@@ -356,7 +356,7 @@ body <- dashboardBody(
 
 
                 actionButton("buttoncat", strong("Categorize Altered Regions")),
-                conditionalPanel("input.catAlteredStatus",
+                conditionalPanel("input.buttoncat > 0 ",
                                  hr(),
                                   downloadButton("downloadData",
                                                strong("Download BED File")
