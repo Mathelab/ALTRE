@@ -558,8 +558,8 @@ enrichHeatmap <- function(input,
                    x = meltedheatmapdata$variable)) +
     geom_tile(aes(fill = meltedheatmapdata$value),
               colour = "black") +
-    scale_fill_continuous(low = "turquoise1",
-                          high = "navy",
+    scale_fill_continuous(low = "navy",
+                          high = "turquoise1",
                           na.value = "white",
                           guide = guide_legend(title = "Pvalue")) +
     theme(text = element_text(size = 13)) +
