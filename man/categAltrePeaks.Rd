@@ -37,7 +37,15 @@ Categorize altered peaks as experiment-specific, reference-specific,
 dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
 csvfile <- file.path(dir, 'lung.csv')
 sampleinfo <- loadCSVFile(csvfile)
-samplePeaks <- loadBEDFiles(csvfile)
+samplePeaks <- loadBedFiles(sampleinfo )
+consPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
+TSSannot <- getTSS()
+consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
+                                          TSS = TSSannot,
+                                          merge = TRUE,
+                                          regionspecific = TRUE,
+                                          mergedistenh = 1500,
+                                          mergedistprom = 1000)
 counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
                               sampleinfo = sampleinfo,
                               reference = 'SAEC')
