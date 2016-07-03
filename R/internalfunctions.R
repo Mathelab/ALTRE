@@ -154,7 +154,7 @@ rundose <- function(set,
   # bgentrezlist=unlist(bgentrezlist)
   bgentrezlist <- unique(unlist(as.list(mcols(bgwithgene)["gene_id"])))
 
-  result <- enrichGO(setentrezlist, OrgDb = "org.Hs.eg.db",
+  result <- clusterProfiler::enrichGO(setentrezlist, OrgDb = "org.Hs.eg.db",
                      pvalueCutoff = 1, keytype = "ENSEMBL",
                      qvalueCutoff = 1, pAdjustMethod = "fdr",
                      universe = bgentrezlist, ont = ontoltype)

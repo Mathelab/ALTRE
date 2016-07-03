@@ -307,7 +307,7 @@ plotDistCountAnalysis <- function(analysisresults, counts) {
 	# Get log2FPM values:
 	log2FPM=log2(DESeq2::fpkm(readcounts,robust=TRUE)+0.001)
 	# Average log2FPM values over replicats:
-	sampletypes=colData(readcounts)$sample
+	sampletypes= SummarizedExperiment::colData(readcounts)$sample
 	meanlog2FPM=c()
 	for (i in unique(sampletypes)) {
 		samp=which(sampletypes==i)
@@ -375,7 +375,7 @@ plotDistCountAnalysis <- function(analysisresults, counts) {
 
 plotgetcounts <- function(countsconspeaks) {
   mydf <- countsconspeaks$regioncountsforplot
-  varstack <- suppressMessages(melt(mydf))
+  varstack <- suppressMessages(reshape2::melt(mydf))
   varstack$concat <- paste(varstack$region,
                            varstack$variable,
                            sep = ": ")
