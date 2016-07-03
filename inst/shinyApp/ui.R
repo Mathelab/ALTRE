@@ -353,7 +353,15 @@ body <- dashboardBody(
                           altered regulatory elements.")
                 ),
                 hr(),
+
+
                 actionButton("buttoncat", strong("Categorize Altered Regions")),
+                conditionalPanel("input.catAlteredStatus",
+                                 hr(),
+                                  downloadButton("downloadData",
+                                               strong("Download BED File")
+                                               )
+                                  ),
                 hr(),
                 h4("Select parameters that define cell-type specific regulatory regions"),
                 sliderInput(
@@ -392,13 +400,6 @@ body <- dashboardBody(
                   value = 0.05
                 ),
                 hr()
-                #,
-                # hr(),
-                # conditionalPanel("input.buttoncat > 0",
-                #                  downloadButton("downloadData",
-                #                               strong("Download Track")
-                #                               )
-                #                  )
               ),
               HTML("</div>"),
               HTML("<div class='col-sm-7' style='min-width:
@@ -408,6 +409,9 @@ body <- dashboardBody(
                 width = NULL,
                 title = "Volcano Plot",
                 plotOutput('volcanoplot'),
+                hr(),
+                plotOutput('boxplot'),
+                hr(),
                 dataTableOutput("table4")
               ),
               HTML("</div>")
