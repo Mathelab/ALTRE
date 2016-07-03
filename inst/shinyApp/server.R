@@ -309,7 +309,8 @@ shinyServer(function(input, output, session) {
     else if (input$buttonannot > 0 && !is.null(annotatePeaks())) {
       infoBox(
         "Status",
-        "Peaks Have Been Annotated (If You Change the Parameters, Please Press Button Again). You Can Proceed to Step 4.",
+        "Peaks Have Been Annotated (If You Change the Parameters,
+        Please Press Button Again). You Can Proceed to Step 4.",
         icon = icon("thumbs-up", lib = "glyphicon"),
         color = "green",
         fill = TRUE)
@@ -364,7 +365,8 @@ shinyServer(function(input, output, session) {
       )}
     else if (input$buttoncat > 0 && !is.null(catAlteredPeaks())) {
       infoBox(
-        "Status", "Altered Regions Have Been Categorized. You Can Proceed to Step 7.",
+        "Status", "Altered Regions Have Been Categorized.
+        You Can Proceed to Step 7.",
         icon = icon("thumbs-up", lib = "glyphicon"),
         color = "green",
         fill = TRUE
