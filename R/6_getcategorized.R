@@ -16,7 +16,15 @@
 #' dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
 #' csvfile <- file.path(dir, 'lung.csv')
 #' sampleinfo <- loadCSVFile(csvfile)
-#' samplePeaks <- loadBEDFiles(csvfile)
+#' samplePeaks <- loadBedFiles(sampleinfo )
+#' consPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
+#' TSSannot <- getTSS()
+#' consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
+#'                                           TSS = TSSannot,
+#'                                           merge = TRUE,
+#'                                           regionspecific = TRUE,
+#'                                           mergedistenh = 1500,
+#'                                           mergedistprom = 1000)
 #' counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
 #'                               sampleinfo = sampleinfo,
 #'                               reference = 'SAEC')
@@ -41,6 +49,9 @@
  	lfcshared = 1.2,
  	pvaltypespecific = 0.01,
  	pvalshared = 0.05){
+
+   #quick fix
+   names(analysisresults$results)[10] <- c("region")
 
    analysisresults <- analysisresults[[1]]
 
@@ -70,7 +81,6 @@
    REaltrecateg[sharedind] <- "Shared"
    REaltrecateg[ambigind] <- "Ambiguous"
 
-   print(all.equal(sum(table(REaltrecateg)), nrow(analysisresults)))
 
    if (!all.equal(sum(table(REaltrecateg)), nrow(analysisresults))) {
      stop("Categorization failed, some REs are not categorized")
@@ -114,11 +124,9 @@
        which(analysisresults$REaltrecateg == "Ambiguous")
      )))
    )
-   print(stats)
 
-   result <- list(analysisresults = analysisresults, stats = stats)
 
-   return(result)
+   return(list(analysisresults = analysisresults, stats = stats))
 } # end function
 
 

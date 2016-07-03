@@ -199,6 +199,7 @@ plotCountAnalysis <- function(altrepeakscateg) {
                                                 "REaltrecateg")]
   enh <- toplot[which(toplot$region == "enhancer"), ]
   prom <- toplot[which(toplot$region == "promoter"), ]
+
   plot1 <- ggplot(enh,
                  aes(enh$log2FoldChange,
                      -log2(enh$padj))) +
@@ -212,7 +213,8 @@ plotCountAnalysis <- function(altrepeakscateg) {
           panel.grid.minor = element_blank()) +
     labs(x = "log2FC", y = "-log2(pvalue)") +
     ggtitle("Enhancers")
-    plot2 <- ggplot(prom,
+
+  plot2 <- ggplot(prom,
                  aes(prom$log2FoldChange,
                      -log2(prom$padj))) +
     geom_point(aes(col = factor(prom$REaltrecateg))) +
@@ -226,13 +228,11 @@ plotCountAnalysis <- function(altrepeakscateg) {
     labs(x = "log2FC", y = "-log2(pvalue)") +
     ggtitle("Promoters")
 
-    multiplot(plot1,plot2)
-
 #    geom_hline(aes(yintercept = -log2(pval)), linetype = "dashed") +
 #    geom_vline(aes(xintercept = (-lfcvalue)), linetype = "dashed") +
 #    geom_vline(aes(xintercept =  (lfcvalue)), linetype = "dashed")
 
-  return(NULL)
+  return(multiplot(plot1,plot2))
 }
 
 ###############################################################################
@@ -295,7 +295,7 @@ plotDistCountAnalysis <- function(analysisresults, counts) {
 	countsinfo=as.data.frame(SummarizedExperiment::rowRanges(readcounts))
 	countcoord=paste0(countsinfo$seqnames,countsinfo$start,countsinfo$end)
 	analcoord=paste0(analysisresults$chr,analysisresults$start,analysisresults$stop)
-	
+
 	if(!all.equal(analcoord,countcoord)) {
 	    stop("The peaks in the analysisresults and counts are not the same")
 	}
@@ -697,7 +697,7 @@ multiplot <- function(..., plotlist = NULL, file, cols = 1, layout = NULL) {
 #' altre_peaks <- countanalysis(counts=counts_consPeaks,
 #'                              pval=0.01,
 #'                              lfcvalue=1)
-#' categaltre_peaks=categAltrePeaks(altre_peaks, 
+#' categaltre_peaks=categAltrePeaks(altre_peaks,
 #'	lfctypespecific=1.5,
 #' 	lfcshared=1.2,
 #' 	pvaltypespecific=0.01,
