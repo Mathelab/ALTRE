@@ -2,7 +2,8 @@
 % Please edit documentation in R/plottingfunctions.R
 \name{plotDistCountAnalysis}
 \alias{plotDistCountAnalysis}
-\title{Creates a boxplot to see the distribution of read counts in type-specific and shared enhancers}
+\title{Creates a boxplot to see the distribution of read counts in type-specific and
+shared enhancers}
 \usage{
 plotDistCountAnalysis(analysisresults, counts)
 }
@@ -15,9 +16,10 @@ plotDistCountAnalysis(analysisresults, counts)
 a ggplot
 }
 \description{
-Takes the rlog transformation of the RRKM (Reads Per Kilobase of transcript per Million)
-of the read counts of type-specific and shared regulatory regions and plots
-the distribution of those read counts in all sample types analyzed in the workflow.
+Takes the rlog transformation of the RRKM (Reads Per Kilobase of transcript
+per Million) of the read counts of type-specific and shared regulatory regions
+and plots the distribution of those read counts in all sample types analyzed
+in the workflow.
 }
 \examples{
 \dontrun{

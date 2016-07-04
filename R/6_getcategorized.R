@@ -51,7 +51,7 @@
  	pvalshared = 0.05){
 
    #quick fix
-   names(analysisresults$results)[10:12] <- c("region","A549","SAEC")
+   #names(analysisresults$results)[10:12] <- c("region","A549","SAEC")
 
    analysisresults <- analysisresults[[1]]
 

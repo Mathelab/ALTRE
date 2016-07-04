@@ -218,7 +218,7 @@ plotCountAnalysis <- function(altrepeakscateg) {
                  aes(prom$log2FoldChange,
                      -log2(prom$padj))) +
     geom_point(aes(col = factor(prom$REaltrecateg))) +
-      scale_fill_brewer(palette = "Set2") +
+    scale_fill_brewer(palette = "Set2") +
     theme_bw(base_size = 15) +
     theme(legend.title = element_blank()) +
     scale_x_continuous(expand = c(0, 0)) +
@@ -236,11 +236,13 @@ plotCountAnalysis <- function(altrepeakscateg) {
 }
 
 ###############################################################################
-#' Creates a boxplot to see the distribution of read counts in type-specific and shared enhancers
+#' Creates a boxplot to see the distribution of read counts in type-specific and
+#' shared enhancers
 #'
-#' Takes the rlog transformation of the RRKM (Reads Per Kilobase of transcript per Million)
-#' of the read counts of type-specific and shared regulatory regions and plots
-#' the distribution of those read counts in all sample types analyzed in the workflow.
+#' Takes the rlog transformation of the RRKM (Reads Per Kilobase of transcript
+#' per Million) of the read counts of type-specific and shared regulatory regions
+#' and plots the distribution of those read counts in all sample types analyzed
+#' in the workflow.
 #'
 #' @param analysisresults output generated from countanalysis() then categAltrePeaks()
 #' @param counts output generated from getcounts()
@@ -279,64 +281,75 @@ plotCountAnalysis <- function(altrepeakscateg) {
 #' @export
 #'
 plotDistCountAnalysis <- function(analysisresults, counts) {
-	readcounts=counts$regioncounts
-	analysisresults=analysisresults[[1]]
-	errortest=try(SummarizedExperiment::assay(readcounts), silent=TRUE)
-	if (inherits(errortest, 'try-error')==TRUE){
-	  stop("The input for the readcounts arguement is not a summerized experiment object!")
-	}
 
-	if (is.data.frame(analysisresults)==FALSE)
-	{stop("The input for the analysisresults arguement is not a dataframe!")
+  readcounts <- counts$regioncounts
+  analysisresults <- analysisresults[[1]]
+  errortest = try(SummarizedExperiment::assay(readcounts), silent = TRUE)
+  if (inherits(errortest, 'try-error') == TRUE) {
+    stop("The input for the readcounts arguement is
+         not a summerized experiment object!")
+  }
 
-	}
+  if (is.data.frame(analysisresults) == FALSE)
+  {
+    stop("The input for the analysisresults arguement is not a dataframe!")
 
-	# Check that counts and analysisresults are in the same order
-	countsinfo=as.data.frame(SummarizedExperiment::rowRanges(readcounts))
-	countcoord=paste0(countsinfo$seqnames,countsinfo$start,countsinfo$end)
-	analcoord=paste0(analysisresults$chr,analysisresults$start,analysisresults$stop)
+  }
 
-	if(!all.equal(analcoord,countcoord)) {
-	    stop("The peaks in the analysisresults and counts are not the same")
-	}
+  # Check that counts and analysisresults are in the same order
+  countsinfo <- as.data.frame(SummarizedExperiment::rowRanges(readcounts))
+  countcoord <- paste0(countsinfo$seqnames, countsinfo$start, countsinfo$end)
+  analcoord <- paste0(analysisresults$chr,
+                     analysisresults$start,
+                     analysisresults$stop)
 
-	PEcateg=analysisresults$region
-	altrecateg=analysisresults$REaltrecateg
-	samplecateg=
+  if (!all.equal(analcoord, countcoord)) {
+    stop("The peaks in the analysisresults and counts are not the same")
+  }
 
-	# Get log2FPM values:
-	log2FPM=log2(DESeq2::fpkm(readcounts,robust=TRUE)+0.001)
-	# Average log2FPM values over replicats:
-	sampletypes= SummarizedExperiment::colData(readcounts)$sample
-	meanlog2FPM=c()
-	for (i in unique(sampletypes)) {
-		samp=which(sampletypes==i)
-		meanlog2FPM=cbind(meanlog2FPM,
-			as.numeric(apply(log2FPM[,samp],1,mean)))
-	}
-	colnames(meanlog2FPM)=unique(sampletypes)
+  PEcateg <- analysisresults$region
+  altrecateg <- analysisresults$REaltrecateg
 
-	mydf=data.frame(meanlog2FPM=meanlog2FPM,
-	    PEcateg=PEcateg,
-	    altrecateg=altrecateg)
+  # Get log2FPM values:
+  log2FPM <- log2(DESeq2::fpkm(readcounts, robust = TRUE) + 0.001)
 
-        meltdf=reshape2::melt(mydf)
-	meltdf$variable=gsub("meanlog2FPM.","",meltdf$variable)
+  # Average log2FPM values over replicats:
+  sampletypes <- SummarizedExperiment::colData(readcounts)$sample
+  meanlog2FPM <- c()
 
-	boxplot=ggplot(meltdf, aes_string(x="PEcateg", y="value")) +
-             geom_boxplot(aes_string(fill="altrecateg"),position = position_dodge(width = .8)) +
-	     facet_grid(.~variable) +
-	     scale_fill_manual(values=c("grey","salmon","darkgreen","blue")) +
-             theme_bw() + ggtitle("Distribution of Normalized Counts") +
-             xlab("") + ylab("log2(FPKM)") +
-        	theme(axis.line = element_line(colour = "black"),
-                        axis.title=element_text(size=12,face="bold"),
-                        plot.title=element_text(size=14,face="bold"),
-                        panel.grid.major = element_blank(),
-                        panel.grid.minor = element_blank(),
-                        panel.background = element_blank(),
-                        legend.key=element_blank())
-    return(boxplot)
+  for (i in unique(sampletypes)) {
+    samp <- which(sampletypes == i)
+    meanlog2FPM <- cbind(meanlog2FPM,
+                        as.numeric(apply(log2FPM[, samp], 1, mean)))
+  }
+  colnames(meanlog2FPM) <- unique(sampletypes)
+
+  mydf <- data.frame(meanlog2FPM = meanlog2FPM,
+                    PEcateg = PEcateg,
+                    altrecateg = altrecateg)
+
+  meltdf <- reshape2::melt(mydf)
+  meltdf$variable <- gsub("meanlog2FPM.", "", meltdf$variable)
+
+	p <- ggplot(meltdf, aes_string(x = "PEcateg", y = "value")) +
+	  geom_boxplot(aes_string(fill = "altrecateg"),
+	               position = position_dodge(width = .8)) +
+	  facet_grid(.~ variable) +
+	  scale_fill_brewer(palette = "Set2") +
+	  #scale_fill_manual(values = c("grey","salmon","darkgreen","blue")) +
+	  theme_bw() +
+	  ggtitle("Distribution of Normalized Counts") +
+	  xlab("") +
+	  ylab("log2(FPKM)") +
+	  theme(axis.line = element_line(colour = "black"),
+	        axis.title = element_text(size = 12, face = "bold"),
+	        plot.title = element_text(size = 14, face = "bold"),
+	        panel.grid.major = element_blank(),
+	        panel.grid.minor = element_blank(),
+	        panel.background = element_blank(),
+	        legend.key = element_blank())
+
+    return(p)
 }
 
 ###############################################################################
@@ -558,11 +571,11 @@ enrichHeatmap <- function(input,
                    x = meltedheatmapdata$variable)) +
     geom_tile(aes(fill = meltedheatmapdata$value),
               colour = "black") +
-    scale_fill_continuous(low = "navy",
-                          high = "turquoise1",
+    scale_fill_continuous(low = "#08519c",
+                          high = "#deebf7",
                           na.value = "white",
                           guide = guide_legend(title = "Pvalue")) +
-    theme(text = element_text(size = 13)) +
+    theme(text = element_text(size = 11)) +
     ggtitle(title)
   p2 <- p1 +
     scale_x_discrete(expand = c(0, 0),
@@ -800,8 +813,6 @@ plotvenn <- function(analysisresultsmatrix,
   return(p)
 }
 
-
-
 #' Plots venn diagrams for comparison of two methods of identifying altered
 #' regulatory regions Makes venn diagrams for enhancers, promoters, and combined
 #' for both intensity-based peaks and for peaks identified by hotspot calling
@@ -864,6 +875,5 @@ plotallvenn <- function(analysisresultsmatrix) {
   graphics::title("Venn Diagrams Comparing the Two Methods",
                   outer = TRUE,
                   cex.main = 2)
-
 }
 
