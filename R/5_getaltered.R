@@ -62,7 +62,8 @@ countanalysis <- function(counts, pval = 0.01,
 	grangesdataframe)
    #Rename some columns
    metacols=grep("meta",colnames(fulldataframe))
-   colnames(fulldataframe)[metacols]=gsub("metab.","",colnames(fulldataframe)[metacols])
+   colnames(fulldataframe)[metacols] <-
+     gsub("metab.","", colnames(fulldataframe)[metacols])
 
   return(list(results = as.data.frame(fulldataframe)))  #,
    #           stats = stats,
