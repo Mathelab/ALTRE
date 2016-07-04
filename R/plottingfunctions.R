@@ -563,6 +563,8 @@ enrichHeatmap <- function(input,
                           na.value = "white",
                           guide = guide_legend(title = "Pvalue")) +
     theme(text = element_text(size = 13)) +
+    theme(axis.text.x = element_text(angle=45,hjust=1)) +
+    theme(strip.text.y = element_text(colour="red")) +
     ggtitle(title)
   p2 <- p1 +
     scale_x_discrete(expand = c(0, 0),
