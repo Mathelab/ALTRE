@@ -193,7 +193,7 @@ shinyServer(function(input, output, session) {
     }
   )
 
-  observeEvent(input$buttonstop ,{
+  observeEvent(input$buttonstop, {
     stopApp(returnValue = invisible())
   })
 

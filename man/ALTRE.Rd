@@ -41,7 +41,7 @@ start site). Function can also merge regulatory regions that are within a specif
 distance from each other.  This function requires the annotation of
 transcription start sites (e.g. to retrieve from Ensembl, run TSS <- getTSS()))
 
-\item \code{\link{getcounts}}
+\item \code{\link{getCounts}}
 
 The number of reads overlapping all regions for each cell type is calculated.
 To view a density plot of the sizes of the regions, use the function plotgetcounts().
