@@ -60,10 +60,7 @@
 #' @name ALTRE
 #' @import methods
 #' @import IRanges
-#' @import GenomeInfoDb
 #' @import S4Vectors
 #' @import GenomicRanges
 #' @import ggplot2
-#' @import org.Hs.eg.db
-#' @import grid
 NULL
