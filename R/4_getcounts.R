@@ -103,7 +103,8 @@ getcounts <- function(annotpeaks, sampleinfo, reference, chrom = NULL) {
   region <- originaldata$region
   forplotdf <- cbind(myrpkmlog2, as.data.frame(region))
 
-  colnames(SummarizedExperiment::rowData(countssedds))=gsub("meta.","",colnames(SummarizedExperimentrowData(countssedds)))
+  colnames(SummarizedExperiment::rowData(countssedds)) <-
+    gsub("meta.", "", colnames(SummarizedExperiment::rowData(countssedds)))
 
   return(list(regioncounts = countssedds, regioncountstats = statdf,
               regioncountsforplot = forplotdf))
