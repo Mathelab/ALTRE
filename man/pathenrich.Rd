@@ -71,7 +71,7 @@ consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
                                           mergedistenh = 1500,
                                           mergedistprom = 1000 )
 #Need to run getcounts on all chromosomes
-counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
+counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
                              csvfile = csvfile,
                              reference = 'SAEC')
 altre_peaks <- countanalysis(counts=counts_consPeaks,

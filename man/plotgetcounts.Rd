@@ -2,19 +2,19 @@
 % Please edit documentation in R/plottingfunctions.R
 \name{plotgetcounts}
 \alias{plotgetcounts}
-\title{Given the output from getcounts, plot a density plot of
+\title{Given the output from getCounts, plot a density plot of
 log2 RPKM values of regulation regions}
 \usage{
 plotgetcounts(countsconspeaks)
 }
 \arguments{
-\item{countsconspeaks}{output generated from getcounts}
+\item{countsconspeaks}{output generated from getCounts}
 }
 \value{
 a ggplot
 }
 \description{
-Given the output from getcounts, plot a density plot of
+Given the output from getCounts, plot a density plot of
 log2 RPKM values of regulation regions
 }
 \examples{
@@ -33,7 +33,7 @@ consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
                                           mergedistenh = 1500,
                                           mergedistprom = 1000 )
 
-counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
+counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
                              csvfile = csvfile,
                              reference = 'SAEC',
                              chrom = 'chr21')

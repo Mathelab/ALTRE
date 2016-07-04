@@ -29,7 +29,7 @@
 #'                                           regionspecific = TRUE,
 #'                                           mergedistenh = 1500,
 #'                                           mergedistprom = 1000)
-#' counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
+#' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
 #'                               csvfile = csvfile,
 #'                               reference = 'SAEC')
 #' altre_peaks <- countanalysis(counts=counts_consPeaks,
@@ -62,7 +62,7 @@ countanalysis <- function(counts, pval = 0.01,
 	grangesdataframe)
    #Rename some columns
    metacols=grep("meta",colnames(fulldataframe))
-   colnames(fulldataframe)[metacols]=gsub("metab.","",colnames(fulldataframe)[metacols])   
+   colnames(fulldataframe)[metacols]=gsub("metab.","",colnames(fulldataframe)[metacols])
 
   return(list(results = as.data.frame(fulldataframe)))  #,
    #           stats = stats,
