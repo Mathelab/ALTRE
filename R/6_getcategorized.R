@@ -25,7 +25,7 @@
 #'                                           regionspecific = TRUE,
 #'                                           mergedistenh = 1500,
 #'                                           mergedistprom = 1000)
-#' counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
+#' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
 #'                               sampleinfo = sampleinfo,
 #'                               reference = 'SAEC')
 #' altre_peaks <- countanalysis(counts = counts_consPeaks,
@@ -51,7 +51,7 @@
  	pvalshared = 0.05){
 
    #quick fix
-   names(analysisresults$results)[10:12] <- c("region","A549","SAEC")
+   #names(analysisresults$results)[10:12] <- c("region","A549","SAEC")
 
    analysisresults <- analysisresults[[1]]
 

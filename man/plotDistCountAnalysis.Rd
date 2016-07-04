@@ -2,22 +2,24 @@
 % Please edit documentation in R/plottingfunctions.R
 \name{plotDistCountAnalysis}
 \alias{plotDistCountAnalysis}
-\title{Creates a boxplot to see the distribution of read counts in type-specific and shared enhancers}
+\title{Creates a boxplot to see the distribution of read counts in type-specific and
+shared enhancers}
 \usage{
 plotDistCountAnalysis(analysisresults, counts)
 }
 \arguments{
 \item{analysisresults}{output generated from countanalysis() then categAltrePeaks()}
 
-\item{counts}{output generated from getcounts()}
+\item{counts}{output generated from getCounts()}
 }
 \value{
 a ggplot
 }
 \description{
-Takes the rlog transformation of the RRKM (Reads Per Kilobase of transcript per Million)
-of the read counts of type-specific and shared regulatory regions and plots
-the distribution of those read counts in all sample types analyzed in the workflow.
+Takes the rlog transformation of the RRKM (Reads Per Kilobase of transcript
+per Million) of the read counts of type-specific and shared regulatory regions
+and plots the distribution of those read counts in all sample types analyzed
+in the workflow.
 }
 \examples{
 \dontrun{
@@ -34,7 +36,7 @@ consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
                                           regionspecific = TRUE,
                                           mergedistenh = 1500,
                                           mergedistprom = 1000)
-counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
+counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
                               sampleinfo = sampleinfo,
                               reference = 'SAEC',
                               chrom = 'chr21')

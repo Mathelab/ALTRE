@@ -2,7 +2,7 @@
 % Please edit documentation in R/plottingfunctions.R
 \name{plotCountAnalysis}
 \alias{plotCountAnalysis}
-\title{Given the output from getcounts, plot a density plot
+\title{Given the output from getCounts, plot a density plot
  of log2 RPKM values of regulation regions}
 \usage{
 plotCountAnalysis(altrepeakscateg)
@@ -14,7 +14,7 @@ plotCountAnalysis(altrepeakscateg)
 a ggplot
 }
 \description{
-Given the output from getcounts, plot a density plot
+Given the output from getCounts, plot a density plot
  of log2 RPKM values of regulation regions
 }
 \examples{
@@ -32,7 +32,7 @@ consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
                                           regionspecific = TRUE,
                                           mergedistenh = 1500,
                                           mergedistprom = 1000)
-counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
+counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
                               sampleinfo = sampleinfo,
                               reference = 'SAEC',
                               chrom = 'chr21')

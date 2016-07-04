@@ -30,7 +30,7 @@
 #'                                            regionspecific = TRUE,
 #'                                            mergedistenh = 1500,
 #'                                            mergedistprom = 1000 )
-#' counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
+#' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
 #'                               csvfile = csvfile,
 #'                               reference = 'SAEC')
 #' altre_peaks <- countanalysis(counts = counts_consPeaks,

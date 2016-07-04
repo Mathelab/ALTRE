@@ -126,7 +126,7 @@ rundose <- function(set,
                     offspring) {
 
   TSSgranges <- getTSS()
-  en2eg <- as.list(org.Hs.egENSEMBL2EG)
+  en2eg <- as.list(org.Hs.eg.db::org.Hs.egENSEMBL2EG)
   en2egfunc <- function(num) {  en2eg[[num]] }
 
   setgranges <- GRanges(set$chr,
@@ -172,7 +172,7 @@ rundose <- function(set,
 
     #### Gene Filtering###########
     GenesforGOterms <- function(Node) {
-      GOgenes <- as.list(org.Hs.egGO2EG)
+      GOgenes <- as.list(org.Hs.eg.db::org.Hs.egGO2EG)
       genenum <- length(GOgenes[[Node]])
       return(genenum)
     }

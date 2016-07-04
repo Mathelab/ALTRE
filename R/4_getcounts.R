@@ -37,14 +37,14 @@
 #'                                           regionspecific = TRUE,
 #'                                           mergedistenh = 1500,
 #'                                           mergedistprom = 1000 )
-#' counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
+#' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
 #'                               sampleinfo = sampleinfo,
 #'                               reference = 'SAEC',
 #'                               chrom = 'chr21')
 #' }
 #' @export
 
-getcounts <- function(annotpeaks, sampleinfo, reference, chrom = NULL) {
+getCounts <- function(annotpeaks, sampleinfo, reference, chrom = NULL) {
   bamfileslist <- loadBamFiles(sampleinfo)
 
   if (is.null(chrom) == FALSE) {
@@ -104,6 +104,8 @@ getcounts <- function(annotpeaks, sampleinfo, reference, chrom = NULL) {
   forplotdf <- cbind(myrpkmlog2, as.data.frame(region))
 
   colnames(SummarizedExperiment::rowData(countssedds))=gsub("meta.","",colnames(SummarizedExperiment::rowData(countssedds)))
+  #colnames(SummarizedExperiment::rowData(countssedds)) <-
+    gsub("meta.", "", colnames(SummarizedExperiment::rowData(countssedds)))
 
   return(list(regioncounts = countssedds, regioncountstats = statdf,
               regioncountsforplot = forplotdf))

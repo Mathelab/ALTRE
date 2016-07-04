@@ -4,34 +4,34 @@ shinyServer(function(input, output, session) {
   ############################################################################
   # Load data
 
-  csvFile <- reactive({
+  loadCSVObj <- reactive({
       loadCSVFile(req(input$file)$datapath)
   })
 
-  peaks <- reactive({
-      loadBedFiles(req(csvFile()))
+  loadBedObj <- reactive({
+      loadBedFiles(req(loadCSVObj()))
   })
 
   ############################################################################
   # function calls
 
-  mergedPeaks <- eventReactive(input$buttonmerge, {
+  getConsensusObj <- eventReactive(input$buttonmerge, {
     withProgress(message = 'In Progress:',
                  detail = 'This may take a while...',
                  value = 0,
                  {
                    setProgress(value = .1, detail = "Loading Peak Files")
-                   peaks <-  req(peaks())
+                   loadBedOut <-  req(loadBedObj())
                    setProgress(value = 0.5, detail = "Merging Replicates")
-                   consensusPeaks <- getConsensusPeaks(peaks,
+                   consensusPeaksOut <- getConsensusPeaks(loadBedOut,
                                                        req(input$numOverlap))
                    setProgress(value = 1, detail = "Done!")
                    Sys.sleep(0.5)
                  })
-    return(consensusPeaks)
+    return(consensusPeaksOut)
   })
 
-  annotatePeaks <- eventReactive(input$buttonannot, {
+  combineAnnotateObj <- eventReactive(input$buttonannot, {
     withProgress(message = 'In Progress',
                  detail = 'This may take a while...',
                  value = 0,
@@ -39,8 +39,8 @@ shinyServer(function(input, output, session) {
                    setProgress(value = .1, detail = "Retrieving TSS File")
                    TSSannot <- getTSS()
                    setProgress(value = 0.2, detail = "Annotating Peaks")
-                   annotatedPeaks <- combineAnnotatePeaks(
-                     conspeaks = req(mergedPeaks()),
+                   combineAnnotateOut <- combineAnnotatePeaks(
+                     conspeaks = req(getConsensusObj()),
                      TSS = TSSannot,
                      merge = input$mergeradio,
                      regionspecific = input$regionradio,
@@ -51,27 +51,27 @@ shinyServer(function(input, output, session) {
                    setProgress(value = 1, detail = "Done!")
                    Sys.sleep(0.5)
                  })
-    return(annotatedPeaks)
+    return(combineAnnotateOut)
   })
 
-  countsPeaks <- eventReactive(input$buttoncounts, {
+  getCountsObj <- eventReactive(input$buttoncounts, {
     withProgress(message = 'In progress',
                  detail = 'This may take a while...',
                  value = 0,
                  {
                    setProgress(value = 0.1, detail = "Retrieving counts")
-                   countsSummary <- getcounts(
-                     annotpeaks = req(annotatePeaks()),
-                     sampleinfo = req(csvFile()),
+                   getCountsOut <- getCounts(
+                     annotpeaks = req(combineAnnotateObj()),
+                     sampleinfo = req(loadCSVObj()),
                      reference = input$reference,
                      chrom = input$chr)
                    setProgress(value = 1, detail = "done!")
                    Sys.sleep(0.5)
                  })
-    return(countsSummary)
+    return(getCountsOut)
   })
 
-  alteredPeaks <- eventReactive(input$buttondefine, {
+  getAlteredObj <- eventReactive(input$buttondefine, {
     withProgress(message = 'In progress',
                  detail = 'This may take a while...',
                  value = 0,
@@ -79,7 +79,7 @@ shinyServer(function(input, output, session) {
                    setProgress(value = 0.2, detail = "annotating peaks")
                    altred <-
                      countanalysis(
-                       counts = req(countsPeaks()),
+                       counts = req(getCountsObj()),
                        pval = input$alpha,
                        lfcvalue = input$lfcThreshold
                      )
@@ -90,20 +90,20 @@ shinyServer(function(input, output, session) {
   })
 
   observeEvent(input$buttondefine, {
-    alteredPeaks()
+    getAlteredObj()
   })
 
 
 
-  catAlteredPeaks <- eventReactive(input$buttoncat, {
+  categAltreObj <- eventReactive(input$buttoncat, {
     withProgress(message = 'In progress',
                  detail = 'This may take a while...',
                  value = 0,
                  {
                    setProgress(value = 0.2, detail = "categorizing altered peaks")
-                   catAltred <-
+                   categAltreOut <-
                      categAltrePeaks(
-                       analysisresults = req(alteredPeaks()),
+                       analysisresults = req(getAlteredObj()),
                        lfctypespecific = input$lfcSpecific,
                        lfcshared = input$lfcShared,
                        pvaltypespecific = input$pvalueSpecific,
@@ -112,27 +112,27 @@ shinyServer(function(input, output, session) {
                    setProgress(value = 1, detail = "done!")
                    Sys.sleep(0.5)
                  })
-    return(catAltred)
+    return(categAltreOut)
   })
 
 
-  compareMethods <- eventReactive(input$buttoncompare, {
+  comparePeaksObj <- eventReactive(input$buttoncompare, {
     withProgress(message = 'In progress',
                  detail = 'This may take a while...',
                  value = 0,
                  {
                    setProgress(value = 0.2, detail = "Comparing Methods")
-                   compareResults <- comparePeaksAltre(
-                     req(catAlteredPeaks()),
+                   comparePeaksOut <- comparePeaksAltre(
+                     req(categAltreObj()),
                      reference = req(input$reference)
                      )
-                   setProgress(value = 1, detail = "Done!")
+                   setProgress(value = 1, detail = "done!")
                    Sys.sleep(0.5)
                  })
-    return(compareResults)
+    return(comparePeaksOut)
   })
 
-  pathewayOutputMF <- eventReactive(input$buttonpathwayMF, {
+  pathenrichMFObj <- eventReactive(input$buttonpathwayMF, {
     withProgress(message = 'In progress',
                  detail = 'This may take a while...',
                  value = 0,
@@ -140,7 +140,7 @@ shinyServer(function(input, output, session) {
                    setProgress(value = 0.2, detail = "MF: GO Enrichment Analysis")
                    MFenrich <-
                        pathenrich(
-                         analysisresults = req(catAlteredPeaks()),
+                         analysisresults = req(categAltreObj()),
                          ontoltype = "MF",
                          enrichpvalfilt = input$pathpvaluecutoffMF
                        )
@@ -150,7 +150,7 @@ shinyServer(function(input, output, session) {
     return(MFenrich)
   })
 
-  pathewayOutputBP <- eventReactive(input$buttonpathwayBP, {
+  pathenrichBPObj <- eventReactive(input$buttonpathwayBP, {
     withProgress(message = 'In progress',
                  detail = 'This may take a while...',
                  value = 0,
@@ -158,7 +158,7 @@ shinyServer(function(input, output, session) {
                    setProgress(value = 0.2, detail = "BP: GO Enrichment Analysis")
                    BPenrich <-
                      pathenrich(
-                       analysisresults = req(catAlteredPeaks()),
+                       analysisresults = req(categAltreObj()),
                        ontoltype = "BP",
                        enrichpvalfilt = input$pathpvaluecutoffBP
                      )
@@ -171,7 +171,7 @@ shinyServer(function(input, output, session) {
    #  get input
 
   output$chooseref <- renderUI({
-    reflist <- unique(csvFile()$sample)
+    reflist <- unique(loadCSVObj()$sample)
     selectInput("reference",
                 "Select which cell-type to act as reference",
                 reflist ,
@@ -180,45 +180,50 @@ shinyServer(function(input, output, session) {
 
 
   output$chooseChrom <- renderUI({
-    peaks <- req(annotatePeaks())
+    peaks <- req(combineAnnotateObj())
     chroChoices <- unique(as.character(GenomeInfoDb::seqnames(peaks[[1]])))
     selectInput("chr", "Choose Chromosome", chroChoices, selected = "chr21")
 
   })
 
   output$downloadData <- downloadHandler(
-    filename = "ALTREtrack.bed",
+    filename = "AnnotatedTrack.bed",
     content = function(con) {
-      writeBedFile(req(catAlteredPeaks()), con)
+      writeBedFile(req(categAltreObj()), con)
     }
   )
+
+  observeEvent(input$buttonstop ,{
+    stopApp(returnValue = invisible())
+  })
+
 
   ############################################################################
   #tables
   output$table1 <- renderDataTable({
     if (!is.null(input$file)) {
-      csvFile()[, -1]
+      loadCSVObj()[, -1]
     }
   }, options = list(searching = FALSE,
                     paging = FALSE))
 
   output$table2 <- renderDataTable({
-    mergedPeaks()$consPeaksStats
+    getConsensusObj()$consPeaksStats
   }, options = list(searching = FALSE,
                     paging = FALSE))
 
   output$table3 <- renderDataTable({
-    annotatePeaks()$mergestats
+    combineAnnotateObj()$mergestats
   }, options = list(searching = FALSE,
                     paging = FALSE))
 
   output$table4 <- renderDataTable({
-    req(catAlteredPeaks()$stats)
+    req(categAltreObj()$stats)
   }, options = list(searching = FALSE,
                     paging = FALSE))
 
   output$table5 <- renderDataTable({
-    compareMethods()
+    comparePeaksObj()
   }, options = list(searching = FALSE,
                     paging = FALSE))
 
@@ -226,35 +231,35 @@ shinyServer(function(input, output, session) {
   # plots
 
   output$barplot <- renderPlot({
-    plotConsensusPeaks(mergedPeaks())
+    plotConsensusPeaks(getConsensusObj())
   })
 
   output$annotatebarplot <- renderPlot({
-    plotCombineAnnotatePeaks(annotatePeaks())
+    plotCombineAnnotatePeaks(combineAnnotateObj())
   })
 
   output$densityplot <- renderPlot({
-    plotgetcounts(countsPeaks())
+    plotgetcounts(getCountsObj())
   })
 
   output$volcanoplot <- renderPlot({
-    plotCountAnalysis(req(catAlteredPeaks()))
+    plotCountAnalysis(req(categAltreObj()))
   })
 
   output$boxplot <- renderPlot({
-    plotDistCountAnalysis(req(catAlteredPeaks()), req(countsPeaks()))
+    plotDistCountAnalysis(req(categAltreObj()), req(getCountsObj()))
   })
 
   output$heatplotMF <- renderPlot({
-      enrichHeatmap(req(pathewayOutputMF()), title = "GO:MF, p<0.01")
+      enrichHeatmap(req(pathenrichMFObj()), title = "GO:MF, p<0.01")
   })
 
   output$heatplotBP <- renderPlot({
-        enrichHeatmap(req(pathewayOutputBP()), title = "GO:BP, p<0.01")
+        enrichHeatmap(req(pathenrichBPObj()), title = "GO:BP, p<0.01")
   })
 
   output$vennplot <- renderPlot({
-    plotallvenn(req(compareMethods()))
+    plotallvenn(req(comparePeaksObj()))
   })
 
   ############################################################################
@@ -287,7 +292,7 @@ shinyServer(function(input, output, session) {
         color = "aqua",
         fill = TRUE)
       }
-    else if(input$buttonmerge > 0 && !is.null(mergedPeaks())) {
+    else if(input$buttonmerge > 0 && !is.null(getConsensusObj())) {
       infoBox(
         "Status",
         "Replicates Have Been Merged. You Can Proceed to Step 3.",
@@ -306,7 +311,7 @@ shinyServer(function(input, output, session) {
         color = "aqua",
         fill = TRUE)
       }
-    else if (input$buttonannot > 0 && !is.null(annotatePeaks())) {
+    else if (input$buttonannot > 0 && !is.null(combineAnnotateObj())) {
       infoBox(
         "Status",
         "Peaks Have Been Annotated (If You Change the Parameters,
@@ -326,7 +331,7 @@ shinyServer(function(input, output, session) {
         color = "aqua",
         fill = TRUE)
       }
-    else if (input$buttoncounts > 0 && !is.null(countsPeaks())) {
+    else if (input$buttoncounts > 0 && !is.null(getCountsObj())) {
       infoBox(
         "Status",
         "Counts Have Been Retrieved. You Can Proceed to Step 5.",
@@ -344,7 +349,7 @@ shinyServer(function(input, output, session) {
         color = "aqua",
         fill = TRUE
       )}
-    else if (input$buttondefine > 0 && !is.null(alteredPeaks())) {
+    else if (input$buttondefine > 0 && !is.null(getAlteredObj())) {
       infoBox(
         "Status", "Altered Regions Have Been Defined.
         You Can Proceed to Step 6.",
@@ -363,7 +368,7 @@ shinyServer(function(input, output, session) {
         color = "aqua",
         fill = TRUE
       )}
-    else if (input$buttoncat > 0 && !is.null(catAlteredPeaks())) {
+    else if (input$buttoncat > 0 && !is.null(categAltreObj())) {
       infoBox(
         "Status", "Altered Regions Have Been Categorized.
         You Can Proceed to Step 7.",
@@ -383,7 +388,7 @@ shinyServer(function(input, output, session) {
         color = "aqua",
         fill = TRUE)
       }
-    else if (input$buttonpathwayMF > 0 && !is.null(pathewayOutputMF())) {
+    else if (input$buttonpathwayMF > 0 && !is.null(pathenrichMFObj())) {
       infoBox(
         "Status",
         "MF Enrichment Analysis Has Been Run.",
@@ -402,7 +407,7 @@ shinyServer(function(input, output, session) {
         color = "aqua",
         fill = TRUE)
       }
-    else if(input$buttonpathwayBP > 0 && !is.null(pathewayOutputBP())) {
+    else if(input$buttonpathwayBP > 0 && !is.null(pathenrichBPObj())) {
       infoBox(
         "Status",
         "BP Enrichment Analysis Completed.",
@@ -422,7 +427,7 @@ shinyServer(function(input, output, session) {
         color = "aqua",
         fill = TRUE)
       }
-    else if (input$buttoncompare > 0 && !is.null(compareMethods())) {
+    else if (input$buttoncompare > 0 && !is.null(comparePeaksObj())) {
       infoBox(
         "Status",
         "Method Comparison Completed.",
