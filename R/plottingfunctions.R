@@ -93,8 +93,9 @@ plotCombineAnnotatePeaks <- function(conspeaks) {
     numreg$REmerge <- rownames(mydf)
     numreg$REmerge <- gsub("enhancers_", "", numreg$REmerge)
     numreg$REmerge <- gsub("promoters_", "", numreg$REmerge)
+    numreg$REmerge <- gsub("_merging","",numreg$REmerge)
     numreg$REmerge <- factor(numreg$REmerge,
-                             levels = c("before_merging", "after_merging"))
+                             levels = c("before", "after"))
 
     plot1 <- ggplot(numreg, aes_string(x = "REtype",
                                        y = "TotalNumber",
@@ -106,15 +107,17 @@ plotCombineAnnotatePeaks <- function(conspeaks) {
                            y = "TotalNumber",
                            ymax = "TotalNumber"),
                 position = position_dodge(width = 1),
-                size = 3,
+                size = 2,
                 hjust = 0.5,
                 vjust = -.5) +
       scale_fill_brewer(palette = "Set2") +
-      theme_bw(base_size = 12) +
+      theme_bw(base_size = 10) +
       theme(aspect.ratio = 1.5,
             panel.grid.major = element_blank(),
             panel.grid.minor = element_blank()) +
-      labs(x = "", y = "Number of Regulatory Regions") +
+      labs(x = "", y = "Number of REs") +
+      theme(axis.text.x = element_text(angle=45,hjust=1)) +
+      theme(legend.title = element_blank()) +
       ggtitle("Number of REs\nBefore/After merging")
 
 
@@ -124,8 +127,9 @@ plotCombineAnnotatePeaks <- function(conspeaks) {
     meanlength$REmerge <- rownames(mydf)
     meanlength$REmerge <- gsub("enhancers_", "", meanlength$REmerge)
     meanlength$REmerge <- gsub("promoters_", "", meanlength$REmerge)
+    meanlength$REmerge <- gsub("_merging","",meanlength$REmerge)
     meanlength$REmerge <- factor(meanlength$REmerge,
-                                 levels = c("before_merging", "after_merging"))
+                                 levels = c("before", "after"))
 
     plot2 <- ggplot(meanlength, aes_string(x = "REtype",
                                            y = "MeanLength",
@@ -137,15 +141,17 @@ plotCombineAnnotatePeaks <- function(conspeaks) {
                            y = "MeanLength",
                            ymax = "MeanLength"),
                 position = position_dodge(width = 1),
-                size = 3,
+                size = 2,
                 hjust = 0.5,
                 vjust = -.5) +
       scale_fill_brewer(palette = "Set2") +
-      theme_bw(base_size = 12) +
+      theme_bw(base_size = 10) +
       theme(aspect.ratio = 1.5,
             panel.grid.major = element_blank(),
             panel.grid.minor = element_blank()) +
-      labs(x = "", y = "Mean length of Regulatory Regions") +
+      labs(x = "", y = "Mean length of REs") +
+      theme(legend.title = element_blank()) +
+      theme(axis.text.x = element_text(angle=45,hjust=1)) +
       ggtitle("Mean length of REs\nBefore/After merging")
 
     multiplot(plot1, plot2, cols = 2)
