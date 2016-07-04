@@ -193,6 +193,11 @@ shinyServer(function(input, output, session) {
     }
   )
 
+  observeEvent(input$buttonstop ,{
+    stopApp(returnValue = invisible())
+  })
+
+
   ############################################################################
   #tables
   output$table1 <- renderDataTable({

@@ -71,6 +71,10 @@ sidebar <- dashboardSidebar(
       tabName = "pathways",
       badgeLabel = "step 8",
       badgeColor = "green"
+    ),
+    menuItem(
+    actionButton("buttonstop", strong("Click to Exit Shiny App")),
+    icon = icon("sign-out")
     )
   )
 )
