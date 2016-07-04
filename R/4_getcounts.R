@@ -37,14 +37,14 @@
 #'                                           regionspecific = TRUE,
 #'                                           mergedistenh = 1500,
 #'                                           mergedistprom = 1000 )
-#' counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
+#' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
 #'                               sampleinfo = sampleinfo,
 #'                               reference = 'SAEC',
 #'                               chrom = 'chr21')
 #' }
 #' @export
 
-getcounts <- function(annotpeaks, sampleinfo, reference, chrom = NULL) {
+getCounts <- function(annotpeaks, sampleinfo, reference, chrom = NULL) {
   bamfileslist <- loadBamFiles(sampleinfo)
 
   if (is.null(chrom) == FALSE) {

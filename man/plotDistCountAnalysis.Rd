@@ -10,7 +10,7 @@ plotDistCountAnalysis(analysisresults, counts)
 \arguments{
 \item{analysisresults}{output generated from countanalysis() then categAltrePeaks()}
 
-\item{counts}{output generated from getcounts()}
+\item{counts}{output generated from getCounts()}
 }
 \value{
 a ggplot
@@ -36,7 +36,7 @@ consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
                                           regionspecific = TRUE,
                                           mergedistenh = 1500,
                                           mergedistprom = 1000)
-counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
+counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
                               sampleinfo = sampleinfo,
                               reference = 'SAEC',
                               chrom = 'chr21')

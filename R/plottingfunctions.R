@@ -153,7 +153,7 @@ plotCombineAnnotatePeaks <- function(conspeaks) {
 }
 
 
-#' Given the output from getcounts, plot a density plot
+#' Given the output from getCounts, plot a density plot
 #'  of log2 RPKM values of regulation regions
 #'
 #' @param altrepeakscateg output generated from countanalysis() then categAltrePeaks()
@@ -175,7 +175,7 @@ plotCombineAnnotatePeaks <- function(conspeaks) {
 #'                                           regionspecific = TRUE,
 #'                                           mergedistenh = 1500,
 #'                                           mergedistprom = 1000)
-#' counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
+#' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
 #'                               sampleinfo = sampleinfo,
 #'                               reference = 'SAEC',
 #'                               chrom = 'chr21')
@@ -245,7 +245,7 @@ plotCountAnalysis <- function(altrepeakscateg) {
 #' in the workflow.
 #'
 #' @param analysisresults output generated from countanalysis() then categAltrePeaks()
-#' @param counts output generated from getcounts()
+#' @param counts output generated from getCounts()
 #'
 #' @return a ggplot
 #'
@@ -264,7 +264,7 @@ plotCountAnalysis <- function(altrepeakscateg) {
 #'                                           regionspecific = TRUE,
 #'                                           mergedistenh = 1500,
 #'                                           mergedistprom = 1000)
-#' counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
+#' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
 #'                               sampleinfo = sampleinfo,
 #'                               reference = 'SAEC',
 #'                               chrom = 'chr21')
@@ -355,10 +355,10 @@ plotDistCountAnalysis <- function(analysisresults, counts) {
 ###############################################################################
 
 
-#' Given the output from getcounts, plot a density plot of
+#' Given the output from getCounts, plot a density plot of
 #' log2 RPKM values of regulation regions
 #'
-#' @param countsconspeaks output generated from getcounts
+#' @param countsconspeaks output generated from getCounts
 #'
 #' @return a ggplot
 #'
@@ -378,7 +378,7 @@ plotDistCountAnalysis <- function(analysisresults, counts) {
 #'                                           mergedistenh = 1500,
 #'                                           mergedistprom = 1000 )
 #'
-#' counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
+#' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
 #'                              csvfile = csvfile,
 #'                              reference = 'SAEC',
 #'                              chrom = 'chr21')
@@ -440,7 +440,7 @@ plotgetcounts <- function(countsconspeaks) {
 #'                                           regionspecific = TRUE,
 #'                                           mergedistenh = 1500,
 #'                                           mergedistprom = 1000)
-#' counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
+#' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
 #'                               csvfile = csvfile,
 #'                               reference = 'SAEC',
 #'                               chrom = 'chr21')
@@ -619,7 +619,7 @@ enrichHeatmap <- function(input,
 #'                                           regionspecific = TRUE,
 #'                                           mergedistenh = 1500,
 #'                                           mergedistprom = 1000 )
-#'counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
+#'counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
 #'                              csvfile = csvfile,
 #'                              reference = 'SAEC',
 #'                              chrom = 'chr21')
@@ -704,7 +704,7 @@ multiplot <- function(..., plotlist = NULL, file, cols = 1, layout = NULL) {
 #'                                            regionspecific = TRUE,
 #'                                            mergedistenh = 1500,
 #'                                            mergedistprom = 1000)
-#' counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
+#' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
 #'                               csvfile = csvfile,
 #'                               reference = 'SAEC')
 #' altre_peaks <- countanalysis(counts=counts_consPeaks,
@@ -834,7 +834,7 @@ plotvenn <- function(analysisresultsmatrix,
 #'                                            regionspecific = TRUE,
 #'                                            mergedistenh = 1500,
 #'                                            mergedistprom = 1000 )
-#' counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
+#' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
 #'                               csvfile = csvfile,
 #'                               reference = 'SAEC')
 #' altre_peaks <- countanalysis(counts=counts_consPeaks,
