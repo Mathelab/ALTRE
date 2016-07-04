@@ -28,14 +28,12 @@ loadBedFiles <- function(csvfile) {
 	trackline=utils::read.table(bedPath,nrows=1,sep="\t")
 	# if not track line:
 	if (length(grep("track type",trackline$V1)) == 0) { 
-	print("No track line")
         	bed <- DataFrame(readr::read_delim(bedPath,
                                     delim = "\t",
                                     col_names = FALSE,
                                     na = "."))[, 1:3]
 	}
 	else { # if there is a trackline
-		print("There's a track")
 		                bed <- DataFrame(readr::read_delim(bedPath,
                                 delim = "\t",
                                 col_names = FALSE,

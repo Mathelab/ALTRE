@@ -54,9 +54,12 @@ comparePeaksAltre <- function(analysisresults,
 
   analysisresults <- analysisresults[[1]]
 
-  if (!is.data.frame(analysisresults) ||
-      !(reference %in% colnames(analysisresults))  ){
+  if (!is.data.frame(analysisresults)) {
     stop("Make sure the output of the analysis is from categAltrePeaks() function")
+  }
+
+  if (!reference %in% colnames(analysisresults)) {
+	stop("Make sure the reference sample exists!")
   }
 
   samplenames <-colnames(analysisresults)[11:(ncol(analysisresults)-1)]
