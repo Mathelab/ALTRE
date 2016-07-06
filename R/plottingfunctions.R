@@ -581,8 +581,8 @@ enrichHeatmap <- function(input,
                           high = "#deebf7",
                           na.value = "white",
                           guide = guide_legend(title = "Pvalue")) +
-#    theme(text = element_text(size = 13)) +
-#    theme(axis.text.x = element_text(angle=45,hjust=1)) +
+    theme(text = element_text(size = 13)) +
+    theme(axis.text.x = element_text(angle=45,hjust=1)) +
 #    theme(strip.text.y = element_text(colour="red")) +
     theme(text = element_text(size = 11)) +
     ggtitle(title)
