@@ -102,9 +102,9 @@ body <- dashboardBody(
                 solidHeader = TRUE,
                 h5("This step does the following: "),
                 tags$ul(
-                  tags$li("Loads a metadata spreadsheet with a csv file extention."),
+                  tags$li("Loads a metadata spreadsheet with a CSV file extention."),
                   tags$li(" Prints out the contents of entire the file except for the
-                        first column, which contains the data filepaths")
+                        first column, which contains the data filepaths.")
                 ),
                 hr(),
                 fileInput(
@@ -432,10 +432,10 @@ body <- dashboardBody(
                 tags$ul(
                   tags$li("Compares two methods of identifying altered regulatory
                           regions. The first method uses peak presence and
-                          associated intensity (i.e chromatin accessibility).
+                          associated intensity (i.e. chromatin accessibility).
                           The second method uses peak presence only as determined
                           by the peak caller."),
-                  tags$li(" Outputs a venn plot")
+                  tags$li(" Outputs a Venn diagram.")
                 ),
                 hr(),
                 actionButton("buttoncompare", strong("Compare Methods")),
