@@ -224,7 +224,7 @@ plotCountAnalysis <- function(altrepeakscateg) {
                  aes(prom$log2FoldChange,
                      -log2(prom$padj))) +
     geom_point(aes(col = factor(prom$REaltrecateg))) +
-    scale_fill_brewer(palette = "Set2") +
+    scale_colour_manual(values = c("dark grey","salmon","dark green","blue")) +
     theme_bw(base_size = 15) +
     theme(legend.title = element_blank()) +
     scale_x_continuous(expand = c(0, 0)) +
@@ -341,8 +341,8 @@ plotDistCountAnalysis <- function(analysisresults, counts) {
 	  geom_boxplot(aes_string(fill = "altrecateg"),
 	               position = position_dodge(width = .8)) +
 	  facet_grid(.~ variable) +
-	  scale_fill_brewer(palette = "Set2") +
-	  #scale_fill_manual(values = c("grey","salmon","darkgreen","blue")) +
+	  #scale_fill_brewer(palette = "Set2") +
+	  scale_fill_manual(values = c("dark grey","salmon","dark green","blue")) +
 	  theme_bw() +
 	  ggtitle("Distribution of Normalized Counts") +
 	  xlab("") +
