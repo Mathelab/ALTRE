@@ -73,6 +73,7 @@ pathenrich <- function(analysisresults,
                        genes = 20,
                        offspring = 300,
                        regionsubset = "promoter") {
+
   analysisresults <- analysisresults$analysisresults
 
   if (is.data.frame(analysisresults) == FALSE) {

@@ -25,19 +25,20 @@ loadBedFiles <- function(csvfile) {
         stop("csvfile must be a data.frame ")
 
     readBed <- function(bedPath, ind) {
-	trackline=utils::read.table(bedPath,nrows=1,sep="\t")
+
+	trackline <- utils::read.table(bedPath, nrows = 1, sep = "\t")
 	# if not track line:
-	if (length(grep("track type",trackline$V1)) == 0) { 
+	if (length(grep("track type", trackline$V1)) == 0) {
         	bed <- DataFrame(readr::read_delim(bedPath,
                                     delim = "\t",
                                     col_names = FALSE,
                                     na = "."))[, 1:3]
 	}
-	else { # if there is a trackline
+	else {# if there is a trackline
 		                bed <- DataFrame(readr::read_delim(bedPath,
                                 delim = "\t",
                                 col_names = FALSE,
-                                na = ".",skip=1))[, 1:3]
+                                na = ".", skip = 1))[, 1:3]
 	}
         colnames(bed) <- c("seqnames", "start", "end")
         bed <- DataFrame(bed, csvfile[ind, c("sample", "replicate")])
