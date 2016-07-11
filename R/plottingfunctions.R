@@ -569,13 +569,18 @@ enrichHeatmap <- function(input,
   rownames(heatmapdata) <- c(1:nrow(heatmapdata))
   meltedheatmapdata <- reshape2::melt(heatmapdata)
 
+  meltedheatmapdata$newid = stringr::str_wrap(meltedheatmapdata$id, width = 80)
+#  meltedheatmapdata$id <- factor(meltedheatmapdata$id,
+#                                 levels = unique(meltedheatmapdata$id))
+
   meltedheatmapdata$id <- factor(meltedheatmapdata$id,
                                  levels = unique(meltedheatmapdata$id))
 
+#  meltedheatmapdata$id = str_wrap(meltedheatmapdata$id, width = 80)
+
   p1 <- ggplot(meltedheatmapdata,
-               aes(y = meltedheatmapdata$id,
-                   x = meltedheatmapdata$variable)) +
-    geom_tile(aes(fill = meltedheatmapdata$value),
+               aes_string(y = "id", x = "variable")) +
+    geom_tile(aes_string(fill = "value"),
               colour = "black") +
     scale_fill_continuous(low = "#08519c",
                           high = "#deebf7",
@@ -583,15 +588,16 @@ enrichHeatmap <- function(input,
                           guide = guide_legend(title = "Pvalue")) +
     theme(text = element_text(size = 13)) +
     theme(axis.text.x = element_text(angle=45,hjust=1)) +
-#    theme(strip.text.y = element_text(colour="red")) +
     theme(text = element_text(size = 11)) +
     ggtitle(title)
   p2 <- p1 +
     scale_x_discrete(expand = c(0, 0),
                      labels = c("High in Expt","High in Reference", "Shared")) +
-    scale_y_discrete(expand = c(0, 0)) +
+    scale_y_discrete(expand = c(0, 0),
+                labels=meltedheatmapdata$newid) +
     theme(axis.title.x = element_blank(),
           axis.title.y = element_blank())
+
 
   return(p2)
 }
