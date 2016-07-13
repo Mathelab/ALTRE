@@ -142,6 +142,8 @@ body <- dashboardBody(
                   tags$li(" Outputs a barplot summary of the number of peaks in
                           each replicate and in their merged consensus.")
                   ),
+                tags$p(" Note: You can save the plots by clicking on the right mouse button
+                  and selecting 'save image as'"),
                 hr(),
                 actionButton("buttonmerge",
                              strong("Load Files then Merge Replicates")),
@@ -326,7 +328,7 @@ body <- dashboardBody(
 
                 sliderInput(
                   "alpha",
-                  label = strong("Select pvalue cutoff"),
+                  label = strong("Select p-value cutoff"),
                   min = 0,
                   max = 1,
                   value = 0.01
@@ -377,7 +379,7 @@ body <- dashboardBody(
                 ),
                 sliderInput(
                   "pvalueSpecific",
-                  label = strong("Select pvalue cutoff for specific
+                  label = strong("Select p-value cutoff for specific
                              enhancers/promoters"),
                   min = 0,
                   max = 1,
@@ -396,7 +398,7 @@ body <- dashboardBody(
                 ),
                 sliderInput(
                   "pvalueShared",
-                  label = strong("Select pvalue cutoff for shared enhancers/promoters"),
+                  label = strong("Select p-value cutoff for shared enhancers/promoters"),
                   min = 0,
                   max = 1,
                   value = 0.05
@@ -412,7 +414,7 @@ body <- dashboardBody(
               HTML("</div>"),
               HTML("<div class='col-sm-7' style='min-width:
                    550px !important;'>"),
-              infoBoxOutput("statusbox5b", width = NULL),
+              infoBoxOutput("statusbox6", width = NULL),
               box(
                 width = NULL,
                 title = "Volcano Plot",
@@ -456,7 +458,7 @@ body <- dashboardBody(
               HTML("</div>"),
               HTML("<div class='col-sm-7' style='min-width:
                    550px !important;'>"),
-              infoBoxOutput("statusbox8", width = NULL),
+              infoBoxOutput("statusbox7", width = NULL),
               box(
                 width = NULL,
                 title = "Venn Plot",
@@ -492,7 +494,7 @@ body <- dashboardBody(
                      hr(),
                      sliderInput(
                        "pathpvaluecutoffMF",
-                       label = strong("Select pvalue cutoff"),
+                       label = strong("Select p-value cutoff"),
                        min = 0,
                        max = 1,
                        value = 0.01
@@ -510,7 +512,7 @@ body <- dashboardBody(
                    HTML("</div>"),
                    HTML("<div class='col-sm-7' style='min-width:
                    550px !important;'>"),
-                   infoBoxOutput("statusbox6", width = NULL),
+                   infoBoxOutput("statusbox8a", width = NULL),
                    box(
                      width = NULL,
                      title = "Heat Plot",
@@ -541,7 +543,7 @@ body <- dashboardBody(
                     hr(),
                     sliderInput(
                       "pathpvaluecutoffBP",
-                      label = strong("Select pvalue cutoff"),
+                      label = strong("Select p-value cutoff"),
                       min = 0,
                       max = 1,
                       value = 0.01
@@ -559,7 +561,7 @@ body <- dashboardBody(
                   HTML("</div>"),
                   HTML("<div class='col-sm-7' style='min-width:
                        550px !important;'>"),
-                  infoBoxOutput("statusbox7", width = NULL),
+                  infoBoxOutput("statusbox8b", width = NULL),
                   box(
                     width = NULL,
                     title = "Heat Plot",
@@ -590,7 +592,7 @@ body <- dashboardBody(
                     hr(),
                     sliderInput(
                       "pathpvaluecutoffCC",
-                      label = strong("Select pvalue cutoff"),
+                      label = strong("Select p-value cutoff"),
                       min = 0,
                       max = 1,
                       value = 0.01
@@ -608,7 +610,7 @@ body <- dashboardBody(
                   HTML("</div>"),
                   HTML("<div class='col-sm-7' style='min-width:
                        550px !important;'>"),
-                  infoBoxOutput("statusbox10", width = NULL),
+                  infoBoxOutput("statusbox8c", width = NULL),
                   box(
                     width = NULL,
                     title = "Heat Plot",

@@ -30,7 +30,7 @@ sudo R CMD javareconf
 ```
 
 
-On Windows, If you get an error then first run the following lines of code in as well:
+On Windows, if you get an installation error then first run the following lines of code in as well:
 
 ```{R}
 install.packages(c("htmltools","httpuv","evaluate","markdown"))
@@ -95,7 +95,7 @@ To inculde the vignette in the installation package run
 devtools::install(build_vignettes = TRUE)
 ```
 
-Make sure that the *vignette.Rmd*file contains the following commands in the header:
+Make sure that the *vignette.Rmd* file contains the following commands in the header:
 
 ```{R}
 author: "...."
