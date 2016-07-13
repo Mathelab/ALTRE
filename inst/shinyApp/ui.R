@@ -239,7 +239,13 @@ body <- dashboardBody(
                                    value = 1000
                                    )
                                  ),
-
+                conditionalPanel("input.buttonannot> 0",
+                                 hr(),
+                                 downloadButton("downloadAnnotate",
+                                                strong("Download CSV File with
+                                                       Annotated Regions ")
+                                 )
+                ),
                 hr()
                 ),
               HTML("</div>"),
@@ -357,15 +363,7 @@ body <- dashboardBody(
                           altered regulatory elements.")
                 ),
                 hr(),
-
-
                 actionButton("buttoncat", strong("Categorize Altered Regions")),
-                conditionalPanel("input.buttoncat > 0",
-                                 hr(),
-                                  downloadButton("downloadData",
-                                               strong("Download BED File")
-                                               )
-                                  ),
                 hr(),
                 h4("Select parameters that define cell-type specific regulatory regions"),
                 sliderInput(
@@ -402,6 +400,12 @@ body <- dashboardBody(
                   min = 0,
                   max = 1,
                   value = 0.05
+                ),
+                conditionalPanel("input.buttoncat > 0",
+                                 hr(),
+                                 downloadButton("downloadBED",
+                                                strong("Download BED File")
+                                 )
                 ),
                 hr()
               ),
@@ -440,7 +444,14 @@ body <- dashboardBody(
                 hr(),
                 actionButton("buttoncompare", strong("Compare Methods")),
                 hr(),
-                dataTableOutput("table5")
+                dataTableOutput("table5"),
+                conditionalPanel("input.buttoncompare > 0",
+                                 hr(),
+                                 downloadButton("downloadCompareDT",
+                                                strong("Download Data Table")
+                                 )
+                ),
+                hr()
               ),
               HTML("</div>"),
               HTML("<div class='col-sm-7' style='min-width:
@@ -459,7 +470,7 @@ body <- dashboardBody(
       tabBox(
         title = strong("Pathway Enrichment Analysis"),
         width = 12,
-        tabPanel("Pathway Enrichment for Molecular Function",
+        tabPanel("(1) Pathway Enrichment for Molecular Function",
                  fluidRow(
                    HTML("<div class='col-sm-4' style='min-width:
                    400px !important;'>"),
@@ -486,6 +497,14 @@ body <- dashboardBody(
                        max = 1,
                        value = 0.01
                      ),
+                     conditionalPanel("input.buttonpathwayMF> 0",
+                                      hr(),
+                                      downloadButton("downloadPathwayMF",
+                                                     strong("Download Zip
+                                                            File with MF
+                                                            Analysis Results")
+                                      )
+                     ),
                      hr()
                    ),
                    HTML("</div>"),
@@ -500,7 +519,7 @@ body <- dashboardBody(
                    HTML("</div>")
                  )
                  ),
-       tabPanel("Pathway Enrichment for Biological Process",
+       tabPanel("(2) Pathway Enrichment for Biological Process",
                 fluidRow(
                   HTML("<div class='col-sm-4' style='min-width:
                        400px !important;'>"),
@@ -527,6 +546,14 @@ body <- dashboardBody(
                       max = 1,
                       value = 0.01
                     ),
+                    conditionalPanel("input.buttonpathwayBP> 0",
+                                     hr(),
+                                     downloadButton("downloadPathwayBP",
+                                                    strong("Download Zip
+                                                            File with BP
+                                                            Analysis Results")
+                                     )
+                    ),
                     hr()
                   ),
                   HTML("</div>"),
@@ -540,7 +567,56 @@ body <- dashboardBody(
                   ),
                   HTML("</div>")
                   )
-                )
+                ),
+       tabPanel("(3) Pathway Enrichment for Cellular Component",
+                fluidRow(
+                  HTML("<div class='col-sm-4' style='min-width:
+                       400px !important;'>"),
+                  box(
+                    width = NULL,
+                    title = strong("Pathway Enrichment for Cellular Component"),
+                    h5("This step does the following: "),
+                    tags$ul(
+                      tags$li("Determines which pathways are overrepresented in
+                              altered promoters and enhancers as returned by
+                              GO Enrichment Analysis restricted to the
+                              Cellular Component sub-ontology."),
+                      tags$li("Outputs a heatmap plot of the enrichment analysis'
+                              results.")
+                      ),
+                    hr(),
+                    actionButton("buttonpathwayCC",
+                                 strong("Run CC Pathway Enrichment")),
+                    hr(),
+                    sliderInput(
+                      "pathpvaluecutoffCC",
+                      label = strong("Select pvalue cutoff"),
+                      min = 0,
+                      max = 1,
+                      value = 0.01
+                    ),
+                    conditionalPanel("input.buttonpathwayCC> 0",
+                                     hr(),
+                                     downloadButton("downloadPathwayCC",
+                                                    strong("Download Zip
+                                                            File with CC
+                                                            Analysis Results")
+                                     )
+                    ),
+                    hr()
+                      ),
+                  HTML("</div>"),
+                  HTML("<div class='col-sm-7' style='min-width:
+                       550px !important;'>"),
+                  infoBoxOutput("statusbox10", width = NULL),
+                  box(
+                    width = NULL,
+                    title = "Heat Plot",
+                    plotOutput('heatplotCC')
+                  ),
+                  HTML("</div>")
+                  )
+      )
        )
       )
     )

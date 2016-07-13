@@ -33,7 +33,9 @@ Imports:
     tidyr,
     GO.db,
     grid,
-    venneuler
+    venneuler,
+    stringr,
+    tibble
 Suggests: knitr
 VignetteBuilder: knitr
 License: GPL-3

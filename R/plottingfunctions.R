@@ -162,7 +162,8 @@ plotCombineAnnotatePeaks <- function(conspeaks) {
 #' Given the output from getCounts, plot a density plot
 #'  of log2 RPKM values of regulation regions
 #'
-#' @param altrepeakscateg output generated from countanalysis() then categAltrePeaks()
+#' @param altrepeakscateg output generated from countanalysis() then
+#' categAltrePeaks()
 #'
 #' @return a ggplot
 #'
