@@ -445,12 +445,12 @@ body <- dashboardBody(
                 actionButton("buttoncompare", strong("Compare Methods")),
                 hr(),
                 dataTableOutput("table5"),
-                conditionalPanel("input.buttoncompare > 0",
-                                 hr(),
-                                 downloadButton("downloadCompareDT",
-                                                strong("Download Data Table")
-                                 )
-                ),
+                # conditionalPanel("input.buttoncompare > 0",
+                #                  hr(),
+                #                  downloadButton("downloadCompareDT",
+                #                                 strong("Download Data Table")
+                #                  )
+                # ),
                 hr()
               ),
               HTML("</div>"),
