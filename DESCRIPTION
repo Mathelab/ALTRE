@@ -1,14 +1,14 @@
 Package: ALTRE
 Type: Package
-Title: Workflow: Post-alignment to altered enhancers and promoters
+Title: Workflow for Identifying Regulatory Elements from Chromatin Accessibility Assay Data
 Version: 0.99.0
 Authors@R: c(
  person("Elizabeth", "Baskin", email = "Elizabeth.Baskin@osumc.edu", role = "aut"),
  person("Rick", "Farouni", email = "farouni.1@osu.edu", role = "aut"),
  person("Ewy", "Mathe", email = "Ewy.Mathe@osumc.edu", role = c("aut", "cre")))
 Description: This workflow takes alignment data and hotspot calls from assays of
- open chromatin (ATAC-seq, DNase-seq, and FAIRE-seq) and identifies regions
- (enhancers and promoters) that differ based on cell and tissue type.
+ open chromatin (ATAC-seq, DNase-seq, and FAIRE-seq) and identifies regulatory
+ elements (e.g. enhancers and promoters) that differ across cell and tissue type.
 URL: https://github.com/Mathelab/ALTRE
 BugReports: https://github.com/Mathelab/ALTRE/issues
 Depends: R (>= 3.3.0)
