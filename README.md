@@ -22,7 +22,7 @@ BiocInstaller::biocLite(c('GenomeInfoDb',
 # install the package
 devtools::install_github("mathelab/ALTRE")
 ```
-When installing on Linux, if you get an rJava package installation error. Please run the following two lines in the console
+When installing on Linux, if you get an rJava package installation error. Please run the following two lines in the console:
 
 ```{R}
 sudo apt-get install openjdk-7-*
@@ -30,17 +30,17 @@ sudo R CMD javareconf
 ```
 
 
-On Windows, If you get errors then first run the following lines of code in as well
+On Windows, If you get an error then first run the following lines of code in as well:
 
 ```{R}
 install.packages(c("htmltools","httpuv","evaluate","markdown"))
 ```
 
 
-#### Preview
+#### Installation Walk-through Animation
 
 
-![](inst/img/ALTRErun.gif)
+![](inst/img/ALTREinstall.gif)
 
 ### To Run
 
@@ -50,7 +50,7 @@ To launch the Shiny app inside R, run
 library(ALTRE)
 runShinyApp()
 ```
-#### Preview
+#### Shiny App Preview
 
 
 ![](inst/img/ALTRErun.gif)
