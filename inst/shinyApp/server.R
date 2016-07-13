@@ -65,7 +65,7 @@ shinyServer(function(input, output, session) {
                      sampleinfo = req(loadCSVObj()),
                      reference = input$reference,
                      chrom = input$chr)
-                   setProgress(value = 1, detail = "done!")
+                   setProgress(value = 1, detail = "Done!")
                    Sys.sleep(0.5)
                  })
     return(getCountsOut)
@@ -83,7 +83,7 @@ shinyServer(function(input, output, session) {
                        pval = input$alpha,
                        lfcvalue = input$lfcThreshold
                      )
-                   setProgress(value = 1, detail = "done!")
+                   setProgress(value = 1, detail = "Done!")
                    Sys.sleep(0.5)
                  })
     return(altred)
@@ -109,7 +109,7 @@ shinyServer(function(input, output, session) {
                        pvaltypespecific = input$pvalueSpecific,
                        pvalshared = input$pvalueShared
                      )
-                   setProgress(value = 1, detail = "done!")
+                   setProgress(value = 1, detail = "Done!")
                    Sys.sleep(0.5)
                  })
     return(categAltreOut)
@@ -126,7 +126,7 @@ shinyServer(function(input, output, session) {
                      req(categAltreObj()),
                      reference = req(input$reference)
                      )
-                   setProgress(value = 1, detail = "done!")
+                   setProgress(value = 1, detail = "Done!")
                    Sys.sleep(0.5)
                  })
     return(comparePeaksOut)
@@ -167,6 +167,24 @@ shinyServer(function(input, output, session) {
                  })
     return(BPenrich)
   })
+
+  pathenrichCCObj <- eventReactive(input$buttonpathwayCC, {
+    withProgress(message = 'In progress',
+                 detail = 'This may take a while...',
+                 value = 0,
+                 {
+                   setProgress(value = 0.2, detail = "CC: GO Enrichment Analysis")
+                   BPenrich <-
+                     pathenrich(
+                       analysisresults = req(categAltreObj()),
+                       ontoltype = "CC",
+                       enrichpvalfilt = input$pathpvaluecutoffCC
+                     )
+                   setProgress(value = 1, detail = "Done!")
+                   Sys.sleep(0.5)
+                 })
+    return(BPenrich)
+  })
   ############################################################################
    #  get input
 
@@ -186,13 +204,51 @@ shinyServer(function(input, output, session) {
 
   })
 
-  output$downloadData <- downloadHandler(
+  ############################################################################
+  # download buttons
+  output$downloadAnnotate <- downloadHandler(
+    filename = "annotatedRegions.csv",
+    content = function(con) {
+      writeAnnotatedRegions(req(combineAnnotateObj()), con)
+    }
+  )
+  output$downloadBED <- downloadHandler(
     filename = "AnnotatedTrack.bed",
     content = function(con) {
       writeBedFile(req(categAltreObj()), con)
     }
   )
 
+  output$downloadCompareDT <- downloadHandler(
+    filename = "dataTableRE.csv",
+    content = function(con) {
+      writeREdf(req(comparePeaksObj()), con)
+    }
+  )
+
+  output$downloadPathwayMF <- downloadHandler(
+    filename = "pathEnrichMF.zip",
+    content = function(con) {
+      writePathEnrich(req(pathenrichMFObj()), con)
+    #contentType = "application/zip"
+    }
+  )
+
+  output$downloadPathwayBP <- downloadHandler(
+    filename = "pathEnrichBP.zip",
+    content = function(con) {
+      writePathEnrich(req(pathenrichBPObj()), con)
+    }
+  )
+
+  output$downloadPathwayCC <- downloadHandler(
+    filename = "pathEnrichCC.zip",
+    content = function(con) {
+      writePathEnrich(req(pathenrichCCObj()), con)
+    }
+  )
+
+  ####
   observeEvent(input$buttonstop, {
     stopApp(returnValue = invisible())
   })
@@ -208,22 +264,22 @@ shinyServer(function(input, output, session) {
                     paging = FALSE))
 
   output$table2 <- renderDataTable({
-    getConsensusObj()$consPeaksStats
+    req(getConsensusObj())$consPeaksStats
   }, options = list(searching = FALSE,
                     paging = FALSE))
 
   output$table3 <- renderDataTable({
-    combineAnnotateObj()$mergestats
+    req(combineAnnotateObj())$mergestats
   }, options = list(searching = FALSE,
                     paging = FALSE))
 
   output$table4 <- renderDataTable({
-    req(categAltreObj()$stats)
+    req(categAltreObj())$stats
   }, options = list(searching = FALSE,
                     paging = FALSE))
 
   output$table5 <- renderDataTable({
-    comparePeaksObj()
+    req(comparePeaksObj())
   }, options = list(searching = FALSE,
                     paging = FALSE))
 
@@ -251,11 +307,15 @@ shinyServer(function(input, output, session) {
   })
 
   output$heatplotMF <- renderPlot({
-      enrichHeatmap(req(pathenrichMFObj()), title = "GO:MF, p<0.01")
+      enrichHeatmap(req(pathenrichMFObj()), title = "GO:MF")
   })
 
   output$heatplotBP <- renderPlot({
-        enrichHeatmap(req(pathenrichBPObj()), title = "GO:BP, p<0.01")
+        enrichHeatmap(req(pathenrichBPObj()), title = "GO:BP")
+  })
+
+  output$heatplotCC <- renderPlot({
+    enrichHeatmap(req(pathenrichCCObj()), title = "GO:CC")
   })
 
   output$vennplot <- renderPlot({
@@ -411,6 +471,27 @@ shinyServer(function(input, output, session) {
       infoBox(
         "Status",
         "BP Enrichment Analysis Completed.",
+        icon = icon("thumbs-up", lib = "glyphicon"),
+        color = "green",
+        fill = TRUE
+      )
+    }
+  })
+
+
+  output$statusbox9 <- renderInfoBox({
+    if (input$buttonpathwayCC == 0) {
+      infoBox(
+        "Status",
+        "CC Enrichment Analysis Button Not Clicked Yet!",
+        icon = icon("flag", lib = "glyphicon"),
+        color = "aqua",
+        fill = TRUE)
+    }
+    else if(input$buttonpathwayCC > 0 && !is.null(pathenrichCCObj())) {
+      infoBox(
+        "Status",
+        "CC Enrichment Analysis Completed.",
         icon = icon("thumbs-up", lib = "glyphicon"),
         color = "green",
         fill = TRUE
