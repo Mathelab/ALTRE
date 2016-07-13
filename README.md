@@ -108,7 +108,8 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ```
 
-MIT License
+
+## MIT License
 
 Copyright (c) [2016] 
 
