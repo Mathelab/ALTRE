@@ -86,6 +86,10 @@ http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/wgEncod
 
 http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/wgEncodeUwDnaseSaecHotspotsRep2.broadPeak.gz
 
+### Blacklisted genomic regions for functional genomics analysis
+
+https://sites.google.com/site/anshulkundaje/projects/blacklists
+
 
 ##  To build from source (Optional)
 
