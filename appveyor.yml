@@ -37,6 +37,7 @@ environment:
 
 build_script:
   - travis-tool.sh install_deps
+  - travis-tool.sh install_r htmltools httpuv evaluate
   - travis-tool.sh install_bioc S4Vectors GenomeInfoDb IRanges DESeq2 GenomicAlignments SummarizedExperiment GenomicRanges Rsamtools org.Hs.eg.db clusterProfiler ensembldb EnsDb.Hsapiens.v75 GO.db
 
 test_script:
