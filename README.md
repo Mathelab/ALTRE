@@ -1,5 +1,10 @@
 # ALTRE R Package
 
+[![Travis-CI Build Status](https://travis-ci.org/rfarouni/ALTRE-1.svg?branch=master)](https://travis-ci.org/rfarouni/ALTRE-1)
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/rfarouni/ALTRE-1?branch=master&svg=true)](https://ci.appveyor.com/project/rfarouni/ALTRE-1)
+[![codecov](https://codecov.io/gh/rfarouni/ALTRE-1/branch/master/graph/badge.svg)](https://codecov.io/gh/rfarouni/ALTRE-1)
+
+
 ## Install From Github
 
 ```{R}
@@ -30,7 +35,7 @@ sudo R CMD javareconf
 ```
 
 
-On Windows, If you get an error then first run the following lines of code in as well:
+On Windows, if you get an installation error then first run the following lines of code in as well:
 
 ```{R}
 install.packages(c("htmltools","httpuv","evaluate","markdown"))
@@ -86,6 +91,10 @@ http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/wgEncod
 
 http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/wgEncodeUwDnaseSaecHotspotsRep2.broadPeak.gz
 
+### Blacklisted genomic regions for functional genomics analysis
+
+https://sites.google.com/site/anshulkundaje/projects/blacklists
+
 
 ##  To build from source (Optional)
 
@@ -95,7 +104,7 @@ To inculde the vignette in the installation package run
 devtools::install(build_vignettes = TRUE)
 ```
 
-Make sure that the *vignette.Rmd*file contains the following commands in the header:
+Make sure that the *vignette.Rmd* file contains the following commands in the header:
 
 ```{R}
 author: "...."

@@ -1,3 +1,5 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^inst/img$
+^\.travis\.yml$
+^appveyor\.yml$

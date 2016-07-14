@@ -93,8 +93,6 @@ shinyServer(function(input, output, session) {
     getAlteredObj()
   })
 
-
-
   categAltreObj <- eventReactive(input$buttoncat, {
     withProgress(message = 'In progress',
                  detail = 'This may take a while...',
@@ -351,8 +349,16 @@ shinyServer(function(input, output, session) {
         icon = icon("flag", lib = "glyphicon"),
         color = "aqua",
         fill = TRUE)
-      }
-    else if(input$buttonmerge > 0 && !is.null(getConsensusObj())) {
+     }
+    else if (input$buttonmerge > 0 && is.null(input$file)) {
+      infoBox(
+        "Status",
+        "Step 2 is Not Complete Yet. Please Run Step 1 Before Proceeding! ",
+        icon = icon("warning-sign", lib = "glyphicon"),
+        color = "red",
+        fill = TRUE)
+    }
+    else if (input$buttonmerge > 0 && !is.null(getConsensusObj())) {
       infoBox(
         "Status",
         "Replicates Have Been Merged. You Can Proceed to Step 3.",
@@ -370,7 +376,15 @@ shinyServer(function(input, output, session) {
         icon = icon("flag", lib = "glyphicon"),
         color = "aqua",
         fill = TRUE)
-      }
+    }
+    else if (input$buttonannot > 0 && (input$buttonmerge == 0 || is.null(input$file))) {
+      infoBox(
+        "Status",
+        "Step 2 is Not Complete Yet. Please Run Previous Steps Before Proceeding!",
+        icon = icon("warning-sign", lib = "glyphicon"),
+        color = "red",
+        fill = TRUE)
+    }
     else if (input$buttonannot > 0 && !is.null(combineAnnotateObj())) {
       infoBox(
         "Status",
@@ -390,7 +404,17 @@ shinyServer(function(input, output, session) {
         icon = icon("flag", lib = "glyphicon"),
         color = "aqua",
         fill = TRUE)
-      }
+    }
+    else if (input$buttoncounts > 0 && (input$buttonannot == 0 ||
+                                        input$buttonmerge == 0 ||
+                                         is.null(input$file))) {
+      infoBox(
+        "Status",
+        "Step 3 is Not Complete Yet. Please Run Previous Steps Before Proceeding!",
+        icon = icon("warning-sign", lib = "glyphicon"),
+        color = "red",
+        fill = TRUE)
+    }
     else if (input$buttoncounts > 0 && !is.null(getCountsObj())) {
       infoBox(
         "Status",
@@ -409,6 +433,17 @@ shinyServer(function(input, output, session) {
         color = "aqua",
         fill = TRUE
       )}
+    else if (input$buttondefine > 0 &&  (input$buttoncounts == 0 ||
+                                         input$buttonannot == 0 ||
+                                         input$buttonmerge == 0 ||
+                                         is.null(input$file))) {
+      infoBox(
+        "Status",
+        "Step 4 is Not Complete Yet. Please Run Previous Steps Before Proceeding! ",
+        icon = icon("warning-sign", lib = "glyphicon"),
+        color = "red",
+        fill = TRUE)
+    }
     else if (input$buttondefine > 0 && !is.null(getAlteredObj())) {
       infoBox(
         "Status", "Altered Regions Have Been Defined.
@@ -420,7 +455,7 @@ shinyServer(function(input, output, session) {
     }
   })
 
-  output$statusbox5b <- renderInfoBox({
+  output$statusbox6 <- renderInfoBox({
     if (input$buttoncat == 0) {
       infoBox(
         "Status", "Categorize Altered Regions Button Not Clicked Yet!",
@@ -428,6 +463,18 @@ shinyServer(function(input, output, session) {
         color = "aqua",
         fill = TRUE
       )}
+    else if (input$buttoncat > 0 && (input$buttondefine == 0 ||
+                                     input$buttoncounts == 0 ||
+                                     input$buttonannot  == 0 ||
+                                     input$buttonmerge  == 0 ||
+                                     is.null(input$file))) {
+      infoBox(
+        "Status",
+        "Step 5 is Not Complete Yet. Please Run Previous Steps Before Proceeding! ",
+        icon = icon("warning-sign", lib = "glyphicon"),
+        color = "red",
+        fill = TRUE)
+    }
     else if (input$buttoncat > 0 && !is.null(categAltreObj())) {
       infoBox(
         "Status", "Altered Regions Have Been Categorized.
@@ -439,7 +486,39 @@ shinyServer(function(input, output, session) {
     }
   })
 
-  output$statusbox6 <- renderInfoBox({
+  output$statusbox7 <- renderInfoBox({
+    if (input$buttoncompare == 0) {
+      infoBox(
+        "Status",
+        "Compare Methods Button Not Clicked Yet!",
+        icon = icon("flag", lib = "glyphicon"),
+        color = "aqua",
+        fill = TRUE)
+    }
+    else if (input$buttoncompare> 0 && (input$buttoncat    == 0 ||
+                                           input$buttondefine == 0 ||
+                                           input$buttoncounts == 0 ||
+                                           input$buttonannot  == 0 ||
+                                           input$buttonmerge  == 0 ||
+                                           is.null(input$file))) {
+      infoBox(
+        "Status",
+        "Step 6 is Not Complete Yet. Please Run Previous Steps Before Proceeding!",
+        icon = icon("warning-sign", lib = "glyphicon"),
+        color = "red",
+        fill = TRUE)
+    }
+    else if (input$buttoncompare > 0 && !is.null(comparePeaksObj())) {
+      infoBox(
+        "Status",
+        "Method Comparison Completed.",
+        icon = icon("thumbs-up", lib = "glyphicon"),
+        color = "green",
+        fill = TRUE)
+    }
+  })
+
+  output$statusbox8a <- renderInfoBox({
     if (input$buttonpathwayMF == 0) {
       infoBox(
         "Status",
@@ -447,7 +526,21 @@ shinyServer(function(input, output, session) {
         icon = icon("flag", lib = "glyphicon"),
         color = "aqua",
         fill = TRUE)
-      }
+    }
+    else if (input$buttonpathwayMF > 0 && (input$buttoncompare == 0 ||
+                                           input$buttoncat    == 0 ||
+                                           input$buttondefine == 0 ||
+                                           input$buttoncounts == 0 ||
+                                           input$buttonannot  == 0 ||
+                                           input$buttonmerge  == 0 ||
+                                           is.null(input$file))) {
+      infoBox(
+        "Status",
+        "Step 7 is Not Complete Yet. Please Run Previous Steps Before Proceeding!",
+        icon = icon("warning-sign", lib = "glyphicon"),
+        color = "red",
+        fill = TRUE)
+    }
     else if (input$buttonpathwayMF > 0 && !is.null(pathenrichMFObj())) {
       infoBox(
         "Status",
@@ -458,7 +551,7 @@ shinyServer(function(input, output, session) {
     }
   })
 
-  output$statusbox7 <- renderInfoBox({
+  output$statusbox8b <- renderInfoBox({
     if (input$buttonpathwayBP == 0) {
       infoBox(
         "Status",
@@ -466,8 +559,22 @@ shinyServer(function(input, output, session) {
         icon = icon("flag", lib = "glyphicon"),
         color = "aqua",
         fill = TRUE)
-      }
-    else if(input$buttonpathwayBP > 0 && !is.null(pathenrichBPObj())) {
+    }
+    else if (input$buttonpathwayBP > 0 && (input$buttoncompare == 0 ||
+                                           input$buttoncat    == 0 ||
+                                           input$buttondefine == 0 ||
+                                           input$buttoncounts == 0 ||
+                                           input$buttonannot  == 0 ||
+                                           input$buttonmerge  == 0 ||
+                                           is.null(input$file))) {
+      infoBox(
+        "Status",
+        "Step 7 is Not Complete Yet. Please Run Previous Steps Before Proceeding!",
+        icon = icon("warning-sign", lib = "glyphicon"),
+        color = "red",
+        fill = TRUE)
+    }
+    else if (input$buttonpathwayBP > 0 && !is.null(pathenrichBPObj())) {
       infoBox(
         "Status",
         "BP Enrichment Analysis Completed.",
@@ -479,7 +586,7 @@ shinyServer(function(input, output, session) {
   })
 
 
-  output$statusbox9 <- renderInfoBox({
+  output$statusbox8c <- renderInfoBox({
     if (input$buttonpathwayCC == 0) {
       infoBox(
         "Status",
@@ -488,7 +595,21 @@ shinyServer(function(input, output, session) {
         color = "aqua",
         fill = TRUE)
     }
-    else if(input$buttonpathwayCC > 0 && !is.null(pathenrichCCObj())) {
+    else if (input$buttonpathwayCC > 0 && (input$buttoncompare == 0 ||
+                                           input$buttoncat    == 0 ||
+                                           input$buttondefine == 0 ||
+                                           input$buttoncounts == 0 ||
+                                           input$buttonannot  == 0 ||
+                                           input$buttonmerge  == 0 ||
+                                           is.null(input$file))) {
+      infoBox(
+        "Status",
+        "Step 7 is Not Complete Yet. Please Run Previous Steps Before Proceeding!",
+        icon = icon("warning-sign", lib = "glyphicon"),
+        color = "red",
+        fill = TRUE)
+    }
+    else if (input$buttonpathwayCC > 0 && !is.null(pathenrichCCObj())) {
       infoBox(
         "Status",
         "CC Enrichment Analysis Completed.",
@@ -499,24 +620,7 @@ shinyServer(function(input, output, session) {
     }
   })
 
-  output$statusbox8 <- renderInfoBox({
-    if (input$buttoncompare == 0) {
-      infoBox(
-        "Status",
-        "Compare Methods Button Not Clicked Yet!",
-        icon = icon("flag", lib = "glyphicon"),
-        color = "aqua",
-        fill = TRUE)
-      }
-    else if (input$buttoncompare > 0 && !is.null(comparePeaksObj())) {
-      infoBox(
-        "Status",
-        "Method Comparison Completed.",
-        icon = icon("thumbs-up", lib = "glyphicon"),
-        color = "green",
-        fill = TRUE)
-    }
-  })
+
   ##########################################################
   })
 
