@@ -19,6 +19,9 @@ cache:
 # Adapt as necessary starting from here
 
 environment:
+
+  BIOC_USE_DEVEL: false
+
   global:
     WARNINGS_ARE_ERRORS: 1
 
@@ -27,11 +30,15 @@ environment:
   - R_VERSION: devel
     R_ARCH: x64
     GCC_PATH: mingw_64
+    USE_RTOOLS: true
 
   - R_VERSION: release
     R_ARCH: x64
+    USE_RTOOLS: true
 
   - R_VERSION: oldrel
+    R_ARCH: x64
+    USE_RTOOLS: true
     RTOOLS_VERSION: 32
     CRAN: http://cran.rstudio.com
 
