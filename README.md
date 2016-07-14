@@ -1,6 +1,7 @@
 # ALTRE R Package
 
 [![Travis-CI Build Status](https://travis-ci.org/rfarouni/ALTRE-1.svg?branch=master)](https://travis-ci.org/rfarouni/ALTRE-1)
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/rfarouni/ALTRE-1?branch=master&svg=true)](https://ci.appveyor.com/project/rfarouni/ALTRE-1)
 [![codecov](https://codecov.io/gh/rfarouni/ALTRE-1/branch/master/graph/badge.svg)](https://codecov.io/gh/rfarouni/ALTRE-1)
 
 
