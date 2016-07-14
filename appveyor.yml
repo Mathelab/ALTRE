@@ -20,8 +20,6 @@ cache:
 
 environment:
 
-  BIOC_USE_DEVEL: false
-
   global:
     WARNINGS_ARE_ERRORS: 1
 
@@ -31,21 +29,25 @@ environment:
     R_ARCH: x64
     GCC_PATH: mingw_64
     USE_RTOOLS: true
+    BIOC_USE_DEVEL: true
 
   - R_VERSION: release
     R_ARCH: x64
     USE_RTOOLS: true
+    BIOC_USE_DEVEL: false
 
   - R_VERSION: oldrel
     R_ARCH: x64
     USE_RTOOLS: true
     RTOOLS_VERSION: 32
     CRAN: http://cran.rstudio.com
+    BIOC_USE_DEVEL: false
+
 
 build_script:
   - travis-tool.sh install_deps
   - travis-tool.sh install_r htmltools httpuv evaluate
-  - travis-tool.sh install_bioc S4Vectors GenomeInfoDb IRanges DESeq2 GenomicAlignments SummarizedExperiment GenomicRanges Rsamtools org.Hs.eg.db clusterProfiler ensembldb EnsDb.Hsapiens.v75 GO.db
+  - travis-tool.sh install_bioc  GenomeInfoDb DESeq2 Rsamtools org.Hs.eg.db clusterProfiler ensembldb EnsDb.Hsapiens.v75 GO.db IRanges GenomicAlignments SummarizedExperiment GenomicRanges S4Vectors
 
 test_script:
   - travis-tool.sh run_tests
