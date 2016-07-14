@@ -1,6 +1,8 @@
 # ALTRE R Package
 
 [![Travis-CI Build Status](https://travis-ci.org/rfarouni/ALTRE-1.svg?branch=master)](https://travis-ci.org/rfarouni/ALTRE-1)
+[![codecov](https://codecov.io/gh/rfarouni/ALTRE-1/branch/master/graph/badge.svg)](https://codecov.io/gh/rfarouni/ALTRE-1)
+
 
 ## Install From Github
 

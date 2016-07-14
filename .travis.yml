@@ -5,3 +5,7 @@ sudo: false
 cache: packages
 r: bioc-release
 
+r_packages:
+  - covr
+after_success:
+  - Rscript -e 'library(covr); codecov()'
