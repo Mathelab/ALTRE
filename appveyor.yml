@@ -25,28 +25,26 @@ environment:
 
   matrix:
 
-  - R_VERSION: devel
+  - R_VERSION: release
     R_ARCH: x64
     GCC_PATH: mingw_64
     USE_RTOOLS: true
-    BIOC_USE_DEVEL: true
+    BIOC_USE_DEVEL: false
 
   - R_VERSION: release
     R_ARCH: x64
     USE_RTOOLS: true
     BIOC_USE_DEVEL: false
 
-  - R_VERSION: oldrel
+  - R_VERSION: release
     R_ARCH: x64
-    USE_RTOOLS: true
-    RTOOLS_VERSION: 32
-    CRAN: http://cran.rstudio.com
+    USE_RTOOLS: false
     BIOC_USE_DEVEL: false
+
 
 
 build_script:
   - travis-tool.sh install_deps
-  - travis-tool.sh install_r htmltools httpuv evaluate
   - travis-tool.sh install_bioc  GenomeInfoDb DESeq2 Rsamtools org.Hs.eg.db clusterProfiler ensembldb EnsDb.Hsapiens.v75 GO.db IRanges GenomicAlignments SummarizedExperiment GenomicRanges S4Vectors
 
 test_script:
