@@ -46,7 +46,8 @@ Before analysis, it is important to identify consensus peaks amoung sample repli
 
 Many of the functions within ALTRE rely on meta-information about the samples supplied in a csv file. 
 
-First, we will read in that csv file. Be sure to change the file path to where your csv file is located. 
+First, we will read in that csv file. This csv file is included in the bundle of chr21 subsetted data. Be sure to edit the csv file so that the "file path" column points to the location of the 
+chr21 folder on your computer. Additionally, be sure to change the file path in the below code chunk to the chr21 folder as well. 
 ```{r}
 library(ALTRE)
 csvfile <- file.path("/Users/bask05/Desktop/Mathelab-ALTREsampledata", "DNaseEncodeMacLinux.csv")
@@ -160,8 +161,7 @@ The "offspring" argument limits how many offspring a pathway can contain. Genera
 
 2. Removal or pathways with low gene counts – these pathways are more likely to be false positives. This is because they are more likely to be elevated in the pathway rankings due to the nature of the statistical test – it is much easier to contain half of a pathway’s genes in the gene cluster under analysis when the pathway contains only four genes, and not 100 genes. The "gene" argument limits how few genes a pathway can contain. 
 
-Pathways fall into three categories (Molecular Function (MF), Biological Process (BP), and Cellular Component (CC)), and each category must be analyzed separately. The category is selected by supplying an argument to "ontoltype". No significant pathways will come up since we are using only a chr21 subset of the data in this vignette  -- the pval is set very high as a result. 
-
+Pathways fall into three categories (Molecular Function (MF), Biological Process (BP), and Cellular Component (CC)), and each category must be analyzed separately. The category is selected by supplying an argument to "ontoltype". No pathways will have low p-values (p<0.05) since we are using only a chr21 subset of the data in this vignette  -- the p-value argument is set very high so that the results do not come up as "none" in this example. During a real analysis the p-value should be set to a more scientifically meaningful p-value cut-off, such as 0.05. The enriched pathways for this entire dataset at a low p-value cut-off can be seen in the published paper. 
 ```{r}
 MFenrich <- pathenrich(analysisresults = categaltre_peaks,
                           ontoltype = 'MF',
@@ -192,14 +192,15 @@ plotDistCountAnalysis(categaltre_peaks, counts_consPeaks)
 
 ```
 
-"genomebrowservis" allows raw data to be visualized as tracks in the UCSC by creating hotspot files color-coded by type-specificity. A bed file will be created in the working directory, there is no output to the function that can be saved as an object.
+"writeBedFile" allows raw data to be visualized as tracks in the UCSC by creating hotspot files color-coded by type-specificity. A bed file will be created in the working directory, there is no output to the function that can be saved as an object.
 
 ```{r}
 writeBedFile(categaltre_peaks, "output.txt")
 ```
 
 
-"enrichmentheatmap” creates a heatmap of the analysis for all three RE types (SAEC-specific, A549-specific, and shared), with the color-coding corresponding to the significance of the pathway – the lighter the blue, the lower the p-value. No significant pathways will come up since we are using only a chr21 subset of the data in this vignette  -- the pval is set very high as a result. 
+"enrichHeatmap” creates a heatmap of the analysis for all three RE types (SAEC-specific, A549-specific, and shared), with the color-coding corresponding to the significance of the pathway – the lighter the blue, the lower the p-value. No pathways will have low p-values (p<0.05) since we are using only a chr21 subset of the data in this vignette  -- the p-value argument is set very so that the results do not come up as "none" in this example. During a real analysis the p-value should be set to a more scientifically meaniningful p-value cut-off, such as 0.05. The enriched pathways for this entire dataset at a low p-value cut-off can be seen in the published paper. 
+
 ```{r}
 enrichHeatmap(MFenrich, title="GO:MF", pvalfilt = 0.99)
 

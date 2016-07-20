@@ -74,6 +74,13 @@ pathenrich <- function(analysisresults,
                        offspring = 300,
                        regionsubset = "promoter") {
 
+  
+  
+  suppressWarnings(suppressMessages(library(GenomicRanges)))  
+  suppressWarnings(suppressMessages(library(org.Hs.eg.db)))
+  suppressWarnings(suppressMessages(library(AnnotationDbi)))
+  suppressWarnings(suppressMessages(library(Biobase)))
+  
   analysisresults <- analysisresults$analysisresults
 
   if (is.data.frame(analysisresults) == FALSE) {
@@ -159,7 +166,7 @@ pathenrich <- function(analysisresults,
                       pvalfilt = enrichpvalfilt,
                       genes = genes,
                       offspring = offspring)
-    print(paste("Number of rows", nrow(shared)))
+    print(paste("Number of rows:", nrow(shared)))
     if (nrow(shared) == 0) {
       shared <- as.data.frame("No enrichment found for shared REs")
     }
