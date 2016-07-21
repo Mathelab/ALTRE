@@ -35,7 +35,7 @@ As for all high-throughput sequencing experiments, the results of ATAC-seq, DHS-
 
 To demonstrate the abilities of ALTRE, we have provided an example dataset (BAM and HOTSPOT files) of cancerous (A549) and normal (SAEC) lung cell types downloaded from the ENCODE project. This dataset will guide users through the workflow of the package in this vignette. 
 
-This vignette uses only the chr21 subset of the data. This data is available for download here: https://mathelab.github.io/ALTREsampledata/
+This vignette uses only the chr21 subset of the data. This data is available here: https://mathelab.github.io/ALTREsampledata/, and we will automatically download it below for this vignette. 
 
 ##Start of pipeline
 
@@ -46,17 +46,26 @@ Before analysis, it is important to identify consensus peaks amoung sample repli
 
 Many of the functions within ALTRE rely on meta-information about the samples supplied in a csv file. 
 
-First, we will read in that csv file. This csv file is included in the bundle of chr21 subsetted data. Be sure to edit the csv file so that the "file path" column points to the location of the 
-chr21 folder on your computer. Additionally, be sure to change the file path in the below code chunk to the chr21 folder as well. 
+First, we need to download all the necessary sample files for this analysis and then read in a csv file that contains meta-information about our samples. This csv file is included in the bundle of chr21 subsetted data. 
 ```{r}
 library(ALTRE)
-csvfile <- file.path("/Users/bask05/Desktop/Mathelab-ALTREsampledata", "DNaseEncodeMacLinux.csv")
+download.file("https://github.com/Mathelab/AltreDataRepo/tarball/master", "./dataset.tar.gz")
+untar("dataset.tar.gz")
+workingdirectory=getwd()
+csvfile <- file.path(workingdirectory, "Mathelab-ALTREsampledata-042a6f3/DNaseEncodeWindows.csv")
 csvfile
+```
+
+In this vignette we will change information in the csv file on the command line, by editing the object. It likely makes more sense for you to manually edit the file when running 
+this analysis on your own samples. 
+```{r}
+sampleinfo <- loadCSVFile(csvfile)
+filespath <- file.path(workingdirectory, "Mathelab-ALTREsampledata-042a6f3")
+sampleinfo$datapath=filespath
 ```
 
 For the "getConsensusPeaks" function, we need to read in the hotspot files for analysis. 
 ```{r}
-sampleinfo <- loadCSVFile(csvfile)
 samplePeaks <- loadBedFiles(sampleinfo)
 samplePeaks
 ```
