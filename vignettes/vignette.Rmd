@@ -169,7 +169,7 @@ MFenrich <- pathenrich(analysisresults = categaltre_peaks,
 
 ```
 
-##Post-processing summerization and visualization 
+##Post-processing summarization and visualization 
 
 Once results have been obtained, there are a number of additional functions in ALTRE to summarize and better depict the results and raw data in tables and graphs. In this section of the vignette we will walk through these functions.
 
