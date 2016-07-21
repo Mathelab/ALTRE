@@ -335,7 +335,7 @@ plotDistCountAnalysis <- function(analysisresults, counts) {
                     PEcateg = PEcateg,
                     altrecateg = altrecateg)
 
-  meltdf <- reshape2::melt(mydf)
+  suppressMessages(meltdf <- reshape2::melt(mydf))
   meltdf$variable <- gsub("meanlog2FPM.", "", meltdf$variable)
 
 	p <- ggplot(meltdf, aes_string(x = "PEcateg", y = "value")) +
@@ -507,7 +507,7 @@ enrichHeatmap <- function(input,
   pathways <- unique(c(up$Description,
                        reference$Description,
                        shared$Description))
-  print(paste("Pathways", pathways))
+  #print(paste("Pathways", pathways))
   pathways <- pathways[!is.na(pathways)]
   if (is.na(pathways) || length(pathways) == 0) {
     stop("No pathways are significant
@@ -524,10 +524,10 @@ enrichHeatmap <- function(input,
   colnames(heatmapmatrix) <- c("up", "down", "shared")
   # put up, down, and shared as the pathway names
 
-  print(paste("Dim heatmapmatrix", dim(heatmapmatrix)))
+  #print(paste("Dim heatmapmatrix", dim(heatmapmatrix)))
 
   for (i in 1:length(row.names(heatmapmatrix))) {
-    print(row.names(heatmapmatrix)[i])
+    #print(row.names(heatmapmatrix)[i])
     if (row.names(heatmapmatrix)[i] %in% up$Description) {
       num1 <- which(up$Description == row.names(heatmapmatrix)[i])
       heatmapmatrix[i, 1] <- up[num1, 6]
@@ -568,7 +568,7 @@ enrichHeatmap <- function(input,
   heatmapdata$id <- rownames(heatmapdata)
   # makes id
   rownames(heatmapdata) <- c(1:nrow(heatmapdata))
-  meltedheatmapdata <- reshape2::melt(heatmapdata)
+  suppressMessages(meltedheatmapdata <- reshape2::melt(heatmapdata))
 
   meltedheatmapdata$newid = stringr::str_wrap(meltedheatmapdata$id, width = 80)
 #  meltedheatmapdata$id <- factor(meltedheatmapdata$id,
