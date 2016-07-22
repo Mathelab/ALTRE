@@ -74,13 +74,6 @@ pathenrich <- function(analysisresults,
                        offspring = 300,
                        regionsubset = "promoter") {
 
-  
-  
-  suppressWarnings(suppressMessages(library(GenomicRanges)))  
-  suppressWarnings(suppressMessages(library(org.Hs.eg.db)))
-  suppressWarnings(suppressMessages(library(AnnotationDbi)))
-  suppressWarnings(suppressMessages(library(Biobase)))
-  
   analysisresults <- analysisresults$analysisresults
 
   if (is.data.frame(analysisresults) == FALSE) {
