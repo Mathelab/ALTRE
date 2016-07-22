@@ -14,8 +14,6 @@ BugReports: https://github.com/Mathelab/ALTRE/issues
 Depends: R (>= 3.3.0)
 Imports:
     shiny,
-    shinydashboard,
-    rmarkdown,
     methods,
     S4Vectors,
     GenomeInfoDb,
@@ -38,7 +36,9 @@ Imports:
     venneuler,
     stringr,
     tibble
-Suggests: knitr
+Suggests: knitr,
+          shinydashboard,
+          rmarkdown
 VignetteBuilder: knitr
 License: GPL-2
 LazyData: TRUE
