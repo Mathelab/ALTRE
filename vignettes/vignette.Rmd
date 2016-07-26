@@ -25,8 +25,9 @@ ALTRE takes as input alignment files (BAM format) and peak files (BED format).  
 To demonstrate the functionality of ALTRE, we have provided an example dataset (BAM and BED files) of cancerous (A549) and normal (SAEC) lung cell types downloaded from the ENCODE project (see <https://mathelab.github.io/ALTREsampledata/>). Of note, this vignette uses only a subset of the data corresponging to Chromosome 21 (results may not be as meaningful). 
 
 
-1. **Load Data** 
+**1. Load Data** 
 
+*Load Metadata*
 The location of data files, along with metadata, to be analyzed in ALTRE is supplied as a CSV file. After downlading all files in the example datasets in one folder, download the CSV at <https://raw.githubusercontent.com/mathelab/AltreDataRepo/master/DNaseEncodeWindows.csv>.  You'll need to modify the CSV file such that the file paths refer to your local directory.  Also, be sure to set your working directory in the R environment to point to the directory where you have placed your CSV file.
 
 ```{r}
@@ -35,18 +36,17 @@ csvfile <- loadCSVFile("DNaseEncodeChr21.csv")
 csvfile
 ```
 
-For the *getConsensusPeaks* function, we need to read in the BED files for analysis. The *loadBedFiles* function will only read the first three columns of the BED files corresponding to the chr, start, stop variables. Additional columns are allowed, but are ignored.
+*Load peak files*
+Read in the peak files (BED format) with the *loadBedFiles* function.  Only the first three columns (chr, start, end) of the peak files are required an read in. Additional columns are allowed but ignored.
 
 ```{r}
 samplePeaks <- loadBedFiles(csvfile)
 samplePeaks
 ```
 
-2. **Get Reproducible Peaks**
+**2. Get Reproducible Peaks**
 
-In the second step, we try to identify consensus peaks among sample replicates – peaks that are present in all (or, less stringently, the majority) of sample replicates. The function *getConsensusPeaks* processes an input of two or more BED files per sample and returns a GRanges list. At least two BED replicates are required in order to differentiate sample noise from robust, reproducible peaks.
-
-We use the *getConsensusPeaks* function to identify the peaks that are present in both replicates of each sample type.
+In the second step, ALTRE identifies consensus peaks among sample replicates – peaks that are present in all (or, less stringently, the majority) of sample replicates. The function *getConsensusPeaks* processes an input of two or more peak files per sample and returns a GRanges list. At least two biological replicates are required in order to identify consensus peaks.
 
 ```{r}
 consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
@@ -59,22 +59,22 @@ The function *plotConsensusPeaks* creates a bar graph comparing the number of re
 plotConsensusPeaks(samplepeaks = consensusPeaks)
 ```
 
-3. **Annotate Peaks**
+**3. Annotate Peaks**
 
 The output of the function *getConsensusPeaks* is then further processed by the *combineAnnotatePeaks* function, which in turn accomplishes three main tasks:
 
-Combines the reproducible peaks from both samples type into one large master list of peaks. This enables peak height comparison across sample types.
+  1. Combines consensus peaks for each samples type into one large master list of peaks for each sample type. 
 
-Categorize the peaks as either promoters or enhancers based on the distance of the RE from a transcription start site (TSS). In this vignette we will use the default promoter distance argument: REs within 1,500 bp of a TSS are considered promoters; those not within 1,500 bp of a TSS are considered enhancers.
+  2. Categorizes peaks as candidate promoters or enhancers, based on the distance of the peaks from a transcription start site (TSS). In this vignette we will use the default promoter distance argument: peaks within 1,500 bp of a TSS are considered promoters; those not within 1,500 bp of a TSS are considered enhancers.
 
-Optionally, merges REs within a certain distance of each other. Merging close-by REs loosens the stringency of the region comparison. Multiple regions of active chromatin within ~1000 bp are likely to represent only one RE. In this vignette we will use the defaults of the function, which merges regions within 1000 bp of each other and merges only within RE type (i.e. only enhancers will only be merged with other enhancers, and likewise, promoters only with promoters). Both these functionalities can be changed via the “mergedistenh”, “mergedistprom” and “regionspecific” arguments.
+  3. Optionally, merges peaks within a certain distance of each other. Merging close-by peaks loosens the stringency of the region comparison. Multiple regions of active chromatin within ~1000 bp are likely to represent only one regulatory element. In this vignette we will use the defaults of the function, which merges regions within 1000 bp of each other and merges only within regulatory element type (i.e. only enhancers will only be merged with other enhancers, and likewise, promoters only with promoters). Both these functionalities can be changed via the “mergedistenh”, “mergedistprom” and “regionspecific” arguments.
 
-This function requires a list of TSSs for the promoter/enhancer annotation:
+The *combineAnnotatePeaks* function requires a list of TSSs for the promoter/enhancer annotation, which can be read in with the *getTSS()* function:
 ```{r}
 TSSannot <- getTSS()
 ```
 
-The output of the previous function *getConsensusPeaks* is fed as input:
+Then the function can be run with: 
 
 ```{r}
 consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
@@ -86,25 +86,26 @@ consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
 ```
 
 
-The function produces a GRanges object containing the annotated, merged peaks – all peaks present in cancerous or normal lung.
+Note that the output of the previous function *getConsensusPeaks* is fed as input (consensPeaks).
 
-Additionally, the function *plotCombineAnnotatePeaks* creates a bar graph to showcase the changes in the number and size of enhancers and promoters before and after merging close-by REs.
+The output of *combineAnnotatePeaks()* produces a GRanges object containing the annotated, merged peaks – all peaks present in cancerous or normal lung.
 
+Additionally, the function *plotCombineAnnotatePeaks* creates a bar graph to showcase the changes in the number and size of enhancers and promoters before and after merging close-by peaks.
 
 ```{r}
 plotCombineAnnotatePeaks(consensusPeaksAnnotated)
 ```
 
-The number of REs decreases and the size of the regions increases, as expected.
+The number of regulatory elements decreases and the size of the regions increases, as expected.
 
 
-4. **Get Read Counts**
+**4. Get Read Counts**
 
-The next function *getCounts* counts the number of reads in each RE for each sample type – this determines the peak height/intensity and approximates the accessibility of the RE in question.
+The next function *getCounts()* retrieves the number of reads in each regulatory element (RE) for each sample type – this determines the peak height/intensity and approximates the accessibility of the RE in question.  Read counts are retrieved from the alignment files (BAM format) that are supplied in the CSV file containing the sample metadata.  We have already read in the CSV in the first step of the workflow (load data).  
 
-Read count information across regions of interest is only available in the BAM file format – BAM files must be supplied to this function for each sample type. At least two replicates per sample type are required in order to distinguish reproducible peaks from sample noise. The names of the BAM files are not supplied to the function directly. Instead, the information is included in the CSV file containing sample meta-information. We have already extracted that information from the CSV file in the sampleinfo object.
+Of note, one cell type must be designated as  “reference ”, to which the other cell types will be compared. In this example, the reference type is the normal lung cell line (SAEC).
 
-One cell type must be designated as the “reference type”, to which the other cell types will be compared. In this example, the reference type is the normal lung cell line (SAEC).
+To run the function:
 ```{r}
 consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
                               sampleinfo = csvfile,
@@ -114,10 +115,9 @@ plotgetcounts(consensusPeaksCounts)
 ```
 
 
+**5. Retrieve and Categorize Candidate Altered Regulatory Elements (REs)**
 
-5. **Get Candidate Regions with Altered Regulatory Elements**
-
-The count information from the function *getCounts* is then processed by the function *countanalysis* – this is the point in the pathway where the changes in peak height across cell types are quantified with an algorithm from the DESeq2 R package.
+The counts for each REs are processed by the function *countanalysis*, which leverages the algorithm from the R package DESeq2 to compare peak intensities across cell types.  
 
 ```{r}
 alteredPeaks <- countanalysis(counts = consensusPeaksCounts,
@@ -126,10 +126,7 @@ alteredPeaks <- countanalysis(counts = consensusPeaksCounts,
 
 ```
 
-6. **Categorize Altered Peaks**
-
-
-Finally, altered enhancers and promoters are identified. Larger log2fold changes and smaller p-values signify greater differences between cell types. How large a change is considered cell-type specific is left up to the user.
+Altered REs are next categorized based on associated log2fold changes and p-values, where larger log2fold changes and smaller p-values signify greater differences between cell types. How large a change is considered cell-type specific is left up to the user.
 
 ```{r}
 alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
@@ -143,11 +140,13 @@ plotCountAnalysis(alteredPeaksCategorized)
 REs with large, positive log2fold changes and small p-values are more open in the lung cancer cell type, and therefore, their activity is associated with the cancer phenotype. REs with large, negative log2fold changes and small p-values are more open in the normal lung cell type, and may therefore be associated with tumor suppressive properties. REs with minimal log2fold change and high p-values are equally open in both cell types, and therefore, their activity is more likely to contribute to the house-keeping functions required in every cell.
 
 
-7. **Compare Methods for Identifying Altered Regulatory Regions** 
+**6. Compare Methods for Identifying Altered Regulatory Regions** 
 
-Once results have been obtained, there are a number of additional functions in ALTRE to summarize and better depict the results and raw data in tables and graphs. In this section of the vignette we will walk through these functions.
+Once results have been obtained, there are a number of additional functions in ALTRE to summarize and better depict the results and raw data in tables and graphs. One function, *comparePeaksAltre*, creates a table to compare two methods for identifying altered REs:
+  1. one based on peak intensity (ALTRE's *countanalysis* function)
+  2. one based on peak presence or absence as determined by the peak calling algorithm
 
-The function *comparePeaksAltre* creates a table to compare the two methods of identifying altered REs – one based on peak intensity, the other on peak presence or absence as determined by peak calling algorithms. The intensity-based method identifies much fewer type-specific regions.
+To compare resulting altered REs from these two methods, run the following:
 
 ```{r}
 analysisresults <- comparePeaksAltre(alteredPeaksCategorized, reference = "SAEC")
