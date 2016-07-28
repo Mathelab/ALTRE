@@ -31,6 +31,10 @@ environment:
     USE_RTOOLS: true
     BIOC_USE_DEVEL: false
 
+  - R_VERSION: devel
+    R_ARCH: x64
+    BIOC_USE_DEVEL: true
+
   - R_VERSION: release
     R_ARCH: x64
     GCC_PATH: mingw_64
@@ -46,6 +50,11 @@ environment:
     R_ARCH: x64
     USE_RTOOLS: false
     BIOC_USE_DEVEL: false
+
+  - R_VERSION: devel
+    R_ARCH: x64
+    USE_RTOOLS: true
+    BIOC_USE_DEVEL: true
 
 build_script:
   - travis-tool.sh install_deps

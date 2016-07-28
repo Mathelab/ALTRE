@@ -5,14 +5,12 @@ sudo: false
 cache: packages
 os:
   - linux
-  - osx
 r:
   - bioc-release
   - bioc-devel
 
 r_build_args: --no-build-vignettes
 r_check_args: --no-build-vignettes
-disable_homebrew: true
 r_packages:
   - covr
 after_success:
