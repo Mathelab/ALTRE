@@ -1,10 +1,10 @@
 ---
+title: 'ALTRE: vignette'
 author: "Ewy Mathe, Elizabeth Baskin, and Rick Farouni"
-title: "ALTRE: vignette"
-date: "`r Sys.Date()`"
-output: pdf_document
+date: '`r Sys.Date()`'
+output: html_document
 vignette: >
-  %\VignetteIndexEntry{ALTRE: vignette}
+  %\VignetteIndexEntry{ALTRE: vignette} 
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
