@@ -41,6 +41,15 @@ On Windows, if you get an installation error then first run the following lines 
 install.packages(c("htmltools","httpuv","evaluate","markdown"))
 ```
 
+When installing on OSC cluster, if you get an installation error then first run the following lines of code in your console prior to trying to install:
+
+```{R}
+sudo R CMD javareconf -e
+export JAVA_CPPFLAGS='-O2'
+module load gnu/5.2.0
+module load R/3.3.1
+```
+
 
 #### Installation Walk-through Animation
 
