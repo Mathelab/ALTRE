@@ -26,7 +26,7 @@ sidebar <- dashboardSidebar(
       badgeLabel = "step 1"
     ),
     menuItem(
-      "Define Consensus Peaks",
+      "Identify Consensus Peaks",
       tabName = "definerep",
       icon = icon("bullseye"),
       badgeLabel = "step 2"
@@ -45,7 +45,7 @@ sidebar <- dashboardSidebar(
       badgeColor = "green"
     ),
     menuItem(
-      "Define Altered Regions",
+      "Identify Altered Regions",
       icon = icon("bullseye"),
       tabName = "definealtered",
       badgeLabel = "step 5",
