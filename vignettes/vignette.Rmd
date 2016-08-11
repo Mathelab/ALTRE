@@ -32,7 +32,7 @@ The location of data files, along with metadata, to be analyzed in ALTRE is supp
 
 ```{r}
 library(ALTRE)
-csvfile <- loadCSVFile("/home/rick/Documents/AltreDataRepo/DNaseEncodeChr21.csv")
+csvfile <- loadCSVFile("~/Documents/AltreDataRepo/DNaseEncodeChr21.csv")
 csvfile
 ```
 
