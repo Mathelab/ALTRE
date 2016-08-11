@@ -38,6 +38,8 @@ Imports:
     venneuler,
     stringr,
     tibble
+Suggests: knitr
+VignetteBuilder: knitr
 License: GPL-2
 LazyData: TRUE
 RoxygenNote: 5.0.1
