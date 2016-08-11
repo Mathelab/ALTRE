@@ -78,7 +78,7 @@ getConsensusPeaks <- function(samplepeaks, minreps) {
     colnames(mcols(finalgranges)) <- "sampletype"
 
    # Remove chromosomes that are not 1-22/X/Y
-    finalranges <- GenomeInfoDb::keepSeqlevels(finalgranges, chrom_subset)
+    finalgranges <- GenomeInfoDb::keepSeqlevels(finalgranges, chrom_subset)
 
     # Construct output
     conspeaks$mytype <- finalgranges
