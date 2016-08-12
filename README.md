@@ -105,25 +105,6 @@ http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/wgEncod
 https://sites.google.com/site/anshulkundaje/projects/blacklists
 
 
-##  To build from source (Optional)
-
-To inculde the vignette in the installation package run
-
-```{R}
-devtools::install(build_vignettes = TRUE)
-```
-
-Make sure that the *vignette.Rmd* file contains the following commands in the header:
-
-```{R}
-author: "...."
-title: "ALTRE: vignette"
-date: "`r Sys.Date()`"
-output: pdf_document
-vignette: >
-  %\VignetteIndexEntry{ALTRE: vignette}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
-```
-
+A vignette (which provides an overview of the package via step-by-step guide through an example dataset) is here:
+https://mathelab.github.io/ALTRE/vignette.html
 
