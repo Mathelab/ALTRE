@@ -1,10 +1,10 @@
 ---
+title: 'ALTRE: vignette'
 author: "Ewy Mathe, Elizabeth Baskin, and Rick Farouni"
-title: "ALTRE: vignette"
-date: "`r Sys.Date()`"
-output: pdf_document
+date: '`r Sys.Date()`'
+output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{ALTRE: vignette}
+  %\VignetteIndexEntry{ALTRE: vignette} 
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -14,7 +14,7 @@ vignette: >
 
 ALTRE (ALTered Regulatory Elements) is an R software package that streamlines and simplifies the analysis of data generated from genome-wide chromatin accessibility assays such as DNase-seq (a.k.a. DHS-seq), FAIRE-seq, and ATAC-seq.
 
-Regulatory elements (REs), such as enhancers and promoters are involved in regulating gene transcription – they control genes and pathways that can be investigated as putative therapeutic targets, or they may serve as targets themselves. Chromatin accessibility assays allow us to identify the location of REs genome-wide by identifying “open” chromatin (i.e. euchromatin). Identifying REs that differ between cell types, such as cancerous and noncancerous cell lines and tissues, holds promise for discovering new mechanisms involved in cellular development and disease progression. 
+Regulatory elements (REs) such as enhancers and promoters are involved in regulating gene transcription – they control genes and pathways that can be investigated as putative therapeutic targets, or they may serve as targets themselves. Chromatin accessibility assays allow us to identify the location of REs genome-wide by identifying “open” chromatin (i.e. euchromatin). Identifying REs that differ between cell types, such as cancerous and noncancerous cell lines and tissues, holds promise for discovering new mechanisms involved in cellular development and disease progression. 
 
 #Workflow
 
@@ -32,7 +32,7 @@ The location of data files, along with metadata, to be analyzed in ALTRE is supp
 
 ```{r}
 library(ALTRE)
-csvfile <- loadCSVFile("DNaseEncodeChr21.csv")
+csvfile <- loadCSVFile("~/Documents/AltreDataRepo/DNaseEncodeChr21.csv")
 csvfile
 ```
 
