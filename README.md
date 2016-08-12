@@ -105,6 +105,7 @@ http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/wgEncod
 https://sites.google.com/site/anshulkundaje/projects/blacklists
 
 
+####Vignette 
 A vignette (which provides an overview of the package via step-by-step guide through an example dataset) is here:
 https://mathelab.github.io/ALTRE/vignette.html
 
