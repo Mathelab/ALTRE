@@ -1,7 +1,7 @@
 # ALTRE R Package
 
 [![Build Status](https://travis-ci.org/Mathelab/ALTRE.svg?branch=master)](https://travis-ci.org/Mathelab/ALTRE)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/rfarouni/ALTRE-1?branch=master&svg=true)](https://ci.appveyor.com/project/rfarouni/ALTRE-1)
+[![Build status](https://ci.appveyor.com/api/projects/status/i7lbh9tl449hvnmj/branch/master?svg=true)](https://ci.appveyor.com/project/Mathelab/altre/branch/master)
 [![codecov](https://codecov.io/gh/rfarouni/ALTRE-1/branch/master/graph/badge.svg)](https://codecov.io/gh/rfarouni/ALTRE-1)
 
 
