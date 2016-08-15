@@ -1,0 +1,270 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: "Helvetica Neue", Helvetica, "Hiragino Sans GB", Arial, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    color: #737373;
+    background-color: white;
+    margin: 10px 13px 10px 13px;
+}
+table {
+	margin: 10px 0 15px 0;
+	border-collapse: collapse;
+}
+td,th {	
+	border: 1px solid #ddd;
+	padding: 3px 10px;
+}
+th {
+	padding: 5px 10px;	
+}
+
+a {
+    color: #0069d6;
+}
+a:hover {
+    color: #0050a3;
+    text-decoration: none;
+}
+a img {
+    border: none;
+}
+p {
+    margin-bottom: 9px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #404040;
+    line-height: 36px;
+}
+h1 {
+    margin-bottom: 18px;
+    font-size: 30px;
+}
+h2 {
+    font-size: 24px;
+}
+h3 {
+    font-size: 18px;
+}
+h4 {
+    font-size: 16px;
+}
+h5 {
+    font-size: 14px;
+}
+h6 {
+    font-size: 13px;
+}
+hr {
+    margin: 0 0 19px;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+}
+blockquote {
+    padding: 13px 13px 21px 15px;
+    margin-bottom: 18px;
+    font-family:georgia,serif;
+    font-style: italic;
+}
+blockquote:before {
+    content:"\201C";
+    font-size:40px;
+    margin-left:-10px;
+    font-family:georgia,serif;
+    color:#eee;
+}
+blockquote p {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 18px;
+    margin-bottom: 0;
+    font-style: italic;
+}
+code, pre {
+    font-family: Monaco, Andale Mono, Courier New, monospace;
+}
+code {
+    background-color: #fee9cc;
+    color: rgba(0, 0, 0, 0.75);
+    padding: 1px 3px;
+    font-size: 12px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+pre {
+    display: block;
+    padding: 14px;
+    margin: 0 0 18px;
+    line-height: 16px;
+    font-size: 11px;
+    border: 1px solid #d9d9d9;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+pre code {
+    background-color: #fff;
+    color:#737373;
+    font-size: 11px;
+    padding: 0;
+}
+sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+* {
+	-webkit-print-color-adjust: exact;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:10px auto;
+    }
+}
+@media print {
+	body,code,pre code,h1,h2,h3,h4,h5,h6 {
+		color: black;
+	}
+	table, pre {
+		page-break-inside: avoid;
+	}
+}
+</style>
+<title>ALTRE R Package</title>
+
+</head>
+<body>
+<h1>ALTRE R Package</h1>
+
+<p><a href="https://travis-ci.org/Mathelab/ALTRE"><img src="https://travis-ci.org/Mathelab/ALTRE.svg?branch=master" alt="Build Status" /></a>
+<a href="https://ci.appveyor.com/project/Mathelab/altre/branch/master"><img src="https://ci.appveyor.com/api/projects/status/i7lbh9tl449hvnmj/branch/master?svg=true" alt="Build status" /></a>
+<a href="https://codecov.io/gh/Mathelab/ALTRE"><img src="https://codecov.io/gh/Mathelab/ALTRE/branch/master/graph/badge.svg" alt="codecov" /></a></p>
+
+<h4>Install From Github</h4>
+
+<pre><code>install.packages("devtools")
+</code></pre>
+
+<h4>install Bioconductor packages</h4>
+
+<pre><code>source("http://bioconductor.org/biocLite.R")
+BiocInstaller::biocLite(c('GenomeInfoDb',
+                        'IRanges',
+                        'DESeq2',
+                        'GenomicAlignments',
+                        'SummarizedExperiment',
+                        'GenomicRanges',
+                        'Rsamtools',
+                        'org.Hs.eg.db',
+                        'clusterProfiler',
+                        'ensembldb', 
+                        'EnsDb.Hsapiens.v75',
+                        'GO.db'))
+</code></pre>
+
+<h1>install the package</h1>
+
+<pre><code>devtools::install_github("mathelab/ALTRE")
+</code></pre>
+
+<p>When installing on Linux, if you get an rJava package installation error. Please run the following two lines in the console:</p>
+
+<pre><code>sudo apt-get install openjdk-7-*
+sudo R CMD javareconf
+</code></pre>
+
+<p>On Windows, if you get an installation error then first run the following lines of code in as well:</p>
+
+<pre><code>install.packages(c("htmltools","httpuv","evaluate","markdown"))
+</code></pre>
+
+<p>When installing on OSC cluster, if you get an installation error then first run the following lines of code in your console prior to trying to install:</p>
+
+<pre><code>sudo R CMD javareconf -e
+export JAVA_CPPFLAGS='-O2'
+module load gnu/5.2.0
+module load R/3.3.1
+</code></pre>
+
+<h4>Installation Walk-through Animation</h4>
+
+<p><img src="https://raw.githubusercontent.com/Mathelab/ALTRE/master/inst/img/ALTREinstall.gif" alt="" /></p>
+
+<h3>To Run</h3>
+
+<p>To launch the Shiny app inside R, run</p>
+
+<pre><code>library(ALTRE)
+runShinyApp()
+</code></pre>
+
+<h4>Shiny App Preview</h4>
+
+<p><img src="https://raw.githubusercontent.com/Mathelab/ALTRE/master/inst/img/ALTRErun.gif" alt="" /></p>
+
+<h2>Vignette</h2>
+
+<p>A vignette (which provides an overview of the package via step-by-step guide through an example dataset) is here:
+https://mathelab.github.io/ALTRE/vignette.html</p>
+
+<h2>Data</h2>
+
+<p>A restricted subset of the data with one chromosome (i.e. chromosome 21) can be found on this <a href="http://mathelab.github.io/ALTREsampledata/">page</a>. The corresponding CSV file for input into ALTRE can be downloaded <a href="https://raw.githubusercontent.com/mathelab/ALTREsampledata/master/DNaseEncodeWindows.csv">here</a>. Be sure to modify the datapath column of the CSV file so that the appropriate full path of the data files on your local machine is included.</p>
+
+<p>To download the entire data, please use a file download manager to download the files from the links listed below.</p>
+
+<h3>Alignment (in BAM format) files:</h3>
+
+<h4><em>A549</em>:</h4>
+
+<p>https://www.encodeproject.org/files/ENCFF001CLE/@@download/ENCFF001CLE.bam</p>
+
+<p>https://www.encodeproject.org/files/ENCFF001CLJ/@@download/ENCFF001CLJ.bam</p>
+
+<h4><em>SAEC</em>:</h4>
+
+<p>https://www.encodeproject.org/files/ENCFF001EFI/@@download/ENCFF001EFI.bam</p>
+
+<p>https://www.encodeproject.org/files/ENCFF001EFN/@@download/ENCFF001EFN.bam</p>
+
+<h3>Peak/hotspot (in BED format) files:</h3>
+
+<h4><em>A549</em>:</h4>
+
+<p>http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/wgEncodeUwDnaseA549HotspotsRep1.broadPeak.gz</p>
+
+<p>http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/wgEncodeUwDnaseA549HotspotsRep2.broadPeak.gz</p>
+
+<h4><em>SAEC</em>:</h4>
+
+<p>http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/wgEncodeUwDnaseSaecHotspotsRep1.broadPeak.gz</p>
+
+<p>http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/wgEncodeUwDnaseSaecHotspotsRep2.broadPeak.gz</p>
+
+<h3>Blacklisted genomic regions for functional genomics analysis</h3>
+
+<p>https://sites.google.com/site/anshulkundaje/projects/blacklists</p>
+</body>
+</html>
