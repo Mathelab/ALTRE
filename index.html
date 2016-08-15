@@ -162,15 +162,14 @@ sup {
 <a href="https://ci.appveyor.com/project/Mathelab/altre/branch/master"><img src="https://ci.appveyor.com/api/projects/status/i7lbh9tl449hvnmj/branch/master?svg=true" alt="Build status" /></a>
 <a href="https://codecov.io/gh/Mathelab/ALTRE"><img src="https://codecov.io/gh/Mathelab/ALTRE/branch/master/graph/badge.svg" alt="codecov" /></a></p>
 
-<h2>Install From Github</h2>
+<h4>Install From Github</h4>
 
-<p>```{R}</p>
+<pre><code>install.packages("devtools")
+</code></pre>
 
-<p>install.packages("devtools")</p>
+<h4>install Bioconductor packages</h4>
 
-<h1>install Bioconductor packages</h1>
-
-<p>source("http://bioconductor.org/biocLite.R")
+<pre><code>source("http://bioconductor.org/biocLite.R")
 BiocInstaller::biocLite(c('GenomeInfoDb',
                         'IRanges',
                         'DESeq2',
@@ -180,35 +179,34 @@ BiocInstaller::biocLite(c('GenomeInfoDb',
                         'Rsamtools',
                         'org.Hs.eg.db',
                         'clusterProfiler',
-                        'ensembldb',
+                        'ensembldb', 
                         'EnsDb.Hsapiens.v75',
-                        'GO.db'))</p>
+                        'GO.db'))
+</code></pre>
 
 <h1>install the package</h1>
 
-<p>devtools::install_github("mathelab/ALTRE")
-```
-When installing on Linux, if you get an rJava package installation error. Please run the following two lines in the console:</p>
+<pre><code>devtools::install_github("mathelab/ALTRE")
+</code></pre>
 
-<p><code>{R}
-sudo apt-get install openjdk-7-*
+<p>When installing on Linux, if you get an rJava package installation error. Please run the following two lines in the console:</p>
+
+<pre><code>sudo apt-get install openjdk-7-*
 sudo R CMD javareconf
-</code></p>
+</code></pre>
 
 <p>On Windows, if you get an installation error then first run the following lines of code in as well:</p>
 
-<p><code>{R}
-install.packages(c("htmltools","httpuv","evaluate","markdown"))
-</code></p>
+<pre><code>install.packages(c("htmltools","httpuv","evaluate","markdown"))
+</code></pre>
 
 <p>When installing on OSC cluster, if you get an installation error then first run the following lines of code in your console prior to trying to install:</p>
 
-<p><code>{R}
-sudo R CMD javareconf -e
+<pre><code>sudo R CMD javareconf -e
 export JAVA_CPPFLAGS='-O2'
 module load gnu/5.2.0
 module load R/3.3.1
-</code></p>
+</code></pre>
 
 <h4>Installation Walk-through Animation</h4>
 
@@ -218,10 +216,9 @@ module load R/3.3.1
 
 <p>To launch the Shiny app inside R, run</p>
 
-<p><code>{R}
-library(ALTRE)
+<pre><code>library(ALTRE)
 runShinyApp()
-</code></p>
+</code></pre>
 
 <h4>Shiny App Preview</h4>
 
