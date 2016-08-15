@@ -1,0 +1,202 @@
+---
+title: 'ALTRE: vignette'
+author: "Ewy Mathe, Elizabeth Baskin, and Rick Farouni"
+date: '`r Sys.Date()`'
+output: html_document
+vignette: >
+  %\VignetteIndexEntry{ALTRE: vignette} 
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+#Introduction
+
+ALTRE (ALTered Regulatory Elements) is an R software package that streamlines and simplifies the analysis of data generated from genome-wide chromatin accessibility assays such as DNase-seq (a.k.a. DHS-seq), FAIRE-seq, and ATAC-seq.
+
+Regulatory elements (REs) such as enhancers and promoters are involved in regulating gene transcription – they control genes and pathways that can be investigated as putative therapeutic targets, or they may serve as targets themselves. Chromatin accessibility assays allow us to identify the location of REs genome-wide by identifying “open” chromatin (i.e. euchromatin). Identifying REs that differ between cell types, such as cancerous and noncancerous cell lines and tissues, holds promise for discovering new mechanisms involved in cellular development and disease progression. 
+
+#Workflow
+
+ALTRE takes as input alignment files (BAM format) and peak files (BED format).  The software then takes users through defining altered peaks using both binary data (presence/absence of peaks) and quantitative data (peak intensity). Moreover, the package includes functions that merge and annotate peaks (e.g. as promoters and enhancers), perform enrichment analysis for REs of interest, and provide visualization functions. The analysis can be conducted through the R command line or through an RShiny web interface for those who are not familiar with the R statistical language. This vignette further explains the purpose of the package and establishes the workflow.
+
+###Example data 
+
+To demonstrate the functionality of ALTRE, we have provided an example dataset (BAM and BED files) of cancerous (A549) and normal (SAEC) lung cell types downloaded from the ENCODE project (see <https://mathelab.github.io/ALTREsampledata/>). Of note, this vignette uses only a subset of the data corresponging to Chromosome 21 (results may not be as meaningful). 
+
+
+**1. Load Data** 
+
+*Load Metadata*
+The location of data files, along with metadata, to be analyzed in ALTRE is supplied as a CSV file. After downlading all files in the example datasets in one folder, download the CSV at <https://raw.githubusercontent.com/mathelab/AltreDataRepo/master/DNaseEncodeWindows.csv>.  You'll need to modify the CSV file such that the file paths refer to your local directory.  Also, be sure to set your working directory in the R environment to point to the directory where you have placed your CSV file.
+
+```{r}
+library(ALTRE)
+csvfile <- loadCSVFile("DNaseEncodeMacLinux.csv")
+csvfile
+```
+
+*Load peak files*
+Read in the peak files (BED format) with the *loadBedFiles()* function.  Only the first three columns (chr, start, end) of the peak files are required an read in. Additional columns are allowed but ignored.
+
+```{r}
+samplePeaks <- loadBedFiles(csvfile)
+samplePeaks
+```
+
+**2. Get Reproducible Peaks**
+
+In the second step, ALTRE identifies consensus peaks among sample replicates – peaks that are present in all (or, less stringently, the majority) of sample replicates. The function *getConsensusPeaks()* processes an input of two or more peak files per sample and returns a GRanges list. At least two biological replicates are required in order to identify consensus peaks.
+
+```{r}
+consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
+                                    minreps = 2)
+```
+
+The function *plotConsensusPeaks()* creates a bar graph comparing the number of replicate peaks identified vs. total number of peaks.
+
+```{r}
+plotConsensusPeaks(samplepeaks = consensusPeaks)
+```
+
+**3. Annotate Peaks**
+
+The output of the function *getConsensusPeaks()* is then further processed by the *combineAnnotatePeaks()* function, which in turn accomplishes three main tasks:
+
+  1. Combines consensus peaks for each samples type into one large master list of peaks for each sample type. 
+
+  2. Categorizes peaks as candidate promoters or enhancers, based on the distance of the peaks from a transcription start site (TSS). In this vignette we will use the default promoter distance argument: peaks within 1,500 bp of a TSS are considered promoters; those not within 1,500 bp of a TSS are considered enhancers.
+
+  3. Optionally, merges peaks within a certain distance of each other. Merging close-by peaks loosens the stringency of the region comparison. Multiple regions of active chromatin within ~1000 bp are likely to represent only one regulatory element. In this vignette we will use the defaults of the function, which merges regions within 1000 bp of each other and merges only within regulatory element type (i.e. only enhancers will only be merged with other enhancers, and likewise, promoters only with promoters). Both these functionalities can be changed via the “mergedistenh”, “mergedistprom” and “regionspecific” arguments.
+
+The *combineAnnotatePeaks()* function requires a list of TSSs for the promoter/enhancer annotation, which can be read in with the *getTSS()* function:
+```{r}
+TSSannot <- getTSS()
+```
+
+Then the function can be run with: 
+
+```{r}
+consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
+                                           TSS = TSSannot,
+                                           merge = TRUE,
+                                           regionspecific = TRUE,
+                                           mergedistenh = 1500,
+                                           mergedistprom = 1000)
+```
+
+
+Note that the output of the previous function *getConsensusPeaks()* is fed as input (consensPeaks).
+
+The output of *combineAnnotatePeaks()* produces a GRanges object containing the annotated, merged peaks – all peaks present in cancerous or normal lung.
+
+Additionally, the function *plotCombineAnnotatePeaks()* creates a bar graph to showcase the changes in the number and size of enhancers and promoters before and after merging close-by peaks.
+
+```{r}
+plotCombineAnnotatePeaks(consensusPeaksAnnotated)
+```
+
+The number of regulatory elements decreases and the size of the regions increases, as expected.
+
+
+**4. Get Read Counts**
+
+The next function *getCounts()* retrieves the number of reads in each regulatory element (RE) for each sample type – this determines the peak height/intensity and approximates the accessibility of the RE in question.  Read counts are retrieved from the alignment files (BAM format) that are supplied in the CSV file containing the sample metadata.  We have already read in the CSV in the first step of the workflow (load data).  
+
+Of note, one cell type must be designated as  “reference ”, to which the other cell types will be compared. In this example, the reference type is the normal lung cell line (SAEC).
+
+To run the function:
+```{r}
+consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
+                              sampleinfo = csvfile,
+                              reference = 'SAEC',
+                              chrom = 'chr21')
+plotgetcounts(consensusPeaksCounts)
+```
+
+
+**5. Retrieve and Categorize Candidate Altered Regulatory Elements (REs)**
+
+The counts for each REs are processed by the function *countanalysis()*, which leverages the algorithm from the R package DESeq2 to compare peak intensities across cell types.  
+
+```{r}
+alteredPeaks <- countanalysis(counts = consensusPeaksCounts,
+                             pval = 0.01,
+                             lfcvalue = 1)
+
+```
+
+Altered REs are next categorized based on associated log2fold changes and p-values, where larger log2fold changes and smaller p-values signify greater differences between cell types. How large a change is considered cell-type specific is left up to the user.
+
+```{r}
+alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
+                                    lfctypespecific = 1.5,
+                                    lfcshared = 1.2,
+                                    pvaltypespecific = 0.01,
+                                    pvalshared = 0.05)
+plotCountAnalysis(alteredPeaksCategorized)
+```
+
+REs with large, positive log2fold changes and small p-values are more open in the lung cancer cell type, and therefore, their activity is associated with the cancer phenotype. REs with large, negative log2fold changes and small p-values are more open in the normal lung cell type, and may therefore be associated with tumor suppressive properties. REs with minimal log2fold change and high p-values are equally open in both cell types, and therefore, their activity is more likely to contribute to the house-keeping functions required in every cell.
+
+
+**6. Summarizing Results** 
+
+Once results have been obtained, there are a number of additional functions in ALTRE to summarize results and raw data in tables and graphs. 
+
+  A. Compare two methods for identifying altered REs:
+    1. one based on peak intensity (ALTRE's *countanalysis()* function)
+    2. one based on peak presence or absence as determined by the peak calling algorithm
+
+To compare resulting altered REs from these two methods, use the function *comparePeaksAltre* as follows:
+
+```{r}
+analysisresults <- comparePeaksAltre(alteredPeaksCategorized, reference = "SAEC")
+```
+
+The function *plotallvenn()* takes the results from comparePeaksAltre and translates the table into Venn diagrams.
+
+
+```{r}
+plotallvenn(analysisresults)
+```
+
+  B. The function *plotDistCountAnalysis()* enables users to view the raw count data in regions identified as type-specific or shared. The log2 transformation of reads per kilo-base per million for each RE is plotted. As expected, for REs identified as higher log-fold change than normal, the lung cancer cell line has much higher counts than he normal lung cell line. The opposite is true for the lower log-fold change regions. For RE with little log-fold change between cell types, the counts are similar. This visual depiction confirms the results of countanalysis and enables users to change parameters if needed.
+
+```{r}
+plotDistCountAnalysis(alteredPeaksCategorized, consensusPeaksCounts)
+```
+
+
+**8. Get Putative Enrichment Pathways** 
+
+Finally, ALTRE performs pathway enrichment analysis for cell type-specific or shared REs using the *enrichment()* function. This is accomplished by linking each RE to the closest gene, and then linking each gene’s product to the pathway the gene product participates in. Pathways that recur many times in the gene cluster (“enriched” pathways) are likely to be regulated by the REs linked to the gene cluster (whether type-specific or shared).
+
+Pathways that are unlikely to be of interest can be filtered out of the enrichment results. ALTRE has two metrics to identify “low information” pathways:
+  1. Vague pathways such as “DNA binding” are removed – they encompass a number of other, more precise pathways (termed “offspring” pathways) already present in the enrichment results. The “offspring” argument limits how many offspring a pathway can contain. Generally, the more offspring, the vaguer and less informative the pathway.
+  2. Removal of pathways with low gene counts – these pathways are more likely to be false positives. This is because they are more likely to be elevated in the pathway rankings due to the nature of the statistical test – it is much easier to contain half of a pathway’s genes in the gene cluster under analysis when the pathway contains only four genes, and not 100 genes. The “gene” argument limits how few genes a pathway can contain.
+
+Gene Ontology pathway annotations are used and pathways fall into three categories: 1) Molecular Function (MF); 2) Biological Process (BP); 3) Cellular Component (CC)), and each category must be analyzed separately. The category is selected by supplying an argument to “ontoltype”. No pathways will have low p-values (p < 0.05) since we are using only a chr21 subset of the data in this vignette – the p-value argument is set very high so that the results do not come up as “none” in this example. During a real analysis the p-value should be set to a lower p-value cut-off such as 0.05. The enriched pathways for this entire dataset at a low p-value cut-off can be seen in the published paper.
+```{r, message = FALSE}
+MFenrich <- pathenrich(analysisresults = alteredPeaksCategorized,
+                       ontoltype = 'MF',
+                       enrichpvalfilt = 0.99)
+```
+
+
+The function *enrichHeatmap()* creates a heatmap plot of the analysis for all three RE types (SAEC-specific, A549-specific, and shared), with the color-coding corresponding to the significance of the pathway – the lighter the blue, the lower the p-value. No pathways will have low p-values (p < 0.05) since we are using only chr21 subset of the data in this vignette – the p-value argument is set very so that the results do not come up as “none” in this example. During a real analysis the p-value should be set to a lower p-value cut-off such as 0.05. The enriched pathways for this entire dataset at a low p-value cut-off can be seen in the published paper.
+
+```{r}
+enrichHeatmap(MFenrich, title = "GO:MF", pvalfilt = 0.99)
+```
+
+**9. Creating Tracks** 
+
+The function *writeBedFile()* allows the location of REs to be visualized as tracks in a Genome Browser by creating hotspot files color-coded by type-specificity. A bed file will be created in the working directory, there is no output to the function that can be saved as an object.
+```{r, eval = FALSE}
+writeBedFile(alteredPeaksCategorized, "output.txt")
+```
+
+```{r}
+sessionInfo()
+```
