@@ -69,6 +69,11 @@ runShinyApp()
 
 ![](inst/img/ALTRErun.gif)
 
+##Vignette 
+
+A vignette (which provides an overview of the package via step-by-step guide through an example dataset) is here:
+https://mathelab.github.io/ALTRE/vignette.html
+
 ## Data
 
 A restricted subset of the data with one chromosome (i.e. chromosome 21) can be found on this [page](http://mathelab.github.io/ALTREsampledata/). The corresponding CSV file for input into ALTRE can be downloaded [here](https://raw.githubusercontent.com/mathelab/ALTREsampledata/master/DNaseEncodeWindows.csv). Be sure to modify the datapath column of the CSV file so that the appropriate full path of the data files on your local machine is included.
@@ -105,7 +110,4 @@ http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/wgEncod
 https://sites.google.com/site/anshulkundaje/projects/blacklists
 
 
-###Vignette 
-A vignette (which provides an overview of the package via step-by-step guide through an example dataset) is here:
-https://mathelab.github.io/ALTRE/vignette.html
 
