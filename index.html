@@ -152,22 +152,19 @@ sup {
 	}
 }
 </style>
-<title>ALTRE – defines ALTered Regulatory Elements from chromatin accessibility data.</title>
+<title>ALTRE R Package</title>
 
 </head>
 <body>
-<h1>ALTRE – defines ALTered Regulatory Elements from chromatin accessibility data.</h1>
+<h1>ALTRE R Package</h1>
 
-<p>The software provides a workflow in the form of an R package and an associated R Shiny app for the comparison of regulatory elements (e.g. candidate promoters and enhancers) between two different cell types.</p>
-
-<h2>Contact</h2>
-
-<p>Contributing authors are Elizabeth Baskin, Rick Farouni, and Ewy Mathe.  Should you have any questions, please contact Ewy at ewy.mathe@osumc.edu.</p>
+<p><a href="https://travis-ci.org/Mathelab/ALTRE"><img src="https://travis-ci.org/Mathelab/ALTRE.svg?branch=master" alt="Build Status" /></a>
+<a href="https://ci.appveyor.com/project/Mathelab/altre/branch/master"><img src="https://ci.appveyor.com/api/projects/status/i7lbh9tl449hvnmj/branch/master?svg=true" alt="Build status" /></a>
+<a href="https://codecov.io/gh/Mathelab/ALTRE"><img src="https://codecov.io/gh/Mathelab/ALTRE/branch/master/graph/badge.svg" alt="codecov" /></a></p>
 
 <h2>Install From Github</h2>
 
-<p>In your R console:
-```{R eval = FALSE}</p>
+<p>```{R}</p>
 
 <p>install.packages("devtools")</p>
 
@@ -175,17 +172,17 @@ sup {
 
 <p>source("http://bioconductor.org/biocLite.R")
 BiocInstaller::biocLite(c('GenomeInfoDb',
-                          'IRanges',
-                          'DESeq2',
-                          'GenomicAlignments',
-                          'SummarizedExperiment',
-                          'GenomicRanges',
-                          'Rsamtools',
-                          'org.Hs.eg.db',
-                          'clusterProfiler',
-                          'ensembldb',
-                          'EnsDb.Hsapiens.v75',
-                          'GO.db'))</p>
+                        'IRanges',
+                        'DESeq2',
+                        'GenomicAlignments',
+                        'SummarizedExperiment',
+                        'GenomicRanges',
+                        'Rsamtools',
+                        'org.Hs.eg.db',
+                        'clusterProfiler',
+                        'ensembldb',
+                        'EnsDb.Hsapiens.v75',
+                        'GO.db'))</p>
 
 <h1>install the package</h1>
 
@@ -193,21 +190,21 @@ BiocInstaller::biocLite(c('GenomeInfoDb',
 ```
 When installing on Linux, if you get an rJava package installation error. Please run the following two lines in the console:</p>
 
-<p><code>{R eval = FALSE}
+<p><code>{R}
 sudo apt-get install openjdk-7-*
-    sudo R CMD javareconf
+sudo R CMD javareconf
 </code></p>
 
-<p>When installing on Windows, if you get an installation error then first run the following lines of code in as well:</p>
+<p>On Windows, if you get an installation error then first run the following lines of code in as well:</p>
 
-<p><code>{R eval = FALSE}
+<p><code>{R}
 install.packages(c("htmltools","httpuv","evaluate","markdown"))
 </code></p>
 
 <p>When installing on OSC cluster, if you get an installation error then first run the following lines of code in your console prior to trying to install:</p>
 
-<p><code>{R eval = FALSE}
-R CMD javareconf -e
+<p><code>{R}
+sudo R CMD javareconf -e
 export JAVA_CPPFLAGS='-O2'
 module load gnu/5.2.0
 module load R/3.3.1
@@ -221,7 +218,7 @@ module load R/3.3.1
 
 <p>To launch the Shiny app inside R, run</p>
 
-<p><code>{R eval = FALSE}
+<p><code>{R}
 library(ALTRE)
 runShinyApp()
 </code></p>
@@ -229,6 +226,11 @@ runShinyApp()
 <h4>Shiny App Preview</h4>
 
 <p><img src="https://raw.githubusercontent.com/Mathelab/ALTRE/master/inst/img/ALTRErun.gif" alt="" /></p>
+
+<h2>Vignette</h2>
+
+<p>A vignette (which provides an overview of the package via step-by-step guide through an example dataset) is here:
+https://mathelab.github.io/ALTRE/vignette.html</p>
 
 <h2>Data</h2>
 
