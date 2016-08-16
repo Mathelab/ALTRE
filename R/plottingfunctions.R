@@ -429,6 +429,7 @@ plotgetcounts <- function(countsconspeaks) {
 #' @param pvalfilt p-value cut-off for inclusion in heatmap
 #' @param removeonlyshared removes regions that come up signifigant only shared
 #' regulatory regions when set to TRUE. Default is FALSE.
+#' @param numshow number of top pathways (ranked according to p-value) of each type (expt, reference, shared) to show in the plot (default=10)
 #'
 #' @return heatmap
 #'
@@ -454,10 +455,15 @@ plotgetcounts <- function(countsconspeaks) {
 #' altre_peaks <- countanalysis(counts=counts_consPeaks,
 #'                              pval=0.01,
 #'                              lfcvalue=1)
-#' MFenrich <- pathenrich(analysisresults = altre_peaks,
+#' categaltre_peaks <- categAltrePeaks(altre_peaks,
+#'				lfctypespecific = 1.5,
+#'				lfcshared = 1.2,
+#'				pvaltypespecific = 0.01,
+#'				pvalshared = 0.05)
+#' MFenrich <- pathenrich(analysisresults = categaltre_peaks,
 #'                        ontoltype = 'MF',
 #'                        enrichpvalfilt = 0.01)
-#' BPenrich <- pathenrich(analysisresults=altre_peaks,
+#' BPenrich <- pathenrich(analysisresults=categaltre_peaks,
 #'                        ontoltype='BP',
 #'                        enrichpvalfilt=0.01)
 #' plot1 <- enrichHeatmap(MFenrich, title='GO:MF, p<0.01')
@@ -468,7 +474,8 @@ plotgetcounts <- function(countsconspeaks) {
 enrichHeatmap <- function(input,
                           title,
                           pvalfilt = 0.01,
-                          removeonlyshared = FALSE) {
+                          removeonlyshared = FALSE,
+			  numshow=10) {
   # input=input[[1]]
 
   if (is.list(input) == FALSE) {
@@ -490,18 +497,27 @@ enrichHeatmap <- function(input,
     up$Description <- NA
   } else {
     up <- up[up$p.adjust < pvalfilt, ]
+    if(nrow(up)>numshow) {
+	up=up[order(up$p.adjust)[1:numshow],]
+    }
   }
   reference <- input$reference
   if (length(reference) <= 1) {
     reference$Description <- NA
   } else {
     reference <- reference[reference$p.adjust < pvalfilt, ]
+    if(nrow(reference)>numshow) {
+	reference=referene[order(reference$p.adjust)[1:numshow],]
+    }
   }
   shared <- input$shared
   if (length(shared) <= 1) {
     shared$Description <- NA
   } else {
     shared <- shared[shared$p.adjust < pvalfilt, ]
+    if(nrow(shared)>numshow) {
+	shared=shared[order(shared$p.adjust)[1:numshow],]
+    }
   }
 
   pathways <- unique(c(up$Description,
@@ -547,12 +563,12 @@ enrichHeatmap <- function(input,
   # places the adjusted p-value in the matrix is there is one
 
   if (removeonlyshared == TRUE) {
+    # finds the shared pathways the are not present in up or down
     mycounts <- as.numeric(apply(heatmapmatrix,
                                  1,
                                  function(x) is.na(x[1]) & is.na(x[2])))
-    # finds the shared pathways the are not present in up or down
-    heatmapinput <- heatmapmatrix[mycounts == 0, ]
     # keeps those that are not only shared
+    heatmapinput <- heatmapmatrix[mycounts == 0, ]
   }
   if (removeonlyshared == FALSE) {
     heatmapinput <- heatmapmatrix
