@@ -507,7 +507,7 @@ enrichHeatmap <- function(input,
   } else {
     reference <- reference[reference$p.adjust < pvalfilt, ]
     if(nrow(reference)>numshow) {
-	reference=referene[order(reference$p.adjust)[1:numshow],]
+	reference=reference[order(reference$p.adjust)[1:numshow],]
     }
   }
   shared <- input$shared
