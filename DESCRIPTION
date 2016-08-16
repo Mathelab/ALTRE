@@ -37,7 +37,9 @@ Imports:
     grid,
     venneuler,
     stringr,
-    tibble
+    tibble,
+    highcharter,
+    magrittr
 Suggests: knitr
 VignetteBuilder: knitr
 License: GPL-2
