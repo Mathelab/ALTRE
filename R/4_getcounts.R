@@ -5,13 +5,7 @@
 #' are supplied in a Granges object, ideally output of combineannotatepeaks.R.
 #'
 #' @param annotpeaks list output from combineannotatepeaks function
-#' @param sampleinfo name of CSV file, with complete path, that contains the
-#'  following 4 columns for each sample
-#'  1) complete filepath;
-#'  2) name of bamfiles;
-#'  3) name of peak files;
-#'  4) name or type of sample;
-#'  5) name of replicate
+#' @param sampleinfo dataframe as returned from loadCSVFile() function
 #' @param reference name of sample type to be
 #' considered 'reference' in DESeq2 analysis
 #' @param chrom optional, only chromosome chrom will be evaluated

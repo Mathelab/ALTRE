@@ -45,7 +45,7 @@
 #'                                           mergedistprom = 1000 )
 #' #Need to run getcounts on all chromosomes
 #' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
-#'                              csvfile = csvfile,
+#'                              sampleinfo = sampleinfo,
 #'                              reference = 'SAEC')
 #' altre_peaks <- countanalysis(counts=counts_consPeaks,
 #'                              pval=0.01,
