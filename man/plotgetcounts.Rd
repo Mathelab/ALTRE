@@ -34,7 +34,7 @@ consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
                                           mergedistprom = 1000 )
 
 counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
-                             csvfile = csvfile,
+                             sampleinfo = sampleinfo,
                              reference = 'SAEC',
                              chrom = 'chr21')
 plotgetcounts(counts_consPeaks)

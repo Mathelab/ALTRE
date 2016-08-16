@@ -8,7 +8,8 @@ the pathway in enrichment of both type-specific (increased or decreased
 log2fold change, low p-value) and shared (no change, higher p-value)
 regulatory regions is plotted.}
 \usage{
-enrichHeatmap(input, title, pvalfilt = 0.01, removeonlyshared = FALSE)
+enrichHeatmap(input, title, pvalfilt = 0.01, removeonlyshared = FALSE,
+  numshow = 10)
 }
 \arguments{
 \item{input}{results from enrichment analysis}
@@ -19,6 +20,8 @@ enrichHeatmap(input, title, pvalfilt = 0.01, removeonlyshared = FALSE)
 
 \item{removeonlyshared}{removes regions that come up signifigant only shared
 regulatory regions when set to TRUE. Default is FALSE.}
+
+\item{numshow}{number of top pathways (ranked according to p-value) of each type (expt, reference, shared) to show in the plot (default=10)}
 }
 \value{
 heatmap
@@ -46,16 +49,21 @@ consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
                                           mergedistenh = 1500,
                                           mergedistprom = 1000)
 counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
-                              csvfile = csvfile,
+                              sampleinfo = sampleinfo,
                               reference = 'SAEC',
                               chrom = 'chr21')
 altre_peaks <- countanalysis(counts=counts_consPeaks,
                              pval=0.01,
                              lfcvalue=1)
-MFenrich <- pathenrich(analysisresults = altre_peaks,
+categaltre_peaks <- categAltrePeaks(altre_peaks,
+			lfctypespecific = 1.5,
+			lfcshared = 1.2,
+			pvaltypespecific = 0.01,
+			pvalshared = 0.05)
+MFenrich <- pathenrich(analysisresults = categaltre_peaks,
                        ontoltype = 'MF',
                        enrichpvalfilt = 0.01)
-BPenrich <- pathenrich(analysisresults=altre_peaks,
+BPenrich <- pathenrich(analysisresults=categaltre_peaks,
                        ontoltype='BP',
                        enrichpvalfilt=0.01)
 plot1 <- enrichHeatmap(MFenrich, title='GO:MF, p<0.01')

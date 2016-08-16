@@ -32,15 +32,18 @@ The location of data files, along with metadata, to be analyzed in ALTRE is supp
 
 ```{r}
 library(ALTRE)
-csvfile <- loadCSVFile("~/Documents/AltreDataRepo/DNaseEncodeChr21.csv")
-csvfile
+# You will need to modify the location of your csvfile here
+csvfile <- file.path(system.file("extdata", package="ALTRE", mustWork=TRUE), 
+	"lung.csv" )
+sampleinfo <- loadCSVFile(csvfile)
+sampleinfo
 ```
 
 *Load peak files*
 Read in the peak files (BED format) with the *loadBedFiles()* function.  Only the first three columns (chr, start, end) of the peak files are required an read in. Additional columns are allowed but ignored.
 
 ```{r}
-samplePeaks <- loadBedFiles(csvfile)
+samplePeaks <- loadBedFiles(sampleinfo)
 samplePeaks
 ```
 
@@ -108,7 +111,7 @@ Of note, one cell type must be designated as  “reference ”, to which the oth
 To run the function:
 ```{r}
 consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
-                              sampleinfo = csvfile,
+                              sampleinfo = sampleinfo,
                               reference = 'SAEC',
                               chrom = 'chr21')
 plotgetcounts(consensusPeaksCounts)
