@@ -386,7 +386,7 @@ plotDistCountAnalysis <- function(analysisresults, counts) {
 #'                                           mergedistprom = 1000 )
 #'
 #' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
-#'                              csvfile = csvfile,
+#'                              sampleinfo = sampleinfo,
 #'                              reference = 'SAEC',
 #'                              chrom = 'chr21')
 #' plotgetcounts(counts_consPeaks)
@@ -448,7 +448,7 @@ plotgetcounts <- function(countsconspeaks) {
 #'                                           mergedistenh = 1500,
 #'                                           mergedistprom = 1000)
 #' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
-#'                               csvfile = csvfile,
+#'                               sampleinfo = sampleinfo,
 #'                               reference = 'SAEC',
 #'                               chrom = 'chr21')
 #' altre_peaks <- countanalysis(counts=counts_consPeaks,
@@ -636,7 +636,7 @@ enrichHeatmap <- function(input,
 #'                                           mergedistenh = 1500,
 #'                                           mergedistprom = 1000 )
 #'counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
-#'                              csvfile = csvfile,
+#'                              sampleinfo = sampleinfo,
 #'                              reference = 'SAEC',
 #'                              chrom = 'chr21')
 #' altre_peaks <- countanalysis(counts = counts_consPeaks,
@@ -721,7 +721,7 @@ multiplot <- function(..., plotlist = NULL, file, cols = 1, layout = NULL) {
 #'                                            mergedistenh = 1500,
 #'                                            mergedistprom = 1000)
 #' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
-#'                               csvfile = csvfile,
+#'                               sampleinfo = sampleinfo,
 #'                               reference = 'SAEC')
 #' altre_peaks <- countanalysis(counts=counts_consPeaks,
 #'                              pval=0.01,
@@ -851,7 +851,7 @@ plotvenn <- function(analysisresultsmatrix,
 #'                                            mergedistenh = 1500,
 #'                                            mergedistprom = 1000 )
 #' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
-#'                               csvfile = csvfile,
+#'                               sampleinfo = sampleinfo,
 #'                               reference = 'SAEC')
 #' altre_peaks <- countanalysis(counts=counts_consPeaks,
 #'                              pval=0.01,
