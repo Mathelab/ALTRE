@@ -112,7 +112,7 @@ body <- dashboardBody(
                   accept = c('text/csv',
                              'text/comma-separated-values,text/plain',
                              '.csv'),
-                  "Lood CSV File"
+                  "Load CSV File"
                   ),
                 hr(),
                 dataTableOutput("table1")
