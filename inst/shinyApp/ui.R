@@ -20,6 +20,12 @@ sidebar <- dashboardSidebar(
              tabName = "about",
              icon = icon("info")),
     menuItem(
+      "HC plots",
+      tabName = "HCplots",
+      icon = icon("folder-open"),
+      badgeLabel = "temporary"
+    ),
+    menuItem(
       "Load Data",
       tabName = "loaddata",
       icon = icon("folder-open"),
@@ -92,6 +98,32 @@ body <- dashboardBody(
                        )
                      )
             ),
+    tabItem(tabName = "HCplots",
+            fluidRow(
+              box(
+                width = 6,
+                highcharter::highchartOutput("barplotHC")
+                ),
+              box(
+                width = 6,
+                highcharter::highchartOutput("densityplotHC")
+              )
+            ),
+            fluidRow(
+              box(
+                width = 4,
+                highcharter::highchartOutput("boxplotHC")
+              ),
+              box(
+                width = 4,
+                highcharter::highchartOutput("heatplotHC")
+              ),
+              box(
+                width = 4,
+                highcharter::highchartOutput("scatterplotHC")
+              )
+            )
+    ),
     tabItem(tabName = "loaddata",
             fluidRow(
               HTML("<div class='col-sm-4' style='min-width:

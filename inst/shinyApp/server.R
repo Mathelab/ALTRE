@@ -343,6 +343,29 @@ shinyServer(function(input, output, session) {
     plotallvenn(req(comparePeaksObj()))
   })
 
+
+  # HC plots
+
+  output$barplotHC <- highcharter::renderHighchart({
+    plotBarplot()
+  })
+
+  output$heatplotHC <- highcharter::renderHighchart({
+    plotHeatmap()
+  })
+  output$densityplotHC <- highcharter::renderHighchart({
+    plotDensity()
+  })
+
+  output$boxplotHC <- highcharter::renderHighchart({
+    plotBoxplot()
+  })
+
+  output$scatterplotHC <- highcharter::renderHighchart({
+    plotScatter()
+  })
+
+
   ############################################################################
   # info boxes
 

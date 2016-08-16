@@ -63,4 +63,6 @@
 #' @import S4Vectors
 #' @import GenomicRanges
 #' @import ggplot2
+#' @import magrittr
+#' @import highcharter
 NULL

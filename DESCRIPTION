@@ -38,7 +38,9 @@ Imports:
     grid,
     venneuler,
     stringr,
-    tibble
+    tibble,
+    highcharter,
+    magrittr
 License: GPL-2
 LazyData: TRUE
 RoxygenNote: 5.0.1
