@@ -95,7 +95,7 @@ body <- dashboardBody(
     tabItem(tabName = "loaddata",
             fluidRow(
               HTML("<div class='col-sm-4' style='min-width:
-                   600px !important;'>"),
+                   650px !important;'>"),
               box(
                 title = strong("Load Metadata Spreadsheet"),
                 width = NULL,
@@ -107,15 +107,13 @@ body <- dashboardBody(
                         first column, which contains the data filepaths.")
                 ),
                 hr(),
-                fileInput(
-                  "file",
-                  accept = c('text/csv',
-                             'text/comma-separated-values,text/plain',
-                             '.csv'),
-                  "Load CSV File"
-                  ),
-                hr(),
-                dataTableOutput("table1")
+	        strong("Load CSV File:"),
+		br(),
+		shinyFiles::shinyFilesButton('file', 
+			'Select File', 'Select a CSV file',multiple=FALSE),
+  		hr(),
+              textOutput("getlocalpath"),
+		  dataTableOutput("table1")
                 ),
               HTML("</div>"),
               HTML("<div class='col-sm-6' style='min-width:

@@ -2,10 +2,15 @@
 shinyServer(function(input, output, session) {
 
   ############################################################################
+   # Button to Load Data
+	roots=getVolumes()
+    	shinyFileChoose(input, 'file', roots=roots,session=session)
+
   # Load data
 
   loadCSVObj <- reactive({
-      loadCSVFile(req(input$file)$datapath)
+       loadCSVFile(req(as.character(parseFilePaths(roots=roots, input$file)$datapath)))
+
   })
 
   loadBedObj <- reactive({
@@ -256,7 +261,7 @@ shinyServer(function(input, output, session) {
   #tables
   output$table1 <- renderDataTable({
     if (!is.null(input$file)) {
-      loadCSVObj()[, -1]
+      loadCSVObj()[, !(names(loadCSVObj()) %in% "datapath")]
     }
   }, options = list(searching = FALSE,
                     paging = FALSE))
@@ -620,6 +625,13 @@ shinyServer(function(input, output, session) {
     }
   })
 
+  output$getlocalpath <- renderPrint({
+	if(!is.null(input$testfile)) {
+	print(parseFilePaths(roots=roots, input$file)$datapath)
+	}
+	
+  })
+  
 
   ##########################################################
   })

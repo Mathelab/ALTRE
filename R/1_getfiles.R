@@ -7,13 +7,14 @@ loadCSVFile <- function(csvPath) {
         stop("CSV input file does not exist")
     }
     csvfile <- readr::read_csv(csvPath,
-                        col_types = readr::cols_only(datapath = readr::col_character(),
-                                              bamfiles = readr::col_character(),
+                        col_types = readr::cols_only(bamfiles = readr::col_character(),
                                               peakfiles = readr::col_character(),
                                               sample = readr::col_character(),
                                               replicate = readr::col_character()))
 
     csvfile <- csvfile[order(csvfile$replicate, csvfile$sample), ]
+    csvfile$datapath = rep(gsub("(.*)\\/(.*)","\\1",csvPath),nrow(csvfile))
+    print(csvfile)
     return(csvfile)
 }
 
