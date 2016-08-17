@@ -3,8 +3,8 @@ shinyServer(function(input, output, session) {
 
   ############################################################################
    # Button to Load Data
-	roots=getVolumes()
-    	shinyFileChoose(input, 'file', roots=roots,session=session)
+	roots=shinyFiles::getVolumes()
+    	shinyFiles::shinyFileChoose(input, 'file', roots=roots,session=session)
 
   # Load data
 
@@ -261,8 +261,15 @@ shinyServer(function(input, output, session) {
   #tables
   output$table1 <- renderDataTable({
     if (!is.null(input$file)) {
-      loadCSVObj()[, !(names(loadCSVObj()) %in% "datapath")]
+     csvoutput=loadCSVObj()[, !(names(loadCSVObj()) %in% "datapath")]
+     if(is.null(csvoutput)) {
+	print("Check the format of the CSV file")
+        data.frame(ERROR="Check the format of the CSV file")
+     }
+     else {
+	csvoutput[, !(names(csvoutput) %in% "datapath")]  
     }
+   }
   }, options = list(searching = FALSE,
                     paging = FALSE))
 

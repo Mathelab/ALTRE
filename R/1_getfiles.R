@@ -12,10 +12,13 @@ loadCSVFile <- function(csvPath) {
                                               sample = readr::col_character(),
                                               replicate = readr::col_character()))
 
-    csvfile <- csvfile[order(csvfile$replicate, csvfile$sample), ]
-    csvfile$datapath = rep(gsub("(.*)\\/(.*)","\\1",csvPath),nrow(csvfile))
-    print(csvfile)
-    return(csvfile)
+   if(ncol(csvfile)!=4) {
+        return(NULL)}
+    else {
+    	csvfile <- csvfile[order(csvfile$replicate, csvfile$sample), ]
+    	csvfile$datapath = rep(gsub("(.*)\\/(.*)","\\1",csvPath),nrow(csvfile))
+    	return(csvfile)
+   }
 }
 
 #' Read in BED Files (internal function)

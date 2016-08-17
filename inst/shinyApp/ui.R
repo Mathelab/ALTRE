@@ -103,8 +103,12 @@ body <- dashboardBody(
                 h5("This step does the following: "),
                 tags$ul(
                   tags$li("Loads a metadata spreadsheet with a CSV file extention."),
-                  tags$li(" Prints out the contents of entire the file except for the
-                        first column, which contains the data filepaths.")
+		  tags$li("CSV file must contain the following columns: 
+                        'bamfiles' (name of alignment files), 
+                        'replicate' (replicate number), 
+                        'sample' (name of sample), 
+                        'peakfiles' (name of peak files)"),
+                  tags$li("Prints out the contents of the file.")
                 ),
                 hr(),
 	        strong("Load CSV File:"),
