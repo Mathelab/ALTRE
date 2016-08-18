@@ -17,34 +17,60 @@
 #' @export
 #'
 plotConsensusPeaks <- function(samplepeaks) {
-  dfstats <- samplepeaks$consPeaksStats
-  # quick fix: change to numeric
-  row.names(dfstats) <- NULL
-  dfstats[ , 2] <-  as.numeric(as.character(dfstats[[2]]))
-  dfstats[ , 3] <-  as.numeric(as.character(dfstats[[3]]))
-  ##
-  mydf <- tidyr::gather(dfstats, "CellType", "Count", 2:3)
-
-  p <- ggplot(data = mydf, aes_string(x = "CellType",
-                                      y = "Count",
-                                      fill = "PeakType")) +
-    geom_bar(stat = "identity",
-             position = position_dodge()) +
-    geom_text(aes_string(label = "Count",
-                         x = "CellType"),
-              position = position_dodge(width = 1),
-              size = 3,
-              hjust = 0.5,
-              vjust = -.3) +
-    theme_bw(base_size = 12, base_family = "Helvetica") +
-    theme(aspect.ratio = 0.8,
-          panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank()) +
-    labs(x = "Sample Type",
-         y = "Number of Peaks") +
-    ggtitle("Number of Peaks for Bioreplicates  \n and their Merged Consensus") +
-    scale_fill_brewer(palette = "Set2")
-  return(p)
+    
+    dfstats=samplepeaks$consPeaksStats
+    row.names(dfstats) <- NULL
+    dfstats[ , 2] <-  as.numeric(as.character(dfstats[[2]]))
+    dfstats[ , 3] <-  as.numeric(as.character(dfstats[[3]]))
+    mydf <- tidyr::gather(dfstats, "CellType", "Count", 2:3)
+    
+    dat <- mydf %>% split(levels(as.factor(mydf$CellType)))
+    p <- highchart() %>%
+        hc_title(text = "Peak Counts by Cell Type",
+                 style = list(color = '#2E1717',
+                              fontWeight = 'bold')) %>%
+        hc_subtitle(text = "For bioreplicates and their merged consensus track") %>%
+        hc_add_series(
+            data = dat[[1]]$Count,
+            name = names(dat[1]),
+            type = "column",
+            dataLabels = list(
+                enabled = TRUE,
+                rotation = 270,
+                color = '#FFFFFF',
+                y = 40
+            )
+        ) %>%
+        hc_add_series(
+            data = dat[[2]]$Count,
+            name = names(dat[2]),
+            dataLabels = list(
+                enabled = TRUE,
+                rotation = 270,
+                color = '#FFFFFF',
+                y = 40
+            ),
+            type = "column"
+        ) %>%
+        hc_yAxis(title = list(text = "Peak Counts"),
+                 labels = list(format = "{value}")) %>%
+        hc_xAxis(categories = dat[[1]]$PeakType) %>%
+        hc_legend(
+            enabled = TRUE,
+            layout = "vertical",
+            align = "right",
+            verticalAlign = "top",
+            floating = TRUE,
+            x = -20,
+            y = 60
+        ) %>%
+        hc_tooltip(
+            headerFormat = "<b>{series.name}_{point.key}</b><br>",
+            pointFormat = "{point.y}",
+            valueSuffix = ' peaks'
+        ) %>%
+        hc_exporting(enabled = TRUE)
+    return(p)
 }
 
 ####################################################################
