@@ -3,7 +3,7 @@
 #'
 #' @param samplepeaks output generated from getConsensusPeaks
 #'
-#' @return a ggplot
+#' @return a highcharter object
 #'
 #' @examples
 #' \dontrun{
@@ -76,12 +76,14 @@ plotConsensusPeaks <- function(samplepeaks) {
 ####################################################################
 
 #' Given the output from combineAnnotatePeaks,
-#' plot a barplot showing number of peaks before/after merging
+#' plot a barplot showing number of peaks before/after merging or length of 
+#' peaks before/after merging
 #' (only works if peaks were merged)
 #'
 #' @param conspeaks output generated from combineAnnotatePeaks
+#' @param feature either "TotalNumber" or "MeanLength"
 #'
-#' @return a ggplot
+#' @return a highcharter object
 #'
 #' @examples
 #' \dontrun{
@@ -102,86 +104,119 @@ plotConsensusPeaks <- function(samplepeaks) {
 #' }
 #' @export
 #'
-plotCombineAnnotatePeaks <- function(conspeaks) {
-
-  # quick fix
-  mydf <- conspeaks$mergestats[ , c(2, 3)]
-  row.names(mydf) <- conspeaks$mergestats[ , 1]
-  ##
-
-  if (nrow(mydf) == 1) {
-    stop("No plot to show since merging was not performed
-         when calling combineAnnotatePeaks function")
-  } else {
-    numreg <- as.data.frame(mydf$TotalNumber)
-    colnames(numreg) <- "TotalNumber"
-    numreg$REtype <- gsub("_.*", "", rownames(mydf))
-    numreg$REmerge <- rownames(mydf)
-    numreg$REmerge <- gsub("enhancers_", "", numreg$REmerge)
-    numreg$REmerge <- gsub("promoters_", "", numreg$REmerge)
-    numreg$REmerge <- gsub("_merging","",numreg$REmerge)
-    numreg$REmerge <- factor(numreg$REmerge,
-                             levels = c("before", "after"))
-
-    plot1 <- ggplot(numreg, aes_string(x = "REtype",
-                                       y = "TotalNumber",
-                                       fill = "REmerge")) +
-      geom_bar(stat = "identity",
-               position = position_dodge()) +
-      geom_text(aes_string(label = "TotalNumber",
-                           x = "REtype",
-                           y = "TotalNumber",
-                           ymax = "TotalNumber"),
-                position = position_dodge(width = 1),
-                size = 2,
-                hjust = 0.5,
-                vjust = -.5) +
-      scale_fill_brewer(palette = "Set2") +
-      theme_bw(base_size = 10) +
-      theme(aspect.ratio = 1.5,
-            panel.grid.major = element_blank(),
-            panel.grid.minor = element_blank()) +
-      labs(x = "", y = "Number of REs") +
-      theme(axis.text.x = element_text(angle=45,hjust=1)) +
-      theme(legend.title = element_blank()) +
-      ggtitle("Number of REs\nBefore/After merging")
-
-
-    meanlength <- as.data.frame(mydf$MeanLength)
-    colnames(meanlength) <- "MeanLength"
-    meanlength$REtype <- gsub("_.*", "", rownames(mydf))
-    meanlength$REmerge <- rownames(mydf)
-    meanlength$REmerge <- gsub("enhancers_", "", meanlength$REmerge)
-    meanlength$REmerge <- gsub("promoters_", "", meanlength$REmerge)
-    meanlength$REmerge <- gsub("_merging","",meanlength$REmerge)
-    meanlength$REmerge <- factor(meanlength$REmerge,
-                                 levels = c("before", "after"))
-
-    plot2 <- ggplot(meanlength, aes_string(x = "REtype",
-                                           y = "MeanLength",
-                                           fill = "REmerge")) +
-      geom_bar(stat = "identity",
-               position = position_dodge()) +
-      geom_text(aes_string(label = "MeanLength",
-                           x = "REtype",
-                           y = "MeanLength",
-                           ymax = "MeanLength"),
-                position = position_dodge(width = 1),
-                size = 2,
-                hjust = 0.5,
-                vjust = -.5) +
-      scale_fill_brewer(palette = "Set2") +
-      theme_bw(base_size = 10) +
-      theme(aspect.ratio = 1.5,
-            panel.grid.major = element_blank(),
-            panel.grid.minor = element_blank()) +
-      labs(x = "", y = "Mean length of REs") +
-      theme(legend.title = element_blank()) +
-      theme(axis.text.x = element_text(angle=45,hjust=1)) +
-      ggtitle("Mean length of REs\nBefore/After merging")
-
-    multiplot(plot1, plot2, cols = 2)
-  }
+plotCombineAnnotatePeaks <- function(samplepeaks, feature="TotalNumber") {
+    
+    dfstats=samplepeaks$mergestats
+    row.names(dfstats) <- NULL
+    dfstats[ , 2] <-  as.numeric(as.character(dfstats[[2]]))
+    dfstats[ , 3] <-  as.numeric(as.character(dfstats[[3]]))
+    mydf <- tidyr::gather(dfstats, "CellType", "Count", 2:3)
+    
+    if (nrow(mydf) == 1) {
+        stop("No plot to show since merging was not performed
+             when calling combineAnnotatePeaks function")
+    }
+    
+    if(feature=="TotalNumber"){
+        mydf2=mydf[mydf$CellType=="TotalNumber",]
+        thecondition=matrix(unlist(strsplit(mydf2$Condition, "_")), nrow=3, ncol=4)[2,]
+        before=mydf2[which(thecondition=="before"),]
+        after=mydf2[which(thecondition=="after"),]
+        
+        p <- highchart() %>%
+            hc_title(text = "Number of REs before/after merging",
+                     style = list(color = '#2E1717',
+                                  fontWeight = 'bold')) %>%
+            hc_add_series(
+                data = before$Count,
+                name=c("enhancers"),
+                type = "column",
+                dataLabels = list(
+                    enabled = TRUE,
+                    rotation = 270,
+                    color = '#FFFFFF',
+                    y = 40
+                )) %>%
+            hc_add_series(
+                data = after$Count,
+                name=c("promoters"),
+                type = "column",
+                dataLabels = list(
+                    enabled = TRUE,
+                    rotation = 270,
+                    color = '#FFFFFF',
+                    y = 40
+                )) %>%
+            hc_yAxis(title = list(text = "Number of REs"),
+                     labels = list(format = "{value}")) %>%
+            hc_xAxis(categories = c("beforemerging", "aftermerging")) %>%
+            hc_legend(
+                enabled = TRUE,
+                layout = "vertical",
+                align = "right",
+                verticalAlign = "top",
+                floating = TRUE,
+                x = -5,
+                y = 60
+            ) %>%
+            hc_tooltip(
+                headerFormat = "<b>{series.name}_{point.key}</b><br>",
+                pointFormat = "{point.y}",
+                valueSuffix = ' peaks'
+            ) %>%
+            hc_exporting(enabled = TRUE)
+    }
+    
+    if(feature=="MeanLength"){
+        mydf2=mydf[mydf$CellType=="MeanLength",]
+        thecondition=matrix(unlist(strsplit(mydf2$Condition, "_")), nrow=3, ncol=4)[2,]
+        before=mydf2[which(thecondition=="before"),]
+        after=mydf2[which(thecondition=="after"),]
+        
+        p <- highchart() %>%
+            hc_title(text = "Mean length of REs before/after merging",
+                     style = list(color = '#2E1717',
+                                  fontWeight = 'bold')) %>%
+            hc_add_series(
+                data = before$Count,
+                name=c("enhancers"),
+                type = "column",
+                dataLabels = list(
+                    enabled = TRUE,
+                    rotation = 270,
+                    color = '#FFFFFF',
+                    y = 40
+                )) %>%
+            hc_add_series(
+                data = after$Count,
+                name=c("promoters"),
+                type = "column",
+                dataLabels = list(
+                    enabled = TRUE,
+                    rotation = 270,
+                    color = '#FFFFFF',
+                    y = 40
+                )) %>%
+            hc_yAxis(title = list(text = "Mean Length of REs"),
+                     labels = list(format = "{value}")) %>%
+            hc_xAxis(categories = c("beforemerging", "aftermerging")) %>%
+            hc_legend(
+                enabled = TRUE,
+                layout = "vertical",
+                align = "right",
+                verticalAlign = "top",
+                floating = TRUE,
+                x = -5,
+                y = 60
+            ) %>%
+            hc_tooltip(
+                headerFormat = "<b>{series.name}_{point.key}</b><br>",
+                pointFormat = "{point.y}",
+                valueSuffix = ' peaks'
+            ) %>%
+            hc_exporting(enabled = TRUE)
+    }
+    return(p)
 }
 
 
