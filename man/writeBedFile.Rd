@@ -22,8 +22,7 @@ some regions will not fulfill any of the supplied criteria
 }
 \examples{
 \dontrun{
-dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
-csvfile <- file.path(dir, 'lung.csv')
+csvfile <- file.path(dir="yourfilepath", 'sampleinfo.csv')
 sampleinfo <- loadCSVFile(csvfile)
 samplePeaks <- loadBedFiles(sampleinfo)
 consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
