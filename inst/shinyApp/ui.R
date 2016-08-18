@@ -103,18 +103,20 @@ body <- dashboardBody(
                 h5("This step does the following: "),
                 tags$ul(
                   tags$li("Loads a metadata spreadsheet with a CSV file extention."),
-		  tags$li("CSV file must contain the following columns: 
-                        'bamfiles' (name of alignment files), 
-                        'replicate' (replicate number), 
-                        'sample' (name of sample), 
+		  tags$li("CSV file must contain the following columns:
+                        'bamfiles' (name of alignment files),
+                        'replicate' (replicate number),
+                        'sample' (name of sample),
                         'peakfiles' (name of peak files)"),
                   tags$li("Prints out the contents of the file.")
                 ),
                 hr(),
 	        strong("Load CSV File:"),
 		br(),
-		shinyFiles::shinyFilesButton('file', 
-			'Select File', 'Select a CSV file',multiple=FALSE),
+		shinyFiles::shinyFilesButton('file',
+		                             'Select File',
+		                             'Provide CSV File to Load Data',
+		                             FALSE),
   		hr(),
               textOutput("getlocalpath"),
 		  dataTableOutput("table1")

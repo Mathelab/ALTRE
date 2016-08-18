@@ -3,13 +3,21 @@ shinyServer(function(input, output, session) {
 
   ############################################################################
    # Button to Load Data
-	roots=shinyFiles::getVolumes()
-    	shinyFiles::shinyFileChoose(input, 'file', roots=roots,session=session)
+  shinyFiles::shinyFileChoose(input,'file',
+                              roots = shinyFiles::getVolumes(),
+                              session = session)
 
   # Load data
 
   loadCSVObj <- reactive({
-       loadCSVFile(req(as.character(parseFilePaths(roots=roots, input$file)$datapath)))
+       loadCSVFile(
+         req(
+           as.character(
+             shinyFiles::parseFilePaths(
+               shinyFiles::getVolumes(),
+               input$csvfile)$datapath)
+           )
+         )
 
   })
 
@@ -267,7 +275,7 @@ shinyServer(function(input, output, session) {
         data.frame(ERROR="Check the format of the CSV file")
      }
      else {
-	csvoutput[, !(names(csvoutput) %in% "datapath")]  
+	csvoutput[, !(names(csvoutput) %in% "datapath")]
     }
    }
   }, options = list(searching = FALSE,
@@ -636,9 +644,9 @@ shinyServer(function(input, output, session) {
 	if(!is.null(input$testfile)) {
 	print(parseFilePaths(roots=roots, input$file)$datapath)
 	}
-	
+
   })
-  
+
 
   ##########################################################
   })
