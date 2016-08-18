@@ -113,8 +113,6 @@ body <- dashboardBody(
                 hr(),
 	        strong("Load CSV File:"),
 		br(),
-		shinyFiles::shinyFilesButton('file', 
-			'Select File', 'Select a CSV file',multiple=FALSE),
   		hr(),
               textOutput("getlocalpath"),
 		  dataTableOutput("table1")
