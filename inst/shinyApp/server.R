@@ -3,14 +3,10 @@ shinyServer(function(input, output, session) {
 
   ############################################################################
    # Button to Load Data
-	roots=shinyFiles::getVolumes()
-    	shinyFiles::shinyFileChoose(input, 'file', roots=roots,session=session)
 
   # Load data
 
   loadCSVObj <- reactive({
-       loadCSVFile(req(as.character(shinyFiles::parseFilePaths(roots=roots, 
-                                                       input$file)$datapath)))
 
   })
 
