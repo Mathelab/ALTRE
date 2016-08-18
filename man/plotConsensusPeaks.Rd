@@ -11,7 +11,7 @@ plotConsensusPeaks(samplepeaks)
 \item{samplepeaks}{output generated from getConsensusPeaks}
 }
 \value{
-a ggplot
+a highcharter object
 }
 \description{
 Given the output from getConsensusPeaks, generate a barplot

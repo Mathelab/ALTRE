@@ -104,9 +104,9 @@ plotConsensusPeaks <- function(samplepeaks) {
 #' }
 #' @export
 #'
-plotCombineAnnotatePeaks <- function(samplepeaks, feature="TotalNumber") {
+plotCombineAnnotatePeaks <- function(conspeaks, feature="TotalNumber") {
     
-    dfstats=samplepeaks$mergestats
+    dfstats=conspeaks$mergestats
     row.names(dfstats) <- NULL
     dfstats[ , 2] <-  as.numeric(as.character(dfstats[[2]]))
     dfstats[ , 3] <-  as.numeric(as.character(dfstats[[3]]))

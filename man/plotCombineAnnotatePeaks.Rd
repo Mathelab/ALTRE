@@ -3,20 +3,24 @@
 \name{plotCombineAnnotatePeaks}
 \alias{plotCombineAnnotatePeaks}
 \title{Given the output from combineAnnotatePeaks,
-plot a barplot showing number of peaks before/after merging
+plot a barplot showing number of peaks before/after merging or length of 
+peaks before/after merging
 (only works if peaks were merged)}
 \usage{
-plotCombineAnnotatePeaks(conspeaks)
+plotCombineAnnotatePeaks(conspeaks, feature = "TotalNumber")
 }
 \arguments{
 \item{conspeaks}{output generated from combineAnnotatePeaks}
+
+\item{feature}{either "TotalNumber" or "MeanLength"}
 }
 \value{
-a ggplot
+a highcharter object
 }
 \description{
 Given the output from combineAnnotatePeaks,
-plot a barplot showing number of peaks before/after merging
+plot a barplot showing number of peaks before/after merging or length of 
+peaks before/after merging
 (only works if peaks were merged)
 }
 \examples{
