@@ -30,7 +30,7 @@ devtools::install_github("mathelab/ALTRE")
 When installing on Linux, if you get an rJava package installation error. Please run the following two lines in the console:
 
 ```{R}
-sudo apt-get install openjdk-7-*
+apt-get install openjdk-7-*
 sudo R CMD javareconf
 ```
 

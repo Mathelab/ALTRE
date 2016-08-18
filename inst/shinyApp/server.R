@@ -3,9 +3,12 @@ shinyServer(function(input, output, session) {
 
   ############################################################################
    # Button to Load Data
-  shinyFiles::shinyFileChoose(input,'file',
-                              roots = shinyFiles::getVolumes(),
-                              session = session)
+
+  rootVolumes <- getVolumes()
+
+  shinyFileChoose(input,'file',
+                  roots = rootVolumes,
+                  session = session)
 
   # Load data
 
@@ -13,9 +16,9 @@ shinyServer(function(input, output, session) {
        loadCSVFile(
          req(
            as.character(
-             shinyFiles::parseFilePaths(
-               shinyFiles::getVolumes(),
-               input$csvfile)$datapath)
+             parseFilePaths(
+               rootVolumes,
+               input$file)$datapath)
            )
          )
 
@@ -269,13 +272,13 @@ shinyServer(function(input, output, session) {
   #tables
   output$table1 <- renderDataTable({
     if (!is.null(input$file)) {
-     csvoutput=loadCSVObj()[, !(names(loadCSVObj()) %in% "datapath")]
-     if(is.null(csvoutput)) {
+     csvoutput <- loadCSVObj()[ , !(names(loadCSVObj()) %in% "datapath")]
+     if (is.null(csvoutput)) {
 	print("Check the format of the CSV file")
-        data.frame(ERROR="Check the format of the CSV file")
+        data.frame(ERROR = "Check the format of the CSV file")
      }
      else {
-	csvoutput[, !(names(csvoutput) %in% "datapath")]
+	csvoutput[ , !(names(csvoutput) %in% "datapath")]
     }
    }
   }, options = list(searching = FALSE,
@@ -641,8 +644,8 @@ shinyServer(function(input, output, session) {
   })
 
   output$getlocalpath <- renderPrint({
-	if(!is.null(input$testfile)) {
-	print(parseFilePaths(roots=roots, input$file)$datapath)
+	if (!is.null(input$testfile)) {
+	print( parseFilePaths(roots = rootVolumes, input$file)$datapath)
 	}
 
   })
