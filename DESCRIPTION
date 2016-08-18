@@ -37,7 +37,8 @@ Imports:
     grid,
     venneuler,
     stringr,
-    tibble
+    tibble,
+    RJSONIO, rstudioapi
 Suggests: knitr
 VignetteBuilder: knitr
 License: GPL-2

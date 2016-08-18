@@ -9,7 +9,8 @@ shinyServer(function(input, output, session) {
   # Load data
 
   loadCSVObj <- reactive({
-       loadCSVFile(req(as.character(parseFilePaths(roots=roots, input$file)$datapath)))
+       loadCSVFile(req(as.character(shinyFiles::parseFilePaths(roots=roots, 
+                                                       input$file)$datapath)))
 
   })
 
@@ -634,7 +635,7 @@ shinyServer(function(input, output, session) {
 
   output$getlocalpath <- renderPrint({
 	if(!is.null(input$testfile)) {
-	print(parseFilePaths(roots=roots, input$file)$datapath)
+	print(shinyFiles::parseFilePaths(roots=roots, input$file)$datapath)
 	}
 	
   })
