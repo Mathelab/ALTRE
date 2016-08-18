@@ -17,13 +17,13 @@
 #' @export
 #'
 plotConsensusPeaks <- function(samplepeaks) {
-    
-    dfstats=samplepeaks$consPeaksStats
+
+    dfstats <- samplepeaks$consPeaksStats
     row.names(dfstats) <- NULL
     dfstats[ , 2] <-  as.numeric(as.character(dfstats[[2]]))
     dfstats[ , 3] <-  as.numeric(as.character(dfstats[[3]]))
     mydf <- tidyr::gather(dfstats, "CellType", "Count", 2:3)
-    
+
     dat <- mydf %>% split(levels(as.factor(mydf$CellType)))
     p <- highchart() %>%
         hc_title(text = "Peak Counts by Cell Type",
