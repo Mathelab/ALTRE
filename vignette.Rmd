@@ -18,21 +18,23 @@ Regulatory elements (REs) such as enhancers and promoters are involved in regula
 
 #Workflow
 
-ALTRE takes as input alignment files (BAM format) and peak files (BED format).  The software then takes users through defining altered peaks using both binary data (presence/absence of peaks) and quantitative data (peak intensity). Moreover, the package includes functions that merge and annotate peaks (e.g. as promoters and enhancers), perform enrichment analysis for REs of interest, and provide visualization functions. The analysis can be conducted through the R command line or through an RShiny web interface for those who are not familiar with the R statistical language. This vignette further explains the purpose of the package and establishes the workflow.
+ALTRE takes as input a CSV file which provides the names and metadata information for the alignment files (BAM format) and peak files (BED format) of samples to be analyzed.  The software then takes users through defining altered peaks using both binary data (presence/absence of peaks) and quantitative data (peak intensity). Moreover, the package includes functions that merge and annotate peaks (e.g. as promoters and enhancers), perform enrichment analysis for REs of interest, and provide visualization functions. The analysis can be conducted through the R command line or through an RShiny web interface for those who are not familiar with the R statistical language. This vignette further explains the purpose of the package and establishes the workflow.
 
 ###Example data 
 
-To demonstrate the functionality of ALTRE, we have provided an example dataset (BAM and BED files) of cancerous (A549) and normal (SAEC) lung cell types downloaded from the ENCODE project (see <https://mathelab.github.io/ALTREsampledata/>). Of note, this vignette uses only a subset of the data corresponging to Chromosome 21 (results may not be as meaningful). 
+To demonstrate the functionality of ALTRE, we have provided an example dataset (BAM and BED files) of cancerous (A549) and normal (SAEC) lung cell types downloaded from the ENCODE project (see <https://mathelab.github.io/ALTREsampledata/>). Of note, this vignette uses only a subset of the data corresponding to Chromosome 21 (results may not be as meaningful). 
 
 
 **1. Load Data** 
 
 *Load Metadata*
-The location of data files, along with metadata, to be analyzed in ALTRE is supplied as a CSV file. After downlading all files in the example datasets in one folder, download the CSV at <https://raw.githubusercontent.com/mathelab/AltreDataRepo/master/DNaseEncodeWindows.csv>.  You'll need to modify the CSV file such that the file paths refer to your local directory.  Also, be sure to set your working directory in the R environment to point to the directory where you have placed your CSV file.
+The metadata associated with data files to be analyzed in ALTRE is supplied as a CSV file. The software will automatically retrieve the file path of your input CSV so __it is important that all analysis files are in the same folder as your CSV file.__  
+
+After downlading all files in the example datasets in one folder, download the CSV at <https://raw.githubusercontent.com/mathelab/AltreDataRepo/master/DNAseEncodeExample.csv> and place it in the same folder.  Also, be sure to set your working directory in the R environment to point to the directory where you have placed your CSV file.
 
 ```{r}
 library(ALTRE)
-csvfile <- loadCSVFile("DNaseEncodeMacLinux.csv")
+csvfile <- loadCSVFile("DNAseEncodeExample.csv")
 csvfile
 ```
 
