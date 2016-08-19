@@ -17,6 +17,9 @@
 #'
 plotConsensusPeaks <- function(samplepeaks) {
 
+    CellType=NULL
+    #without this R CMD check throws no visible binding for global variable error
+
     consPeaksStats <- samplepeaks$consPeaksStats
     row.names(consPeaksStats) <- NULL
     consPeaksStats[ , 2] <-  as.numeric(as.character(consPeaksStats[[2]]))
@@ -104,6 +107,9 @@ plotConsensusPeaks <- function(samplepeaks) {
 #' @export
 #'
 plotCombineAnnotatePeaks <- function(conspeaks, feature = "TotalNumber") {
+
+    CellType=NULL
+    #without this R CMD check throws no visible binding for global variable error
 
     mergeStats <- conspeaks$mergestats
     row.names(mergeStats) <- NULL
