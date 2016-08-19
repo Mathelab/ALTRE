@@ -33,8 +33,7 @@ regions, one based on peak intensity, the other on peak presence as
 }
 \examples{
 \dontrun{
-dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
-csvfile <- file.path(dir, 'lung.csv')
+csvfile <- file.path(dir="yourfilepath", 'sampleinfo.csv')
 sampleinfo <- loadCSVFile(csvfile)
 samplePeaks <- loadBedFiles(sampleinfo)
 consPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
