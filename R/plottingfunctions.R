@@ -17,7 +17,7 @@
 #'
 plotConsensusPeaks <- function(samplepeaks) {
 
-    CellType=NULL
+    CellType <- NULL
     #without this R CMD check throws no visible binding for global variable error
 
     consPeaksStats <- samplepeaks$consPeaksStats
@@ -108,7 +108,7 @@ plotConsensusPeaks <- function(samplepeaks) {
 #'
 plotCombineAnnotatePeaks <- function(conspeaks, feature = "TotalNumber") {
 
-    CellType=NULL
+    CellType <- NULL
     #without this R CMD check throws no visible binding for global variable error
 
     mergeStats <- conspeaks$mergestats
@@ -118,14 +118,14 @@ plotCombineAnnotatePeaks <- function(conspeaks, feature = "TotalNumber") {
     mergeStatsFormatted <- tidyr::gather(mergeStats, "CellType", "Count", 2:3)
 
 
-    if (nrow(mergeStatsFormatted) == 1) {
+    if ( nrow(mergeStatsFormatted) == 1 ) {
         stop("No plot to show since merging was not performed
              when calling combineAnnotatePeaks function")
     }
 
-    if(feature == "TotalNumber"){
+    if ( feature == "TotalNumber") {
         mergeStatsTotal <- dplyr::filter(mergeStatsFormatted, CellType == "TotalNumber")
-        thecondition <- matrix(unlist(strsplit(mergeStatsTotal$Condition, "_")), nrow=3, ncol=4)[2,]
+        thecondition <- matrix(unlist(strsplit(mergeStatsTotal$Condition, "_")), nrow = 3, ncol = 4)[2,]
         mergeStatsBefore <- dplyr::filter(mergeStatsTotal, thecondition == "before")
         mergeStatsAfter <- dplyr::filter(mergeStatsTotal, thecondition == "after")
 
@@ -135,7 +135,7 @@ plotCombineAnnotatePeaks <- function(conspeaks, feature = "TotalNumber") {
                                   fontWeight = 'bold')) %>%
             hc_add_series(
                 data = mergeStatsBefore$Count,
-                name=c("enhancers"),
+                name = c("enhancers"),
                 type = "column",
                 dataLabels = list(
                     enabled = TRUE,
@@ -145,7 +145,7 @@ plotCombineAnnotatePeaks <- function(conspeaks, feature = "TotalNumber") {
                 )) %>%
             hc_add_series(
                 data = mergeStatsAfter$Count,
-                name=c("promoters"),
+                name = c("promoters"),
                 type = "column",
                 dataLabels = list(
                     enabled = TRUE,
@@ -173,9 +173,9 @@ plotCombineAnnotatePeaks <- function(conspeaks, feature = "TotalNumber") {
             hc_exporting(enabled = TRUE)
     }
 
-    if(feature=="MeanLength"){
+    if ( feature == "MeanLength" ) {
       mergeStatsMean <- dplyr::filter(mergeStatsFormatted, CellType == "MeanLength")
-      thecondition <- matrix(unlist(strsplit(mergeStatsMean$Condition, "_")), nrow=3, ncol=4)[2,]
+      thecondition <- matrix(unlist(strsplit(mergeStatsMean$Condition, "_")), nrow = 3, ncol = 4)[2,]
       mergeStatsBefore <- dplyr::filter(mergeStatsMean, thecondition == "before")
       mergeStatsAfter <- dplyr::filter(mergeStatsMean, thecondition == "after")
 
@@ -186,7 +186,7 @@ plotCombineAnnotatePeaks <- function(conspeaks, feature = "TotalNumber") {
                                   fontWeight = 'bold')) %>%
             hc_add_series(
                 data = mergeStatsBefore$Count,
-                name=c("enhancers"),
+                name = c("enhancers"),
                 type = "column",
                 dataLabels = list(
                     enabled = TRUE,
@@ -196,7 +196,7 @@ plotCombineAnnotatePeaks <- function(conspeaks, feature = "TotalNumber") {
                 )) %>%
             hc_add_series(
                 data = mergeStatsAfter$Count,
-                name=c("promoters"),
+                name = c("promoters"),
                 type = "column",
                 dataLabels = list(
                     enabled = TRUE,
@@ -539,7 +539,7 @@ enrichHeatmap <- function(input,
                           title,
                           pvalfilt = 0.01,
                           removeonlyshared = FALSE,
-			  numshow=10) {
+                          numshow=10) {
   # input=input[[1]]
 
   if (is.list(input) == FALSE) {
@@ -561,8 +561,8 @@ enrichHeatmap <- function(input,
     up$Description <- NA
   } else {
     up <- up[up$p.adjust < pvalfilt, ]
-    if(nrow(up)>numshow) {
-	up=up[order(up$p.adjust)[1:numshow],]
+    if ( nrow(up) > numshow ) {
+      up <- up[order(up$p.adjust)[1:numshow],]
     }
   }
   reference <- input$reference
@@ -570,8 +570,8 @@ enrichHeatmap <- function(input,
     reference$Description <- NA
   } else {
     reference <- reference[reference$p.adjust < pvalfilt, ]
-    if(nrow(reference)>numshow) {
-	reference=reference[order(reference$p.adjust)[1:numshow],]
+    if ( nrow(reference) > numshow) {
+      reference <- reference[order(reference$p.adjust)[1:numshow],]
     }
   }
   shared <- input$shared
@@ -579,8 +579,8 @@ enrichHeatmap <- function(input,
     shared$Description <- NA
   } else {
     shared <- shared[shared$p.adjust < pvalfilt, ]
-    if(nrow(shared)>numshow) {
-	shared=shared[order(shared$p.adjust)[1:numshow],]
+    if ( nrow(shared) > numshow ) {
+      shared <- shared[order(shared$p.adjust)[1:numshow],]
     }
   }
 
@@ -648,41 +648,51 @@ enrichHeatmap <- function(input,
   heatmapdata$id <- rownames(heatmapdata)
   # makes id
   rownames(heatmapdata) <- c(1:nrow(heatmapdata))
+
+
   suppressMessages(meltedheatmapdata <- reshape2::melt(heatmapdata))
 
-  meltedheatmapdata$newid = stringr::str_wrap(meltedheatmapdata$id, width = 80)
-#  meltedheatmapdata$id <- factor(meltedheatmapdata$id,
-#                                 levels = unique(meltedheatmapdata$id))
+  meltedheatmapdata$newid <- stringr::str_wrap(meltedheatmapdata$id, width = 80)
 
   meltedheatmapdata$id <- factor(meltedheatmapdata$id,
                                  levels = unique(meltedheatmapdata$id))
 
-#  meltedheatmapdata$id = str_wrap(meltedheatmapdata$id, width = 80)
+  theXAxis <- as.character(meltedheatmapdata[,2])
+  theYAxis <- meltedheatmapdata[,4]
+  #all possible values of X (type) and Y (pathways)
 
-  p1 <- ggplot(meltedheatmapdata,
-               aes_string(y = "id", x = "variable")) +
-    geom_tile(aes_string(fill = "value"),
-              colour = "black") +
-    scale_fill_continuous(low = "#08519c",
-                          high = "#deebf7",
-                          na.value = "white",
-                          guide = guide_legend(title = "Pvalue")) +
-    theme(text = element_text(size = 13)) +
-    theme(axis.text.x = element_text(angle=45,hjust=1)) +
-    theme(text = element_text(size = 11)) +
-    ggtitle(title)
-  p2 <- p1 +
-    scale_x_discrete(expand = c(0, 0),
-                     labels = c("High in Expt","High in Reference", "Shared")) +
-    scale_y_discrete(expand = c(0, 0),
-                labels=meltedheatmapdata$newid) +
-    theme(axis.title.x = element_blank(),
-          axis.title.y = element_blank())
+  theUniqueY <- unique(meltedheatmapdata$newid)
+  theUniqueX <- c("up", "down", "shared")
+  #unique values of X and Y
 
 
-  return(p2)
-}
+  for (i in 0:(length(theUniqueY) - 1))
+  {
+    num <- which(theYAxis == theUniqueY[i + 1])
+    theYAxis[num] <- i
+  }
+  for (i in 0:(length(theUniqueX) - 1))
+  {
+    num <- which(theXAxis == theUniqueX[i + 1])
+    theXAxis[num] <- i
+  }
+  #Subsitute words with position on the matrix
 
+  dataforHeatmap <- as.data.frame(cbind(as.numeric(theXAxis),as.numeric(theYAxis),as.numeric(meltedheatmapdata$value)))
+  formattedHeatmapData <- list_parse2(dataforHeatmap)
+  #create final formatting
+
+  hc <- highchart() %>%
+    hc_chart(type = "heatmap") %>%
+    hc_title(text = title) %>%
+    hc_xAxis(categories = theUniqueX) %>%
+    hc_yAxis(categories = theUniqueY) %>%
+    hc_add_series(name = "matrix location, p-value", data = formattedHeatmapData)
+  p <- hc_colorAxis(hc, minColor = "#FFFFFF", maxColor = "#000080")
+  #create final formatting
+
+  return(p)
+  }
 
 
 #' Multiple plot function
