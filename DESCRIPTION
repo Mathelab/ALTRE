@@ -34,6 +34,7 @@ Imports:
     ensembldb,
     EnsDb.Hsapiens.v75,
     tidyr,
+    dplyr,
     GO.db,
     grid,
     venneuler,

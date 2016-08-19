@@ -3,7 +3,7 @@
 \name{plotCombineAnnotatePeaks}
 \alias{plotCombineAnnotatePeaks}
 \title{Given the output from combineAnnotatePeaks,
-plot a barplot showing number of peaks before/after merging or length of 
+plot a barplot showing number of peaks before/after merging or length of
 peaks before/after merging
 (only works if peaks were merged)}
 \usage{
@@ -19,7 +19,7 @@ a highcharter object
 }
 \description{
 Given the output from combineAnnotatePeaks,
-plot a barplot showing number of peaks before/after merging or length of 
+plot a barplot showing number of peaks before/after merging or length of
 peaks before/after merging
 (only works if peaks were merged)
 }
