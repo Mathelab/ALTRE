@@ -19,11 +19,9 @@ loadCSVFile <- function(csvPath) {
 
 	#If the current directory is used (no path given), the get the directory first:
 	if(length(grep("/",csvPath))+length(grep("\\*",csvPath)) == 0) {
-		csvfile$datapath=paste0(getwd(),"/",csvPath)
+		csvPath=paste0(getwd(),"/",csvPath)
 	}
-	else {
-    		csvfile$datapath = rep(gsub("(.*)\\/(.*)","\\1",csvPath),nrow(csvfile))
-	}
+    	csvfile$datapath = rep(gsub("(.*)\\/(.*)","\\1",csvPath),nrow(csvfile))
     	return(csvfile)
    }
 }
