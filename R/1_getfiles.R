@@ -18,7 +18,7 @@ loadCSVFile <- function(csvPath) {
     	csvfile <- csvfile[order(csvfile$replicate, csvfile$sample), ]
 
 	#If the current directory is used (no path given), the get the directory first:
-	if(length(grep("/",csvPath))+length(grep("\\.*",csvPath)) == 0) {
+	if(length(grep("/",csvPath))+length(grep("\\*",csvPath)) == 0) {
 		csvfile$datapath=paste0(getwd(),"/",csvPath)
 	}
 	else {
