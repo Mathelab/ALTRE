@@ -175,7 +175,9 @@ plotCombineAnnotatePeaks <- function(conspeaks, feature = "TotalNumber") {
 
     if ( feature == "MeanLength" ) {
       mergeStatsMean <- dplyr::filter(mergeStatsFormatted, CellType == "MeanLength")
-      thecondition <- matrix(unlist(strsplit(mergeStatsMean$Condition, "_")), nrow = 3, ncol = 4)[2,]
+      thecondition <- matrix(unlist(strsplit(mergeStatsMean$Condition, "_")),
+                             nrow = 3,
+                             ncol = 4)[2, ]
       mergeStatsBefore <- dplyr::filter(mergeStatsMean, thecondition == "before")
       mergeStatsAfter <- dplyr::filter(mergeStatsMean, thecondition == "after")
 
