@@ -34,14 +34,14 @@ After downlading all files in the example datasets in one folder, download the C
 
 ```{r}
 library(ALTRE)
-csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+csvfile <- loadCSVFile("/Users/bask05/Desktop/Mathelab-ALTREsampledata/DNAseEncodeExample.csv")
 csvfile
 ```
 
 *Load peak files*
 Read in the peak files (BED format) with the *loadBedFiles()* function.  Only the first three columns (chr, start, end) of the peak files are required an read in. Additional columns are allowed but ignored.
 
-```{r}
+```{r, message=FALSE}
 samplePeaks <- loadBedFiles(csvfile)
 samplePeaks
 ```
