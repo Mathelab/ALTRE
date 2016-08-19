@@ -18,21 +18,22 @@
 #'
 plotConsensusPeaks <- function(samplepeaks) {
 
-    dfstats <- samplepeaks$consPeaksStats
-    row.names(dfstats) <- NULL
-    dfstats[ , 2] <-  as.numeric(as.character(dfstats[[2]]))
-    dfstats[ , 3] <-  as.numeric(as.character(dfstats[[3]]))
-    mydf <- tidyr::gather(dfstats, "CellType", "Count", 2:3)
+    consPeaksStats <- samplepeaks$consPeaksStats
+    row.names(consPeaksStats) <- NULL
+    consPeaksStats[ , 2] <-  as.numeric(as.character(consPeaksStats[[2]]))
+    consPeaksStats[ , 3] <-  as.numeric(as.character(consPeaksStats[[3]]))
+    statsFormated <- tidyr::gather(consPeaksStats, "CellType", "Count", 2:3)
 
-    dat <- mydf %>% split(levels(as.factor(mydf$CellType)))
+    plottingData <- statsFormated %>% split(levels(as.factor(statsFormated$CellType)))
+
     p <- highchart() %>%
         hc_title(text = "Peak Counts by Cell Type",
                  style = list(color = '#2E1717',
                               fontWeight = 'bold')) %>%
         hc_subtitle(text = "For bioreplicates and their merged consensus track") %>%
         hc_add_series(
-            data = dat[[1]]$Count,
-            name = names(dat[1]),
+            data = plottingData[[1]]$Count,
+            name = names(plottingData[1]),
             type = "column",
             dataLabels = list(
                 enabled = TRUE,
@@ -42,8 +43,8 @@ plotConsensusPeaks <- function(samplepeaks) {
             )
         ) %>%
         hc_add_series(
-            data = dat[[2]]$Count,
-            name = names(dat[2]),
+            data = plottingData[[2]]$Count,
+            name = names(plottingData[2]),
             dataLabels = list(
                 enabled = TRUE,
                 rotation = 270,
@@ -54,14 +55,14 @@ plotConsensusPeaks <- function(samplepeaks) {
         ) %>%
         hc_yAxis(title = list(text = "Peak Counts"),
                  labels = list(format = "{value}")) %>%
-        hc_xAxis(categories = dat[[1]]$PeakType) %>%
+        hc_xAxis(categories = plottingData[[1]]$PeakType) %>%
         hc_legend(
             enabled = TRUE,
             layout = "vertical",
             align = "right",
             verticalAlign = "top",
             floating = TRUE,
-            x = -20,
+            x = -5,
             y = 60
         ) %>%
         hc_tooltip(
@@ -76,7 +77,7 @@ plotConsensusPeaks <- function(samplepeaks) {
 ####################################################################
 
 #' Given the output from combineAnnotatePeaks,
-#' plot a barplot showing number of peaks before/after merging or length of 
+#' plot a barplot showing number of peaks before/after merging or length of
 #' peaks before/after merging
 #' (only works if peaks were merged)
 #'
@@ -104,31 +105,32 @@ plotConsensusPeaks <- function(samplepeaks) {
 #' }
 #' @export
 #'
-plotCombineAnnotatePeaks <- function(conspeaks, feature="TotalNumber") {
-    
-    dfstats=conspeaks$mergestats
-    row.names(dfstats) <- NULL
-    dfstats[ , 2] <-  as.numeric(as.character(dfstats[[2]]))
-    dfstats[ , 3] <-  as.numeric(as.character(dfstats[[3]]))
-    mydf <- tidyr::gather(dfstats, "CellType", "Count", 2:3)
-    
-    if (nrow(mydf) == 1) {
+plotCombineAnnotatePeaks <- function(conspeaks, feature = "TotalNumber") {
+
+    mergeStats <- conspeaks$mergestats
+    row.names(mergeStats) <- NULL
+    mergeStats[ , 2] <-  as.numeric(as.character(mergeStats[[2]]))
+    mergeStats[ , 3] <-  as.numeric(as.character(mergeStats[[3]]))
+    mergeStatsFormatted <- tidyr::gather(mergeStats, "CellType", "Count", 2:3)
+
+
+    if (nrow(mergeStatsFormatted) == 1) {
         stop("No plot to show since merging was not performed
              when calling combineAnnotatePeaks function")
     }
-    
-    if(feature=="TotalNumber"){
-        mydf2=mydf[mydf$CellType=="TotalNumber",]
-        thecondition=matrix(unlist(strsplit(mydf2$Condition, "_")), nrow=3, ncol=4)[2,]
-        before=mydf2[which(thecondition=="before"),]
-        after=mydf2[which(thecondition=="after"),]
-        
+
+    if(feature == "TotalNumber"){
+        mergeStatsTotal <- dplyr::filter(mergeStatsFormatted, CellType == "TotalNumber")
+        thecondition <- matrix(unlist(strsplit(mergeStatsTotal$Condition, "_")), nrow=3, ncol=4)[2,]
+        mergeStatsBefore <- dplyr::filter(mergeStatsTotal, thecondition == "before")
+        mergeStatsAfter <- dplyr::filter(mergeStatsTotal, thecondition == "after")
+
         p <- highchart() %>%
             hc_title(text = "Number of REs before/after merging",
                      style = list(color = '#2E1717',
                                   fontWeight = 'bold')) %>%
             hc_add_series(
-                data = before$Count,
+                data = mergeStatsBefore$Count,
                 name=c("enhancers"),
                 type = "column",
                 dataLabels = list(
@@ -138,7 +140,7 @@ plotCombineAnnotatePeaks <- function(conspeaks, feature="TotalNumber") {
                     y = 40
                 )) %>%
             hc_add_series(
-                data = after$Count,
+                data = mergeStatsAfter$Count,
                 name=c("promoters"),
                 type = "column",
                 dataLabels = list(
@@ -166,19 +168,20 @@ plotCombineAnnotatePeaks <- function(conspeaks, feature="TotalNumber") {
             ) %>%
             hc_exporting(enabled = TRUE)
     }
-    
+
     if(feature=="MeanLength"){
-        mydf2=mydf[mydf$CellType=="MeanLength",]
-        thecondition=matrix(unlist(strsplit(mydf2$Condition, "_")), nrow=3, ncol=4)[2,]
-        before=mydf2[which(thecondition=="before"),]
-        after=mydf2[which(thecondition=="after"),]
-        
+      mergeStatsMean <- dplyr::filter(mergeStatsFormatted, CellType == "MeanLength")
+      thecondition <- matrix(unlist(strsplit(mergeStatsMean$Condition, "_")), nrow=3, ncol=4)[2,]
+      mergeStatsBefore <- dplyr::filter(mergeStatsMean, thecondition == "before")
+      mergeStatsAfter <- dplyr::filter(mergeStatsMean, thecondition == "after")
+
+
         p <- highchart() %>%
             hc_title(text = "Mean length of REs before/after merging",
                      style = list(color = '#2E1717',
                                   fontWeight = 'bold')) %>%
             hc_add_series(
-                data = before$Count,
+                data = mergeStatsBefore$Count,
                 name=c("enhancers"),
                 type = "column",
                 dataLabels = list(
@@ -188,7 +191,7 @@ plotCombineAnnotatePeaks <- function(conspeaks, feature="TotalNumber") {
                     y = 40
                 )) %>%
             hc_add_series(
-                data = after$Count,
+                data = mergeStatsAfter$Count,
                 name=c("promoters"),
                 type = "column",
                 dataLabels = list(
