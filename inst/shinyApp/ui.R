@@ -202,7 +202,7 @@ body <- dashboardBody(
                 title = "Barplot",
                 width = NULL,
                 solidHeader = TRUE,
-                plotOutput('barplot')
+                highcharter::highchartOutput("barplot")
               ),
               HTML("</div>")
               )

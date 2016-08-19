@@ -307,7 +307,7 @@ shinyServer(function(input, output, session) {
   ############################################################################
   # plots
 
-  output$barplot <- renderPlot({
+  output$barplot <- highcharter::renderHighchart({
     plotConsensusPeaks(getConsensusObj())
   })
 
