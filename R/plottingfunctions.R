@@ -84,7 +84,6 @@ plotConsensusPeaks <- function(samplepeaks) {
 #' (only works if peaks were merged)
 #'
 #' @param conspeaks output generated from combineAnnotatePeaks
-#' @param feature either "TotalNumber" or "MeanLength"
 #'
 #' @return a highcharter object
 #'
@@ -228,7 +227,7 @@ plotCombineAnnotatePeaks <- function(conspeaks) {
             ) %>%
             hc_exporting(enabled = TRUE)
     }
-    browsable(hw_grid(p1, p2, ncol = 1, rowheight = 300))
+    htmltools::browsable(hw_grid(p1, p2, ncol = 1, rowheight = 300))
     htmlcode <- hw_grid(p1, p2)
     return(htmlcode)
 }
