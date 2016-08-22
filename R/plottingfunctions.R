@@ -227,9 +227,9 @@ plotCombineAnnotatePeaks <- function(conspeaks) {
             ) %>%
             hc_exporting(enabled = TRUE)
     }
-    htmltools::browsable(hw_grid(p1, p2, ncol = 1, rowheight = 300))
+    plot <- htmltools::browsable(hw_grid(p1, p2, ncol = 1, rowheight = 300))
     htmlcode <- hw_grid(p1, p2)
-    return(htmlcode)
+    return(plot)
 }
 
 
@@ -239,7 +239,7 @@ plotCombineAnnotatePeaks <- function(conspeaks) {
 #' @param altrepeakscateg output generated from countanalysis() then
 #' categAltrePeaks()
 #'
-#' @return a ggplot
+#' @return a highcharter object
 #'
 #' @examples
 #' \dontrun{
@@ -279,41 +279,61 @@ plotCountAnalysis <- function(altrepeakscateg) {
                                                 "REaltrecateg")]
   enh <- toplot[which(toplot$region == "enhancer"), ]
   prom <- toplot[which(toplot$region == "promoter"), ]
+  lengthRE <- rep("", length(enh$REaltrecateg))
 
-  plot1 <- ggplot(enh,
-                 aes(enh$log2FoldChange,
-                     -log2(enh$padj))) +
-    geom_point(aes(col = factor(enh$REaltrecateg))) +
-    scale_colour_manual(values = c("dark grey","salmon","dark green","blue")) +
-    theme_bw(base_size = 15) +
-    theme(legend.title = element_blank()) +
-    scale_x_continuous(expand = c(0, 0)) +
-    scale_y_continuous(expand = c(0, 0)) +
-    theme(panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank()) +
-    labs(x = "log2FC", y = "-log2(pvalue)") +
-    ggtitle("Enhancers")
+  num1 <- min(which(enh$REaltrecateg == "Experiment Specific"))
+  num2 <- min(which(enh$REaltrecateg == "Reference Specific"))
+  num3 <- min(which(enh$REaltrecateg == "Shared"))
+  num4 <- min(which(enh$REaltrecateg == "Ambiguous"))
 
-  plot2 <- ggplot(prom,
-                 aes(prom$log2FoldChange,
-                     -log2(prom$padj))) +
-    geom_point(aes(col = factor(prom$REaltrecateg))) +
-    scale_colour_manual(values = c("dark grey","salmon","dark green","blue")) +
-    theme_bw(base_size = 15) +
-    theme(legend.title = element_blank()) +
-    scale_x_continuous(expand = c(0, 0)) +
-    scale_y_continuous(expand = c(0, 0)) +
-    theme(panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank()) +
-    labs(x = "log2FC", y = "-log2(pvalue)") +
-    ggtitle("Promoters")
+  lengthRE[num1] <- "Experiment Specific"
+  lengthRE[num2] <- "Reference Specific"
+  lengthRE[num3] <- "Shared"
+  lengthRE[num4] <- "Ambiguous"
 
-#    geom_hline(aes(yintercept = -log2(pval)), linetype = "dashed") +
-#    geom_vline(aes(xintercept = (-lfcvalue)), linetype = "dashed") +
-#    geom_vline(aes(xintercept =  (lfcvalue)), linetype = "dashed")
+  p1 <- highchart() %>%
+    hc_title(text = "Enhancers",
+             style = list(color = '#2E1717',
+                          fontWeight = 'bold')) %>%
+    hc_add_series_scatter(y = -log10(enh$padj),
+                          x = enh$log2FoldChange,
+                          color = enh$REaltrecateg,
+                          label = lengthRE)  %>%
+    hc_tooltip(headerFormat = "",
+               pointFormat  = "<b>log2FC</b> = {point.x}<br> <b>-log10pvalue</b> = {point.y}<br>") %>%
+    hc_exporting(enabled = TRUE)
 
-  return(multiplot(plot1,plot2))
+  lengthRE=rep("", length(prom$REaltrecateg))
+
+  num1 <- min(which(prom$REaltrecateg == "Experiment Specific"))
+  num2 <- min(which(prom$REaltrecateg == "Reference Specific"))
+  num3 <- min(which(prom$REaltrecateg == "Shared"))
+  num4 <- min(which(prom$REaltrecateg == "Ambiguous"))
+
+  lengthRE[num1] <- "Experiment Specific"
+  lengthRE[num2] <- "Reference Specific"
+  lengthRE[num3] <- "Shared"
+  lengthRE[num4] <- "Ambiguous"
+
+
+  p2 <- highchart() %>%
+    hc_title(text = "Promoters",
+             style = list(color = '#2E1717',
+                          fontWeight = 'bold')) %>%
+    hc_add_series_scatter(y = -log10(prom$padj),
+                          x = prom$log2FoldChange,
+                          color = prom$REaltrecateg,
+                          label = lengthRE)  %>%
+    hc_tooltip(headerFormat = "",
+               pointFormat  = "<b>log2FC</b> = {point.x}<br> <b>-log10pvalue</b> = {point.y}<br>") %>%
+    hc_exporting(enabled = TRUE)
+
+  plot<- htmltools::browsable(hw_grid(p1, p2, ncol = 2, rowheight = 550))
+  htmlcode <- hw_grid(p1, p2)
+
+  return(plot)
 }
+
 
 ###############################################################################
 #' Creates a boxplot to see the distribution of read counts in type-specific and
