@@ -26,8 +26,8 @@ consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
                                           TSS = TSSannot,
                                           merge = TRUE,
                                           regionspecific = TRUE,
-                                          mergedistenh = 1500,
-                                          mergedistprom = 1000)
+                                          distancefromTSSdist = 1500,
+                                          distancefromTSSprox = 1000)
 #Need to run getcounts on all chromosomes
 counts_consPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
                              csvfile = csvfile,

@@ -99,8 +99,8 @@ plotConsensusPeaks <- function(samplepeaks) {
 #'                                           TSS = TSSannot,
 #'                                           merge = TRUE,
 #'                                           regionspecific = TRUE,
-#'                                           mergedistenh = 1500,
-#'                                           mergedistprom = 1000)
+#'                                           distancefromTSSdist = 1500,
+#'                                           distancefromTSSprox = 1000)
 #' plotCombineAnnotatePeaks(consPeaksAnnotated)
 #' }
 #' @export
@@ -253,8 +253,8 @@ plotCombineAnnotatePeaks <- function(conspeaks) {
 #'                                           TSS = TSSannot,
 #'                                           merge = TRUE,
 #'                                           regionspecific = TRUE,
-#'                                           mergedistenh = 1500,
-#'                                           mergedistprom = 1000)
+#'                                           distancefromTSSdist = 1500,
+#'                                           distancefromTSSprox = 1000)
 #' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
 #'                               sampleinfo = sampleinfo,
 #'                               reference = 'SAEC',
@@ -341,8 +341,8 @@ plotCountAnalysis <- function(altrepeakscateg) {
 #'                                           TSS = TSSannot,
 #'                                           merge = TRUE,
 #'                                           regionspecific = TRUE,
-#'                                           mergedistenh = 1500,
-#'                                           mergedistprom = 1000)
+#'                                           distancefromTSSdist = 1500,
+#'                                           distancefromTSSprox = 1000)
 #' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
 #'                               sampleinfo = sampleinfo,
 #'                               reference = 'SAEC',
@@ -453,8 +453,8 @@ plotDistCountAnalysis <- function(analysisresults, counts) {
 #'                                           TSS = TSSannot,
 #'                                           merge = TRUE,
 #'                                           regionspecific = TRUE,
-#'                                           mergedistenh = 1500,
-#'                                           mergedistprom = 1000 )
+#'                                           distancefromTSSdist = 1500,
+#'                                           distancefromTSSprox = 1000 )
 #'
 #' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
 #'                              sampleinfo = sampleinfo,
@@ -516,8 +516,8 @@ plotgetcounts <- function(countsconspeaks) {
 #'                                           TSS = TSSannot,
 #'                                           merge = TRUE,
 #'                                           regionspecific = TRUE,
-#'                                           mergedistenh = 1500,
-#'                                           mergedistprom = 1000)
+#'                                           distancefromTSSdist = 1500,
+#'                                           distancefromTSSprox = 1000)
 #' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
 #'                               sampleinfo = sampleinfo,
 #'                               reference = 'SAEC',
@@ -728,8 +728,8 @@ enrichHeatmap <- function(input,
 #'                                           TSS = TSSannot,
 #'                                           merge = TRUE,
 #'                                           regionspecific = TRUE,
-#'                                           mergedistenh = 1500,
-#'                                           mergedistprom = 1000 )
+#'                                           distancefromTSSdist = 1500,
+#'                                           distancefromTSSprox = 1000 )
 #'counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
 #'                              sampleinfo = sampleinfo,
 #'                              reference = 'SAEC',
@@ -812,8 +812,8 @@ multiplot <- function(..., plotlist = NULL, file, cols = 1, layout = NULL) {
 #'                                            TSS = TSSannot,
 #'                                            merge = TRUE,
 #'                                            regionspecific = TRUE,
-#'                                            mergedistenh = 1500,
-#'                                            mergedistprom = 1000)
+#'                                            distancefromTSSdist = 1500,
+#'                                            distancefromTSSprox = 1000)
 #' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
 #'                               sampleinfo = sampleinfo,
 #'                               reference = 'SAEC')
@@ -941,8 +941,8 @@ plotvenn <- function(analysisresultsmatrix,
 #'                                            TSS = TSSannot,
 #'                                            merge = TRUE,
 #'                                            regionspecific = TRUE,
-#'                                            mergedistenh = 1500,
-#'                                            mergedistprom = 1000 )
+#'                                            distancefromTSSdist = 1500,
+#'                                            distancefromTSSprox = 1000 )
 #' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
 #'                               sampleinfo = sampleinfo,
 #'                               reference = 'SAEC')

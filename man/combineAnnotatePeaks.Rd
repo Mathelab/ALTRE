@@ -4,8 +4,8 @@
 \alias{combineAnnotatePeaks}
 \title{Combine and annotate peaks from different sample types. Optionally merge nearby regions.}
 \usage{
-combineAnnotatePeaks(conspeaks, TSS, merge = FALSE, mergedistenh = 0,
-  mergedistprom = 0, mergedist = 0, regionspecific = NA,
+combineAnnotatePeaks(conspeaks, TSS, merge = FALSE, distancefromTSSdist = 0,
+  distancefromTSSprox = 0, mergedist = 0, regionspecific = NA,
   distancefromTSS = 1500)
 }
 \arguments{
@@ -17,26 +17,26 @@ combineAnnotatePeaks(conspeaks, TSS, merge = FALSE, mergedistenh = 0,
 \item{merge}{whether or not regions should be merged if they are within a
 user set distance to each other (default is FALSE)}
 
-\item{mergedistenh}{merge enhancers peaks if they are < mergedistenh apart
+\item{distancefromTSSdist}{merge TSS-distal peaks if they are < distancefromTSSdist apart
 (set when regionspecific is TRUE)}
 
-\item{mergedistprom}{merge promoters if they are < mergedistprom apart
+\item{distancefromTSSprox}{merge TSS-proximal if they are < distancefromTSSprox apart
 (set when regionspecific is TRUE)}
 
-\item{mergedist}{merge promoters and enhancers if they are < mergedist apart
+\item{mergedist}{merge TSS-proximal and TSS-distal if they are < mergedist apart
 (set when regionspecific is FALSE)}
 
 \item{regionspecific}{logical to if TRUE, merging occurs within same type
-peaks (e.g. merge promoters, then merge enhancers)}
+peaks (e.g. merge TSS-proximal, then merge TSS-distal)}
 
 \item{distancefromTSS}{in bp; peaks within distFromTSS of an annotated
-Transcription Start Site (TSS) will be annotated as promoter (default=1500bp)}
+Transcription Start Site (TSS) will be annotated as TSS-proximal (default=1500bp)}
 }
 \value{
 List containing two items:
 (1) GRanges object:  all sample types combined, regions annotated as
- type-specific and enhancer/promoter specific.
-(2) Matrix: number and size of enhancers and promoters before and
+ type-specific and TSS-distal/TSS-proximal specific.
+(2) Matrix: number and size of TSS-distal and TSS-proximal before and
  after merging nearby regulatory regions
 }
 \description{
@@ -44,9 +44,9 @@ This function accomplishes three tasks:
 (1) Combines peaks from different sample types into one master list,
  and annotates each peak with it's sample type-specificity (which cell or
   tissue types the peak can be found in)
-(2) Categorizes peaks as either a promoter or enhancer (promoter distance
-is defined as 1500bp away from a transcription start site (TSS) by default,
-but the distance can be changed with the distancefromTSS argument)
+(2) Categorizes peaks as either TSS-proximal or TSS-distal based on the distance
+from a known transcription start site (TSS).  By defaul, distance is set to 
+1500 bp but can be changed with the distancefromTSS argument).
 (3) Optionally, regulatory regions that are within a certain distance of
  each other can be merged to form a larger regulatory region.
 }
@@ -61,8 +61,8 @@ consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
                                           TSS = TSSannot,
                                           merge = TRUE,
                                           regionspecific = TRUE,
-                                          mergedistenh = 1500,
-                                          mergedistprom = 1000)
+                                          distancefromTSSdist = 1500,
+                                          distancefromTSSprox = 1000)
 }
 }
 
