@@ -3,13 +3,13 @@
 #'
 #' @param analysisresults output of countanalysis()
 #' @param lfctypespecific log2fold change cutoff (of chromatin accessibility)
-#' for type specific enhancers/promoters
+#' for type specific TSS-distals/TSS-proximals
 #' @param lfcshared log2fold change cutoff (of chromatin accessibility)
-#' for shared enhancers/promoters
+#' for shared TSS-distals/TSS-proximals
 #' @param pvaltypespecific p-value cutoff (of chromatin accessibility)
-#' for type specific enhancers/promoters
+#' for type specific TSS-distals/TSS-proximals
 #' @param pvalshared p-value cutoff (of chromatin accessibility)
-#' for shared enhancers/promoters
+#' for shared TSS-distals/TSS-proximals
 #'
 #' @examples
 #' \dontrun{
@@ -22,8 +22,8 @@
 #'                                           TSS = TSSannot,
 #'                                           merge = TRUE,
 #'                                           regionspecific = TRUE,
-#'                                           mergedistenh = 1500,
-#'                                           mergedistprom = 1000)
+#'                                           distancefromTSSdist = 1500,
+#'                                           distancefromTSSprox = 1000)
 #' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
 #'                               sampleinfo = sampleinfo,
 #'                               reference = 'SAEC')
@@ -88,38 +88,38 @@
    analysisresults$REaltrecateg <- REaltrecateg
 
    stats <- data.frame(
-     REtype = c("Promoter", "Enhancer"),
+     REtype = c("TSS-proximal", "TSS-distal"),
      Expt_Specific = c(length(intersect(
-       which(analysisresults$region == "promoter"),
+       which(analysisresults$region == "TSS-proximal"),
        which(analysisresults$REaltrecateg ==
                "Experiment Specific")
      )),
      length(intersect(
-       which(analysisresults$region == "enhancer"),
+       which(analysisresults$region == "TSS-distal"),
        which(analysisresults$REaltrecateg ==
                "Experiment Specific")
      ))),
      Ref_Specific = c(length(intersect(
-       which(analysisresults$region ==  "promoter"),
+       which(analysisresults$region ==  "TSS-proximal"),
        which(analysisresults$REaltrecateg == "Reference Specific")
      )),
      length(intersect(
-       which(analysisresults$region == "enhancer"),
+       which(analysisresults$region == "TSS-distal"),
        which(analysisresults$REaltrecateg == "Reference Specific")
      ))),
      Shared = c(length(intersect(
-       which(analysisresults$region == "promoter"),
+       which(analysisresults$region == "TSS-proximal"),
        which(analysisresults$REaltrecateg == "Shared")
      )),
      length(intersect(
-       which(analysisresults$region == "enhancer"),
+       which(analysisresults$region == "TSS-distal"),
        which(analysisresults$REaltrecateg == "Shared")
      ))),
      Ambiguous = c(length(intersect(
-       which(analysisresults$region == "promoter"),
+       which(analysisresults$region == "TSS-proximal"),
        which(analysisresults$REaltrecateg == "Ambiguous")
      )), length(intersect(
-       which(analysisresults$region == "enhancer"),
+       which(analysisresults$region == "TSS-distal"),
        which(analysisresults$REaltrecateg == "Ambiguous")
      )))
    )

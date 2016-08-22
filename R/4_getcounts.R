@@ -12,7 +12,7 @@
 #'
 #' @return List containing three items:
 #' (1) DESeqDataSet: contains count information for all replicates of all samples
-#' (2) Matrix: contains number of enhancers and promoters
+#' (2) Matrix: contains number of TSS-distal and TSS-proximal
 #'  before and after filtering (if applicable)
 #' (3) Data frame for creating a density plot (use function plotgetcounts()
 #'
@@ -28,8 +28,8 @@
 #'                                           TSS = TSSannot,
 #'                                           merge = TRUE,
 #'                                           regionspecific = TRUE,
-#'                                           mergedistenh = 1500,
-#'                                           mergedistprom = 1000 )
+#'                                           distancefromTSSdist = 1500,
+#'                                           distancefromTSSprox = 1000 )
 #' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
 #'                               sampleinfo = sampleinfo,
 #'                               reference = 'SAEC',
@@ -85,11 +85,11 @@ getCounts <- function(annotpeaks, sampleinfo, reference, chrom = NULL) {
   # Create stats matrix originaldata is created ~ 10 lines lines above
   colnames(originaldata) <- unlist(lapply(colnames(originaldata), gsub,
                                           pattern = "meta.", replacement = ""))
-  enhancernum <- length(which(originaldata$region == "enhancer"))
-  promoternum <- length(which(originaldata$region == "promoter"))
+  tssdistnum <- length(which(originaldata$region == "TSS-distal"))
+  tssproxnum <- length(which(originaldata$region == "TSS-proximal"))
 
-  statdf <- data.frame(Num_Enhancers = enhancernum,
-                       Num_Promoters = promoternum)
+  statdf <- data.frame(Num_TSSdistals = tssdistnum,
+                       Num_TSSproximals = tssproxnum)
 
   #########################################
   # Create densityplot
