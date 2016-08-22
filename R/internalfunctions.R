@@ -36,7 +36,7 @@ grangestodataframe <- function(grange) {
 }
 
 ################################################################################
-#' Internal function: annotates peaks as promoters or enhancers
+#' Internal function: annotates peaks as TSS-proximals or TSS-distals
 #'
 #' Takes a Grange input
 #' Not for use by package user
@@ -57,11 +57,11 @@ tssannotgrange <- function(grange, TSS, distancefromTSS) {
   newdataframe$distance <- mcols(distancetoTSS)$distance
   newdataframe <- within(newdataframe, {
     region <- ifelse(distance <= distancefromTSS,
-                     "promoter",
-                     "enhancer")
+                     "TSS-proximal",
+                     "TSS-distal")
   })
   # annotate anything <=1500 bp away as
-  # promoter, otherwise enhancer
+  # TSS-proximal, otherwise TSS-distal
   chr <- c()
   annotatedgrange <- with(newdataframe,
                           GRanges(chr,
@@ -92,13 +92,13 @@ statscombineannotate <- function(tableofinfo,
   inputdata <- input
   inputdata$size <- inputdata$stop - inputdata$start
   tableofinfo[row1, 2] <- round(mean(inputdata[inputdata[, 4] ==
-                                                 "enhancer", ]$size),
+                                                 "TSS-distal", ]$size),
                                 digits = 0)
   tableofinfo[row2, 2] <- round(mean(inputdata[inputdata[, 4] ==
-                                                 "promoter", ]$size),
+                                                 "TSS-proximal", ]$size),
                                 digits = 0)
-  tableofinfo[row1, 1] <- nrow(inputdata[inputdata[, 4] == "enhancer", ])
-  tableofinfo[row2, 1] <- nrow(inputdata[inputdata[, 4] == "promoter", ])
+  tableofinfo[row1, 1] <- nrow(inputdata[inputdata[, 4] == "TSS-distal", ])
+  tableofinfo[row2, 1] <- nrow(inputdata[inputdata[, 4] == "TSS-proximal", ])
   return(tableofinfo)
 }
 ################################################################################

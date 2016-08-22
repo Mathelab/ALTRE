@@ -130,24 +130,24 @@ combineAnnotatePeaks <- function(conspeaks,
              then distancefromTSSprox and distancefromTSSdist must be set")
       }
       dataframeformerge <- grangestodataframe(TSSgranges)
-      TSS-distalbeforemergedata <- dataframeformerge[dataframeformerge$region ==
+      TSSdistalbeforemergedata <- dataframeformerge[dataframeformerge$region ==
                                                      "TSS-distal", ]
-      TSS-proximalbeforemergedata <- dataframeformerge[dataframeformerge$region ==
+      TSSproxbeforemergedata <- dataframeformerge[dataframeformerge$region ==
                                                      "TSS-proximal", ]
 
       # Merge TSS-distal and TSS-proximal independently
       # if they're within user defined distances
-      TSS-distalafter <- mergeclosepeaks(peaklist,
-                                       TSS-distalbeforemergedata,
+      TSSdistafter <- mergeclosepeaks(peaklist,
+                                       TSSdistalbeforemergedata,
                                        mergedist = distancefromTSSdist,
                                        TSS, distancefromTSS)
-      TSS-proximalafter <- mergeclosepeaks(peaklist,
-                                       TSS-proximalbeforemergedata,
+      TSSproxafter <- mergeclosepeaks(peaklist,
+                                       TSSproxbeforemergedata,
                                        mergedist = distancefromTSSprox,
                                        TSS, distancefromTSS)
 
-      bothafter <- sort(GenomeInfoDb::sortSeqlevels(c(TSS-distalafter,
-                                        TSS-proximalafter)))
+      bothafter <- sort(GenomeInfoDb::sortSeqlevels(c(TSSdistafter,
+                                        TSSproxafter)))
     }
 
     # if merging TSS-distal and TSS-proximal regions at
