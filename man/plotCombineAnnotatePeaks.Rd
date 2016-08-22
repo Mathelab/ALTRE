@@ -7,12 +7,10 @@ plot a barplot showing number of peaks before/after merging or length of
 peaks before/after merging
 (only works if peaks were merged)}
 \usage{
-plotCombineAnnotatePeaks(conspeaks, feature = "TotalNumber")
+plotCombineAnnotatePeaks(conspeaks)
 }
 \arguments{
 \item{conspeaks}{output generated from combineAnnotatePeaks}
-
-\item{feature}{either "TotalNumber" or "MeanLength"}
 }
 \value{
 a highcharter object

@@ -84,7 +84,6 @@ plotConsensusPeaks <- function(samplepeaks) {
 #' (only works if peaks were merged)
 #'
 #' @param conspeaks output generated from combineAnnotatePeaks
-#' @param feature either "TotalNumber" or "MeanLength"
 #'
 #' @return a highcharter object
 #'
@@ -106,7 +105,7 @@ plotConsensusPeaks <- function(samplepeaks) {
 #' }
 #' @export
 #'
-plotCombineAnnotatePeaks <- function(conspeaks, feature = "TotalNumber") {
+plotCombineAnnotatePeaks <- function(conspeaks) {
 
     CellType <- NULL
     #without this R CMD check throws no visible binding for global variable error
@@ -123,13 +122,15 @@ plotCombineAnnotatePeaks <- function(conspeaks, feature = "TotalNumber") {
              when calling combineAnnotatePeaks function")
     }
 
+
+    feature <- "TotalNumber"
     if ( feature == "TotalNumber") {
         mergeStatsTotal <- dplyr::filter(mergeStatsFormatted, CellType == "TotalNumber")
         thecondition <- matrix(unlist(strsplit(mergeStatsTotal$Condition, "_")), nrow = 3, ncol = 4)[2,]
         mergeStatsBefore <- dplyr::filter(mergeStatsTotal, thecondition == "before")
         mergeStatsAfter <- dplyr::filter(mergeStatsTotal, thecondition == "after")
 
-        p <- highchart() %>%
+        p1 <- highchart() %>%
             hc_title(text = "Number of REs before/after merging",
                      style = list(color = '#2E1717',
                                   fontWeight = 'bold')) %>%
@@ -173,6 +174,7 @@ plotCombineAnnotatePeaks <- function(conspeaks, feature = "TotalNumber") {
             hc_exporting(enabled = TRUE)
     }
 
+    feature <- "MeanLength"
     if ( feature == "MeanLength" ) {
       mergeStatsMean <- dplyr::filter(mergeStatsFormatted, CellType == "MeanLength")
       thecondition <- matrix(unlist(strsplit(mergeStatsMean$Condition, "_")),
@@ -182,7 +184,7 @@ plotCombineAnnotatePeaks <- function(conspeaks, feature = "TotalNumber") {
       mergeStatsAfter <- dplyr::filter(mergeStatsMean, thecondition == "after")
 
 
-        p <- highchart() %>%
+        p2 <- highchart() %>%
             hc_title(text = "Mean length of REs before/after merging",
                      style = list(color = '#2E1717',
                                   fontWeight = 'bold')) %>%
@@ -225,7 +227,9 @@ plotCombineAnnotatePeaks <- function(conspeaks, feature = "TotalNumber") {
             ) %>%
             hc_exporting(enabled = TRUE)
     }
-    return(p)
+    htmltools::browsable(hw_grid(p1, p2, ncol = 1, rowheight = 300))
+    htmlcode <- hw_grid(p1, p2)
+    return(htmlcode)
 }
 
 
