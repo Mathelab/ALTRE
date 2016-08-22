@@ -25,6 +25,7 @@ BiocInstaller::biocLite(c('GenomeInfoDb',
                         'EnsDb.Hsapiens.v75',
                         'GO.db'))
 # install the package
+setRepositories(ind=1:2)
 devtools::install_github("mathelab/ALTRE")
 ```
 When installing on Linux, if you get an rJava package installation error. Please run the following two lines in the console:
