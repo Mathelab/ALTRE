@@ -19,7 +19,7 @@ considered 'reference' in DESeq2 analysis}
 \value{
 List containing three items:
 (1) DESeqDataSet: contains count information for all replicates of all samples
-(2) Matrix: contains number of enhancers and promoters
+(2) Matrix: contains number of TSS-distal and TSS-proximal
  before and after filtering (if applicable)
 (3) Data frame for creating a density plot (use function plotgetcounts()
 }

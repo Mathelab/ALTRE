@@ -2,7 +2,7 @@
 % Please edit documentation in R/internalfunctions.R
 \name{tssannotgrange}
 \alias{tssannotgrange}
-\title{Internal function: annotates peaks as promoters or enhancers}
+\title{Internal function: annotates peaks as TSS-proximals or TSS-distals}
 \usage{
 tssannotgrange(grange, TSS, distancefromTSS)
 }

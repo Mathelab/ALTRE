@@ -277,8 +277,8 @@ plotCountAnalysis <- function(altrepeakscateg) {
                                                 "log2FoldChange",
                                                 "padj",
                                                 "REaltrecateg")]
-  enh <- toplot[which(toplot$region == "enhancer"), ]
-  prom <- toplot[which(toplot$region == "promoter"), ]
+  enh <- toplot[which(toplot$region == "TSS-distal"), ]
+  prom <- toplot[which(toplot$region == "TSS-proximal"), ]
   lengthRE <- rep("", length(enh$REaltrecateg))
 
   num1 <- min(which(enh$REaltrecateg == "Experiment Specific"))
@@ -303,7 +303,7 @@ plotCountAnalysis <- function(altrepeakscateg) {
                pointFormat  = "<b>log2FC</b> = {point.x}<br> <b>-log10pvalue</b> = {point.y}<br>") %>%
     hc_exporting(enabled = TRUE)
 
-  lengthRE=rep("", length(prom$REaltrecateg))
+  lengthRE <- rep("", length(prom$REaltrecateg))
 
   num1 <- min(which(prom$REaltrecateg == "Experiment Specific"))
   num2 <- min(which(prom$REaltrecateg == "Reference Specific"))
@@ -328,7 +328,7 @@ plotCountAnalysis <- function(altrepeakscateg) {
                pointFormat  = "<b>log2FC</b> = {point.x}<br> <b>-log10pvalue</b> = {point.y}<br>") %>%
     hc_exporting(enabled = TRUE)
 
-  plot<- htmltools::browsable(hw_grid(p1, p2, ncol = 2, rowheight = 550))
+  plot <- htmltools::browsable(hw_grid(p1, p2, ncol = 2, rowheight = 550))
   htmlcode <- hw_grid(p1, p2)
 
   return(plot)
@@ -854,30 +854,18 @@ multiplot <- function(..., plotlist = NULL, file, cols = 1, layout = NULL) {
 plotvenn <- function(analysisresultsmatrix,
                      region = "both", method = "intensity",
                      color = "redorange") {
-  analysisresultsmatrix <- analysisresultsmatrix[[1]]
-  if (is.matrix(analysisresultsmatrix) ==
-      FALSE) {
-    stop("The input is not a matrix!")
-  }
 
-  if (color == "redorange") {
-    color2 <- c(0.1, 0.9)
-  }
-  if (color == "bluegreen") {
-    color2 <- c(0.3, 0.6)
-  }
-
-  if (region == "promoter") {
-    feature <- c("promoter")
+  if (region == "TSS-proximal") {
+    feature <- c("TSS-proxs")
     coordinates <- c(2, 5, 8)
   }
-  if (region == "enhancer") {
-    feature <- c("enhancer")
+  if (region == "TSS-distal") {
+    feature <- c("TSS-dists")
     coordinates <- c(1, 4, 7)
   }
   if (region == "both") {
-    region <- c("enhancer/promoter")
-    feature <- c("enhancer", "promoter")
+    region <- c("TSS-distal/TSS-proximal")
+    feature <- c("TSS-dists", "TSS-proxs")
     coordinates <- c(3, 6, 9)
   }
   # identifies the correct numbers from the
@@ -991,21 +979,21 @@ plotvenn <- function(analysisresultsmatrix,
 plotallvenn <- function(analysisresultsmatrix) {
 analysisresultsmatrix <- analysisresultsmatrix[[1]]
 
-  if (is.matrix(analysisresultsmatrix[[1]]) ==
+  if (is.matrix(analysisresultsmatrix) ==
       FALSE) {
     stop("The input is not a matrix!")
   }
 
   p1 <- plotvenn(analysisresultsmatrix,
-                    "promoter", "intensity", "bluegreen")
+                    "TSS-proximal", "intensity", "bluegreen")
   p2 <- plotvenn(analysisresultsmatrix,
-                    "enhancer", "intensity", "bluegreen")
+                    "TSS-distal", "intensity", "bluegreen")
   p3 <- plotvenn(analysisresultsmatrix,
                     "both", "intensity", "bluegreen")
   p4 <- plotvenn(analysisresultsmatrix,
-                    "promoter", "peak", "redorange")
+                    "TSS-proximal", "peak", "redorange")
   p5 <- plotvenn(analysisresultsmatrix,
-                    "enhancer", "peak", "redorange")
+                    "TSS-distal", "peak", "redorange")
   p6 <- plotvenn(analysisresultsmatrix,
                     "both", "peak", "redorange")
 
