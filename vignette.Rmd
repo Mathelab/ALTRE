@@ -34,7 +34,7 @@ After downlading all files in the example datasets in one folder, download the C
 
 ```{r}
 library(ALTRE)
-csvfile <- loadCSVFile("/Users/bask05/Desktop/Mathelab-ALTREsampledata/DNAseEncodeExample.csv")
+csvfile <- loadCSVFile("DNAseEncodeExample.csv")
 csvfile
 ```
 
