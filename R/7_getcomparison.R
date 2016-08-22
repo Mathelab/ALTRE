@@ -7,10 +7,10 @@
 #' @param analysisresults analysisresults of countanalysis.
 #' @param reference cell type to be considered "reference" or "reference" to which
 #' other cell types will be compared
-#' @param lfctypespecific log2fold change for type specific enhancers/promoters
-#' @param lfcshared log2fold chance for shared enhancers/promoters
-#' @param pvaltypespecific p-value for type specific enhancers/promoters
-#' @param pvalshared p-value for shared enhancers/promoters
+#' @param lfctypespecific log2fold change for type specific TSS-dists/TSS-proxs
+#' @param lfcshared log2fold chance for shared TSS-dists/TSS-proxs
+#' @param pvaltypespecific p-value for type specific TSS-dists/TSS-proxs
+#' @param pvalshared p-value for shared TSS-dists/TSS-proxs
 #'
 #' @return matrix comparing the two methods of identifying altered regulatory
 #' regions, one based on peak intensity, the other on peak presence as
@@ -82,34 +82,34 @@ comparePeaksAltre <- function(analysisresults,
   }
 
   one <- c(rep(nonreferencestr, 3), rep(reference, 3), rep("Shared", 3))
-  two <- rep(c("enhancers", "promoters", "all"), 3)
+  two <- rep(c("TSS-dists", "TSS-proxs", "all"), 3)
 
   matrixrownames <- paste(one, two)
   rownames(analysisresultsmatrix) <- matrixrownames
   colnames(analysisresultsmatrix) <- c("intensity", "peak")
 
   # create a matrix for my analysisresults which says how mant of one-specific
-  # total, two-specific promoters, etc.
+  # total, two-specific TSS-proxs, etc.
 
   analysisresultsmatrix[1, 1] <-
     length(which(analysisresults$log2FoldChange > lfctypespecific &
                    analysisresults$padj < pvaltypespecific &
-                   analysisresults$region == "enhancer"))
+                   analysisresults$region == "TSS-dist"))
   analysisresultsmatrix[2, 1] <-
     length(which(analysisresults$log2FoldChange > lfctypespecific &
                    analysisresults$padj <  pvaltypespecific &
-                   analysisresults$region == "promoter"))
+                   analysisresults$region == "TSS-prox"))
   analysisresultsmatrix[3, 1] <-
     length(which(analysisresults$log2FoldChange > lfctypespecific &
                    analysisresults$padj <  pvaltypespecific))
   analysisresultsmatrix[4, 1] <-
     length(which(analysisresults$log2FoldChange < -lfctypespecific &
                    analysisresults$padj <  pvaltypespecific &
-                   analysisresults$region ==  "enhancer"))
+                   analysisresults$region ==  "TSS-dist"))
   analysisresultsmatrix[5, 1] <-
     length(which(analysisresults$log2FoldChange <  -lfctypespecific &
                    analysisresults$padj <   pvaltypespecific &
-                   analysisresults$region ==  "promoter"))
+                   analysisresults$region ==  "TSS-prox"))
   analysisresultsmatrix[6, 1] <-
     length(which(analysisresults$log2FoldChange <   -lfctypespecific &
                    analysisresults$padj <   pvaltypespecific))
@@ -118,13 +118,13 @@ comparePeaksAltre <- function(analysisresults,
                     analysisresults$log2FoldChange <= lfcshared) &
                    (analysisresults$padj >=   pvalshared |
                       is.na(analysisresults$padj)) &
-                   analysisresults$region == "enhancer"))
+                   analysisresults$region == "TSS-dist"))
   analysisresultsmatrix[8, 1] <-
     length(which((analysisresults$log2FoldChange >= -lfcshared &
                     analysisresults$log2FoldChange <= lfcshared) &
                    (analysisresults$padj >= pvalshared |
                       is.na(analysisresults$padj)) &
-                   analysisresults$region == "promoter"))
+                   analysisresults$region == "TSS-prox"))
   analysisresultsmatrix[9, 1] <-
     length(which((analysisresults$log2FoldChange >= -lfcshared &
                     analysisresults$log2FoldChange <= lfcshared) &
@@ -136,19 +136,19 @@ comparePeaksAltre <- function(analysisresults,
   nonreferencesub <- as.matrix(analysisresults[,  nonreference])
 
   analysisresultsmatrix[1, 2] <-
-    enhancernonreference <-
+    tssdistnonreference <-
     length(which(apply(nonreferencesub,
                        1,
                        function(x) {any(is.na(x) == FALSE)}) &
                    apply(referencesub, 1, function(x) {any(is.na(x))}) &
-                   analysisresults$region == "enhancer"))
+                   analysisresults$region == "TSS-dist"))
   analysisresultsmatrix[2, 2] <-
-    promoternonreference <-
+    tssproxnonreference <-
     length(which(apply(nonreferencesub,
                        1,
                        function(x) {any(is.na(x) == FALSE)}) &
                    apply(referencesub, 1, function(x) {any(is.na(x))}) &
-                   analysisresults$region == "promoter"))
+                   analysisresults$region == "TSS-prox"))
   analysisresultsmatrix[3, 2] <-
     allnonreference <-
     length(which(apply(nonreferencesub,
@@ -158,23 +158,23 @@ comparePeaksAltre <- function(analysisresults,
                          1,
                          function(x) {any(is.na(x))})))
   analysisresultsmatrix[4, 2] <-
-    enhancerreference <-
+    tssdistreference <-
     length(which(apply(referencesub,
                        1,
                        function(x) { any(is.na(x) == FALSE)}) &
                    apply(nonreferencesub,
                          1,
                          function(x) { all(is.na(x))}) &
-                   analysisresults$region == "enhancer"))
+                   analysisresults$region == "TSS-dist"))
   analysisresultsmatrix[5, 2] <-
-    promoterreference <-
+    tssproxreference <-
     length(which(apply(referencesub,
                        1,
                        function(x) { any(is.na(x) == FALSE)}) &
                    apply(nonreferencesub,
                          1,
                          function(x) { all(is.na(x))}) &
-                   analysisresults$region == "promoter"))
+                   analysisresults$region == "TSS-prox"))
   analysisresultsmatrix[6, 2] <-
     allreference <-
     length(which(apply(referencesub,
@@ -184,21 +184,21 @@ comparePeaksAltre <- function(analysisresults,
                          1,
                          function(x) { all(is.na(x))})))
   analysisresultsmatrix[7, 2] <-
-    enhancershared <-
+    tssdistshared <-
     length(which(apply(referencesub,
                        1, function(x) {
                          any(is.na(x) == FALSE)
                        }) & apply(nonreferencesub, 1, function(x) {
                          any(is.na(x) == FALSE)
-                       }) & analysisresults$region == "enhancer"))
+                       }) & analysisresults$region == "TSS-dist"))
   analysisresultsmatrix[8, 2] <-
-    promotershared <-
+    tssproxshared <-
     length(which(apply(referencesub,
                        1, function(x) {
                          any(is.na(x) == FALSE)
                        }) & apply(nonreferencesub, 1, function(x) {
                          any(is.na(x) == FALSE)
-                       }) & analysisresults$region == "promoter"))
+                       }) & analysisresults$region == "TSS-prox"))
   analysisresultsmatrix[9, 2] <-
     allshared <-
     length(which(apply(referencesub,

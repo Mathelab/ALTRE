@@ -88,8 +88,8 @@ getCounts <- function(annotpeaks, sampleinfo, reference, chrom = NULL) {
   tssdistnum <- length(which(originaldata$region == "TSS-distal"))
   tssproxnum <- length(which(originaldata$region == "TSS-proximal"))
 
-  statdf <- data.frame(Num_Enhancers = tssdistnum,
-                       Num_Promoters = tssproxnum)
+  statdf <- data.frame(Num_TSSdistals = tssdistnum,
+                       Num_TSSproximals = tssproxnum)
 
   #########################################
   # Create densityplot
