@@ -12,7 +12,7 @@ plotCountAnalysis(altrepeakscateg)
 categAltrePeaks()}
 }
 \value{
-a ggplot
+a highcharter object
 }
 \description{
 Given the output from getCounts, plot a density plot
