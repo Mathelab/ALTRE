@@ -220,7 +220,7 @@ body <- dashboardBody(
                   tags$li("Combines peaks from different sample types,
                    optionally merging nearby regions."),
                   tags$li(" Annotates genomic regions with type specificity based
-                          on whether each region is a candidate promoter or enhancer
+                          on whether each region is TSS-proximal or TSS-distal
                           as determined by user-defined distance from a
                           transcription start site.")
                 ),
@@ -253,7 +253,7 @@ body <- dashboardBody(
                                  sliderInput(
                                    "dist",
                                    label = strong("Select upper threshold distance
-                                                  for merging promoters and enhancers"),
+                                                  for merging TSS-proximal and TSS-distal"),
                                    min = 0,
                                    max = 3000,
                                    value = 0
@@ -261,17 +261,17 @@ body <- dashboardBody(
                                  ),
                 conditionalPanel("input.regionradio == 'TRUE'",
                                  sliderInput(
-                                   "distenh",
+                                   "distTSSdist",
                                    label = strong("Select distance
-                                              threshold for merging enhancers"),
+                                              threshold for merging TSS-distal regions"),
                                    min = 0,
                                    max = 3000,
                                    value = 1500
                                    ),
                                  sliderInput(
-                                   "distprom",
+                                   "distTSSprox",
                                    label = strong("Select distance
-                                              threshold for merging promoters"),
+                                              threshold for merging TSS-proximal regions"),
                                    min = 0,
                                    max = 3000,
                                    value = 1000
@@ -407,7 +407,7 @@ body <- dashboardBody(
                 sliderInput(
                   "lfcSpecific",
                   label = strong("Select log2fold change cutoff for specific
-                             enhancers/promoters"),
+                             TSS-proximal/distal regions"),
                   min = 0,
                   max = 5,
                   value = 1.5,
@@ -416,7 +416,7 @@ body <- dashboardBody(
                 sliderInput(
                   "pvalueSpecific",
                   label = strong("Select p-value cutoff for specific
-                             enhancers/promoters"),
+                             TSS-proximal/distal regions"),
                   min = 0,
                   max = 1,
                   value = 0.01
@@ -426,7 +426,7 @@ body <- dashboardBody(
                 sliderInput(
                   "lfcShared",
                   label = strong("Select log2fold change cutoff for shared
-                             enhancers/promoters"),
+                             TSS-proximal/distal regions"),
                   min = 0,
                   max = 5,
                   value = 1.2,
@@ -434,7 +434,7 @@ body <- dashboardBody(
                 ),
                 sliderInput(
                   "pvalueShared",
-                  label = strong("Select p-value cutoff for shared enhancers/promoters"),
+                  label = strong("Select p-value cutoff for shared TSS-proximal/distal regions"),
                   min = 0,
                   max = 1,
                   value = 0.05
@@ -518,7 +518,7 @@ body <- dashboardBody(
                      h5("This step does the following: "),
                      tags$ul(
                        tags$li("Determines which pathways are overrepresented in
-                             altered promoters and enhancers as returned by
+                             altered TSS-proximal/distal regions as returned by
                              GO Enrichment Analysis restricted to the Molecular
                              Function sub-ontology."),
                        tags$li("Outputs a heatmap plot of the enrichment analysis'
@@ -567,7 +567,7 @@ body <- dashboardBody(
                     h5("This step does the following: "),
                     tags$ul(
                       tags$li("Determines which pathways are overrepresented in
-                             altered promoters and enhancers as returned by
+                             altered TSS-proximal/distal regions as returned by
                              GO Enrichment Analysis restricted to the Biological
                              Process sub-ontology."),
                       tags$li("Outputs a heatmap plot of the enrichment analysis'
@@ -616,7 +616,7 @@ body <- dashboardBody(
                     h5("This step does the following: "),
                     tags$ul(
                       tags$li("Determines which pathways are overrepresented in
-                              altered promoters and enhancers as returned by
+                              altered TSS-proximal/distal regions as returned by
                               GO Enrichment Analysis restricted to the
                               Cellular Component sub-ontology."),
                       tags$li("Outputs a heatmap plot of the enrichment analysis'
