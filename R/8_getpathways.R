@@ -2,8 +2,8 @@
 #' investigation
 #'
 #' Determine which pathways are overrepresented in
-#' altered promoters and enhancers. Pathways are determined by linking
-#' the enhancer/promoter to the nearest gene, and then linking genes to pathways
+#' altered TSS-proximal and TSS-distal regions. Pathways are determined by linking
+#' the TSS-proximal/distal regions to the nearest gene, and then linking genes to pathways
 #' using the gene ontology database. The 'gene' argument limits how few genes
 #' a pathway can contain, while the 'offspring' argument limits how many
 #' offspring a pathway can contain. Pathways with low gene counts are less
@@ -19,16 +19,16 @@
 #' @param enrichpvalfilt Adjusted pval for enrichment to filter on
 #'  (adjusted for multiple testing).
 #' @param lfctypespecific Log2fold change (of chromatin accessibility)
-#' for type specific enhancers/promoters.
+#' for type specific TSS-proximal and TSS-distal regions.
 #' @param lfcshared Log2fold change (of chromatin accessibility) for
-#'  shared enhancers/promoters.
+#'  shared TSS-proximal and TSS-distal regions.
 #' @param pvaltypespecific P-value (of chromatin accessibility) for
-#'  type specific enhancers/promoters.
+#'  type specific TSS-proximal and TSS-distal regions.
 #' @param pvalshared P-value (of chromatin accessibility) for
-#' shared enhancers/promoters.
+#' shared TSS-proximal and TSS-distal regions.
 #' @param genes Minimum number of genes allowable in a pathway.
 #' @param offspring Maximum number of offspring allowable in a pathway.
-#' @param regionsubset  A 'promoter' or 'enhancer'.
+#' @param regionsubset  'TSS-proximal' or 'TSS-distal'. Default is "TSS-distal".
 #' @examples
 #' \dontrun{
 #' csvfile <- file.path(dir="yourfilepath", 'sampleinfo.csv')
@@ -71,7 +71,7 @@ pathenrich <- function(analysisresults,
                        pvalshared = 0.05,
                        genes = 20,
                        offspring = 300,
-                       regionsubset = "promoter") {
+                       regionsubset = "TSS-distal") {
 
   analysisresults <- analysisresults$analysisresults
 

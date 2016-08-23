@@ -136,7 +136,7 @@ plotCombineAnnotatePeaks <- function(conspeaks) {
                                   fontWeight = 'bold')) %>%
             hc_add_series(
                 data = mergeStatsBefore$Count,
-                name = c("enhancers"),
+                name = c("TSS-distal"),
                 type = "column",
                 dataLabels = list(
                     enabled = TRUE,
@@ -146,7 +146,7 @@ plotCombineAnnotatePeaks <- function(conspeaks) {
                 )) %>%
             hc_add_series(
                 data = mergeStatsAfter$Count,
-                name = c("promoters"),
+                name = c("TSS-proximal"),
                 type = "column",
                 dataLabels = list(
                     enabled = TRUE,
@@ -190,7 +190,7 @@ plotCombineAnnotatePeaks <- function(conspeaks) {
                                   fontWeight = 'bold')) %>%
             hc_add_series(
                 data = mergeStatsBefore$Count,
-                name = c("enhancers"),
+                name = c("TSS-distal"),
                 type = "column",
                 dataLabels = list(
                     enabled = TRUE,
@@ -200,7 +200,7 @@ plotCombineAnnotatePeaks <- function(conspeaks) {
                 )) %>%
             hc_add_series(
                 data = mergeStatsAfter$Count,
-                name = c("promoters"),
+                name = c("TSS-proximal"),
                 type = "column",
                 dataLabels = list(
                     enabled = TRUE,
@@ -277,14 +277,14 @@ plotCountAnalysis <- function(altrepeakscateg) {
                                                 "log2FoldChange",
                                                 "padj",
                                                 "REaltrecateg")]
-  enh <- toplot[which(toplot$region == "TSS-distal"), ]
-  prom <- toplot[which(toplot$region == "TSS-proximal"), ]
-  lengthRE <- rep("", length(enh$REaltrecateg))
+  tssdist <- toplot[which(toplot$region == "TSS-distal"), ]
+  tssprox <- toplot[which(toplot$region == "TSS-proximal"), ]
+  lengthRE <- rep("", length(tssdist$REaltrecateg))
 
-  num1 <- min(which(enh$REaltrecateg == "Experiment Specific"))
-  num2 <- min(which(enh$REaltrecateg == "Reference Specific"))
-  num3 <- min(which(enh$REaltrecateg == "Shared"))
-  num4 <- min(which(enh$REaltrecateg == "Ambiguous"))
+  num1 <- min(which(tssdist$REaltrecateg == "Experiment Specific"))
+  num2 <- min(which(tssdist$REaltrecateg == "Reference Specific"))
+  num3 <- min(which(tssdist$REaltrecateg == "Shared"))
+  num4 <- min(which(tssdist$REaltrecateg == "Ambiguous"))
 
   lengthRE[num1] <- "Experiment Specific"
   lengthRE[num2] <- "Reference Specific"
@@ -295,20 +295,20 @@ plotCountAnalysis <- function(altrepeakscateg) {
     hc_title(text = "Enhancers",
              style = list(color = '#2E1717',
                           fontWeight = 'bold')) %>%
-    hc_add_series_scatter(y = -log10(enh$padj),
-                          x = enh$log2FoldChange,
-                          color = enh$REaltrecateg,
+    hc_add_series_scatter(y = -log10(tssdist$padj),
+                          x = tssdist$log2FoldChange,
+                          color = tssdist$REaltrecateg,
                           label = lengthRE)  %>%
     hc_tooltip(headerFormat = "",
                pointFormat  = "<b>log2FC</b> = {point.x}<br> <b>-log10pvalue</b> = {point.y}<br>") %>%
     hc_exporting(enabled = TRUE)
 
-  lengthRE <- rep("", length(prom$REaltrecateg))
+  lengthRE <- rep("", length(tssprox$REaltrecateg))
 
-  num1 <- min(which(prom$REaltrecateg == "Experiment Specific"))
-  num2 <- min(which(prom$REaltrecateg == "Reference Specific"))
-  num3 <- min(which(prom$REaltrecateg == "Shared"))
-  num4 <- min(which(prom$REaltrecateg == "Ambiguous"))
+  num1 <- min(which(tssprox$REaltrecateg == "Experiment Specific"))
+  num2 <- min(which(tssprox$REaltrecateg == "Reference Specific"))
+  num3 <- min(which(tssprox$REaltrecateg == "Shared"))
+  num4 <- min(which(tssprox$REaltrecateg == "Ambiguous"))
 
   lengthRE[num1] <- "Experiment Specific"
   lengthRE[num2] <- "Reference Specific"
@@ -320,9 +320,9 @@ plotCountAnalysis <- function(altrepeakscateg) {
     hc_title(text = "Promoters",
              style = list(color = '#2E1717',
                           fontWeight = 'bold')) %>%
-    hc_add_series_scatter(y = -log10(prom$padj),
-                          x = prom$log2FoldChange,
-                          color = prom$REaltrecateg,
+    hc_add_series_scatter(y = -log10(tssprox$padj),
+                          x = tssprox$log2FoldChange,
+                          color = tssprox$REaltrecateg,
                           label = lengthRE)  %>%
     hc_tooltip(headerFormat = "",
                pointFormat  = "<b>log2FC</b> = {point.x}<br> <b>-log10pvalue</b> = {point.y}<br>") %>%
@@ -337,7 +337,7 @@ plotCountAnalysis <- function(altrepeakscateg) {
 
 ###############################################################################
 #' Creates a boxplot to see the distribution of read counts in type-specific and
-#' shared enhancers
+#' shared TSS-proximal and TSS-distal regions.
 #'
 #' Takes the rlog transformation of the RRKM (Reads Per Kilobase of transcript
 #' per Million) of the read counts of type-specific and shared regulatory regions
@@ -808,13 +808,12 @@ multiplot <- function(..., plotlist = NULL, file, cols = 1, layout = NULL) {
   }
 }
 
-#' Plots a venn digram to compare sample types Plots the number of type-specific
-#' and shared regulatory regions in a venn diagram Type of regulatroy region
-#' (enhancer, promoter, or both) and type  of peak comparison (intensity or peak)
-#' must be specified.
+#' Plots a venn diagram that compares altered regions as determined by peak presence or by
+#' differential counts.  The type of regulatory region (TSS-proximal, TSS-distal, or both)
+#' and type of peak comparison (intensity or peak) must be specified.
 #' @param analysisresultsmatrix analysisresults of Intensity analysis place into
 #' analysisresults matrix by the analyzeanalysisresults function
-#' @param region pick a region, regions can be 'enhancer', 'promoter', or 'both'
+#' @param region pick a region, regions can be 'TSS-distal', 'TSS-proximal', or 'both'
 #' INCLUDE quotes
 #' @param method pick a method, methods can be 'intensity' or 'peak'
 #' include quotes
@@ -847,7 +846,7 @@ multiplot <- function(..., plotlist = NULL, file, cols = 1, layout = NULL) {
 #' 	pvalshared=0.05)
 #' analysisresults <- comparePeaksAltre(categaltre_peaks, reference= "SAEC")
 #' plot1 <- plotvenn(analysisresults,
-#'                   region='enhancer',
+#'                   region='TSS-distal',
 #'                   method='intensity')
 #'}
 
@@ -898,12 +897,12 @@ plotvenn <- function(analysisresultsmatrix,
   stringsplit <- strsplit(string, " ")
   uniquestringsplit <- unique(stringsplit[[1]])
   split <- unlist(strsplit(rownames(analysisresultsmatrix)[1], split = " "))
-  names <- split[!(split %in% c("enhancers"))]
+  names <- split[!(split %in% c("TSS-distal"))]
   names <- paste(names, collapse = " ")
   casename <- names
 
   split <- unlist(strsplit(rownames(analysisresultsmatrix)[4], split = " "))
-  names <- split[!(split %in% c("enhancers"))]
+  names <- split[!(split %in% c("TSS-distal"))]
   names <- paste(names, collapse = " ")
   referencename <- names
 
@@ -940,7 +939,7 @@ plotvenn <- function(analysisresultsmatrix,
 }
 
 #' Plots venn diagrams for comparison of two methods of identifying altered
-#' regulatory regions Makes venn diagrams for enhancers, promoters, and combined
+#' regulatory regions Makes venn diagrams for TSS-proximal, TSS-distal, and combined
 #' for both intensity-based peaks and for peaks identified by hotspot calling
 #' algorithms.  There is no return value. Six venn diagrams will be plotted
 #' @param analysisresultsmatrix analysisresults of countanalysis function

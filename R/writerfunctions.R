@@ -1,7 +1,7 @@
 
 #' Writes annotated genomic regions
 #'
-#' Creates a CSV file with genomic regions annoted as promotor or enhances
+#' Creates a CSV file with genomic regions annoted as TSS-proximal and TSS-distal regions.
 #' categorized by cell type
 #'
 #' @param countsPeaks output generated from getCounts()

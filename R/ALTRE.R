@@ -1,4 +1,4 @@
-#' Workflow: Post-alignment to altered enhancers and promoters
+#' Workflow: Post-alignment to altered TSS-proximal and TSS-distal regions.
 #'
 #' The ALTRE workflow takes aligned reads and peak/hotspot calls from
 #' assays of open chromatin (e.g. ATAC-seq, DNAse-seq) and identifies
@@ -81,7 +81,7 @@
 #'
 #' \item \code{\link{pathenrich}}
 #'
-#' Determines which pathways are overrepresented in altered promoters and enhancers.
+#' Determines which pathways are overrepresented in altered TSS-proximal or TSS-distal regions.
 #' This function leverages Gene Ontology pathway annotations.
 #' To visualize the pathways that are enriched, use the function enrichHeatmap(). 
 #' }
