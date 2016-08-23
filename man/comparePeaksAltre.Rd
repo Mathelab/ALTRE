@@ -13,13 +13,13 @@ comparePeaksAltre(analysisresults, reference, lfctypespecific = 1.5,
 \item{reference}{cell type to be considered "reference" or "reference" to which
 other cell types will be compared}
 
-\item{lfctypespecific}{log2fold change for type specific enhancers/promoters}
+\item{lfctypespecific}{log2fold change for type specific TSS-dists/TSS-proxs}
 
-\item{lfcshared}{log2fold chance for shared enhancers/promoters}
+\item{lfcshared}{log2fold chance for shared TSS-dists/TSS-proxs}
 
-\item{pvaltypespecific}{p-value for type specific enhancers/promoters}
+\item{pvaltypespecific}{p-value for type specific TSS-dists/TSS-proxs}
 
-\item{pvalshared}{p-value for shared enhancers/promoters}
+\item{pvalshared}{p-value for shared TSS-dists/TSS-proxs}
 }
 \value{
 matrix comparing the two methods of identifying altered regulatory

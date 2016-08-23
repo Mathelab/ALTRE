@@ -61,7 +61,7 @@ comparePeaksAltre <- function(analysisresults,
 	stop("Make sure the reference sample exists!")
   }
 
-  samplenames <-colnames(analysisresults)[11:(ncol(analysisresults)-1)]
+  samplenames <- colnames(analysisresults)[11:(ncol(analysisresults) - 1)]
   analysisresultsmatrix <-  matrix(nrow = 9, ncol = 2)
   nonreference <-  samplenames[!(samplenames %in% reference)]
 
@@ -94,22 +94,22 @@ comparePeaksAltre <- function(analysisresults,
   analysisresultsmatrix[1, 1] <-
     length(which(analysisresults$log2FoldChange > lfctypespecific &
                    analysisresults$padj < pvaltypespecific &
-                   analysisresults$region == "TSS-dist"))
+                   analysisresults$region == "TSS-distal"))
   analysisresultsmatrix[2, 1] <-
     length(which(analysisresults$log2FoldChange > lfctypespecific &
                    analysisresults$padj <  pvaltypespecific &
-                   analysisresults$region == "TSS-prox"))
+                   analysisresults$region == "TSS-proximal"))
   analysisresultsmatrix[3, 1] <-
     length(which(analysisresults$log2FoldChange > lfctypespecific &
                    analysisresults$padj <  pvaltypespecific))
   analysisresultsmatrix[4, 1] <-
     length(which(analysisresults$log2FoldChange < -lfctypespecific &
                    analysisresults$padj <  pvaltypespecific &
-                   analysisresults$region ==  "TSS-dist"))
+                   analysisresults$region ==  "TSS-distal"))
   analysisresultsmatrix[5, 1] <-
     length(which(analysisresults$log2FoldChange <  -lfctypespecific &
                    analysisresults$padj <   pvaltypespecific &
-                   analysisresults$region ==  "TSS-prox"))
+                   analysisresults$region ==  "TSS-proximal"))
   analysisresultsmatrix[6, 1] <-
     length(which(analysisresults$log2FoldChange <   -lfctypespecific &
                    analysisresults$padj <   pvaltypespecific))
@@ -118,13 +118,13 @@ comparePeaksAltre <- function(analysisresults,
                     analysisresults$log2FoldChange <= lfcshared) &
                    (analysisresults$padj >=   pvalshared |
                       is.na(analysisresults$padj)) &
-                   analysisresults$region == "TSS-dist"))
+                   analysisresults$region == "TSS-distal"))
   analysisresultsmatrix[8, 1] <-
     length(which((analysisresults$log2FoldChange >= -lfcshared &
                     analysisresults$log2FoldChange <= lfcshared) &
                    (analysisresults$padj >= pvalshared |
                       is.na(analysisresults$padj)) &
-                   analysisresults$region == "TSS-prox"))
+                   analysisresults$region == "TSS-proximal"))
   analysisresultsmatrix[9, 1] <-
     length(which((analysisresults$log2FoldChange >= -lfcshared &
                     analysisresults$log2FoldChange <= lfcshared) &
@@ -141,14 +141,14 @@ comparePeaksAltre <- function(analysisresults,
                        1,
                        function(x) {any(is.na(x) == FALSE)}) &
                    apply(referencesub, 1, function(x) {any(is.na(x))}) &
-                   analysisresults$region == "TSS-dist"))
+                   analysisresults$region == "TSS-distal"))
   analysisresultsmatrix[2, 2] <-
     tssproxnonreference <-
     length(which(apply(nonreferencesub,
                        1,
                        function(x) {any(is.na(x) == FALSE)}) &
                    apply(referencesub, 1, function(x) {any(is.na(x))}) &
-                   analysisresults$region == "TSS-prox"))
+                   analysisresults$region == "TSS-proximal"))
   analysisresultsmatrix[3, 2] <-
     allnonreference <-
     length(which(apply(nonreferencesub,
@@ -165,7 +165,7 @@ comparePeaksAltre <- function(analysisresults,
                    apply(nonreferencesub,
                          1,
                          function(x) { all(is.na(x))}) &
-                   analysisresults$region == "TSS-dist"))
+                   analysisresults$region == "TSS-distal"))
   analysisresultsmatrix[5, 2] <-
     tssproxreference <-
     length(which(apply(referencesub,
@@ -174,7 +174,7 @@ comparePeaksAltre <- function(analysisresults,
                    apply(nonreferencesub,
                          1,
                          function(x) { all(is.na(x))}) &
-                   analysisresults$region == "TSS-prox"))
+                   analysisresults$region == "TSS-proximal"))
   analysisresultsmatrix[6, 2] <-
     allreference <-
     length(which(apply(referencesub,
@@ -190,7 +190,7 @@ comparePeaksAltre <- function(analysisresults,
                          any(is.na(x) == FALSE)
                        }) & apply(nonreferencesub, 1, function(x) {
                          any(is.na(x) == FALSE)
-                       }) & analysisresults$region == "TSS-dist"))
+                       }) & analysisresults$region == "TSS-distal"))
   analysisresultsmatrix[8, 2] <-
     tssproxshared <-
     length(which(apply(referencesub,
@@ -198,7 +198,7 @@ comparePeaksAltre <- function(analysisresults,
                          any(is.na(x) == FALSE)
                        }) & apply(nonreferencesub, 1, function(x) {
                          any(is.na(x) == FALSE)
-                       }) & analysisresults$region == "TSS-prox"))
+                       }) & analysisresults$region == "TSS-proximal"))
   analysisresultsmatrix[9, 2] <-
     allshared <-
     length(which(apply(referencesub,

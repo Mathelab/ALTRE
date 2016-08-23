@@ -277,8 +277,8 @@ plotCountAnalysis <- function(altrepeakscateg) {
                                                 "log2FoldChange",
                                                 "padj",
                                                 "REaltrecateg")]
-  enh <- toplot[which(toplot$region == "enhancer"), ]
-  prom <- toplot[which(toplot$region == "promoter"), ]
+  enh <- toplot[which(toplot$region == "TSS-distal"), ]
+  prom <- toplot[which(toplot$region == "TSS-proximal"), ]
   lengthRE <- rep("", length(enh$REaltrecateg))
 
   num1 <- min(which(enh$REaltrecateg == "Experiment Specific"))
@@ -303,7 +303,7 @@ plotCountAnalysis <- function(altrepeakscateg) {
                pointFormat  = "<b>log2FC</b> = {point.x}<br> <b>-log10pvalue</b> = {point.y}<br>") %>%
     hc_exporting(enabled = TRUE)
 
-  lengthRE=rep("", length(prom$REaltrecateg))
+  lengthRE <- rep("", length(prom$REaltrecateg))
 
   num1 <- min(which(prom$REaltrecateg == "Experiment Specific"))
   num2 <- min(which(prom$REaltrecateg == "Reference Specific"))
@@ -328,7 +328,7 @@ plotCountAnalysis <- function(altrepeakscateg) {
                pointFormat  = "<b>log2FC</b> = {point.x}<br> <b>-log10pvalue</b> = {point.y}<br>") %>%
     hc_exporting(enabled = TRUE)
 
-  plot<- htmltools::browsable(hw_grid(p1, p2, ncol = 2, rowheight = 550))
+  plot <- htmltools::browsable(hw_grid(p1, p2, ncol = 2, rowheight = 550))
   htmlcode <- hw_grid(p1, p2)
 
   return(plot)
@@ -854,30 +854,18 @@ multiplot <- function(..., plotlist = NULL, file, cols = 1, layout = NULL) {
 plotvenn <- function(analysisresultsmatrix,
                      region = "both", method = "intensity",
                      color = "redorange") {
-  analysisresultsmatrix <- analysisresultsmatrix[[1]]
-  if (is.matrix(analysisresultsmatrix) ==
-      FALSE) {
-    stop("The input is not a matrix!")
-  }
 
-  if (color == "redorange") {
-    color2 <- c(0.1, 0.9)
-  }
-  if (color == "bluegreen") {
-    color2 <- c(0.3, 0.6)
-  }
-
-  if (region == "promoter") {
-    feature <- c("promoter")
+  if (region == "TSS-proximal") {
+    feature <- c("TSS-proxs")
     coordinates <- c(2, 5, 8)
   }
-  if (region == "enhancer") {
-    feature <- c("enhancer")
+  if (region == "TSS-distal") {
+    feature <- c("TSS-dists")
     coordinates <- c(1, 4, 7)
   }
   if (region == "both") {
-    region <- c("enhancer/promoter")
-    feature <- c("enhancer", "promoter")
+    region <- c("TSS-distal/TSS-proximal")
+    feature <- c("TSS-dists", "TSS-proxs")
     coordinates <- c(3, 6, 9)
   }
   # identifies the correct numbers from the
@@ -922,23 +910,31 @@ plotvenn <- function(analysisresultsmatrix,
   # this is a way to the name of the 'case'
   # from the analysisresults matrix
 
-  caselabel <- paste(casename, "\n", case)
-  controllabel <- paste(referencename,  "\n", reference)
-  # case=case+shared
-  # reference=reference+shared
-  p <- venneuler::venneuler(c(A = c(case),
-                              B = c(reference),
-                              `A&B` = shared))
-  p$labels <- c("", "")
-  p$colors <- color2
-  graphics::plot(p)
 
-  graphics::text(0.15, 0.6, controllabel, cex = 1.1)
-  graphics::text(0.75, 0.4, caselabel, cex = 1.1)
-  graphics::text(0.5, 0.5, shared, cex = 1.1)
-  title <- paste(method, region)
+  p <- highchart() %>%
+    hc_chart(type = "pie") %>%
+    hc_title(text = paste(method, region),
+             style = list(color = '#2E1717',
+                          fontWeight = 'bold')) %>%
+    hc_plotOptions(
+      series = list(showInLegend = TRUE)
+    ) %>%
+    hc_legend(
+      enabled = FALSE,
+      layout = "vertical",
+      align = "right",
+      verticalAlign = "top",
+      floating = TRUE,
+      x = -5,
+      y = 60
+    ) %>%
 
-  graphics::title(title, cex = 1.3)
+    hc_add_series(data = list(
+      list(y = case, name = casename),
+      list(y = reference, name = referencename),
+      list(y = shared, name = "Shared")
+    )
+    )
 
   return(p)
 }
@@ -981,28 +977,28 @@ plotvenn <- function(analysisresultsmatrix,
 
 
 plotallvenn <- function(analysisresultsmatrix) {
-#  analysisresultsmatrix <- analysisresultsmatrix[[1]]
+analysisresultsmatrix <- analysisresultsmatrix[[1]]
 
-  if (is.matrix(analysisresultsmatrix[[1]]) ==
+  if (is.matrix(analysisresultsmatrix) ==
       FALSE) {
     stop("The input is not a matrix!")
   }
-  graphics::par(mfrow = c(2, 3), oma = c(0,0,2,0))
-  plot1 <- plotvenn(analysisresultsmatrix,
-                    "promoter", "intensity", "bluegreen")
-  plot2 <- plotvenn(analysisresultsmatrix,
-                    "enhancer", "intensity", "bluegreen")
-  plot3 <- plotvenn(analysisresultsmatrix,
+
+  p1 <- plotvenn(analysisresultsmatrix,
+                    "TSS-proximal", "intensity", "bluegreen")
+  p2 <- plotvenn(analysisresultsmatrix,
+                    "TSS-distal", "intensity", "bluegreen")
+  p3 <- plotvenn(analysisresultsmatrix,
                     "both", "intensity", "bluegreen")
-  plot4 <- plotvenn(analysisresultsmatrix,
-                    "promoter", "peak", "redorange")
-  plot5 <- plotvenn(analysisresultsmatrix,
-                    "enhancer", "peak", "redorange")
-  plot6 <- plotvenn(analysisresultsmatrix,
+  p4 <- plotvenn(analysisresultsmatrix,
+                    "TSS-proximal", "peak", "redorange")
+  p5 <- plotvenn(analysisresultsmatrix,
+                    "TSS-distal", "peak", "redorange")
+  p6 <- plotvenn(analysisresultsmatrix,
                     "both", "peak", "redorange")
 
-  graphics::title("Venn Diagrams Comparing the Two Methods",
-                  outer = TRUE,
-                  cex.main = 2)
+  plot <- htmltools::browsable(hw_grid(p1, p2, p3, p4, p5, p6, ncol = 3, rowheight = 300))
+
+return(plot)
 }
 

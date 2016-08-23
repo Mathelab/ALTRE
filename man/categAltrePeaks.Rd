@@ -12,16 +12,16 @@ categAltrePeaks(analysisresults, lfctypespecific = 1.5, lfcshared = 1.2,
 \item{analysisresults}{output of countanalysis()}
 
 \item{lfctypespecific}{log2fold change cutoff (of chromatin accessibility)
-for type specific enhancers/promoters}
+for type specific TSS-distals/TSS-proximals}
 
 \item{lfcshared}{log2fold change cutoff (of chromatin accessibility)
-for shared enhancers/promoters}
+for shared TSS-distals/TSS-proximals}
 
 \item{pvaltypespecific}{p-value cutoff (of chromatin accessibility)
-for type specific enhancers/promoters}
+for type specific TSS-distals/TSS-proximals}
 
 \item{pvalshared}{p-value cutoff (of chromatin accessibility)
-for shared enhancers/promoters}
+for shared TSS-distals/TSS-proximals}
 }
 \value{
 list 1) results of countanalysis,
