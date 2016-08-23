@@ -84,7 +84,8 @@ plotConsensusPeaks <- function(samplepeaks) {
 #' (only works if peaks were merged)
 #'
 #' @param conspeaks output generated from combineAnnotatePeaks
-#'
+#' @param viewer whether the plot should be displayed in the RStudio viewer or
+#'        in Shiny/Knittr
 #' @return a highcharter object
 #'
 #' @examples
@@ -105,7 +106,7 @@ plotConsensusPeaks <- function(samplepeaks) {
 #' }
 #' @export
 #'
-plotCombineAnnotatePeaks <- function(conspeaks) {
+plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE) {
 
     CellType <- NULL
     #without this R CMD check throws no visible binding for global variable error
@@ -227,9 +228,15 @@ plotCombineAnnotatePeaks <- function(conspeaks) {
             ) %>%
             hc_exporting(enabled = TRUE)
     }
-    plot <- htmltools::browsable(hw_grid(p1, p2, ncol = 1, rowheight = 300))
-    htmlcode <- hw_grid(p1, p2)
-    return(plot)
+
+
+    if (viewer == TRUE) {
+    p <- htmltools::browsable(hw_grid(p1, p2, ncol = 1, rowheight = 300))
+    }
+    else {
+    p <- hw_grid(p1, p2)
+    }
+    return(p)
 }
 
 
@@ -438,25 +445,25 @@ plotDistCountAnalysis <- function(analysisresults, counts) {
   proximal3 <- dplyr::filter(mydf, altrecateg == "Shared")
   proximal4 <- dplyr::filter(mydf, altrecateg == "Reference Specific")
 
-  distal1_5num_A549 <- fivenum(distal1$meanlog2FPM.A549)
-  proximal1_5num_A549 <- fivenum(proximal1$meanlog2FPM.A549)
-  distal1_5num_SAEC <- fivenum(distal1$meanlog2FPM.SAEC)
-  proximal1_5num_SAEC <- fivenum(proximal1$meanlog2FPM.SAEC)
+  distal1_5num_A549 <- stats::fivenum(distal1$meanlog2FPM.A549)
+  proximal1_5num_A549 <- stats::fivenum(proximal1$meanlog2FPM.A549)
+  distal1_5num_SAEC <- stats::fivenum(distal1$meanlog2FPM.SAEC)
+  proximal1_5num_SAEC <- stats::fivenum(proximal1$meanlog2FPM.SAEC)
 
-  distal2_5num_A549 <- fivenum(distal2$meanlog2FPM.A549)
-  proximal2_5num_A549 <- fivenum(proximal2$meanlog2FPM.A549)
-  distal2_5num_SAEC <- fivenum(distal2$meanlog2FPM.SAEC)
-  proximal2_5num_SAEC <- fivenum(proximal2$meanlog2FPM.SAEC)
+  distal2_5num_A549 <- stats::fivenum(distal2$meanlog2FPM.A549)
+  proximal2_5num_A549 <- stats::fivenum(proximal2$meanlog2FPM.A549)
+  distal2_5num_SAEC <- stats::fivenum(distal2$meanlog2FPM.SAEC)
+  proximal2_5num_SAEC <- stats::fivenum(proximal2$meanlog2FPM.SAEC)
 
-  distal3_5num_A549 <- fivenum(distal3$meanlog2FPM.A549)
-  proximal3_5num_A549 <- fivenum(proximal3$meanlog2FPM.A549)
-  distal3_5num_SAEC <- fivenum(distal3$meanlog2FPM.SAEC)
-  proximal3_5num_SAEC <- fivenum(proximal3$meanlog2FPM.SAEC)
+  distal3_5num_A549 <- stats::fivenum(distal3$meanlog2FPM.A549)
+  proximal3_5num_A549 <- stats::fivenum(proximal3$meanlog2FPM.A549)
+  distal3_5num_SAEC <- stats::fivenum(distal3$meanlog2FPM.SAEC)
+  proximal3_5num_SAEC <- stats::fivenum(proximal3$meanlog2FPM.SAEC)
 
-  distal4_5num_A549 <- fivenum(distal4$meanlog2FPM.A549)
-  proximal4_5num_A549 <- fivenum(proximal4$meanlog2FPM.A549)
-  distal4_5num_SAEC <- fivenum(distal4$meanlog2FPM.SAEC)
-  proximal4_5num_SAEC <- fivenum(proximal4$meanlog2FPM.SAEC)
+  distal4_5num_A549 <- stats::fivenum(distal4$meanlog2FPM.A549)
+  proximal4_5num_A549 <- stats::fivenum(proximal4$meanlog2FPM.A549)
+  distal4_5num_SAEC <- stats::fivenum(distal4$meanlog2FPM.SAEC)
+  proximal4_5num_SAEC <- stats::fivenum(proximal4$meanlog2FPM.SAEC)
 
   Experimentspecific_list <- list(distal1_5num_A549, proximal1_5num_A549, distal1_5num_SAEC, proximal1_5num_SAEC)
   Ambiguous_list <- list(distal2_5num_A549, proximal2_5num_A549, distal2_5num_SAEC, proximal2_5num_SAEC)

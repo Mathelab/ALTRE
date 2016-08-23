@@ -311,8 +311,8 @@ shinyServer(function(input, output, session) {
     plotConsensusPeaks(getConsensusObj())
   })
 
-  output$annotatebarplot <- renderPlot({
-    plotCombineAnnotatePeaks(combineAnnotateObj())
+  output$annotatebarplot <- renderUI({
+    plotCombineAnnotatePeaks(combineAnnotateObj(), viewer = FALSE)
   })
 
   output$densityplot <- renderPlot({

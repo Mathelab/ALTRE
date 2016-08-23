@@ -295,7 +295,7 @@ body <- dashboardBody(
                 title = "Barplot",
                 width = NULL,
                 solidHeader = TRUE,
-                plotOutput('annotatebarplot'),
+                htmlOutput('annotatebarplot'),
                 hr(),
                 dataTableOutput("table3")
               ),

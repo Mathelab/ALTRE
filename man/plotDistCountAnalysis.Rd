@@ -13,7 +13,7 @@ plotDistCountAnalysis(analysisresults, counts)
 \item{counts}{output generated from getCounts()}
 }
 \value{
-a ggplot
+a highcharter object
 }
 \description{
 Takes the rlog transformation of the RRKM (Reads Per Kilobase of transcript

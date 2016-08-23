@@ -7,10 +7,13 @@ plot a barplot showing number of peaks before/after merging or length of
 peaks before/after merging
 (only works if peaks were merged)}
 \usage{
-plotCombineAnnotatePeaks(conspeaks)
+plotCombineAnnotatePeaks(conspeaks, viewer = TRUE)
 }
 \arguments{
 \item{conspeaks}{output generated from combineAnnotatePeaks}
+
+\item{viewer}{whether the plot should be displayed in the RStudio viewer or
+in Shiny/Knittr}
 }
 \value{
 a highcharter object
