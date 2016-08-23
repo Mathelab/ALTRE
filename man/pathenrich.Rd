@@ -8,7 +8,7 @@ investigation}
 pathenrich(analysisresults, ontoltype = "MF", enrichpvalfilt = 0.01,
   lfctypespecific = 1.5, lfcshared = 1.2, pvaltypespecific = 0.01,
   pvalshared = 0.05, genes = 20, offspring = 300,
-  regionsubset = "promoter")
+  regionsubset = "TSS-distal")
 }
 \arguments{
 \item{analysisresults}{Results from analysis of counts, categaltre_peaks.}
@@ -20,22 +20,22 @@ pathenrich(analysisresults, ontoltype = "MF", enrichpvalfilt = 0.01,
 (adjusted for multiple testing).}
 
 \item{lfctypespecific}{Log2fold change (of chromatin accessibility)
-for type specific enhancers/promoters.}
+for type specific TSS-proximal and TSS-distal regions.}
 
 \item{lfcshared}{Log2fold change (of chromatin accessibility) for
-shared enhancers/promoters.}
+shared TSS-proximal and TSS-distal regions.}
 
 \item{pvaltypespecific}{P-value (of chromatin accessibility) for
-type specific enhancers/promoters.}
+type specific TSS-proximal and TSS-distal regions.}
 
 \item{pvalshared}{P-value (of chromatin accessibility) for
-shared enhancers/promoters.}
+shared TSS-proximal and TSS-distal regions.}
 
 \item{genes}{Minimum number of genes allowable in a pathway.}
 
 \item{offspring}{Maximum number of offspring allowable in a pathway.}
 
-\item{regionsubset}{A 'promoter' or 'enhancer'.}
+\item{regionsubset}{'TSS-proximal' or 'TSS-distal'. Default is "TSS-distal".}
 }
 \value{
 dataframe identifying p-values for enriched pathways --
@@ -43,8 +43,8 @@ pathways also annotated with additional information
 }
 \description{
 Determine which pathways are overrepresented in
-altered promoters and enhancers. Pathways are determined by linking
-the enhancer/promoter to the nearest gene, and then linking genes to pathways
+altered TSS-proximal and TSS-distal regions. Pathways are determined by linking
+the TSS-proximal/distal regions to the nearest gene, and then linking genes to pathways
 using the gene ontology database. The 'gene' argument limits how few genes
 a pathway can contain, while the 'offspring' argument limits how many
 offspring a pathway can contain. Pathways with low gene counts are less

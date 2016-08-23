@@ -12,7 +12,7 @@ writeAnnotatedRegions(countsPeaks, con)
 \item{con}{connection filepath}
 }
 \description{
-Creates a CSV file with genomic regions annoted as promotor or enhances
+Creates a CSV file with genomic regions annoted as TSS-proximal and TSS-distal regions.
 categorized by cell type
 }
 \examples{

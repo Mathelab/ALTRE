@@ -2,10 +2,9 @@
 % Please edit documentation in R/plottingfunctions.R
 \name{plotvenn}
 \alias{plotvenn}
-\title{Plots a venn digram to compare sample types Plots the number of type-specific
-and shared regulatory regions in a venn diagram Type of regulatroy region
-(enhancer, promoter, or both) and type  of peak comparison (intensity or peak)
-must be specified.}
+\title{Plots a venn diagram that compares altered regions as determined by peak presence or by
+differential counts.  The type of regulatory region (TSS-proximal, TSS-distal, or both)
+and type of peak comparison (intensity or peak) must be specified.}
 \usage{
 plotvenn(analysisresultsmatrix, region = "both", method = "intensity",
   color = "redorange")
@@ -14,7 +13,7 @@ plotvenn(analysisresultsmatrix, region = "both", method = "intensity",
 \item{analysisresultsmatrix}{analysisresults of Intensity analysis place into
 analysisresults matrix by the analyzeanalysisresults function}
 
-\item{region}{pick a region, regions can be 'enhancer', 'promoter', or 'both'
+\item{region}{pick a region, regions can be 'TSS-distal', 'TSS-proximal', or 'both'
 INCLUDE quotes}
 
 \item{method}{pick a method, methods can be 'intensity' or 'peak'
@@ -26,10 +25,9 @@ include quotes}
 venn diagram
 }
 \description{
-Plots a venn digram to compare sample types Plots the number of type-specific
-and shared regulatory regions in a venn diagram Type of regulatroy region
-(enhancer, promoter, or both) and type  of peak comparison (intensity or peak)
-must be specified.
+Plots a venn diagram that compares altered regions as determined by peak presence or by
+differential counts.  The type of regulatory region (TSS-proximal, TSS-distal, or both)
+and type of peak comparison (intensity or peak) must be specified.
 }
 \examples{
 \dontrun{
@@ -58,7 +56,7 @@ lfctypespecific=1.5,
 	pvalshared=0.05)
 analysisresults <- comparePeaksAltre(categaltre_peaks, reference= "SAEC")
 plot1 <- plotvenn(analysisresults,
-                  region='enhancer',
+                  region='TSS-distal',
                   method='intensity')
 }
 }

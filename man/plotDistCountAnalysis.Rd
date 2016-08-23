@@ -3,7 +3,7 @@
 \name{plotDistCountAnalysis}
 \alias{plotDistCountAnalysis}
 \title{Creates a boxplot to see the distribution of read counts in type-specific and
-shared enhancers}
+shared TSS-proximal and TSS-distal regions.}
 \usage{
 plotDistCountAnalysis(analysisresults, counts)
 }

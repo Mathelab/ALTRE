@@ -292,7 +292,7 @@ plotCountAnalysis <- function(altrepeakscateg) {
   lengthRE[num4] <- "Ambiguous"
 
   p1 <- highchart() %>%
-    hc_title(text = "Enhancers",
+    hc_title(text = "TSS-distal",
              style = list(color = '#2E1717',
                           fontWeight = 'bold')) %>%
     hc_add_series_scatter(y = -log10(tssdist$padj),
@@ -317,7 +317,7 @@ plotCountAnalysis <- function(altrepeakscateg) {
 
 
   p2 <- highchart() %>%
-    hc_title(text = "Promoters",
+    hc_title(text = "TSS-proximal",
              style = list(color = '#2E1717',
                           fontWeight = 'bold')) %>%
     hc_add_series_scatter(y = -log10(tssprox$padj),

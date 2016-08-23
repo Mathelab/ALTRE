@@ -3,7 +3,7 @@
 \name{plotallvenn}
 \alias{plotallvenn}
 \title{Plots venn diagrams for comparison of two methods of identifying altered
-regulatory regions Makes venn diagrams for enhancers, promoters, and combined
+regulatory regions Makes venn diagrams for TSS-proximal, TSS-distal, and combined
 for both intensity-based peaks and for peaks identified by hotspot calling
 algorithms.  There is no return value. Six venn diagrams will be plotted}
 \usage{
@@ -15,7 +15,7 @@ place into a a analysisresults matrix by the analyzeanalysisresults function}
 }
 \description{
 Plots venn diagrams for comparison of two methods of identifying altered
-regulatory regions Makes venn diagrams for enhancers, promoters, and combined
+regulatory regions Makes venn diagrams for TSS-proximal, TSS-distal, and combined
 for both intensity-based peaks and for peaks identified by hotspot calling
 algorithms.  There is no return value. Six venn diagrams will be plotted
 }
