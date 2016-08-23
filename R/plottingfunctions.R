@@ -347,7 +347,7 @@ plotCountAnalysis <- function(altrepeakscateg) {
 #' @param analysisresults output generated from countanalysis() then categAltrePeaks()
 #' @param counts output generated from getCounts()
 #'
-#' @return a ggplot
+#' @return a highcharter object
 #'
 #' @examples
 #' \dontrun{
@@ -426,28 +426,80 @@ plotDistCountAnalysis <- function(analysisresults, counts) {
   mydf <- data.frame(meanlog2FPM = meanlog2FPM,
                     PEcateg = PEcateg,
                     altrecateg = altrecateg)
+  TSSdistal <- dplyr::filter(mydf, PEcateg == "TSS-distal")
+  distal1 <- dplyr::filter(mydf, altrecateg == "Experiment Specific")
+  distal2 <- dplyr::filter(mydf, altrecateg == "Ambiguous")
+  distal3 <- dplyr::filter(mydf, altrecateg == "Shared")
+  distal4 <- dplyr::filter(mydf, altrecateg == "Reference Specific")
 
-  suppressMessages(meltdf <- reshape2::melt(mydf))
-  meltdf$variable <- gsub("meanlog2FPM.", "", meltdf$variable)
+  TSSproximal <- dplyr::filter(mydf, PEcateg == "TSS-proximal")
+  proximal1 <- dplyr::filter(mydf, altrecateg == "Experiment Specific")
+  proximal2 <- dplyr::filter(mydf, altrecateg == "Ambiguous")
+  proximal3 <- dplyr::filter(mydf, altrecateg == "Shared")
+  proximal4 <- dplyr::filter(mydf, altrecateg == "Reference Specific")
 
-	p <- ggplot(meltdf, aes_string(x = "PEcateg", y = "value")) +
-	  geom_boxplot(aes_string(fill = "altrecateg"),
-	               position = position_dodge(width = .8)) +
-	  facet_grid(.~ variable) +
-	  #scale_fill_brewer(palette = "Set2") +
-	  scale_fill_manual(values = c("dark grey","salmon","dark green","blue")) +
-	  theme_bw() +
-	  ggtitle("Distribution of Normalized Counts") +
-	  xlab("") +
-	  ylab("log2(FPKM)") +
-	  theme(axis.line = element_line(colour = "black"),
-	        axis.title = element_text(size = 12, face = "bold"),
-	        plot.title = element_text(size = 14, face = "bold"),
-	        panel.grid.major = element_blank(),
-	        panel.grid.minor = element_blank(),
-	        panel.background = element_blank(),
-	        legend.key = element_blank())
+  distal1_5num_A549 <- fivenum(distal1$meanlog2FPM.A549)
+  proximal1_5num_A549 <- fivenum(proximal1$meanlog2FPM.A549)
+  distal1_5num_SAEC <- fivenum(distal1$meanlog2FPM.SAEC)
+  proximal1_5num_SAEC <- fivenum(proximal1$meanlog2FPM.SAEC)
 
+  distal2_5num_A549 <- fivenum(distal2$meanlog2FPM.A549)
+  proximal2_5num_A549 <- fivenum(proximal2$meanlog2FPM.A549)
+  distal2_5num_SAEC <- fivenum(distal2$meanlog2FPM.SAEC)
+  proximal2_5num_SAEC <- fivenum(proximal2$meanlog2FPM.SAEC)
+
+  distal3_5num_A549 <- fivenum(distal3$meanlog2FPM.A549)
+  proximal3_5num_A549 <- fivenum(proximal3$meanlog2FPM.A549)
+  distal3_5num_SAEC <- fivenum(distal3$meanlog2FPM.SAEC)
+  proximal3_5num_SAEC <- fivenum(proximal3$meanlog2FPM.SAEC)
+
+  distal4_5num_A549 <- fivenum(distal4$meanlog2FPM.A549)
+  proximal4_5num_A549 <- fivenum(proximal4$meanlog2FPM.A549)
+  distal4_5num_SAEC <- fivenum(distal4$meanlog2FPM.SAEC)
+  proximal4_5num_SAEC <- fivenum(proximal4$meanlog2FPM.SAEC)
+
+  Experimentspecific_list <- list(distal1_5num_A549, proximal1_5num_A549, distal1_5num_SAEC, proximal1_5num_SAEC)
+  Ambiguous_list <- list(distal2_5num_A549, proximal2_5num_A549, distal2_5num_SAEC, proximal2_5num_SAEC)
+  Shared_list <- list(distal3_5num_A549, proximal3_5num_A549, distal3_5num_SAEC, proximal3_5num_SAEC)
+  Referencespecific_list <- list(distal4_5num_A549, proximal4_5num_A549, distal4_5num_SAEC, proximal4_5num_SAEC)
+
+  categ <- c('A549-specific TSS-distal', 'A549-specific TSS-proximal', 'SAEC-specific TSS-distal', 'SAEC-specific TSS-proximal')
+  p <- highchart() %>%
+    hc_title(text = "Distribution of Normalized Counts",
+             style = list(color = '#2E1717',
+                          fontWeight = 'bold')) %>%
+    hc_plotOptions(
+      boxplot = list(
+        fillColor = '#F0F0E0',
+        lineWidth = 2,
+        medianColor = '#0C5DA5',
+        medianWidth = 3,
+        stemColor = '#A63400',
+        stemDashStyle = 'dot',
+        stemWidth = 1,
+        whiskerColor = '#3D9200',
+        whiskerLength = '20%',
+        whiskerWidth = 3
+      )
+    ) %>%
+    hc_add_series(data = Experimentspecific_list,
+                  name = 'Experiment Specific',
+                  type = "boxplot") %>%
+    hc_add_series(data = Ambiguous_list,
+                  name = 'Ambiguous',
+                  type = "boxplot") %>%
+    hc_add_series(data = Shared_list,
+                  name = 'Shared',
+                  type = "boxplot") %>%
+    hc_add_series(data = Referencespecific_list,
+                  name = 'Reference Specific',
+                  type = "boxplot") %>%
+    hc_yAxis(title = list(text = "Observations"),
+             labels = list(format = "{value}")) %>%
+    hc_xAxis(categories = categ, title = "Experiment No.") %>%
+    hc_tooltip(headerFormat = "<b>{point.key}</b><br>",
+               pointFormat = "{point.y}") %>%
+    hc_exporting(enabled = TRUE)
     return(p)
 }
 
