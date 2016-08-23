@@ -83,8 +83,8 @@ consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
                                            TSS = TSSannot,
                                            merge = TRUE,
                                            regionspecific = TRUE,
-                                           mergedistenh = 1500,
-                                           mergedistprom = 1000)
+                                           distancefromTSSdist = 1500,
+                                           distancefromTSSprox = 1000)
 ```
 
 
@@ -153,14 +153,14 @@ Once results have been obtained, there are a number of additional functions in A
 To compare resulting altered REs from these two methods, use the function *comparePeaksAltre* as follows:
 
 ```{r}
-analysisresults <- comparePeaksAltre(alteredPeaksCategorized, reference = "SAEC")
+comparePeaksAnalysisResults <- comparePeaksAltre(alteredPeaksCategorized, reference = "SAEC")
 ```
 
 The function *plotallvenn()* takes the results from comparePeaksAltre and translates the table into Venn diagrams.
 
 
 ```{r}
-plotallvenn(analysisresults)
+plotallvenn(comparePeaksAnalysisResults)
 ```
 
   B. The function *plotDistCountAnalysis()* enables users to view the raw count data in regions identified as type-specific or shared. The log2 transformation of reads per kilo-base per million for each RE is plotted. As expected, for REs identified as higher log-fold change than normal, the lung cancer cell line has much higher counts than he normal lung cell line. The opposite is true for the lower log-fold change regions. For RE with little log-fold change between cell types, the counts are similar. This visual depiction confirms the results of countanalysis and enables users to change parameters if needed.
