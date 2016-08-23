@@ -192,9 +192,15 @@ The function *enrichHeatmap()* creates a heatmap plot of the analysis for all th
 enrichHeatmap(MFenrich, title = "GO:MF", pvalfilt = 0.99)
 ```
 
-**9. Creating Tracks** 
+**9. Writing output to files**
+To enable users to write results to files, the following 4 functions are implemented:
 
-The function *writeBedFile()* allows the location of REs to be visualized as tracks in a Genome Browser by creating hotspot files color-coded by type-specificity. A bed file will be created in the working directory, there is no output to the function that can be saved as an object.
+	1. *writeBedFile()*: writes a BED file in the working directory with the location of REs, color-coded by type-specificity.  The output BED file can be directly loaded in a genome browser. There is no output to the function that can be saved as an object.
+	2. *writeConsensusRE()*: writes a CSV file in the working direcoty with the 
+location of the consensus regulatory elements, along with their annotation (e.g. TSS-proximal/distal, whether the peaks are found in the experiment or reference samples).  The file takes as input the output of the getConsensusPeaks() function and returns no output.  
+	3. *writeCompareRE()*: writes a CSV file with the number of peaks called as experiment- or reference-specific and share using qthe quantitative/peak intensity or peak/binary approach. The function takes the output of comparePeaksAltre() as input and returns no output.  
+	4. *writePathEnrich(): writes CSV files showing the results of the enrichHeatmap() function, which it takes as input.  A total of 3 CSV files will be created, one each for the results of pathway enrichment for the experiment-specific, reference-specific, and shared REs.
+
 ```{r, eval = FALSE}
 writeBedFile(alteredPeaksCategorized, "output.txt")
 ```
