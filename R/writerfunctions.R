@@ -20,12 +20,8 @@
 #'                                           regionspecific = TRUE,
 #'                                           distancefromTSSdist = 1500,
 #'                                           distancefromTSSprox = 1000 )
-#' #Need to run getcounts on all chromosomes
-#' countsPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
-#'                              csvfile = csvfile,
-#'                              reference = 'SAEC')
 #' con <- "annotatedRegions.csv"
-#' writeAnnotatedRegions(countsPeaks, con)
+#' writeAnnotatedRegions(consPeaksAnnotated, con)
 #' }
 #' @export
 writeAnnotatedRegions <-
