@@ -223,7 +223,7 @@ shinyServer(function(input, output, session) {
   output$downloadAnnotate <- downloadHandler(
     filename = "annotatedRegions.csv",
     content = function(con) {
-      writeAnnotatedRegions(req(combineAnnotateObj()), con)
+      writeConsensusRE(req(combineAnnotateObj()), con)
     }
   )
   output$downloadBED <- downloadHandler(

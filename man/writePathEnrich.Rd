@@ -12,8 +12,8 @@ writePathEnrich(pathenrichOut, con)
 \item{con}{connection filepath}
 }
 \description{
-Creates  three CSV files containing the results of pathenrichments for
-experimental, reference, and shared
+Creates  three CSV files containing the results of the pathway enrichment analysis for
+experiment-specific, reference-specific, and shared REs.
 }
 \examples{
 \dontrun{

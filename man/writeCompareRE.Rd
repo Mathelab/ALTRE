@@ -12,7 +12,9 @@ writeCompareRE(comparePeaksOut, con)
 \item{con}{connection filepath}
 }
 \description{
-Creates a CSV file containing a data table
+Creates a CSV file with the number of peaks called as experiment- or 
+reference-specific and shared using the quantitative/peak intensity or 
+peak/binary approach.
 }
 \examples{
 \dontrun{
