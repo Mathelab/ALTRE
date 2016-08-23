@@ -236,7 +236,7 @@ shinyServer(function(input, output, session) {
   output$downloadCompareDT <- downloadHandler(
     filename = "dataTableRE.csv",
     content = function(con) {
-      writeREdf(req(comparePeaksObj()), con)
+      writeCompareRE(req(comparePeaksObj()), con)
     }
   )
 

@@ -172,12 +172,12 @@ writeBedFile <-
 #'                                     pvalshared = 0.05)
 #' comparePeaksOut <- comparePeaksAltre(categaltre_peaks, reference= 'SAEC')
 #' con <- "datatableRE.csv"
-#' writeREdf(comparePeaksOut, con)
+#' writeCompareRE(comparePeaksOut, con)
 #'
 #' }
 #' @export
 
-writeREdf <-
+writeCompareRE <-
   function(comparePeaksOut, con) {
     fileOut <- tibble::rownames_to_column(as.data.frame(comparePeaksOut[[1]]))
     readr::write_csv(fileOut, con)
