@@ -231,7 +231,7 @@ plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE) {
 
 
     if (viewer == TRUE) {
-    p <- htmltools::browsable(hw_grid(p1, p2, ncol = 1, rowheight = 300))
+    p <- htmltools::browsable(hw_grid(p1, p2, ncol = 2, rowheight = 550))
     }
     else {
     p <- hw_grid(p1, p2)
@@ -245,6 +245,7 @@ plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE) {
 #'
 #' @param altrepeakscateg output generated from countanalysis() then
 #' categAltrePeaks()
+#' @param cols hex colors for points in this order: Ambiguous, Experiment-Specific, Reference-Specific, Shared
 #'
 #' @return a highcharter object
 #'
@@ -278,7 +279,7 @@ plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE) {
 #' }
 #' @export
 
-plotCountAnalysis <- function(altrepeakscateg) {
+plotCountAnalysis <- function(altrepeakscateg, cols = c("#FFD700", "#C71585", "#B0E0E6", "#d3d3d3")) {
 
   toplot <- altrepeakscateg$analysisresults[ ,c("region",
                                                 "log2FoldChange",
@@ -288,26 +289,24 @@ plotCountAnalysis <- function(altrepeakscateg) {
   tssprox <- toplot[which(toplot$region == "TSS-proximal"), ]
   lengthRE <- rep("", length(tssdist$REaltrecateg))
 
-  num1 <- min(which(tssdist$REaltrecateg == "Experiment Specific"))
-  num2 <- min(which(tssdist$REaltrecateg == "Reference Specific"))
-  num3 <- min(which(tssdist$REaltrecateg == "Shared"))
-  num4 <- min(which(tssdist$REaltrecateg == "Ambiguous"))
+  distal_1 <- dplyr::filter(tssdist, REaltrecateg == "Experiment Specific")
+  distal_2 <- dplyr::filter(tssdist, REaltrecateg == "Reference Specific")
+  distal_3 <- dplyr::filter(tssdist, REaltrecateg == "Shared")
+  distal_4 <- dplyr::filter(tssdist, REaltrecateg == "Ambiguous")
 
-  lengthRE[num1] <- "Experiment Specific"
-  lengthRE[num2] <- "Reference Specific"
-  lengthRE[num3] <- "Shared"
-  lengthRE[num4] <- "Ambiguous"
 
   p1 <- highchart() %>%
+    hc_chart(type = "scatter") %>%
     hc_title(text = "TSS-distal",
              style = list(color = '#2E1717',
                           fontWeight = 'bold')) %>%
-    hc_add_series_scatter(y = -log10(tssdist$padj),
-                          x = tssdist$log2FoldChange,
-                          color = tssdist$REaltrecateg,
-                          label = lengthRE)  %>%
+    hc_add_series_df(data = tssdist, x = log2FoldChange, y = -log10(padj),
+                     type = "scatter", group = REaltrecateg)  %>%
+    hc_xAxis(title = list(text = "log2fold change")) %>%
+    hc_yAxis(title = list(text = "-log10 pvalue")) %>%
     hc_tooltip(headerFormat = "",
                pointFormat  = "<b>log2FC</b> = {point.x}<br> <b>-log10pvalue</b> = {point.y}<br>") %>%
+    hc_colors(cols) %>%
     hc_exporting(enabled = TRUE)
 
   lengthRE <- rep("", length(tssprox$REaltrecateg))
@@ -336,7 +335,6 @@ plotCountAnalysis <- function(altrepeakscateg) {
     hc_exporting(enabled = TRUE)
 
   plot <- htmltools::browsable(hw_grid(p1, p2, ncol = 2, rowheight = 550))
-  htmlcode <- hw_grid(p1, p2)
 
   return(plot)
 }
@@ -787,7 +785,7 @@ enrichHeatmap <- function(input,
 #' INCLUDE quotes
 #' @param method pick a method, methods can be 'intensity' or 'peak'
 #' include quotes
-#' @param color include the colors you want in your venn diagram
+#' @param cols hex colors for points in this order: Ambiguous, Experiment-Specific, Reference-Specific, Shared
 #' @return venn diagram
 #' @examples
 #' \dontrun{
@@ -821,8 +819,7 @@ enrichHeatmap <- function(input,
 #'}
 
 plotvenn <- function(analysisresultsmatrix,
-                     region = "both", method = "intensity",
-                     color = "redorange") {
+                     region = "both", method = "intensity", cols = c("#FFD700", "#C71585", "#B0E0E6")) {
 
   if (region == "TSS-proximal") {
     feature <- c("TSS-proxs")
@@ -867,18 +864,17 @@ plotvenn <- function(analysisresultsmatrix,
   stringsplit <- strsplit(string, " ")
   uniquestringsplit <- unique(stringsplit[[1]])
   split <- unlist(strsplit(rownames(analysisresultsmatrix)[1], split = " "))
-  names <- split[!(split %in% c("TSS-distal"))]
+  names <- split[!(split %in% c("TSS-dists"))]
   names <- paste(names, collapse = " ")
   casename <- names
 
   split <- unlist(strsplit(rownames(analysisresultsmatrix)[4], split = " "))
-  names <- split[!(split %in% c("TSS-distal"))]
+  names <- split[!(split %in% c("TSS-dists"))]
   names <- paste(names, collapse = " ")
   referencename <- names
 
   # this is a way to the name of the 'case'
   # from the analysisresults matrix
-
 
   p <- highchart() %>%
     hc_chart(type = "pie") %>%
@@ -903,7 +899,8 @@ plotvenn <- function(analysisresultsmatrix,
       list(y = reference, name = referencename),
       list(y = shared, name = "Shared")
     )
-    )
+    ) %>%
+    hc_colors(cols)
 
   return(p)
 }
@@ -914,6 +911,7 @@ plotvenn <- function(analysisresultsmatrix,
 #' algorithms.  There is no return value. Six venn diagrams will be plotted
 #' @param analysisresultsmatrix analysisresults of countanalysis function
 #' place into a a analysisresults matrix by the analyzeanalysisresults function
+#' @param cols hex colors for points in this order: Experiment-Specific, Reference-Specific, Shared
 #' @examples
 #' \dontrun{
 #' csvfile <- file.path(dir="yourfilepath", 'sampleinfo.csv')
@@ -945,8 +943,10 @@ plotvenn <- function(analysisresultsmatrix,
 #' @export
 
 
-plotallvenn <- function(analysisresultsmatrix) {
-analysisresultsmatrix <- analysisresultsmatrix[[1]]
+plotallvenn <- function(analysisresultsmatrix, cols = c("#FFD700", "#C71585", "#B0E0E6")) {
+
+
+  analysisresultsmatrix <- analysisresultsmatrix[[1]]
 
   if (is.matrix(analysisresultsmatrix) ==
       FALSE) {
@@ -954,17 +954,17 @@ analysisresultsmatrix <- analysisresultsmatrix[[1]]
   }
 
   p1 <- plotvenn(analysisresultsmatrix,
-                    "TSS-proximal", "intensity", "bluegreen")
+                    "TSS-proximal", "intensity", cols)
   p2 <- plotvenn(analysisresultsmatrix,
-                    "TSS-distal", "intensity", "bluegreen")
+                    "TSS-distal", "intensity", cols)
   p3 <- plotvenn(analysisresultsmatrix,
-                    "both", "intensity", "bluegreen")
+                    "both", "intensity", cols)
   p4 <- plotvenn(analysisresultsmatrix,
-                    "TSS-proximal", "peak", "redorange")
+                    "TSS-proximal", "peak", cols)
   p5 <- plotvenn(analysisresultsmatrix,
-                    "TSS-distal", "peak", "redorange")
+                    "TSS-distal", "peak", cols)
   p6 <- plotvenn(analysisresultsmatrix,
-                    "both", "peak", "redorange")
+                    "both", "peak", cols)
 
   plot <- htmltools::browsable(hw_grid(p1, p2, p3, p4, p5, p6, ncol = 3, rowheight = 300))
 
