@@ -132,6 +132,8 @@ body <- dashboardBody(
                 title = strong("Load Metadata Spreadsheet"),
                 width = NULL,
                 solidHeader = TRUE,
+                tags$b("Please be sure that all files noted in the CSV file,
+                         including the CSV file, are in the same folder."),
                 h5("This step does the following: "),
                 tags$ul(
                   tags$li("Loads a metadata spreadsheet with a CSV file extention."),
