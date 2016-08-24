@@ -84,7 +84,8 @@ plotConsensusPeaks <- function(samplepeaks) {
 #' (only works if peaks were merged)
 #'
 #' @param conspeaks output generated from combineAnnotatePeaks
-#'
+#' @param viewer whether the plot should be displayed in the RStudio viewer or
+#'        in Shiny/Knittr
 #' @return a highcharter object
 #'
 #' @examples
@@ -105,7 +106,7 @@ plotConsensusPeaks <- function(samplepeaks) {
 #' }
 #' @export
 #'
-plotCombineAnnotatePeaks <- function(conspeaks) {
+plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE) {
 
     CellType <- NULL
     #without this R CMD check throws no visible binding for global variable error
@@ -227,9 +228,15 @@ plotCombineAnnotatePeaks <- function(conspeaks) {
             ) %>%
             hc_exporting(enabled = TRUE)
     }
-    plot <- htmltools::browsable(hw_grid(p1, p2, ncol = 1, rowheight = 300))
-    htmlcode <- hw_grid(p1, p2)
-    return(plot)
+
+
+    if (viewer == TRUE) {
+    p <- htmltools::browsable(hw_grid(p1, p2, ncol = 1, rowheight = 300))
+    }
+    else {
+    p <- hw_grid(p1, p2)
+    }
+    return(p)
 }
 
 
@@ -347,7 +354,7 @@ plotCountAnalysis <- function(altrepeakscateg) {
 #' @param analysisresults output generated from countanalysis() then categAltrePeaks()
 #' @param counts output generated from getCounts()
 #'
-#' @return a ggplot
+#' @return a highcharter object
 #'
 #' @examples
 #' \dontrun{
@@ -426,28 +433,80 @@ plotDistCountAnalysis <- function(analysisresults, counts) {
   mydf <- data.frame(meanlog2FPM = meanlog2FPM,
                     PEcateg = PEcateg,
                     altrecateg = altrecateg)
+  TSSdistal <- dplyr::filter(mydf, PEcateg == "TSS-distal")
+  distal1 <- dplyr::filter(mydf, altrecateg == "Experiment Specific")
+  distal2 <- dplyr::filter(mydf, altrecateg == "Ambiguous")
+  distal3 <- dplyr::filter(mydf, altrecateg == "Shared")
+  distal4 <- dplyr::filter(mydf, altrecateg == "Reference Specific")
 
-  suppressMessages(meltdf <- reshape2::melt(mydf))
-  meltdf$variable <- gsub("meanlog2FPM.", "", meltdf$variable)
+  TSSproximal <- dplyr::filter(mydf, PEcateg == "TSS-proximal")
+  proximal1 <- dplyr::filter(mydf, altrecateg == "Experiment Specific")
+  proximal2 <- dplyr::filter(mydf, altrecateg == "Ambiguous")
+  proximal3 <- dplyr::filter(mydf, altrecateg == "Shared")
+  proximal4 <- dplyr::filter(mydf, altrecateg == "Reference Specific")
 
-	p <- ggplot(meltdf, aes_string(x = "PEcateg", y = "value")) +
-	  geom_boxplot(aes_string(fill = "altrecateg"),
-	               position = position_dodge(width = .8)) +
-	  facet_grid(.~ variable) +
-	  #scale_fill_brewer(palette = "Set2") +
-	  scale_fill_manual(values = c("dark grey","salmon","dark green","blue")) +
-	  theme_bw() +
-	  ggtitle("Distribution of Normalized Counts") +
-	  xlab("") +
-	  ylab("log2(FPKM)") +
-	  theme(axis.line = element_line(colour = "black"),
-	        axis.title = element_text(size = 12, face = "bold"),
-	        plot.title = element_text(size = 14, face = "bold"),
-	        panel.grid.major = element_blank(),
-	        panel.grid.minor = element_blank(),
-	        panel.background = element_blank(),
-	        legend.key = element_blank())
+  distal1_5num_A549 <- stats::fivenum(distal1$meanlog2FPM.A549)
+  proximal1_5num_A549 <- stats::fivenum(proximal1$meanlog2FPM.A549)
+  distal1_5num_SAEC <- stats::fivenum(distal1$meanlog2FPM.SAEC)
+  proximal1_5num_SAEC <- stats::fivenum(proximal1$meanlog2FPM.SAEC)
 
+  distal2_5num_A549 <- stats::fivenum(distal2$meanlog2FPM.A549)
+  proximal2_5num_A549 <- stats::fivenum(proximal2$meanlog2FPM.A549)
+  distal2_5num_SAEC <- stats::fivenum(distal2$meanlog2FPM.SAEC)
+  proximal2_5num_SAEC <- stats::fivenum(proximal2$meanlog2FPM.SAEC)
+
+  distal3_5num_A549 <- stats::fivenum(distal3$meanlog2FPM.A549)
+  proximal3_5num_A549 <- stats::fivenum(proximal3$meanlog2FPM.A549)
+  distal3_5num_SAEC <- stats::fivenum(distal3$meanlog2FPM.SAEC)
+  proximal3_5num_SAEC <- stats::fivenum(proximal3$meanlog2FPM.SAEC)
+
+  distal4_5num_A549 <- stats::fivenum(distal4$meanlog2FPM.A549)
+  proximal4_5num_A549 <- stats::fivenum(proximal4$meanlog2FPM.A549)
+  distal4_5num_SAEC <- stats::fivenum(distal4$meanlog2FPM.SAEC)
+  proximal4_5num_SAEC <- stats::fivenum(proximal4$meanlog2FPM.SAEC)
+
+  Experimentspecific_list <- list(distal1_5num_A549, proximal1_5num_A549, distal1_5num_SAEC, proximal1_5num_SAEC)
+  Ambiguous_list <- list(distal2_5num_A549, proximal2_5num_A549, distal2_5num_SAEC, proximal2_5num_SAEC)
+  Shared_list <- list(distal3_5num_A549, proximal3_5num_A549, distal3_5num_SAEC, proximal3_5num_SAEC)
+  Referencespecific_list <- list(distal4_5num_A549, proximal4_5num_A549, distal4_5num_SAEC, proximal4_5num_SAEC)
+
+  categ <- c('A549-specific TSS-distal', 'A549-specific TSS-proximal', 'SAEC-specific TSS-distal', 'SAEC-specific TSS-proximal')
+  p <- highchart() %>%
+    hc_title(text = "Distribution of Normalized Counts",
+             style = list(color = '#2E1717',
+                          fontWeight = 'bold')) %>%
+    hc_plotOptions(
+      boxplot = list(
+        fillColor = '#F0F0E0',
+        lineWidth = 2,
+        medianColor = '#0C5DA5',
+        medianWidth = 3,
+        stemColor = '#A63400',
+        stemDashStyle = 'dot',
+        stemWidth = 1,
+        whiskerColor = '#3D9200',
+        whiskerLength = '20%',
+        whiskerWidth = 3
+      )
+    ) %>%
+    hc_add_series(data = Experimentspecific_list,
+                  name = 'Experiment Specific',
+                  type = "boxplot") %>%
+    hc_add_series(data = Ambiguous_list,
+                  name = 'Ambiguous',
+                  type = "boxplot") %>%
+    hc_add_series(data = Shared_list,
+                  name = 'Shared',
+                  type = "boxplot") %>%
+    hc_add_series(data = Referencespecific_list,
+                  name = 'Reference Specific',
+                  type = "boxplot") %>%
+    hc_yAxis(title = list(text = "Observations"),
+             labels = list(format = "{value}")) %>%
+    hc_xAxis(categories = categ, title = "Experiment No.") %>%
+    hc_tooltip(headerFormat = "<b>{point.key}</b><br>",
+               pointFormat = "{point.y}") %>%
+    hc_exporting(enabled = TRUE)
     return(p)
 }
 
@@ -485,26 +544,24 @@ plotDistCountAnalysis <- function(analysisresults, counts) {
 #' @export
 
 plotgetcounts <- function(countsconspeaks) {
+  region <- NULL
+  variable <- NULL
+  #set to null to prevent a R CMD Check error: Undefined global functions or variables
+
   mydf <- countsconspeaks$regioncountsforplot
   varstack <- suppressMessages(reshape2::melt(mydf))
-  varstack$concat <- paste(varstack$region,
-                           varstack$variable,
-                           sep = ": ")
-  varstack$concat <- sub("librarysize.*", "", varstack$concat)
-  densityplot <- ggplot(varstack, aes(x = varstack$value)) +
-    geom_density(aes(group = varstack$concat,
-                     color = varstack$concat,
-                     fill = varstack$concat),
-                 alpha = 0.3) +
-    theme_bw(base_size = 15, base_family = "") +
-    theme(legend.title = element_blank()) +
-    scale_x_continuous(expand = c(0, 0)) +
-    scale_y_continuous(expand = c(0,0)) +
-    theme(panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank()) +
-    labs(x = "log2 read counts \n(normalized by library and region sizes)")
+  TSSdistal_A549 <- dplyr::filter(varstack, region == "TSS-distal" & variable == "A549")
+  TSSproximal_A549 <- dplyr::filter(varstack, region == "TSS-proximal" & variable == "A549")
+  TSSdistal_SAEC <- dplyr::filter(varstack, region == "TSS-distal" & variable == "SAEC")
+  TSSproximal_SAEC <- dplyr::filter(varstack, region == "TSS-proximal" & variable == "SAEC")
 
-  return(densityplot)
+  p <- hchart(stats::density(TSSdistal_A549$value), area = TRUE) %>%
+    hc_add_series_density(stats::density(TSSproximal_A549$value), area = TRUE) %>%
+    hc_add_series_density(stats::density(TSSdistal_SAEC$value), area = TRUE) %>%
+    hc_add_series_density(stats::density(TSSproximal_SAEC$value), area = TRUE) %>%
+    hc_yAxis(title = "density") %>%
+    hc_xAxis(title = "log2 read counts")
+  return(p)
 }
 
 ##############################################################################
@@ -720,93 +777,6 @@ enrichHeatmap <- function(input,
   return(p)
   }
 
-
-#' Multiple plot function
-#'
-#' Plots multiple ggplot objects in one window.
-#' If the layout is something like matrix(c(1,2,3,3), nrow=2, byrow=TRUE),
-#' then plot 1 will go in the upper left, 2 will go in the upper right, and
-#' 3 will go all the way across the bottom.
-#' This function was not written by the authours of this package. Link:
-#' http://www.cookbook-r.com/Graphs/Multiple_graphs_on_one_page_(ggplot2)/
-#'
-#' @param ... list of plots
-#' @param cols number of columns in layout
-#' @param layout matrix specifying layout, if present cols is ignored
-#' @param plotlist plotlist
-#' @param file file
-#'
-#' @examples
-#' \dontrun{
-#' csvfile <- file.path(dir="yourfilepath", 'sampleinfo.csv')
-#' sampleinfo <- loadCSVFile(csvfile)
-#' samplePeaks <- loadBedFiles(sampleinfo)
-#' consPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
-#' plotConsensusPeaks(samplepeaks = consPeaks)
-#' TSSannot <- getTSS()
-#' consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
-#'                                           TSS = TSSannot,
-#'                                           merge = TRUE,
-#'                                           regionspecific = TRUE,
-#'                                           distancefromTSSdist = 1500,
-#'                                           distancefromTSSprox = 1000 )
-#'counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
-#'                              sampleinfo = sampleinfo,
-#'                              reference = 'SAEC',
-#'                              chrom = 'chr21')
-#' altre_peaks <- countanalysis(counts = counts_consPeaks,
-#'                              pval = 0.01,
-#'                              lfcvalue = 1)
-#' categaltre_peaks <- categAltrePeaks(altre_peaks,
-#'                                     lfctypespecific = 1.5,
-#'                                     lfcshared = 1.2,
-#'                                     pvaltypespecific = 0.01,
-#'                                     pvalshared = 0.05)
-#'MFenrich <- pathenrich(analysisresults = categaltre_peaks,
-#'                       ontoltype = 'MF',
-#'                       enrichpvalfilt = 0.01)
-#'BPenrich <- pathenrich(analysisresults= categaltre_peaks,
-#'                       ontoltype='BP',
-#'                       enrichpvalfilt=0.01)
-#' plot1 <- enrichHeatmap(MFenrich, title='GO:MF, p<0.01')
-#' plot2 <- enrichHeatmap(BPenrich, title='GO:BP, p<0.01')
-#' multiplot(plot1,plot2,cols=1)
-#' }
-#'
-#' @export
-#'
-multiplot <- function(..., plotlist = NULL, file, cols = 1, layout = NULL) {
-  # Make a list from the ... arguments and plotlist
-  plots <- c(list(...), plotlist)
-
-  numPlots <- length(plots)
-
-  # If layout is NULL, then use 'cols' to determine layout
-  if (is.null(layout)) {
-    # Make the panel ncol: Number of columns of plots nrow: Number of rows
-    # needed, calculated from # of cols
-    layout <- matrix(seq(1, cols * ceiling(numPlots/cols)), ncol = cols,
-                     nrow = ceiling(numPlots/cols))
-  }
-
-  if (numPlots == 1) {
-    print(plots[[1]])
-
-  } else {
-    # Set up the page
-    grid::grid.newpage()
-    grid::pushViewport(grid::viewport(layout = grid::grid.layout(nrow(layout), ncol(layout))))
-
-    # Make each plot, in the correct location
-    for (i in 1:numPlots) {
-      # Get the i,j matrix positions of the regions that contain this subplot
-      matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
-
-      print(plots[[i]], vp = grid::viewport(layout.pos.row = matchidx$row,
-                                      layout.pos.col = matchidx$col))
-    }
-  }
-}
 
 #' Plots a venn diagram that compares altered regions as determined by peak presence or by
 #' differential counts.  The type of regulatory region (TSS-proximal, TSS-distal, or both)
