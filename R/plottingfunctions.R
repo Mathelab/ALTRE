@@ -544,19 +544,21 @@ plotDistCountAnalysis <- function(analysisresults, counts) {
 #' @export
 
 plotgetcounts <- function(countsconspeaks) {
+  region <- NULL
+  variable <- NULL
+  #set to null to prevent a R CMD Check error: Undefined global functions or variables
+
   mydf <- countsconspeaks$regioncountsforplot
-
   varstack <- suppressMessages(reshape2::melt(mydf))
-
   TSSdistal_A549 <- dplyr::filter(varstack, region == "TSS-distal" & variable == "A549")
   TSSproximal_A549 <- dplyr::filter(varstack, region == "TSS-proximal" & variable == "A549")
   TSSdistal_SAEC <- dplyr::filter(varstack, region == "TSS-distal" & variable == "SAEC")
   TSSproximal_SAEC <- dplyr::filter(varstack, region == "TSS-proximal" & variable == "SAEC")
 
-  p <- hchart(density(TSSdistal_A549$value), area = TRUE) %>%
-    hc_add_series_density(density(TSSproximal_A549$value), area = TRUE) %>%
-    hc_add_series_density(density(TSSdistal_SAEC$value), area = TRUE) %>%
-    hc_add_series_density(density(TSSproximal_SAEC$value), area = TRUE) %>%
+  p <- hchart(stats::density(TSSdistal_A549$value), area = TRUE) %>%
+    hc_add_series_density(stats::density(TSSproximal_A549$value), area = TRUE) %>%
+    hc_add_series_density(stats::density(TSSdistal_SAEC$value), area = TRUE) %>%
+    hc_add_series_density(stats::density(TSSproximal_SAEC$value), area = TRUE) %>%
     hc_yAxis(title = "density") %>%
     hc_xAxis(title = "log2 read counts")
   return(p)
