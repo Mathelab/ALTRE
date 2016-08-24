@@ -341,7 +341,7 @@ body <- dashboardBody(
               box(
                 width = NULL,
                 title = "Density Plot",
-                plotOutput('densityplot')
+                highcharter::highchartOutput('densityplot')
               ),
               HTML("</div>")
               )
@@ -456,9 +456,9 @@ body <- dashboardBody(
               box(
                 width = NULL,
                 title = "Volcano Plot",
-                plotOutput('volcanoplot'),
+                htmlOutput('volcanoplot'),
                 hr(),
-                plotOutput('boxplot'),
+                highcharter::highchartOutput('boxplot'),
                 hr(),
                 dataTableOutput("table4")
               ),

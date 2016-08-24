@@ -239,12 +239,68 @@ plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE) {
     return(p)
 }
 
+###############################################################################
+
+
+#' Given the output from getCounts, plot a density plot of
+#' log2 RPKM values of regulation regions
+#'
+#' @param countsConsPeaks output generated from getCounts
+#'
+#' @return a ggplot
+#'
+#' @examples
+#' \dontrun{
+#' csvfile <- file.path(dir="yourfilepath", 'sampleinfo.csv')
+#' sampleinfo <- loadCSVFile(csvfile)
+#' samplePeaks <- loadBedFiles(sampleinfo)
+#' consPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps=2)
+#' plotConsensusPeaks(samplepeaks = consPeaks)
+#' TSSannot <- getTSS()
+#' consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
+#'                                           TSS = TSSannot,
+#'                                           merge = TRUE,
+#'                                           regionspecific = TRUE,
+#'                                           distancefromTSSdist = 1500,
+#'                                           distancefromTSSprox = 1000 )
+#'
+#' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
+#'                              sampleinfo = sampleinfo,
+#'                              reference = 'SAEC',
+#'                              chrom = 'chr21')
+#' plotGetCounts(counts_consPeaks)
+#' }
+#' @export
+
+plotGetCounts <- function(countsConsPeaks) {
+  region <- NULL
+  variable <- NULL
+  #set to null to prevent a R CMD Check error: Undefined global functions or variables
+
+  mydf <- countsConsPeaks$regioncountsforplot
+  varstack <- suppressMessages(reshape2::melt(mydf))
+  TSSdistal_A549 <- dplyr::filter(varstack, region == "TSS-distal" & variable == "A549")
+  TSSproximal_A549 <- dplyr::filter(varstack, region == "TSS-proximal" & variable == "A549")
+  TSSdistal_SAEC <- dplyr::filter(varstack, region == "TSS-distal" & variable == "SAEC")
+  TSSproximal_SAEC <- dplyr::filter(varstack, region == "TSS-proximal" & variable == "SAEC")
+
+  p <- hchart(stats::density(TSSdistal_A549$value), area = TRUE) %>%
+    hc_add_series_density(stats::density(TSSproximal_A549$value), area = TRUE) %>%
+    hc_add_series_density(stats::density(TSSdistal_SAEC$value), area = TRUE) %>%
+    hc_add_series_density(stats::density(TSSproximal_SAEC$value), area = TRUE) %>%
+    hc_yAxis(title = "density") %>%
+    hc_xAxis(title = "log2 read counts")
+  return(p)
+}
+
 
 #' Given the output from getCounts, plot a density plot
 #'  of log2 RPKM values of regulation regions
 #'
 #' @param altrepeakscateg output generated from countanalysis() then
 #' categAltrePeaks()
+#' @param viewer whether the plot should be displayed in the RStudio viewer or
+#'        in Shiny/Knittr
 #'
 #' @return a highcharter object
 #'
@@ -278,7 +334,7 @@ plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE) {
 #' }
 #' @export
 
-plotCountAnalysis <- function(altrepeakscateg) {
+plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE) {
 
   toplot <- altrepeakscateg$analysisresults[ ,c("region",
                                                 "log2FoldChange",
@@ -335,10 +391,13 @@ plotCountAnalysis <- function(altrepeakscateg) {
                pointFormat  = "<b>log2FC</b> = {point.x}<br> <b>-log10pvalue</b> = {point.y}<br>") %>%
     hc_exporting(enabled = TRUE)
 
-  plot <- htmltools::browsable(hw_grid(p1, p2, ncol = 2, rowheight = 550))
-  htmlcode <- hw_grid(p1, p2)
-
-  return(plot)
+  if (viewer == TRUE) {
+    p <- htmltools::browsable(hw_grid(p1, p2, ncol = 2, rowheight = 550))
+  }
+  else {
+    p <- hw_grid(p1, p2)
+  }
+  return(p)
 }
 
 
@@ -510,59 +569,6 @@ plotDistCountAnalysis <- function(analysisresults, counts) {
     return(p)
 }
 
-###############################################################################
-
-
-#' Given the output from getCounts, plot a density plot of
-#' log2 RPKM values of regulation regions
-#'
-#' @param countsconspeaks output generated from getCounts
-#'
-#' @return a ggplot
-#'
-#' @examples
-#' \dontrun{
-#' csvfile <- file.path(dir="yourfilepath", 'sampleinfo.csv')
-#' sampleinfo <- loadCSVFile(csvfile)
-#' samplePeaks <- loadBedFiles(sampleinfo)
-#' consPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps=2)
-#' plotConsensusPeaks(samplepeaks = consPeaks)
-#' TSSannot <- getTSS()
-#' consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
-#'                                           TSS = TSSannot,
-#'                                           merge = TRUE,
-#'                                           regionspecific = TRUE,
-#'                                           distancefromTSSdist = 1500,
-#'                                           distancefromTSSprox = 1000 )
-#'
-#' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
-#'                              sampleinfo = sampleinfo,
-#'                              reference = 'SAEC',
-#'                              chrom = 'chr21')
-#' plotgetcounts(counts_consPeaks)
-#' }
-#' @export
-
-plotgetcounts <- function(countsconspeaks) {
-  region <- NULL
-  variable <- NULL
-  #set to null to prevent a R CMD Check error: Undefined global functions or variables
-
-  mydf <- countsconspeaks$regioncountsforplot
-  varstack <- suppressMessages(reshape2::melt(mydf))
-  TSSdistal_A549 <- dplyr::filter(varstack, region == "TSS-distal" & variable == "A549")
-  TSSproximal_A549 <- dplyr::filter(varstack, region == "TSS-proximal" & variable == "A549")
-  TSSdistal_SAEC <- dplyr::filter(varstack, region == "TSS-distal" & variable == "SAEC")
-  TSSproximal_SAEC <- dplyr::filter(varstack, region == "TSS-proximal" & variable == "SAEC")
-
-  p <- hchart(stats::density(TSSdistal_A549$value), area = TRUE) %>%
-    hc_add_series_density(stats::density(TSSproximal_A549$value), area = TRUE) %>%
-    hc_add_series_density(stats::density(TSSdistal_SAEC$value), area = TRUE) %>%
-    hc_add_series_density(stats::density(TSSproximal_SAEC$value), area = TRUE) %>%
-    hc_yAxis(title = "density") %>%
-    hc_xAxis(title = "log2 read counts")
-  return(p)
-}
 
 ##############################################################################
 

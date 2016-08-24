@@ -5,11 +5,14 @@
 \title{Given the output from getCounts, plot a density plot
  of log2 RPKM values of regulation regions}
 \usage{
-plotCountAnalysis(altrepeakscateg)
+plotCountAnalysis(altrepeakscateg, viewer = TRUE)
 }
 \arguments{
 \item{altrepeakscateg}{output generated from countanalysis() then
 categAltrePeaks()}
+
+\item{viewer}{whether the plot should be displayed in the RStudio viewer or
+in Shiny/Knittr}
 }
 \value{
 a highcharter object

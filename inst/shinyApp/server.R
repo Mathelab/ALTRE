@@ -315,15 +315,15 @@ shinyServer(function(input, output, session) {
     plotCombineAnnotatePeaks(combineAnnotateObj(), viewer = FALSE)
   })
 
-  output$densityplot <- renderPlot({
-    plotgetcounts(getCountsObj())
+  output$densityplot <- highcharter::renderHighchart({
+    plotGetCounts(getCountsObj())
   })
 
-  output$volcanoplot <- renderPlot({
-    plotCountAnalysis(req(categAltreObj()))
+  output$volcanoplot <- renderUI({
+    plotCountAnalysis(req(categAltreObj()),  viewer = FALSE)
   })
 
-  output$boxplot <- renderPlot({
+  output$boxplot <- highcharter::renderHighchart({
     plotDistCountAnalysis(req(categAltreObj()), req(getCountsObj()))
   })
 
