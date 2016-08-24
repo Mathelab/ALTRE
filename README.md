@@ -9,12 +9,13 @@
 
 ```{R}
 
-install.packages("devtools")               
-# install Bioconductor packages
+
+# Install Bioconductor packages (dependencies)
 source("http://bioconductor.org/biocLite.R")
 BiocInstaller::biocLite(c('GenomeInfoDb',
                         'IRanges',
                         'DESeq2',
+			'tibble',
                         'GenomicAlignments',
                         'SummarizedExperiment',
                         'GenomicRanges',
@@ -24,7 +25,9 @@ BiocInstaller::biocLite(c('GenomeInfoDb',
                         'ensembldb', 
                         'EnsDb.Hsapiens.v75',
                         'GO.db'))
-# install the package
+# Install the devtools package for installing ALTRE
+install.packages("devtools")
+# Install the ALTRE package
 setRepositories(ind=1:2)
 devtools::install_github("mathelab/ALTRE")
 ```
