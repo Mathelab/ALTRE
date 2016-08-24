@@ -7,7 +7,7 @@ differential counts.  The type of regulatory region (TSS-proximal, TSS-distal, o
 and type of peak comparison (intensity or peak) must be specified.}
 \usage{
 plotvenn(analysisresultsmatrix, region = "both", method = "intensity",
-  color = "redorange")
+  cols = c("#FFD700", "#C71585", "#B0E0E6"))
 }
 \arguments{
 \item{analysisresultsmatrix}{analysisresults of Intensity analysis place into
@@ -19,7 +19,7 @@ INCLUDE quotes}
 \item{method}{pick a method, methods can be 'intensity' or 'peak'
 include quotes}
 
-\item{color}{include the colors you want in your venn diagram}
+\item{cols}{hex colors for points in this order: Ambiguous, Experiment-Specific, Reference-Specific, Shared}
 }
 \value{
 venn diagram

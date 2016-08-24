@@ -279,7 +279,12 @@ plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE) {
 #' }
 #' @export
 
-plotCountAnalysis <- function(altrepeakscateg, cols = c("#FFD700", "#C71585", "#B0E0E6", "#d3d3d3")) {
+plotCountAnalysis <- function(altrepeakscateg, cols = c("#d3d3d3", "#C71585", "#B0E0E6", "#FFD700")) {
+
+  log2FoldChange <- NULL
+  padj <- NULL
+  REaltrecateg <- NULL
+  #To prevent R CMD check error
 
   toplot <- altrepeakscateg$analysisresults[ ,c("region",
                                                 "log2FoldChange",
@@ -323,18 +328,20 @@ plotCountAnalysis <- function(altrepeakscateg, cols = c("#FFD700", "#C71585", "#
 
 
   p2 <- highchart() %>%
+    hc_chart(type = "scatter") %>%
     hc_title(text = "TSS-proximal",
              style = list(color = '#2E1717',
                           fontWeight = 'bold')) %>%
-    hc_add_series_scatter(y = -log10(tssprox$padj),
-                          x = tssprox$log2FoldChange,
-                          color = tssprox$REaltrecateg,
-                          label = lengthRE)  %>%
+    hc_add_series_df(data = tssprox, x = log2FoldChange, y = -log10(padj),
+                     type = "scatter", group = REaltrecateg)  %>%
+    hc_xAxis(title = list(text = "log2fold change")) %>%
+    hc_yAxis(title = list(text = "-log10 pvalue")) %>%
     hc_tooltip(headerFormat = "",
                pointFormat  = "<b>log2FC</b> = {point.x}<br> <b>-log10pvalue</b> = {point.y}<br>") %>%
+    hc_colors(cols) %>%
     hc_exporting(enabled = TRUE)
 
-  plot <- htmltools::browsable(hw_grid(p1, p2, ncol = 2, rowheight = 550))
+  plot <- htmltools::browsable(hw_grid(p1, p2, ncol = 2, rowheight = 700))
 
   return(plot)
 }
@@ -516,7 +523,7 @@ plotDistCountAnalysis <- function(analysisresults, counts) {
 #'
 #' @param countsconspeaks output generated from getCounts
 #'
-#' @return a ggplot
+#' @return a highcharter object
 #'
 #' @examples
 #' \dontrun{

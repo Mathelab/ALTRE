@@ -7,11 +7,13 @@ regulatory regions Makes venn diagrams for TSS-proximal, TSS-distal, and combine
 for both intensity-based peaks and for peaks identified by hotspot calling
 algorithms.  There is no return value. Six venn diagrams will be plotted}
 \usage{
-plotallvenn(analysisresultsmatrix)
+plotallvenn(analysisresultsmatrix, cols = c("#FFD700", "#C71585", "#B0E0E6"))
 }
 \arguments{
 \item{analysisresultsmatrix}{analysisresults of countanalysis function
 place into a a analysisresults matrix by the analyzeanalysisresults function}
+
+\item{cols}{hex colors for points in this order: Experiment-Specific, Reference-Specific, Shared}
 }
 \description{
 Plots venn diagrams for comparison of two methods of identifying altered
