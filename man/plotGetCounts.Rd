@@ -11,7 +11,7 @@ plotGetCounts(countsConsPeaks)
 \item{countsConsPeaks}{output generated from getCounts}
 }
 \value{
-a ggplot
+a highcharter object
 }
 \description{
 Given the output from getCounts, plot a density plot of

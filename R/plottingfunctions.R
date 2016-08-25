@@ -256,7 +256,7 @@ plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE, cols=c("#0099ff",
 #'
 #' @param countsConsPeaks output generated from getCounts
 #'
-#' @return a ggplot
+#' @return a highcharter object
 #'
 #' @examples
 #' \dontrun{

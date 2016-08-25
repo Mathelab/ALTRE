@@ -5,10 +5,12 @@
 \title{Given the output from getConsensusPeaks, generate a barplot
 of countstatistics}
 \usage{
-plotConsensusPeaks(samplepeaks)
+plotConsensusPeaks(samplepeaks, cols = c("#0099ff", "#ff5050"))
 }
 \arguments{
 \item{samplepeaks}{output generated from getConsensusPeaks}
+
+\item{cols}{hex colors for points in this order: Experiment-Specific, Reference-Specific, Shared}
 }
 \value{
 a highcharter object
