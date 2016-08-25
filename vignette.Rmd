@@ -189,35 +189,20 @@ MFenrich <- pathenrich(analysisresults = alteredPeaksCategorized,
 The function *enrichHeatmap()* creates a heatmap plot of the analysis for all three RE types (SAEC-specific, A549-specific, and shared), with the color-coding corresponding to the significance of the pathway – the lighter the blue, the lower the p-value. No pathways will have low p-values (p < 0.05) since we are using only chr21 subset of the data in this vignette – the p-value argument is set very so that the results do not come up as “none” in this example. During a real analysis the p-value should be set to a lower p-value cut-off such as 0.05. The enriched pathways for this entire dataset at a low p-value cut-off can be seen in the published paper.
 
 ```{r}
-enrichHeatmap(MFenrich, title = "GO:MF", pvalfilt = 0.99)
+enrichHeatmap(MFenrich, title = "TSS-distal GO:MF", pvalfilt = 0.99)
 ```
 
 **9. Writing output to files**
 To enable users to write results to files, the following 4 functions are implemented:
 
-1. *writeConsensusRE()*: writes a CSV file in the working direcoty with the 
+	1. *writeBedFile()*: writes a BED file in the working directory with the location of REs, color-coded by type-specificity.  The output BED file can be directly loaded in a genome browser. There is no output to the function that can be saved as an object.
+	2. *writeConsensusRE()*: writes a CSV file in the working direcoty with the 
 location of the consensus regulatory elements, along with their annotation (e.g. TSS-proximal/distal, whether the peaks are found in the experiment or reference samples).  The file takes as input the output of the getConsensusPeaks() function and returns no output.  
+	3. *writeCompareRE()*: writes a CSV file with the number of peaks called as experiment- or reference-specific and share using qthe quantitative/peak intensity or peak/binary approach. The function takes the output of comparePeaksAltre() as input and returns no output.  
+	4. *writePathEnrich(): writes CSV files showing the results of the enrichHeatmap() function, which it takes as input.  A total of 3 CSV files will be created, one each for the results of pathway enrichment for the experiment-specific, reference-specific, and shared REs.
 
 ```{r, eval = FALSE}
-writeConsensusRE(consensusPeaksAnnotated, "altreconspeaks.txt")
-```
-
-2. *writeBedFile()*: writes a BED file in the working directory with the location of REs, color-coded by type-specificity.  The output BED file can be directly loaded in a genome browser. There is no output to the function that can be saved as an object.
-
-```{r, eval = FALSE}
-writeBedFile(alteredPeaksCategorized, "altrecategpeaks.csv")
-```
-
-3. *writeCompareRE()*: writes a CSV file with the number of peaks called as experiment- or reference-specific and share using qthe quantitative/peak intensity or peak/binary approach. The function takes the output of comparePeaksAltre() as input and returns no output.  
-
-```{r, eval = FALSE}
-writeCompareRE(comparePeaksAnalysisResults, "comparealtrepeaks.csv")
-```
-
-4. *writePathEnrich(): writes CSV files showing the results of the enrichHeatmap() function, which it takes as input.  A total of 3 CSV files will be created, one each for the results of pathway enrichment for the experiment-specific, reference-specific, and shared REs.
-
-```{r, eval = FALSE}
-writePathEnrich(MFenrich, "MFenrich.csv")
+writeBedFile(alteredPeaksCategorized, "output.txt")
 ```
 
 ```{r}
