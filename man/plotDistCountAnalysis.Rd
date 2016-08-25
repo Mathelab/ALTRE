@@ -12,6 +12,8 @@ plotDistCountAnalysis(analysisresults, counts, cols = c("#C71585", "#d3d3d3",
 \item{analysisresults}{output generated from countanalysis() then categAltrePeaks()}
 
 \item{counts}{output generated from getCounts()}
+
+\item{cols}{hex colors for points in this order: Experiment-Specific, Reference-Specific, Shared}
 }
 \value{
 a highcharter object

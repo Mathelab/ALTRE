@@ -2,7 +2,7 @@
 #' of countstatistics
 #'
 #' @param samplepeaks output generated from getConsensusPeaks
-#'
+#' @param cols hex colors for points in this order: Experiment-Specific, Reference-Specific, Shared
 #' @return a highcharter object
 #'
 #' @examples
@@ -15,7 +15,7 @@
 #' }
 #' @export
 #'
-plotConsensusPeaks <- function(samplepeaks) {
+plotConsensusPeaks <- function(samplepeaks, cols=c("#0099ff","#ff5050")) {
 
     CellType <- NULL
     #without this R CMD check throws no visible binding for global variable error
@@ -28,12 +28,16 @@ plotConsensusPeaks <- function(samplepeaks) {
 
     plottingData <- statsFormated %>% split(levels(as.factor(statsFormated$CellType)))
 
+    col1 <- cols[1]
+    col2 <- cols[2]
+
     p <- highchart() %>%
         hc_title(text = "Peak Counts by Cell Type",
                  style = list(color = '#2E1717',
                               fontWeight = 'bold')) %>%
         hc_subtitle(text = "For bioreplicates and their merged consensus track") %>%
         hc_add_series(
+            color = col1,
             data = plottingData[[1]]$Count,
             name = names(plottingData[1]),
             type = "column",
@@ -45,7 +49,8 @@ plotConsensusPeaks <- function(samplepeaks) {
             )
         ) %>%
         hc_add_series(
-            data = plottingData[[2]]$Count,
+          color = col2,
+          data = plottingData[[2]]$Count,
             name = names(plottingData[2]),
             dataLabels = list(
                 enabled = TRUE,
@@ -60,12 +65,12 @@ plotConsensusPeaks <- function(samplepeaks) {
         hc_xAxis(categories = plottingData[[1]]$PeakType) %>%
         hc_legend(
             enabled = TRUE,
-            layout = "vertical",
+            layout = "horizonal",
             align = "right",
             verticalAlign = "top",
             floating = TRUE,
-            x = -5,
-            y = 60
+            x = 15,
+            y = 16
         ) %>%
         hc_tooltip(
             headerFormat = "<b>{series.name}_{point.key}</b><br>",
@@ -84,6 +89,7 @@ plotConsensusPeaks <- function(samplepeaks) {
 #' (only works if peaks were merged)
 #'
 #' @param conspeaks output generated from combineAnnotatePeaks
+#' @param cols hex colors for points in this order: Experiment-Specific, Reference-Specific, Shared
 #' @param viewer whether the plot should be displayed in the RStudio viewer or
 #'        in Shiny/Knittr
 #' @return a highcharter object
@@ -106,7 +112,7 @@ plotConsensusPeaks <- function(samplepeaks) {
 #' }
 #' @export
 #'
-plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE) {
+plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE, cols=c("#0099ff","#ff5050")) {
 
     CellType <- NULL
     #without this R CMD check throws no visible binding for global variable error
@@ -160,19 +166,21 @@ plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE) {
             hc_xAxis(categories = c("beforemerging", "aftermerging")) %>%
             hc_legend(
                 enabled = TRUE,
-                layout = "vertical",
+                layout = "horizontal",
                 align = "right",
                 verticalAlign = "top",
                 floating = TRUE,
-                x = -5,
-                y = 60
+                x = 0,
+                y = 17
             ) %>%
             hc_tooltip(
                 headerFormat = "<b>{series.name}_{point.key}</b><br>",
                 pointFormat = "{point.y}",
                 valueSuffix = ' peaks'
             ) %>%
+            hc_colors(cols) %>%
             hc_exporting(enabled = TRUE)
+
     }
 
     feature <- "MeanLength"
@@ -214,18 +222,19 @@ plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE) {
             hc_xAxis(categories = c("beforemerging", "aftermerging")) %>%
             hc_legend(
                 enabled = TRUE,
-                layout = "vertical",
+                layout = "horizontal",
                 align = "right",
                 verticalAlign = "top",
                 floating = TRUE,
-                x = -5,
-                y = 60
+                x = 0,
+                y = 17
             ) %>%
             hc_tooltip(
                 headerFormat = "<b>{series.name}_{point.key}</b><br>",
                 pointFormat = "{point.y}",
                 valueSuffix = ' peaks'
             ) %>%
+            hc_colors(cols) %>%
             hc_exporting(enabled = TRUE)
     }
 
@@ -336,7 +345,7 @@ plotGetCounts <- function(countsConsPeaks) {
 #' }
 #' @export
 
-plotCountAnalysis <- function(altrepeakscateg, cols = c("#d3d3d3",
+plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, cols = c("#d3d3d3",
                                                         #grey (ambiguous)
                                                         "#C71585",
                                                         #magenta (experiment-specific)
@@ -428,7 +437,7 @@ plotCountAnalysis <- function(altrepeakscateg, cols = c("#d3d3d3",
 #'
 #' @param analysisresults output generated from countanalysis() then categAltrePeaks()
 #' @param counts output generated from getCounts()
-#'
+#' @param cols hex colors for points in this order: Experiment-Specific, Reference-Specific, Shared
 #' @return a highcharter object
 #'
 #' @examples
