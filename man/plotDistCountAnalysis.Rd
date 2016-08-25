@@ -5,7 +5,8 @@
 \title{Creates a boxplot to see the distribution of read counts in type-specific and
 shared TSS-proximal and TSS-distal regions.}
 \usage{
-plotDistCountAnalysis(analysisresults, counts)
+plotDistCountAnalysis(analysisresults, counts, cols = c("#C71585", "#d3d3d3",
+  "#000080", "#FFD700"))
 }
 \arguments{
 \item{analysisresults}{output generated from countanalysis() then categAltrePeaks()}

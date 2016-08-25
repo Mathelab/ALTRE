@@ -7,7 +7,7 @@ differential counts.  The type of regulatory region (TSS-proximal, TSS-distal, o
 and type of peak comparison (intensity or peak) must be specified.}
 \usage{
 plotvenn(analysisresultsmatrix, region = "both", method = "intensity",
-  cols = c("#FFD700", "#C71585", "#B0E0E6"))
+  cols = c("#FFD700", "#C71585", "#000080"))
 }
 \arguments{
 \item{analysisresultsmatrix}{analysisresults of Intensity analysis place into

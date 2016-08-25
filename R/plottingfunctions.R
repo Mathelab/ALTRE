@@ -336,10 +336,15 @@ plotGetCounts <- function(countsConsPeaks) {
 #' }
 #' @export
 
+plotCountAnalysis <- function(altrepeakscateg, cols = c("#d3d3d3",
+                                                        #grey (ambiguous)
+                                                        "#C71585",
+                                                        #magenta (experiment-specific)
+                                                        "#FFD700",
+                                                        #yellow (reference specific)
+                                                        "#000080")) {
+                                                        #blue (shared)
 
-plotCountAnalysis <- function(altrepeakscateg,
-                              viewer = TRUE,
-                              cols = c("#d3d3d3", "#C71585", "#B0E0E6", "#FFD700")) {
 
   log2FoldChange <- NULL
   padj <- NULL
@@ -456,7 +461,15 @@ plotCountAnalysis <- function(altrepeakscateg,
 #' }
 #' @export
 #'
-plotDistCountAnalysis <- function(analysisresults, counts) {
+plotDistCountAnalysis <- function(analysisresults, counts, cols = c("#C71585",
+                                                                    #magenta (experiment-specific)
+                                                                    "#d3d3d3",
+                                                                    #grey (ambiguous)
+                                                                    "#000080",
+                                                                    #blue (shared))
+                                                                    "#FFD700"))
+                                                                    #yellow (reference specific)
+{
 
   readcounts <- counts$regioncounts
   analysisresults <- analysisresults[[1]]
@@ -547,14 +560,14 @@ plotDistCountAnalysis <- function(analysisresults, counts) {
                           fontWeight = 'bold')) %>%
     hc_plotOptions(
       boxplot = list(
-        fillColor = '#F0F0E0',
+        fillColor = '#d3d3d3',
         lineWidth = 2,
-        medianColor = '#0C5DA5',
-        medianWidth = 3,
-        stemColor = '#A63400',
+        medianColor = '#000000',
+        medianWidth = 2,
+        stemColor = '#000000',
         stemDashStyle = 'dot',
         stemWidth = 1,
-        whiskerColor = '#3D9200',
+        whiskerColor = '#000000',
         whiskerLength = '20%',
         whiskerWidth = 3
       )
@@ -576,6 +589,7 @@ plotDistCountAnalysis <- function(analysisresults, counts) {
     hc_xAxis(categories = categ, title = "Experiment No.") %>%
     hc_tooltip(headerFormat = "<b>{point.key}</b><br>",
                pointFormat = "{point.y}") %>%
+    hc_colors(cols) %>%
     hc_exporting(enabled = TRUE)
     return(p)
 }
@@ -786,7 +800,11 @@ enrichHeatmap <- function(input,
     hc_title(text = title) %>%
     hc_xAxis(categories = theUniqueX) %>%
     hc_yAxis(categories = theUniqueY) %>%
-    hc_add_series(name = "matrix location, p-value", data = formattedHeatmapData)
+    hc_add_series(name = "matrix location, p-value", data = formattedHeatmapData) %>%
+    hc_legend(
+      title = "p-value",
+      enabled = TRUE
+    )
   p <- hc_colorAxis(hc, minColor = "#FFFFFF", maxColor = "#000080")
   #create final formatting
 
@@ -837,8 +855,12 @@ enrichHeatmap <- function(input,
 #'}
 
 plotvenn <- function(analysisresultsmatrix,
-                     region = "both", method = "intensity", cols = c("#FFD700", "#C71585", "#B0E0E6")) {
-
+                     region = "both", method = "intensity", cols = c("#FFD700",
+                                                                     #gold (reference)
+                                                                     "#C71585",
+                                                                     #magenta (experiment specific)
+                                                                     "#000080")) {
+                                                                      #blue (shared)
   if (region == "TSS-proximal") {
     feature <- c("TSS-proxs")
     coordinates <- c(2, 5, 8)
@@ -961,8 +983,12 @@ plotvenn <- function(analysisresultsmatrix,
 #' @export
 
 
-plotallvenn <- function(analysisresultsmatrix, cols = c("#FFD700", "#C71585", "#B0E0E6")) {
-
+plotallvenn <- function(analysisresultsmatrix, cols = c("#FFD700",
+                                                        #gold (reference)
+                                                        "#C71585",
+                                                        #magenta (experiment specific)
+                                                        "#000080")) {
+                                                         #blue (shared)
 
   analysisresultsmatrix <- analysisresultsmatrix[[1]]
 
