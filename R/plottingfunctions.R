@@ -255,6 +255,7 @@ plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE, cols=c("#0099ff",
 #' log2 RPKM values of regulation regions
 #'
 #' @param countsConsPeaks output generated from getCounts
+#' @param cols hex colors for points in this order: Experiment-Specific, Reference-Specific, Shared
 #'
 #' @return a highcharter object
 #'
@@ -281,7 +282,7 @@ plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE, cols=c("#0099ff",
 #' }
 #' @export
 
-plotGetCounts <- function(countsConsPeaks) {
+plotGetCounts <- function(countsConsPeaks, cols=c("#00cc00", "#ffb3d9", "#33ffff", "#ffe680")) {
   region <- NULL
   variable <- NULL
   #set to null to prevent a R CMD Check error: Undefined global functions or variables
@@ -293,12 +294,16 @@ plotGetCounts <- function(countsConsPeaks) {
   TSSdistal_SAEC <- dplyr::filter(varstack, region == "TSS-distal" & variable == "SAEC")
   TSSproximal_SAEC <- dplyr::filter(varstack, region == "TSS-proximal" & variable == "SAEC")
 
-  p <- hchart(stats::density(TSSdistal_A549$value), area = TRUE) %>%
-    hc_add_series_density(stats::density(TSSproximal_A549$value), area = TRUE) %>%
-    hc_add_series_density(stats::density(TSSdistal_SAEC$value), area = TRUE) %>%
-    hc_add_series_density(stats::density(TSSproximal_SAEC$value), area = TRUE) %>%
+  p <- hchart(stats::density(TSSdistal_A549$value), area = TRUE, name = "A549 TSS-distal") %>%
+    hc_title(text = "Density of log2 read counts (normalized by library and region sizes)",
+             style = list(color = '#2E1717',
+                          fontWeight = 'bold')) %>%
     hc_yAxis(title = "density") %>%
-    hc_xAxis(title = "log2 read counts")
+    hc_xAxis(title = "log2 read counts") %>%
+    hc_add_series_density(stats::density(TSSproximal_A549$value), area = TRUE, name = "A549 TSS-proximal") %>%
+    hc_add_series_density(stats::density(TSSdistal_SAEC$value), area = TRUE, name = "SAEC TSS-distal") %>%
+    hc_add_series_density(stats::density(TSSproximal_SAEC$value), area = TRUE, name = "SAEC TSS-proximal") %>%
+    hc_colors(cols)
   return(p)
 }
 
