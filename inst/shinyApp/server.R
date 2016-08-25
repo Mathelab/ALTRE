@@ -320,7 +320,7 @@ shinyServer(function(input, output, session) {
   })
 
   output$volcanoplot <- renderUI({
-    plotCountAnalysis(req(categAltreObj()),  viewer = FALSE)
+    plotCountAnalysis(req(categAltreObj()), viewer = FALSE)
   })
 
   output$boxplot <- highcharter::renderHighchart({
@@ -341,28 +341,6 @@ shinyServer(function(input, output, session) {
 
   output$vennplot <- renderPlot({
     plotallvenn(req(comparePeaksObj()))
-  })
-
-
-  # HC plots
-
-  output$barplotHC <- highcharter::renderHighchart({
-    plotBarplot()
-  })
-
-  output$heatplotHC <- highcharter::renderHighchart({
-    plotHeatmap()
-  })
-  output$densityplotHC <- highcharter::renderHighchart({
-    plotDensity()
-  })
-
-  output$boxplotHC <- highcharter::renderHighchart({
-    plotBoxplot()
-  })
-
-  output$scatterplotHC <- highcharter::renderHighchart({
-    plotScatter()
   })
 
 

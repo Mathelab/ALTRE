@@ -20,12 +20,6 @@ sidebar <- dashboardSidebar(
              tabName = "about",
              icon = icon("info")),
     menuItem(
-      "HC plots",
-      tabName = "HCplots",
-      icon = icon("folder-open"),
-      badgeLabel = "temporary"
-    ),
-    menuItem(
       "Load Data",
       tabName = "loaddata",
       icon = icon("folder-open"),
@@ -98,32 +92,6 @@ body <- dashboardBody(
                        )
                      )
             ),
-    tabItem(tabName = "HCplots",
-            fluidRow(
-              box(
-                width = 6,
-                highcharter::highchartOutput("barplotHC")
-                ),
-              box(
-                width = 6,
-                highcharter::highchartOutput("densityplotHC")
-              )
-            ),
-            fluidRow(
-              box(
-                width = 4,
-                highcharter::highchartOutput("boxplotHC")
-              ),
-              box(
-                width = 4,
-                highcharter::highchartOutput("heatplotHC")
-              ),
-              box(
-                width = 4,
-                highcharter::highchartOutput("scatterplotHC")
-              )
-            )
-    ),
     tabItem(tabName = "loaddata",
             fluidRow(
               HTML("<div class='col-sm-4' style='min-width:
@@ -165,7 +133,7 @@ body <- dashboardBody(
     tabItem(tabName = "definerep",
             fluidRow(
               HTML("<div class='col-sm-4' style='min-width:
-                   400px !important;'>"),
+                   500px !important;'>"),
               box(
                 title = strong("Load and Merge Annotation Files") ,
                 width = NULL,
@@ -199,15 +167,16 @@ body <- dashboardBody(
               HTML("</div>"),
               HTML("<div class='col-sm-7' style='min-width:
                    550px !important;'>"),
-              infoBoxOutput("statusbox2", width = NULL),
+              hr(),
               box(
-                title = "Barplot",
+                #title = "Barplot",
                 width = NULL,
                 solidHeader = TRUE,
                 highcharter::highchartOutput("barplot")
               ),
+              infoBoxOutput("statusbox2", width = NULL),
               HTML("</div>")
-              )
+            )
             ),
     tabItem(tabName = "combine",
             fluidRow(
@@ -292,15 +261,20 @@ body <- dashboardBody(
 
               HTML("<div class='col-sm-7' style='min-width:
                    550px !important;'>"),
-              infoBoxOutput("statusbox3", width = NULL),
               box(
-                title = "Barplot",
+                #title = "Barplot",
                 width = NULL,
                 solidHeader = TRUE,
-                htmlOutput('annotatebarplot'),
+                htmlOutput('annotatebarplot')
+              ),
+              box(
+                #title = "Barplot",
+                width = NULL,
+                solidHeader = TRUE,
                 hr(),
                 dataTableOutput("table3")
               ),
+              infoBoxOutput("statusbox3", width = NULL),
               HTML("</div>")
             )),
     tabItem(tabName = "retrieve",
@@ -336,13 +310,12 @@ body <- dashboardBody(
               HTML("</div>"),
               HTML("<div class='col-sm-7' style='min-width:
                    550px !important;'>"),
-              infoBoxOutput("statusbox4", width = NULL),
-
               box(
                 width = NULL,
-                title = "Density Plot",
+                #title = "Density Plot",
                 highcharter::highchartOutput('densityplot')
               ),
+              infoBoxOutput("statusbox4", width = NULL),
               HTML("</div>")
               )
             ),
@@ -452,16 +425,22 @@ body <- dashboardBody(
               HTML("</div>"),
               HTML("<div class='col-sm-7' style='min-width:
                    550px !important;'>"),
-              infoBoxOutput("statusbox6", width = NULL),
               box(
                 width = NULL,
-                title = "Volcano Plot",
-                htmlOutput('volcanoplot'),
-                hr(),
-                highcharter::highchartOutput('boxplot'),
-                hr(),
+                #title = "Volcano Plot",
+                htmlOutput('volcanoplot')
+              ),
+              box(
+                width = NULL,
+                #title = "Volcano Plot",
+                highcharter::highchartOutput('boxplot')
+              ),
+              box(
+                width = NULL,
+                #title = "Volcano Plot",
                 dataTableOutput("table4")
               ),
+              infoBoxOutput("statusbox6", width = NULL),
               HTML("</div>")
               )
             ),
@@ -553,7 +532,7 @@ body <- dashboardBody(
                    infoBoxOutput("statusbox8a", width = NULL),
                    box(
                      width = NULL,
-                     title = "Heat Plot",
+                     #title = "Heat Plot",
                      plotOutput('heatplotMF')
                    ),
                    HTML("</div>")
@@ -602,7 +581,7 @@ body <- dashboardBody(
                   infoBoxOutput("statusbox8b", width = NULL),
                   box(
                     width = NULL,
-                    title = "Heat Plot",
+                    #title = "Heat Plot",
                     plotOutput('heatplotBP')
                   ),
                   HTML("</div>")
@@ -651,7 +630,7 @@ body <- dashboardBody(
                   infoBoxOutput("statusbox8c", width = NULL),
                   box(
                     width = NULL,
-                    title = "Heat Plot",
+                    #title = "Heat Plot",
                     plotOutput('heatplotCC')
                   ),
                   HTML("</div>")
