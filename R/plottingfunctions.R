@@ -884,7 +884,7 @@ plotvenn <- function(analysisresultsmatrix,
     coordinates <- c(1, 4, 7)
   }
   if (region == "both") {
-    region <- c("TSS-distal/TSS-proximal")
+    region <- c("all")
     feature <- c("TSS-dists", "TSS-proxs")
     coordinates <- c(3, 6, 9)
   }
