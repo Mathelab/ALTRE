@@ -803,7 +803,7 @@ enrichHeatmap <- function(input,
   }
   #Subsitute words with position on the matrix
 
-  dataforHeatmap <- as.data.frame(cbind(as.numeric(theXAxis),as.numeric(theYAxis),as.numeric(meltedheatmapdata$value)))
+  dataforHeatmap <- as.data.frame(cbind(as.numeric(theXAxis),as.numeric(theYAxis),round(as.numeric(meltedheatmapdata$value),3)))
   formattedHeatmapData <- list_parse2(dataforHeatmap)
   #create final formatting
 
