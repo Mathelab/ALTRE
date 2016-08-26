@@ -866,7 +866,7 @@ enrichHeatmap <- function(input,
 #'                   method='intensity')
 #'}
 
-plotvenn <- function(analysisresultsmatrix,
+plotCompareMethods <- function(analysisresultsmatrix,
                      region = "both", method = "intensity", cols = c("#FFD700",
                                                                      #gold (reference)
                                                                      "#C71585",
@@ -992,7 +992,7 @@ plotvenn <- function(analysisresultsmatrix,
 #' @export
 
 
-plotallvenn <- function(analysisresultsmatrix, cols = c("#FFD700",
+plotCompareMethodsAll <- function(analysisresultsmatrix, cols = c("#FFD700",
                                                         #gold (reference)
                                                         "#C71585",
                                                         #magenta (experiment specific)
@@ -1006,17 +1006,17 @@ plotallvenn <- function(analysisresultsmatrix, cols = c("#FFD700",
     stop("The input is not a matrix!")
   }
 
-  p1 <- plotvenn(analysisresultsmatrix,
+  p1 <- plotCompareMethods(analysisresultsmatrix,
                     "TSS-proximal", "intensity", cols)
-  p2 <- plotvenn(analysisresultsmatrix,
+  p2 <- plotCompareMethods(analysisresultsmatrix,
                     "TSS-distal", "intensity", cols)
-  p3 <- plotvenn(analysisresultsmatrix,
+  p3 <- plotCompareMethods(analysisresultsmatrix,
                     "both", "intensity", cols)
-  p4 <- plotvenn(analysisresultsmatrix,
+  p4 <- plotCompareMethods(analysisresultsmatrix,
                     "TSS-proximal", "peak", cols)
-  p5 <- plotvenn(analysisresultsmatrix,
+  p5 <- plotCompareMethods(analysisresultsmatrix,
                     "TSS-distal", "peak", cols)
-  p6 <- plotvenn(analysisresultsmatrix,
+  p6 <- plotCompareMethods(analysisresultsmatrix,
                     "both", "peak", cols)
 
   plot <- htmltools::browsable(hw_grid(p1, p2, p3, p4, p5, p6, ncol = 3, rowheight = 300))
