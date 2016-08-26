@@ -370,21 +370,19 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, cols = c("#d3d3d3"
                                                 "padj",
                                                 "REaltrecateg")]
   tssdist <- toplot[which(toplot$region == "TSS-distal"), ]
+  tssdist$padj <- round(-log10(tssdist$padj), 2)
+  tssdist$log2FoldChange <- round(tssdist$log2FoldChange, 2)
   tssprox <- toplot[which(toplot$region == "TSS-proximal"), ]
+  tssprox$padj <- round(-log10(tssprox$padj), 2)
+  tssprox$log2FoldChange <- round(tssprox$log2FoldChange, 2)
   lengthRE <- rep("", length(tssdist$REaltrecateg))
-
-  distal_1 <- dplyr::filter(tssdist, REaltrecateg == "Experiment Specific")
-  distal_2 <- dplyr::filter(tssdist, REaltrecateg == "Reference Specific")
-  distal_3 <- dplyr::filter(tssdist, REaltrecateg == "Shared")
-  distal_4 <- dplyr::filter(tssdist, REaltrecateg == "Ambiguous")
-
 
   p1 <- highchart() %>%
     hc_chart(type = "scatter") %>%
     hc_title(text = "TSS-distal",
              style = list(color = '#2E1717',
                           fontWeight = 'bold')) %>%
-    hc_add_series_df(data = tssdist, x = log2FoldChange, y = -log10(padj),
+    hc_add_series_df(data = tssdist, x = log2FoldChange, y = padj,
                      type = "scatter", group = REaltrecateg)  %>%
     hc_xAxis(title = list(text = "log2fold change")) %>%
     hc_yAxis(title = list(text = "-log10 pvalue")) %>%
@@ -411,7 +409,7 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, cols = c("#d3d3d3"
     hc_title(text = "TSS-proximal",
              style = list(color = '#2E1717',
                           fontWeight = 'bold')) %>%
-    hc_add_series_df(data = tssprox, x = log2FoldChange, y = -log10(padj),
+    hc_add_series_df(data = tssprox, x = log2FoldChange, y = padj,
                      type = "scatter", group = REaltrecateg)  %>%
     hc_xAxis(title = list(text = "log2fold change")) %>%
     hc_yAxis(title = list(text = "-log10 pvalue")) %>%
@@ -562,10 +560,10 @@ plotDistCountAnalysis <- function(analysisresults, counts, cols = c("#C71585",
   distal4_5num_SAEC <- stats::fivenum(distal4$meanlog2FPM.SAEC)
   proximal4_5num_SAEC <- stats::fivenum(proximal4$meanlog2FPM.SAEC)
 
-  Experimentspecific_list <- list(distal1_5num_A549, proximal1_5num_A549, distal1_5num_SAEC, proximal1_5num_SAEC)
-  Ambiguous_list <- list(distal2_5num_A549, proximal2_5num_A549, distal2_5num_SAEC, proximal2_5num_SAEC)
-  Shared_list <- list(distal3_5num_A549, proximal3_5num_A549, distal3_5num_SAEC, proximal3_5num_SAEC)
-  Referencespecific_list <- list(distal4_5num_A549, proximal4_5num_A549, distal4_5num_SAEC, proximal4_5num_SAEC)
+  Experimentspecific_list <- list(round(distal1_5num_A549,3), round(proximal1_5num_A549, 3), round(distal1_5num_SAEC,3), round(proximal1_5num_SAEC,3))
+  Ambiguous_list <- list(round(distal2_5num_A549,3), round(proximal2_5num_A549,3), round(distal2_5num_SAEC,3), round(proximal2_5num_SAEC,3))
+  Shared_list <- list(round(distal3_5num_A549,3), round(proximal3_5num_A549,3), round(distal3_5num_SAEC,3), round(proximal3_5num_SAEC,3))
+  Referencespecific_list <- list(round(distal4_5num_A549,3), round(proximal4_5num_A549,3), round(distal4_5num_SAEC,3), round(proximal4_5num_SAEC,3))
 
   categ <- c('A549-specific TSS-distal', 'A549-specific TSS-proximal', 'SAEC-specific TSS-distal', 'SAEC-specific TSS-proximal')
   p <- highchart() %>%
@@ -947,15 +945,12 @@ plotvenn <- function(analysisresultsmatrix,
       x = -5,
       y = 60
     ) %>%
-
     hc_add_series(data = list(
       list(y = case, name = casename),
       list(y = reference, name = referencename),
       list(y = shared, name = "Shared")
-    )
-    ) %>%
+    )) %>%
     hc_colors(cols)
-
   return(p)
 }
 
