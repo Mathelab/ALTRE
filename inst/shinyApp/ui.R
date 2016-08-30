@@ -425,15 +425,15 @@ body <- dashboardBody(
               HTML("</div>"),
               HTML("<div class='col-sm-7' style='min-width:
                    550px !important;'>"),
+              # box(
+              #   width = NULL,
+              #   #title = "Volcano Plot",
+              #   htmlOutput('volcanoplot')
+              # ),
               box(
                 width = NULL,
                 #title = "Volcano Plot",
-                htmlOutput('volcanoplot')
-              ),
-              box(
-                width = NULL,
-                #title = "Volcano Plot",
-                highcharter::highchartOutput('boxplot')
+                highcharter::highchartOutput('boxplotCounts')
               ),
               box(
                 width = NULL,
@@ -478,8 +478,7 @@ body <- dashboardBody(
               infoBoxOutput("statusbox7", width = NULL),
               box(
                 width = NULL,
-                title = "Venn Plot",
-                plotOutput('vennplot')
+                htmlOutput('vennplot')
               ),
               HTML("</div>")
               )
@@ -533,7 +532,7 @@ body <- dashboardBody(
                    box(
                      width = NULL,
                      #title = "Heat Plot",
-                     plotOutput('heatplotMF')
+                     highcharter::highchartOutput('heatplotMF')
                    ),
                    HTML("</div>")
                  )
@@ -582,7 +581,7 @@ body <- dashboardBody(
                   box(
                     width = NULL,
                     #title = "Heat Plot",
-                    plotOutput('heatplotBP')
+                    highcharter::highchartOutput('heatplotBP')
                   ),
                   HTML("</div>")
                   )
@@ -631,7 +630,7 @@ body <- dashboardBody(
                   box(
                     width = NULL,
                     #title = "Heat Plot",
-                    plotOutput('heatplotCC')
+                    highcharter::highchartOutput('heatplotCC')
                   ),
                   HTML("</div>")
                   )

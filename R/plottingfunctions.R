@@ -992,7 +992,7 @@ plotCompareMethods <- function(analysisresultsmatrix,
 #' @export
 
 
-plotCompareMethodsAll <- function(analysisresultsmatrix, cols = c("#FFD700",
+plotCompareMethodsAll <- function(analysisresultsmatrix, viewer = TRUE, cols = c("#FFD700",
                                                         #gold (reference)
                                                         "#C71585",
                                                         #magenta (experiment specific)
@@ -1019,8 +1019,14 @@ plotCompareMethodsAll <- function(analysisresultsmatrix, cols = c("#FFD700",
   p6 <- plotCompareMethods(analysisresultsmatrix,
                     "both", "peak", cols)
 
-  plot <- htmltools::browsable(hw_grid(p1, p2, p3, p4, p5, p6, ncol = 3, rowheight = 300))
+  if (viewer == TRUE) {
+    p <- htmltools::browsable(hw_grid(p1, p2, p3, p4, p5, p6, ncol = 3, rowheight = 300))
+  }
+  else {
+    p <- hw_grid(p1, p2, p3, p4, p5, p6, ncol = 3, rowheight = 300)
+  }
+  return(p)
 
-return(plot)
+return(p)
 }
 

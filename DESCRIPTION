@@ -37,7 +37,6 @@ Imports:
     dplyr,
     GO.db,
     grid,
-    venneuler,
     stringr,
     tibble,
     magrittr,
