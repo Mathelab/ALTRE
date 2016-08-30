@@ -38,6 +38,11 @@ Also when installing on Linux, installation might fail if the XML package cannot
 ```{R}
 sudo apt-get install libxml2-dev
 ```
+To install the devtools R library, you also need to run the following line to install system dependencies on Ubuntu:
+
+```{R}
+sudo apt-get install libssl-dev libcurl4-openssl-dev
+```
 
 On Windows, if you get an installation error then first run the following lines of code in as well:
 
