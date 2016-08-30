@@ -24,8 +24,6 @@ Imports:
     DESeq2,
     GenomicAlignments,
     SummarizedExperiment,
-    ggplot2,
-    reshape2,
     GenomicRanges,
     Rsamtools,
     readr,

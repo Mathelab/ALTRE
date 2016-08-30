@@ -28,28 +28,28 @@ Reads in a sample information file in CSV format and outputs a data frame.
 
 \item \code{\link{loadBedFiles}}
 
-Takes in a sample information data frame (output of loadCSVFile), loads the 
-peak files, and outputs a GRangesList object that holds all peaks for each 
+Takes in a sample information data frame (output of loadCSVFile), loads the
+peak files, and outputs a GRangesList object that holds all peaks for each
 sample type.
 
 \item  \code{\link{getConsensusPeaks}}
 
-Takes in a GRangesList object with peaks (output from loadBedFiles in step 3), and 
+Takes in a GRangesList object with peaks (output from loadBedFiles in step 3), and
 outputs consensus peaks. Consensus peaks are those present in at least N replicates.
-The function outputs a list containting a GRanges object with the consensus peaks, 
+The function outputs a list containting a GRanges object with the consensus peaks,
 and a dataframe with some statistics.
-A barplot summary of the number of consensus peaks and those in each replicate can 
+A barplot summary of the number of consensus peaks and those in each replicate can
 generated with plotConsensusPeaks().
 
 \item \code{\link{combineAnnotatePeaks}}
 
-Peaks for each sample type (from the GRanges object output from previous function) 
-are combined and annotated with type specificity (which cell types the hotspot is 
-present in) and whether each region represented in the GRanges is TSS-proximal 
-(default: <1500bp from a transcription start site) or TSS-distal (>1500bp from 
-a transcription start site). The function can also merge regulatory elements that 
-are within a specified distance from each other.  This function requires the 
-annotation of transcription start sites (e.g. to retrieve from Ensembl, run 
+Peaks for each sample type (from the GRanges object output from previous function)
+are combined and annotated with type specificity (which cell types the hotspot is
+present in) and whether each region represented in the GRanges is TSS-proximal
+(default: <1500bp from a transcription start site) or TSS-distal (>1500bp from
+a transcription start site). The function can also merge regulatory elements that
+are within a specified distance from each other.  This function requires the
+annotation of transcription start sites (e.g. to retrieve from Ensembl, run
 TSS <- getTSS())).
 To view the number and length of peaks before/after merging, use the function
 plotCombineAnnotatePeaks().
@@ -62,25 +62,25 @@ To view a density plot of the sizes of the regions, use the function plotGetCoun
 
 \item \code{\link{countanalysis}}
 
-This function runs differential analysis, using DESeq2, to identify significantly 
+This function runs differential analysis, using DESeq2, to identify significantly
 altered regulatory elements (TSS-proximal or TSS-distal).
 
 \item \code{\link{categAltrePeaks}}
 
 This function allows the user to modify cutoffs for p-values and log fold changes
-to define altered or shared regulatory elements.  
+to define altered or shared regulatory elements.
 A volcano plot (log fold changes vs -log p-values), highlighting significantly
 altered regulatory elements, can be viewed by running the function
 plotCountAnalysis().
 To view the distribution of counts (as FPKM) in each type of regulatory element
-(e.g. TSS-proximal shared/experiment-specific/reference-specific), use the function 
+(e.g. TSS-proximal shared/experiment-specific/reference-specific), use the function
 plotDistCountAnalysis().
 
 \item \code{\link{comparePeaksAltre}}
 
 This function compares the number of regulatory elements identified as altered
 or shared between two sample types.  The two methods compared are:
- 1) using peak presence and associated intensity (e.g. amount of chromatin 
+ 1) using peak presence and associated intensity (e.g. amount of chromatin
 accessibility);
  2) using peak presence only as determined by peak/hotspot caller.
 To visualize differences in the number of regulatory elements called as specific
@@ -90,7 +90,7 @@ or shared, use the function plotCompareMethods().
 
 Determines which pathways are overrepresented in altered TSS-proximal or TSS-distal regions.
 This function leverages Gene Ontology pathway annotations.
-To visualize the pathways that are enriched, use the function enrichHeatmap(). 
+To visualize the pathways that are enriched, use the function enrichHeatmap().
 }
 }
 
