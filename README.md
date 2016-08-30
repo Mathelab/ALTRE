@@ -30,10 +30,14 @@ devtools::install_github("mathelab/ALTRE")
 When installing on Linux, if you get an rJava package installation error. Please run the following two lines in the console:
 
 ```{R}
-apt-get install openjdk-7-*
+sudo apt-get install openjdk-7-*
 sudo R CMD javareconf
 ```
+Also when installing on Linux, installation might fail if the XML package cannot be installed. Installation failure  can be fixed by installing the libxml2, an XML C parser for Linux. On Ubuntu this can be done by running the following line:
 
+```{R}
+sudo apt-get install libxml2-dev
+```
 
 On Windows, if you get an installation error then first run the following lines of code in as well:
 
