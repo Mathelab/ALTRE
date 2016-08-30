@@ -27,13 +27,7 @@ BiocInstaller::biocLite(c('GenomeInfoDb',
 # install the package
 devtools::install_github("mathelab/ALTRE")
 ```
-When installing on Linux, if you get an rJava package installation error. Please run the following two lines in the console:
-
-```{R}
-sudo apt-get install openjdk-7-*
-sudo R CMD javareconf
-```
-Also when installing on Linux, installation might fail if the XML package cannot be installed. Installation failure  can be fixed by installing the libxml2, an XML C parser for Linux. On Ubuntu this can be done by running the following line:
+When installing on Linux, installation might fail if the XML package cannot be installed. Installation failure  can be fixed by installing the libxml2, an XML C parser for Linux. On Ubuntu this can be done by running the following line:
 
 ```{R}
 sudo apt-get install libxml2-dev
@@ -49,16 +43,6 @@ On Windows, if you get an installation error then first run the following lines 
 ```{R}
 install.packages(c("htmltools","httpuv","evaluate","markdown"))
 ```
-
-When installing on OSC cluster, if you get an installation error then first run the following lines of code in your console prior to trying to install:
-
-```{R}
-sudo R CMD javareconf -e
-export JAVA_CPPFLAGS='-O2'
-module load gnu/5.2.0
-module load R/3.3.1
-```
-
 
 #### Installation Walk-through Animation
 
