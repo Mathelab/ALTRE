@@ -20,10 +20,13 @@ Regulatory elements (REs) such as enhancers and promoters are involved in regula
 
 ALTRE takes as input a CSV file which provides the names and metadata information for the alignment files (BAM format) and peak files (BED format) of samples to be analyzed.  The software then takes users through defining altered peaks using both binary data (presence/absence of peaks) and quantitative data (peak intensity). Moreover, the package includes functions that merge and annotate peaks (e.g. as promoters and enhancers), perform enrichment analysis for REs of interest, and provide visualization functions. The analysis can be conducted through the R command line or through an RShiny web interface for those who are not familiar with the R statistical language. This vignette further explains the purpose of the package and establishes the workflow.
 
+###Graphing analysis results
+
+Results of this analysis will be displayed in a number of graphs throughout the workflow. These graphs are interactive -- mouse-over data points to find further information, such as the exact coordinates (e.g. p-value) of a plotted sample, or click a sample or condition in the legend to hide it from the graph -- this can allow the remaining samples to be compared more easily as the graph will zoom in and out to accommodate changes.
+
 ###Example data 
 
 To demonstrate the functionality of ALTRE, we have provided an example dataset (BAM and BED files) of cancerous (A549) and normal (SAEC) lung cell types downloaded from the ENCODE project (see <https://mathelab.github.io/ALTREsampledata/>). Of note, this vignette uses only a subset of the data corresponding to Chromosome 21 (results may not be as meaningful). 
-
 
 **1. Load Data** 
 
@@ -113,7 +116,7 @@ consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
                               sampleinfo = csvfile,
                               reference = 'SAEC',
                               chrom = 'chr21')
-plotgetcounts(consensusPeaksCounts)
+plotGetCounts(consensusPeaksCounts)
 ```
 
 
@@ -160,7 +163,7 @@ The function *plotallvenn()* takes the results from comparePeaksAltre and transl
 
 
 ```{r}
-plotallvenn(comparePeaksAnalysisResults)
+plotCompareMethodsAll(comparePeaksAnalysisResults)
 ```
 
   B. The function *plotDistCountAnalysis()* enables users to view the raw count data in regions identified as type-specific or shared. The log2 transformation of reads per kilo-base per million for each RE is plotted. As expected, for REs identified as higher log-fold change than normal, the lung cancer cell line has much higher counts than he normal lung cell line. The opposite is true for the lower log-fold change regions. For RE with little log-fold change between cell types, the counts are similar. This visual depiction confirms the results of countanalysis and enables users to change parameters if needed.
@@ -195,11 +198,10 @@ enrichHeatmap(MFenrich, title = "TSS-distal GO:MF", pvalfilt = 0.99)
 **9. Writing output to files**
 To enable users to write results to files, the following 4 functions are implemented:
 
-	1. *writeBedFile()*: writes a BED file in the working directory with the location of REs, color-coded by type-specificity.  The output BED file can be directly loaded in a genome browser. There is no output to the function that can be saved as an object.
-	2. *writeConsensusRE()*: writes a CSV file in the working direcoty with the 
-location of the consensus regulatory elements, along with their annotation (e.g. TSS-proximal/distal, whether the peaks are found in the experiment or reference samples).  The file takes as input the output of the getConsensusPeaks() function and returns no output.  
-	3. *writeCompareRE()*: writes a CSV file with the number of peaks called as experiment- or reference-specific and share using qthe quantitative/peak intensity or peak/binary approach. The function takes the output of comparePeaksAltre() as input and returns no output.  
-	4. *writePathEnrich(): writes CSV files showing the results of the enrichHeatmap() function, which it takes as input.  A total of 3 CSV files will be created, one each for the results of pathway enrichment for the experiment-specific, reference-specific, and shared REs.
+1. *writeBedFile()*: writes a BED file in the working directory with the location of REs, color-coded by type-specificity.  The output BED file can be directly loaded in a genome browser. There is no output to the function that can be saved as an object.
+2. *writeConsensusRE()*: writes a CSV file in the working direcoty with the location of the consensus regulatory elements, along with their annotation (e.g. TSS-proximal/distal, whether the peaks are found in the experiment or reference samples).  The file takes as input the output of the getConsensusPeaks() function and returns no output.  
+3. *writeCompareRE()*: writes a CSV file with the number of peaks called as experiment- or reference-specific and share using qthe quantitative/peak intensity or peak/binary approach. The function takes the output of comparePeaksAltre() as input and returns no output.  
+4. *writePathEnrich()*: writes CSV files showing the results of the enrichHeatmap() function, which it takes as input.  A total of 3 CSV files will be created, one each for the results of pathway enrichment for the experiment-specific, reference-specific, and shared REs.
 
 ```{r, eval = FALSE}
 writeBedFile(alteredPeaksCategorized, "output.txt")
