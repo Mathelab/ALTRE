@@ -14,6 +14,9 @@ plotCompareMethodsAll(analysisresultsmatrix, viewer = TRUE,
 \item{analysisresultsmatrix}{analysisresults of countanalysis function
 place into a a analysisresults matrix by the analyzeanalysisresults function}
 
+\item{viewer}{whether the plot should be displayed in the RStudio viewer or
+in Shiny/Knittr}
+
 \item{cols}{hex colors for points in this order: Experiment-Specific, Reference-Specific, Shared}
 }
 \description{

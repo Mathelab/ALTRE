@@ -960,6 +960,8 @@ plotCompareMethods <- function(analysisresultsmatrix,
 #' algorithms.  There is no return value. Six venn diagrams will be plotted
 #' @param analysisresultsmatrix analysisresults of countanalysis function
 #' place into a a analysisresults matrix by the analyzeanalysisresults function
+#' @param viewer whether the plot should be displayed in the RStudio viewer or
+#' in Shiny/Knittr
 #' @param cols hex colors for points in this order: Experiment-Specific, Reference-Specific, Shared
 #' @examples
 #' \dontrun{
@@ -990,8 +992,7 @@ plotCompareMethods <- function(analysisresultsmatrix,
 #' plotallvenn(analysisresults)
 #' }
 #' @export
-
-
+#'
 plotCompareMethodsAll <- function(analysisresultsmatrix, viewer = TRUE, cols = c("#FFD700",
                                                         #gold (reference)
                                                         "#C71585",
