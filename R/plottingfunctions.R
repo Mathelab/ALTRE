@@ -433,7 +433,7 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) {
     p <- htmltools::browsable(hw_grid(p1, p2, ncol = 2, rowheight = 700))
   }
   else {
-    p <- hw_grid(p1, p2, ncol = 2, rowheight = 700)
+    p <- hw_grid(p1, p2, ncol = 2)
   }
   return(p)
 }
@@ -1034,7 +1034,7 @@ plotCompareMethodsAll <- function(analysisresultsmatrix, viewer = TRUE, palette 
     p <- htmltools::browsable(hw_grid(p1, p2, p3, p4, p5, p6, ncol = 3, rowheight = 300))
   }
   else {
-    p <- hw_grid(p1, p2, p3, p4, p5, p6, ncol = 3, rowheight = 300)
+    p <- hw_grid(p1, p2, p3, p4, p5, p6, ncol = 3)
   }
   return(p)
 

@@ -1,12 +1,12 @@
 # App ui
 
 headerbar <- dashboardHeader(
-  title = "ALTRE Analysis Workflow",
+  title = h4("ALTRE Analysis Workflow"),
   titleWidth = 270,
   dropdownMenu(
     type = "notifications",
     notificationItem(
-      text = "Plots take some time to display",
+      text = "Plots might take some time to display",
       icon("truck"),
       status = "warning"
       )
@@ -288,7 +288,7 @@ body <- dashboardBody(
                 tags$ul(
                   tags$li("Counts the number of reads in each regulatory region
                    for each sample type."),
-                  tags$li(" Outputs a denisty plot of the lengths of genomic regions.")
+                  tags$li(" Outputs a density plot of the widths of genomic regions.")
                 ),
                 hr(),
                 actionButton("buttoncounts", strong("Retrieve Counts")),
@@ -475,11 +475,11 @@ body <- dashboardBody(
               HTML("</div>"),
               HTML("<div class='col-sm-7' style='min-width:
                    550px !important;'>"),
-              infoBoxOutput("statusbox7", width = NULL),
               box(
                 width = NULL,
                 htmlOutput('vennplot')
               ),
+              infoBoxOutput("statusbox7", width = NULL),
               HTML("</div>")
               )
             ),
@@ -528,12 +528,12 @@ body <- dashboardBody(
                    HTML("</div>"),
                    HTML("<div class='col-sm-7' style='min-width:
                    550px !important;'>"),
-                   infoBoxOutput("statusbox8a", width = NULL),
                    box(
                      width = NULL,
                      #title = "Heat Plot",
                      highcharter::highchartOutput('heatplotMF')
                    ),
+                   infoBoxOutput("statusbox8a", width = NULL),
                    HTML("</div>")
                  )
                  ),
@@ -577,12 +577,12 @@ body <- dashboardBody(
                   HTML("</div>"),
                   HTML("<div class='col-sm-7' style='min-width:
                        550px !important;'>"),
-                  infoBoxOutput("statusbox8b", width = NULL),
                   box(
                     width = NULL,
                     #title = "Heat Plot",
                     highcharter::highchartOutput('heatplotBP')
                   ),
+                  infoBoxOutput("statusbox8b", width = NULL),
                   HTML("</div>")
                   )
                 ),
@@ -626,12 +626,12 @@ body <- dashboardBody(
                   HTML("</div>"),
                   HTML("<div class='col-sm-7' style='min-width:
                        550px !important;'>"),
-                  infoBoxOutput("statusbox8c", width = NULL),
                   box(
                     width = NULL,
                     #title = "Heat Plot",
                     highcharter::highchartOutput('heatplotCC')
                   ),
+                  infoBoxOutput("statusbox8c", width = NULL),
                   HTML("</div>")
                   )
       )
