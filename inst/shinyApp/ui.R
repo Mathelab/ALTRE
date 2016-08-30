@@ -425,11 +425,12 @@ body <- dashboardBody(
               HTML("</div>"),
               HTML("<div class='col-sm-7' style='min-width:
                    550px !important;'>"),
-              # box(
-              #   width = NULL,
-              #   #title = "Volcano Plot",
-              #   htmlOutput('volcanoplot')
-              # ),
+              box(
+                width = NULL,
+                #title = "Volcano Plot",
+                solidHeader = TRUE,
+                htmlOutput('volcanoplot')
+              ),
               box(
                 width = NULL,
                 #title = "Volcano Plot",
