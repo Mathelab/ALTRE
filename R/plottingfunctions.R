@@ -2,7 +2,7 @@
 #' of countstatistics
 #'
 #' @param samplepeaks output generated from getConsensusPeaks
-#' @param cols hex colors for points in this order: Experiment-Specific, Reference-Specific, Shared
+#' @param palette RColorBrewer palette to change graph colors
 #' @return a highcharter object
 #'
 #' @examples
@@ -15,7 +15,10 @@
 #' }
 #' @export
 #'
-plotConsensusPeaks <- function(samplepeaks, cols=c("#0099ff","#ff5050")) {
+plotConsensusPeaks <- function(samplepeaks, palette = "Set1") {
+
+    cols <- RColorBrewer::brewer.pal(2, palette)
+
 
     CellType <- NULL
     #without this R CMD check throws no visible binding for global variable error
@@ -89,7 +92,7 @@ plotConsensusPeaks <- function(samplepeaks, cols=c("#0099ff","#ff5050")) {
 #' (only works if peaks were merged)
 #'
 #' @param conspeaks output generated from combineAnnotatePeaks
-#' @param cols hex colors for points in this order: Experiment-Specific, Reference-Specific, Shared
+#' @param palette RColorBrewer palette to change graph colors
 #' @param viewer whether the plot should be displayed in the RStudio viewer or
 #'        in Shiny/Knittr
 #' @return a highcharter object
@@ -112,8 +115,9 @@ plotConsensusPeaks <- function(samplepeaks, cols=c("#0099ff","#ff5050")) {
 #' }
 #' @export
 #'
-plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE, cols=c("#0099ff","#ff5050")) {
+plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE, palette = "Set1") {
 
+    cols <- RColorBrewer::brewer.pal(2, palette)
     CellType <- NULL
     #without this R CMD check throws no visible binding for global variable error
 
@@ -255,7 +259,7 @@ plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE, cols=c("#0099ff",
 #' log2 RPKM values of regulation regions
 #'
 #' @param countsConsPeaks output generated from getCounts
-#' @param cols hex colors for points in this order: Experiment-Specific, Reference-Specific, Shared
+#' @param palette RColorBrewer palette to change graph colors
 #'
 #' @return a highcharter object
 #'
@@ -282,10 +286,12 @@ plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE, cols=c("#0099ff",
 #' }
 #' @export
 
-plotGetCounts <- function(countsConsPeaks, cols=c("#00cc00", "#ffb3d9", "#33ffff", "#ffe680")) {
+plotGetCounts <- function(countsConsPeaks, palette = "Set1") {
   region <- NULL
   variable <- NULL
   #set to null to prevent a R CMD Check error: Undefined global functions or variables
+
+  cols <- RColorBrewer::brewer.pal(4, palette)
 
   mydf <- countsConsPeaks$regioncountsforplot
   varstack <- suppressMessages(reshape2::melt(mydf))
@@ -303,7 +309,8 @@ plotGetCounts <- function(countsConsPeaks, cols=c("#00cc00", "#ffb3d9", "#33ffff
     hc_add_series_density(stats::density(TSSproximal_A549$value), area = TRUE, name = "A549 TSS-proximal") %>%
     hc_add_series_density(stats::density(TSSdistal_SAEC$value), area = TRUE, name = "SAEC TSS-distal") %>%
     hc_add_series_density(stats::density(TSSproximal_SAEC$value), area = TRUE, name = "SAEC TSS-proximal") %>%
-    hc_colors(cols)
+    hc_colors(cols) %>%
+    hc_exporting(enabled = TRUE)
   return(p)
 }
 
@@ -315,7 +322,7 @@ plotGetCounts <- function(countsConsPeaks, cols=c("#00cc00", "#ffb3d9", "#33ffff
 #' categAltrePeaks()
 #' @param viewer whether the plot should be displayed in the RStudio viewer or
 #'        in Shiny/Knittr
-#' @param cols hex colors for points in this order: Ambiguous, Experiment-Specific, Reference-Specific, Shared
+#' @param palette RColorBrewer palette to change graph colors
 
 #'
 #' @return a highcharter object
@@ -350,20 +357,23 @@ plotGetCounts <- function(countsConsPeaks, cols=c("#00cc00", "#ffb3d9", "#33ffff
 #' }
 #' @export
 
-plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, cols = c("#d3d3d3",
-                                                        #grey (ambiguous)
-                                                        "#C71585",
-                                                        #magenta (experiment-specific)
-                                                        "#FFD700",
-                                                        #yellow (reference specific)
-                                                        "#000080")) {
-                                                        #blue (shared)
+plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) {
 
+
+  if ( !is.null(palette) ) {
+    cols <- RColorBrewer::brewer.pal(4, palette) }
+  else{cols <- c("#d3d3d3", "#C71585", "#00E5EE","#000080")}
+                        #grey (ambiguous)
+                        #magenta (experiment-specific)
+                        #blue (reference specific)
+  #blue (shared)
 
   log2FoldChange <- NULL
   padj <- NULL
   REaltrecateg <- NULL
   #To prevent R CMD check error
+
+  colnames(altrepeakscateg$analysisresults)
 
   toplot <- altrepeakscateg$analysisresults[ ,c("region",
                                                 "log2FoldChange",
@@ -440,7 +450,7 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, cols = c("#d3d3d3"
 #'
 #' @param analysisresults output generated from countanalysis() then categAltrePeaks()
 #' @param counts output generated from getCounts()
-#' @param cols hex colors for points in this order: Experiment-Specific, Reference-Specific, Shared
+#' @param palette RColorBrewer palette to change graph colors
 #' @return a highcharter object
 #'
 #' @examples
@@ -473,15 +483,12 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, cols = c("#d3d3d3"
 #' }
 #' @export
 #'
-plotDistCountAnalysis <- function(analysisresults, counts, cols = c("#C71585",
-                                                                    #magenta (experiment-specific)
-                                                                    "#d3d3d3",
-                                                                    #grey (ambiguous)
-                                                                    "#000080",
-                                                                    #blue (shared))
-                                                                    "#FFD700"))
-                                                                    #yellow (reference specific)
-{
+plotDistCountAnalysis <- function(analysisresults, counts, palette = NULL){
+
+  if ( !is.null(palette) ) {
+    cols <- RColorBrewer::brewer.pal(4, palette) }
+  else{cols <- c("#C71585", "#d3d3d3", "#000080", "#00E5EE")}
+           #magenta (experiment-specific) #grey (ambiguous) #blue (shared)) #blue (reference specific)
 
   readcounts <- counts$regioncounts
   analysisresults <- analysisresults[[1]]
@@ -816,8 +823,9 @@ enrichHeatmap <- function(input,
     hc_legend(
       title = "p-value",
       enabled = TRUE
-    )
-  p <- hc_colorAxis(hc, minColor = "#FFFFFF", maxColor = "#000080")
+    ) %>%
+    hc_exporting(enabled = TRUE)
+  p <- hc_colorAxis(hc, minColor = "#000080", maxColor = "#FFFFFF")
   #create final formatting
 
   return(p)
@@ -831,9 +839,9 @@ enrichHeatmap <- function(input,
 #' analysisresults matrix by the analyzeanalysisresults function
 #' @param region pick a region, regions can be 'TSS-distal', 'TSS-proximal', or 'both'
 #' INCLUDE quotes
-#' @param method pick a method, methods can be 'intensity' or 'peak'
+#' @param method pick a method, methods can be 'Intensity' or 'Peak'
 #' include quotes
-#' @param cols hex colors for points in this order: Ambiguous, Experiment-Specific, Reference-Specific, Shared
+#' @param palette RColorBrewer palette to change graph colors
 #' @return venn diagram
 #' @examples
 #' \dontrun{
@@ -867,12 +875,13 @@ enrichHeatmap <- function(input,
 #'}
 
 plotCompareMethods <- function(analysisresultsmatrix,
-                     region = "both", method = "intensity", cols = c("#FFD700",
-                                                                     #gold (reference)
-                                                                     "#C71585",
-                                                                     #magenta (experiment specific)
-                                                                     "#000080")) {
-                                                                      #blue (shared)
+                     region = "both", method = "Intensity", palette = NULL) {
+                                                                     #blue (shared)
+
+  if ( !is.null(palette) ) {
+    cols <- RColorBrewer::brewer.pal(3, palette) }
+  else{cols <- c("#00E5EE", "#C71585","#000080")}
+
   if (region == "TSS-proximal") {
     feature <- c("TSS-proxs")
     coordinates <- c(2, 5, 8)
@@ -882,20 +891,20 @@ plotCompareMethods <- function(analysisresultsmatrix,
     coordinates <- c(1, 4, 7)
   }
   if (region == "both") {
-    region <- c("all")
+    region <- c("All")
     feature <- c("TSS-dists", "TSS-proxs")
     coordinates <- c(3, 6, 9)
   }
   # identifies the correct numbers from the
   # analysisresults matrix based on the
   # regulatory region of interest
-  if (method == "intensity") {
+  if (method == "Intensity") {
     case <- analysisresultsmatrix[coordinates[1], 1]
     reference <- analysisresultsmatrix[coordinates[2], 1]
     shared <- analysisresultsmatrix[coordinates[3], 1]
   }
 
-  if (method == "peak") {
+  if (method == "Peak") {
     case <- analysisresultsmatrix[coordinates[1], 2]
     reference <- analysisresultsmatrix[coordinates[2], 2]
     shared <- analysisresultsmatrix[coordinates[3], 2]
@@ -930,27 +939,28 @@ plotCompareMethods <- function(analysisresultsmatrix,
 
   p <- highchart() %>%
     hc_chart(type = "pie") %>%
-    hc_title(text = paste(method, region),
+    hc_title(text = paste(region, method),
              style = list(color = '#2E1717',
                           fontWeight = 'bold')) %>%
     hc_plotOptions(
       series = list(showInLegend = TRUE)
     ) %>%
     hc_legend(
-      enabled = FALSE,
-      layout = "vertical",
-      align = "right",
+      enabled = TRUE,
+      layout = "horizontal",
+      align = "left",
       verticalAlign = "top",
       floating = TRUE,
-      x = -5,
-      y = 60
+      x = 0,
+      y = 16
     ) %>%
     hc_add_series(data = list(
-      list(y = case, name = casename),
-      list(y = reference, name = referencename),
-      list(y = shared, name = "Shared")
+      list(y = case, name = casename, dataLabels = FALSE),
+      list(y = reference, name = referencename, dataLabels = FALSE),
+      list(y = shared, name = "Shared", dataLabels = FALSE)
     )) %>%
-    hc_colors(cols)
+    hc_colors(cols)  %>%
+    hc_exporting(enabled = TRUE)
   return(p)
 }
 
@@ -962,7 +972,7 @@ plotCompareMethods <- function(analysisresultsmatrix,
 #' place into a a analysisresults matrix by the analyzeanalysisresults function
 #' @param viewer whether the plot should be displayed in the RStudio viewer or
 #' in Shiny/Knittr
-#' @param cols hex colors for points in this order: Experiment-Specific, Reference-Specific, Shared
+#' @param palette RColorBrewer palette to change graph colors
 #' @examples
 #' \dontrun{
 #' csvfile <- file.path(dir="yourfilepath", 'sampleinfo.csv')
@@ -993,12 +1003,12 @@ plotCompareMethods <- function(analysisresultsmatrix,
 #' }
 #' @export
 #'
-plotCompareMethodsAll <- function(analysisresultsmatrix, viewer = TRUE, cols = c("#FFD700",
-                                                        #gold (reference)
-                                                        "#C71585",
-                                                        #magenta (experiment specific)
-                                                        "#000080")) {
+plotCompareMethodsAll <- function(analysisresultsmatrix, viewer = TRUE, palette = NULL) {
                                                          #blue (shared)
+
+  if ( !is.null(palette) ) {
+    cols <- RColorBrewer::brewer.pal(3, palette) }
+  else{cols <- c("#00E5EE", "#C71585","#000080")}
 
   analysisresultsmatrix <- analysisresultsmatrix[[1]]
 
@@ -1008,17 +1018,17 @@ plotCompareMethodsAll <- function(analysisresultsmatrix, viewer = TRUE, cols = c
   }
 
   p1 <- plotCompareMethods(analysisresultsmatrix,
-                    "TSS-proximal", "intensity", cols)
+                    "TSS-proximal", "Intensity", palette = palette)
   p2 <- plotCompareMethods(analysisresultsmatrix,
-                    "TSS-distal", "intensity", cols)
+                    "TSS-distal", "Intensity", palette = palette)
   p3 <- plotCompareMethods(analysisresultsmatrix,
-                    "both", "intensity", cols)
+                    "both", "Intensity", palette = palette)
   p4 <- plotCompareMethods(analysisresultsmatrix,
-                    "TSS-proximal", "peak", cols)
+                    "TSS-proximal", "Peak", palette = palette)
   p5 <- plotCompareMethods(analysisresultsmatrix,
-                    "TSS-distal", "peak", cols)
+                    "TSS-distal", "Peak", palette = palette)
   p6 <- plotCompareMethods(analysisresultsmatrix,
-                    "both", "peak", cols)
+                    "both", "Peak", palette = palette)
 
   if (viewer == TRUE) {
     p <- htmltools::browsable(hw_grid(p1, p2, p3, p4, p5, p6, ncol = 3, rowheight = 300))

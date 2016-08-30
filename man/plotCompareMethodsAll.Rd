@@ -7,8 +7,7 @@ regulatory regions Makes venn diagrams for TSS-proximal, TSS-distal, and combine
 for both intensity-based peaks and for peaks identified by hotspot calling
 algorithms.  There is no return value. Six venn diagrams will be plotted}
 \usage{
-plotCompareMethodsAll(analysisresultsmatrix, viewer = TRUE,
-  cols = c("#FFD700", "#C71585", "#000080"))
+plotCompareMethodsAll(analysisresultsmatrix, viewer = TRUE, palette = NULL)
 }
 \arguments{
 \item{analysisresultsmatrix}{analysisresults of countanalysis function
@@ -17,7 +16,7 @@ place into a a analysisresults matrix by the analyzeanalysisresults function}
 \item{viewer}{whether the plot should be displayed in the RStudio viewer or
 in Shiny/Knittr}
 
-\item{cols}{hex colors for points in this order: Experiment-Specific, Reference-Specific, Shared}
+\item{palette}{RColorBrewer palette to change graph colors}
 }
 \description{
 Plots venn diagrams for comparison of two methods of identifying altered
