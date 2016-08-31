@@ -5,7 +5,7 @@
 #'  and annotates each peak with it's sample type-specificity (which cell or
 #'   tissue types the peak can be found in)
 #' (2) Categorizes peaks as either TSS-proximal or TSS-distal based on the distance
-#' from a known transcription start site (TSS).  By defaul, distance is set to 
+#' from a known transcription start site (TSS).  By defaul, distance is set to
 #' 1500 bp but can be changed with the distancefromTSS argument).
 #' (3) Optionally, regulatory regions that are within a certain distance of
 #'  each other can be merged to form a larger regulatory region.
@@ -36,17 +36,16 @@
 #'
 #' @examples
 #' \dontrun{
-#' csvfile <- file.path(dir="yourfilepath", 'sampleinfo.csv')
-#' sampleinfo <- loadCSVFile(csvfile)
-#' samplePeaks <- loadBedFiles(sampleinfo)
-#' consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
+#' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+#' samplePeaks <- loadBedFiles(csvfile)
+#' consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
 #' TSSannot <- getTSS()
-#' consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
-#'                                           TSS = TSSannot,
-#'                                           merge = TRUE,
-#'                                           regionspecific = TRUE,
-#'                                           distancefromTSSdist = 1500,
-#'                                           distancefromTSSprox = 1000)
+#' consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
+#'    TSS = TSSannot,
+#'    merge = TRUE,
+#'    regionspecific = TRUE,
+#'    distancefromTSSdist = 1500,
+#'    distancefromTSSprox = 1000)
 #'}
 #' @export
 
