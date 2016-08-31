@@ -824,6 +824,78 @@ enrichHeatmap <- function(input,
   }
 
 
+##############################################################################
+
+#' Given the output from processPathways(), creates a heatmap from
+#' the ouput of the GREAT enrichment analysis. Presence or absence of
+#' the pathway in enrichment of both type-specific (increased or decreased
+#' log2fold change, low p-value) and shared (no change, higher p-value)
+#' regulatory regions is plotted.
+#'
+#' @param input results from GREAT enrichment analysis
+#' @param title title of the heatmap
+#' @param pathwaycateg 
+#' @param numshow number of top pathways (ranked according to p-value) of each type (expt, reference, shared) to show in the plot (default=10)
+#'
+#' @examples
+#' \dontrun{
+#' csvfile <- file.path(dir="yourfilepath", 'sampleinfo.csv')
+#' sampleinfo <- loadCSVFile(csvfile)
+#' samplePeaks <- loadBedFiles(sampleinfo)
+#' consPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
+#' plotConsensusPeaks(samplepeaks = consPeaks)
+#' TSSannot <- getTSS()
+#' consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
+#'                                           TSS = TSSannot,
+#'                                           merge = TRUE,
+#'                                           regionspecific = TRUE,
+#'                                           distancefromTSSdist = 1500,
+#'                                           distancefromTSSprox = 1000)
+#' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
+#'                               sampleinfo = sampleinfo,
+#'                               reference = 'SAEC',
+#'                               chrom = 'chr21')
+#' altre_peaks <- countanalysis(counts=counts_consPeaks,
+#'                              pval=0.01,
+#'                              lfcvalue=1)
+#' categaltre_peaks <- categAltrePeaks(altre_peaks,
+#'                              lfctypespecific = 1.5,
+#'                              lfcshared = 1.2,
+#'                              pvaltypespecific = 0.01,
+#'                              pvalshared = 0.05)
+#' GREAToutput <- runGREAT(peaks=categaltre_peaks)
+#' GREATpathways <- processPathways(temp)
+#' names(GREATpathways$Sig_Pathways)
+#' plot <- plotGREATenrich(GREATpathways, title="GREAT Enrichment Analysis", pathwaycateg="GO Molecular Function") 
+#' }
+#' @export @return heatmap
+###plotGREATenrich <- function(input,
+###                          title,
+###                          pathwaycateg,
+###                          numshow=10) {
+###
+###
+###  if (is.list(input) == FALSE) {
+###    stop("The input is not a list! Please make sure you are
+###         using the output from the enrichment analysis (function processPathways())")
+###
+###  if (is.data.frame(input$expt) == FALSE |
+###      is.data.frame(input$reference) == FALSE |
+###      is.data.frame(input$shared) == FALSE |
+###      length(input) != 3 |
+###      all(names(input) != c("expt", "reference", "shared"))) {
+###    stop("The input is not a list of three dataframes or
+###         there are no enriched pathways to plot")
+###  }
+
+
+
+
+
+
+
+
+
 #' Plots a venn diagram that compares altered regions as determined by peak presence or by
 #' differential counts.  The type of regulatory region (TSS-proximal, TSS-distal, or both)
 #' and type of peak comparison (intensity or peak) must be specified.

@@ -41,8 +41,10 @@ Imports:
     stringr,
     tibble,
     magrittr,
+    rGREAT
     highcharter,
-    htmltools
+    htmltools,
+    rGREAT
 License: GPL-2
 LazyData: TRUE
 RoxygenNote: 5.0.1
