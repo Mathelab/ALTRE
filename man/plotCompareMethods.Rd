@@ -2,11 +2,13 @@
 % Please edit documentation in R/plottingfunctions.R
 \name{plotCompareMethods}
 \alias{plotCompareMethods}
-\title{Given the output from processPathways(), creates a heatmap from
-the ouput of the GREAT enrichment analysis. Presence or absence of
-the pathway in enrichment of both type-specific (increased or decreased
-log2fold change, low p-value) and shared (no change, higher p-value)
-regulatory regions is plotted.}
+\title{Plots a venn diagram that compares altered regions as determined by peak presence or by
+differential counts.  The type of regulatory region (TSS-proximal, TSS-distal, or both)
+and type of peak comparison (intensity or peak) must be specified.
+Plots a venn diagram that compares altered regions as determined by peak
+presence or by differential counts.  The type of regulatory region
+(TSS-proximal, TSS-distal, or both) and type of peak comparison
+(intensity or peak) must be specified.}
 \usage{
 plotCompareMethods(analysisresultsmatrix, region = "both",
   method = "Intensity", palette = NULL)
@@ -22,55 +24,45 @@ or 'both' -- INCLUDE quotes}
 include quotes}
 
 \item{palette}{RColorBrewer palette to change graph colors}
-
-\item{input}{results from GREAT enrichment analysis}
-
-\item{title}{title of the heatmap}
-
-\item{numshow}{number of top pathways (ranked according to p-value) of each type (expt, reference, shared) to show in the plot (default=10)}
 }
 \value{
-heatmap
-
 venn diagram
 }
 \description{
-Given the output from processPathways(), creates a heatmap from
-the ouput of the GREAT enrichment analysis. Presence or absence of
-the pathway in enrichment of both type-specific (increased or decreased
-log2fold change, low p-value) and shared (no change, higher p-value)
-regulatory regions is plotted.
+Plots a venn diagram that compares altered regions as determined by peak presence or by
+differential counts.  The type of regulatory region (TSS-proximal, TSS-distal, or both)
+and type of peak comparison (intensity or peak) must be specified.
+Plots a venn diagram that compares altered regions as determined by peak
+presence or by differential counts.  The type of regulatory region
+(TSS-proximal, TSS-distal, or both) and type of peak comparison
+(intensity or peak) must be specified.
 }
 \examples{
 \dontrun{
-csvfile <- file.path(dir="yourfilepath", 'sampleinfo.csv')
-sampleinfo <- loadCSVFile(csvfile)
-samplePeaks <- loadBedFiles(sampleinfo)
-consPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
-plotConsensusPeaks(samplepeaks = consPeaks)
+csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+samplePeaks <- loadBedFiles(csvfile)
+consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
+minreps = 2)
 TSSannot <- getTSS()
-consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
-                                          TSS = TSSannot,
-                                          merge = TRUE,
-                                          regionspecific = TRUE,
-                                          distancefromTSSdist = 1500,
-                                          distancefromTSSprox = 1000)
-counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
-                              sampleinfo = sampleinfo,
-                              reference = 'SAEC',
-                              chrom = 'chr21')
-altre_peaks <- countanalysis(counts=counts_consPeaks,
-                             pval=0.01,
-                             lfcvalue=1)
-categaltre_peaks <- categAltrePeaks(altre_peaks,
-                             lfctypespecific = 1.5,
-                             lfcshared = 1.2,
-                             pvaltypespecific = 0.01,
-                             pvalshared = 0.05)
-GREAToutput <- runGREAT(peaks=categaltre_peaks)
-GREATpathways <- processPathways(temp)
-names(GREATpathways$Sig_Pathways)
-plot <- plotGREATenrich(GREATpathways, title="GREAT Enrichment Analysis", pathwaycateg="GO Molecular Function")
+consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
+TSS = TSSannot,
+merge = TRUE,
+regionspecific = TRUE,
+distancefromTSSdist = 1500,
+distancefromTSSprox = 1000)
+consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
+                                 sampleinfo = csvfile,
+                                 reference = 'SAEC',
+                                 chrom = 'chr21')
+alteredPeaks <- countanalysis(counts = consensusPeaksCounts,
+pval = 0.01,
+lfcvalue = 1)
+alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
+                                          lfctypespecific = 1.5,
+                                          lfcshared = 1.2,
+                                          pvaltypespecific = 0.01,
+                                          pvalshared = 0.05)
+plotCompareMethods(comparePeaksAnalysisResults)
 }
 }
 

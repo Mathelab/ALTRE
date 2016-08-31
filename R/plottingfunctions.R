@@ -872,7 +872,7 @@ enrichHeatmap <- function(input,
 #'
 #' @param input results from GREAT enrichment analysis
 #' @param title title of the heatmap
-#' @param pathwaycateg
+#' @param pathwaycateg ontology
 #' @param numshow number of top pathways (ranked according to p-value) of each type (expt, reference, shared) to show in the plot (default=10)
 #'
 #' @return heatmap
@@ -908,7 +908,10 @@ enrichHeatmap <- function(input,
 #' names(GREATpathways$Sig_Pathways)
 #' plot <- plotGREATenrich(GREATpathways, title="GREAT Enrichment Analysis", pathwaycateg="GO Molecular Function")
 #' }
+#'
 #' @export
+
+plotGREATenrich <- function(){}
 ###plotGREATenrich <- function(input,
 ###                          title,
 ###                          pathwaycateg,
