@@ -149,7 +149,7 @@ plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE,
                                          thecondition == "after")
 
         p1 <- highchart(height = 1000) %>%
-            hc_title(text = "Number of REs before/after merging",
+            hc_title(text = "Number of REs",
                      style = list(color = '#2E1717',
                                   fontWeight = 'bold')) %>%
             hc_add_series(
@@ -174,7 +174,7 @@ plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE,
                 )) %>%
             hc_yAxis(title = list(text = "Number of REs"),
                      labels = list(format = "{value}")) %>%
-            hc_xAxis(categories = c("beforemerging", "aftermerging")) %>%
+            hc_xAxis(categories = c("Before Merging", "After Merging")) %>%
             hc_legend(
                 enabled = TRUE,
                 layout = "horizontal",
@@ -209,7 +209,7 @@ plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE,
 
 
         p2 <- highchart(height = 1000) %>%
-            hc_title(text = "Mean length of REs before/after merging",
+            hc_title(text = "Mean length of REs",
                      style = list(color = '#2E1717',
                                   fontWeight = 'bold')) %>%
             hc_add_series(
@@ -234,7 +234,7 @@ plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE,
                 )) %>%
             hc_yAxis(title = list(text = "Mean Length of REs"),
                      labels = list(format = "{value}")) %>%
-            hc_xAxis(categories = c("beforemerging", "aftermerging")) %>%
+            hc_xAxis(categories = c("Before Merging", "After Merging")) %>%
             hc_legend(
                 enabled = TRUE,
                 layout = "horizontal",
@@ -617,7 +617,7 @@ plotDistCountAnalysis <- function(analysisresults, counts, palette = NULL){
                           fontWeight = 'bold')) %>%
     hc_plotOptions(
       boxplot = list(
-        fillColor = '#d3d3d3',
+        fillColor = '#ffffff',
         lineWidth = 2,
         medianColor = '#000000',
         medianWidth = 2,
