@@ -436,7 +436,7 @@ body <- dashboardBody(
                 width = NULL,
                 #title = "Volcano Plot",
                 solidHeader = TRUE,
-                htmlOutput('volcanoplot')
+                htmlOutput('volcano')
               ),
               box(
                 width = NULL,

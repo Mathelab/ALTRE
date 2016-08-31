@@ -319,8 +319,9 @@ shinyServer(function(input, output, session) {
     plotGetCounts(getCountsObj())
   })
 
-  output$volcanoplot <- renderUI({
-    plotCountAnalysis(req(categAltreObj()), viewer = FALSE)
+  output$volcano <- renderUI({
+    plotCombineAnnotatePeaks(combineAnnotateObj(), viewer = FALSE)
+    #plotCountAnalysis(categAltreObj(), viewer = FALSE)
   })
 
   output$boxplotCounts <- highcharter::renderHighchart({
