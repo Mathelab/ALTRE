@@ -17,71 +17,72 @@
 #'
 plotConsensusPeaks <- function(samplepeaks, palette = "Set1") {
 
-    cols <- RColorBrewer::brewer.pal(2, palette)
+  cols <- RColorBrewer::brewer.pal(3, palette)
 
 
-    CellType <- NULL
-    #without this R CMD check throws no visible binding for global variable error
+  CellType <- NULL
+  #without this R CMD check throws no visible binding for global variable error
 
-    consPeaksStats <- samplepeaks$consPeaksStats
-    row.names(consPeaksStats) <- NULL
-    consPeaksStats[ , 2] <-  as.numeric(as.character(consPeaksStats[[2]]))
-    consPeaksStats[ , 3] <-  as.numeric(as.character(consPeaksStats[[3]]))
-    statsFormated <- tidyr::gather(consPeaksStats, "CellType", "Count", 2:3)
+  consPeaksStats <- samplepeaks$consPeaksStats
+  row.names(consPeaksStats) <- NULL
+  consPeaksStats[ , 2] <-  as.numeric(as.character(consPeaksStats[[2]]))
+  consPeaksStats[ , 3] <-  as.numeric(as.character(consPeaksStats[[3]]))
+  statsFormated <- tidyr::gather(consPeaksStats, "CellType", "Count", 2:3)
 
-    plottingData <- statsFormated %>% split(levels(as.factor(statsFormated$CellType)))
+  plottingData <- statsFormated %>% split(levels(as.factor(statsFormated$CellType)))
 
-    col1 <- cols[1]
-    col2 <- cols[2]
+  col1 <- cols[1]
+  col2 <- cols[2]
 
-    p <- highchart() %>%
-        hc_title(text = "Peak Counts by Cell Type",
-                 style = list(color = '#2E1717',
-                              fontWeight = 'bold')) %>%
-        hc_subtitle(text = "For bioreplicates and their merged consensus track") %>%
-        hc_add_series(
-            color = col1,
-            data = plottingData[[1]]$Count,
-            name = names(plottingData[1]),
-            type = "column",
-            dataLabels = list(
-                enabled = TRUE,
-                rotation = 270,
-                color = '#FFFFFF',
-                y = 40
-            )
-        ) %>%
-        hc_add_series(
-          color = col2,
-          data = plottingData[[2]]$Count,
-            name = names(plottingData[2]),
-            dataLabels = list(
-                enabled = TRUE,
-                rotation = 270,
-                color = '#FFFFFF',
-                y = 40
-            ),
-            type = "column"
-        ) %>%
-        hc_yAxis(title = list(text = "Peak Counts"),
-                 labels = list(format = "{value}")) %>%
-        hc_xAxis(categories = plottingData[[1]]$PeakType) %>%
-        hc_legend(
-            enabled = TRUE,
-            layout = "horizonal",
-            align = "right",
-            verticalAlign = "top",
-            floating = TRUE,
-            x = 15,
-            y = 16
-        ) %>%
-        hc_tooltip(
-            headerFormat = "<b>{series.name}_{point.key}</b><br>",
-            pointFormat = "{point.y}",
-            valueSuffix = ' peaks'
-        ) %>%
-        hc_exporting(enabled = TRUE)
-    return(p)
+  p <- highchart(height = 700) %>%
+    hc_title(text = "Peak Counts by Cell Type",
+             style = list(color = '#2E1717',
+                          fontWeight = 'bold')) %>%
+    hc_subtitle(text = "For bioreplicates and their merged consensus track") %>%
+    hc_add_series(
+      color = col1,
+      data = plottingData[[1]]$Count,
+      name = names(plottingData[1]),
+      type = "column",
+      dataLabels = list(
+        enabled = TRUE,
+        rotation = 270,
+        color = '#FFFFFF',
+        y = 40
+      )
+    ) %>%
+    hc_add_series(
+      color = col2,
+      data = plottingData[[2]]$Count,
+      name = names(plottingData[2]),
+      dataLabels = list(
+        enabled = TRUE,
+        rotation = 270,
+        color = '#FFFFFF',
+        y = 40
+      ),
+      type = "column"
+    ) %>%
+    hc_yAxis(title = list(text = "Peak Counts"),
+             labels = list(format = "{value}")) %>%
+    hc_xAxis(categories = plottingData[[1]]$PeakType) %>%
+    hc_legend(
+      enabled = TRUE,
+      layout = "horizonal",
+      align = "center",
+      verticalAlign = "bottom",
+      floating = FALSE,
+      maxHeight = 100,
+      x = 15,
+      y = 16
+    ) %>%
+    hc_tooltip(
+      headerFormat = "<b>{series.name}_{point.key}</b><br>",
+      pointFormat = "{point.y}",
+      valueSuffix = ' peaks'
+    ) %>%
+    hc_exporting(enabled = TRUE)
+  return(p)
 }
 
 ####################################################################
@@ -117,7 +118,7 @@ plotConsensusPeaks <- function(samplepeaks, palette = "Set1") {
 #'
 plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE, palette = "Set1") {
 
-    cols <- RColorBrewer::brewer.pal(2, palette)
+    cols <- RColorBrewer::brewer.pal(3, palette)
     CellType <- NULL
     #without this R CMD check throws no visible binding for global variable error
 
@@ -141,7 +142,7 @@ plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE, palette = "Set1")
         mergeStatsBefore <- dplyr::filter(mergeStatsTotal, thecondition == "before")
         mergeStatsAfter <- dplyr::filter(mergeStatsTotal, thecondition == "after")
 
-        p1 <- highchart() %>%
+        p1 <- highchart(height = 1000) %>%
             hc_title(text = "Number of REs before/after merging",
                      style = list(color = '#2E1717',
                                   fontWeight = 'bold')) %>%
@@ -171,9 +172,10 @@ plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE, palette = "Set1")
             hc_legend(
                 enabled = TRUE,
                 layout = "horizontal",
-                align = "right",
-                verticalAlign = "top",
-                floating = TRUE,
+                align = "center",
+                verticalAlign = "bottom",
+                floating = FALSE,
+                maxHeight = 100,
                 x = 0,
                 y = 17
             ) %>%
@@ -197,7 +199,7 @@ plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE, palette = "Set1")
       mergeStatsAfter <- dplyr::filter(mergeStatsMean, thecondition == "after")
 
 
-        p2 <- highchart() %>%
+        p2 <- highchart(height = 1000) %>%
             hc_title(text = "Mean length of REs before/after merging",
                      style = list(color = '#2E1717',
                                   fontWeight = 'bold')) %>%
@@ -227,9 +229,10 @@ plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE, palette = "Set1")
             hc_legend(
                 enabled = TRUE,
                 layout = "horizontal",
-                align = "right",
-                verticalAlign = "top",
-                floating = TRUE,
+                align = "center",
+                verticalAlign = "bottom",
+                floating = FALSE,
+                maxHeight = 100,
                 x = 0,
                 y = 17
             ) %>%
@@ -937,7 +940,7 @@ plotCompareMethods <- function(analysisresultsmatrix,
   # this is a way to the name of the 'case'
   # from the analysisresults matrix
 
-  p <- highchart() %>%
+  p <- highchart(height = 700) %>%
     hc_chart(type = "pie") %>%
     hc_title(text = paste(region, method),
              style = list(color = '#2E1717',
@@ -948,9 +951,10 @@ plotCompareMethods <- function(analysisresultsmatrix,
     hc_legend(
       enabled = TRUE,
       layout = "horizontal",
-      align = "left",
-      verticalAlign = "top",
-      floating = TRUE,
+      align = "center",
+      verticalAlign = "bottom",
+      floating = FALSE,
+      maxHeight = 100,
       x = 0,
       y = 16
     ) %>%
