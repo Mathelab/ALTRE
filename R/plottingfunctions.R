@@ -872,8 +872,10 @@ enrichHeatmap <- function(input,
 #'
 #' @param input results from GREAT enrichment analysis
 #' @param title title of the heatmap
-#' @param pathwaycateg 
+#' @param pathwaycateg
 #' @param numshow number of top pathways (ranked according to p-value) of each type (expt, reference, shared) to show in the plot (default=10)
+#'
+#' @return heatmap
 #'
 #' @examples
 #' \dontrun{
@@ -904,9 +906,9 @@ enrichHeatmap <- function(input,
 #' GREAToutput <- runGREAT(peaks=categaltre_peaks)
 #' GREATpathways <- processPathways(temp)
 #' names(GREATpathways$Sig_Pathways)
-#' plot <- plotGREATenrich(GREATpathways, title="GREAT Enrichment Analysis", pathwaycateg="GO Molecular Function") 
+#' plot <- plotGREATenrich(GREATpathways, title="GREAT Enrichment Analysis", pathwaycateg="GO Molecular Function")
 #' }
-#' @export @return heatmap
+#' @export
 ###plotGREATenrich <- function(input,
 ###                          title,
 ###                          pathwaycateg,
@@ -937,12 +939,10 @@ enrichHeatmap <- function(input,
 #' Plots a venn diagram that compares altered regions as determined by peak presence or by
 #' differential counts.  The type of regulatory region (TSS-proximal, TSS-distal, or both)
 #' and type of peak comparison (intensity or peak) must be specified.
-=======
 #' Plots a venn diagram that compares altered regions as determined by peak
 #' presence or by differential counts.  The type of regulatory region
 #' (TSS-proximal, TSS-distal, or both) and type of peak comparison
 #' (intensity or peak) must be specified.
->>>>>>> 871358b1f2617ab976c7be2a61ab5de29ea3ee2f
 #' @param analysisresultsmatrix analysisresults of Intensity analysis place into
 #' analysisresults matrix by the analyzeanalysisresults function
 #' @param region pick a region, regions can be 'TSS-distal', 'TSS-proximal',

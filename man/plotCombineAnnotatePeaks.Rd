@@ -28,19 +28,18 @@ peaks before/after merging
 }
 \examples{
 \dontrun{
-csvfile <- file.path(dir="yourfilepath", 'sampleinfo.csv')
-sampleinfo <- loadCSVFile(csvfile)
-samplePeaks <- loadBedFiles(sampleinfo)
-consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
-plotConsensusPeaks(samplepeaks=consPeaks)
+csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+samplePeaks <- loadBedFiles(csvfile)
+consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
+minreps = 2)
 TSSannot <- getTSS()
-consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
-                                          TSS = TSSannot,
-                                          merge = TRUE,
-                                          regionspecific = TRUE,
-                                          distancefromTSSdist = 1500,
-                                          distancefromTSSprox = 1000)
-plotCombineAnnotatePeaks(consPeaksAnnotated)
+consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
+TSS = TSSannot,
+merge = TRUE,
+regionspecific = TRUE,
+distancefromTSSdist = 1500,
+distancefromTSSprox = 1000)
+plotCombineAnnotatePeaks(consensusPeaksAnnotated)
 }
 }
 

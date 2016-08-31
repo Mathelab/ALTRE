@@ -29,10 +29,9 @@ the consensus peaks (found in at least N replicates, where N is input
 }
 \examples{
 \dontrun{
-csvfile <- file.path(dir="yourfilepath", 'sampleinfo.csv')
-sampleinfo <- loadCSVFile(csvfile)
-samplePeaks <- loadBedFiles(sampleinfo)
-consPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps=2)
+csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+samplePeaks <- loadBedFiles(csvfile)
+consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
 }
 }
 

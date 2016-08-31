@@ -2,9 +2,11 @@
 % Please edit documentation in R/plottingfunctions.R
 \name{plotCompareMethods}
 \alias{plotCompareMethods}
-\title{Plots a venn diagram that compares altered regions as determined by peak presence or by
-differential counts.  The type of regulatory region (TSS-proximal, TSS-distal, or both)
-and type of peak comparison (intensity or peak) must be specified.}
+\title{Given the output from processPathways(), creates a heatmap from
+the ouput of the GREAT enrichment analysis. Presence or absence of
+the pathway in enrichment of both type-specific (increased or decreased
+log2fold change, low p-value) and shared (no change, higher p-value)
+regulatory regions is plotted.}
 \usage{
 plotCompareMethods(analysisresultsmatrix, region = "both",
   method = "Intensity", palette = NULL)
@@ -13,21 +15,31 @@ plotCompareMethods(analysisresultsmatrix, region = "both",
 \item{analysisresultsmatrix}{analysisresults of Intensity analysis place into
 analysisresults matrix by the analyzeanalysisresults function}
 
-\item{region}{pick a region, regions can be 'TSS-distal', 'TSS-proximal', or 'both'
-INCLUDE quotes}
+\item{region}{pick a region, regions can be 'TSS-distal', 'TSS-proximal',
+or 'both' -- INCLUDE quotes}
 
 \item{method}{pick a method, methods can be 'Intensity' or 'Peak'
 include quotes}
 
 \item{palette}{RColorBrewer palette to change graph colors}
+
+\item{input}{results from GREAT enrichment analysis}
+
+\item{title}{title of the heatmap}
+
+\item{numshow}{number of top pathways (ranked according to p-value) of each type (expt, reference, shared) to show in the plot (default=10)}
 }
 \value{
+heatmap
+
 venn diagram
 }
 \description{
-Plots a venn diagram that compares altered regions as determined by peak presence or by
-differential counts.  The type of regulatory region (TSS-proximal, TSS-distal, or both)
-and type of peak comparison (intensity or peak) must be specified.
+Given the output from processPathways(), creates a heatmap from
+the ouput of the GREAT enrichment analysis. Presence or absence of
+the pathway in enrichment of both type-specific (increased or decreased
+log2fold change, low p-value) and shared (no change, higher p-value)
+regulatory regions is plotted.
 }
 \examples{
 \dontrun{
@@ -38,26 +50,27 @@ consPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
 plotConsensusPeaks(samplepeaks = consPeaks)
 TSSannot <- getTSS()
 consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
-                                           TSS = TSSannot,
-                                           merge = TRUE,
-                                           regionspecific = TRUE,
-                                           distancefromTSSdist = 1500,
-                                           distancefromTSSprox = 1000)
+                                          TSS = TSSannot,
+                                          merge = TRUE,
+                                          regionspecific = TRUE,
+                                          distancefromTSSdist = 1500,
+                                          distancefromTSSprox = 1000)
 counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
                               sampleinfo = sampleinfo,
-                              reference = 'SAEC')
+                              reference = 'SAEC',
+                              chrom = 'chr21')
 altre_peaks <- countanalysis(counts=counts_consPeaks,
                              pval=0.01,
                              lfcvalue=1)
-categaltre_peaks=categAltrePeaks(altre_peaks,
-lfctypespecific=1.5,
-	lfcshared=1.2,
-	pvaltypespecific=0.01,
-	pvalshared=0.05)
-analysisresults <- comparePeaksAltre(categaltre_peaks, reference= "SAEC")
-plot1 <- plotvenn(analysisresults,
-                  region='TSS-distal',
-                  method='intensity')
+categaltre_peaks <- categAltrePeaks(altre_peaks,
+                             lfctypespecific = 1.5,
+                             lfcshared = 1.2,
+                             pvaltypespecific = 0.01,
+                             pvalshared = 0.05)
+GREAToutput <- runGREAT(peaks=categaltre_peaks)
+GREATpathways <- processPathways(temp)
+names(GREATpathways$Sig_Pathways)
+plot <- plotGREATenrich(GREATpathways, title="GREAT Enrichment Analysis", pathwaycateg="GO Molecular Function")
 }
 }
 

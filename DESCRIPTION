@@ -39,7 +39,6 @@ Imports:
     stringr,
     tibble,
     magrittr,
-    rGREAT
     highcharter,
     htmltools,
     rGREAT,

@@ -5,7 +5,7 @@
 \title{Given the output from getCounts, plot a density plot of
 log2 RPKM values of regulation regions}
 \usage{
-plotGetCounts(countsConsPeaks, palette)
+plotGetCounts(countsConsPeaks, palette = "Set1")
 }
 \arguments{
 \item{countsConsPeaks}{output generated from getCounts}
@@ -21,24 +21,21 @@ log2 RPKM values of regulation regions
 }
 \examples{
 \dontrun{
-csvfile <- file.path(dir="yourfilepath", 'sampleinfo.csv')
-sampleinfo <- loadCSVFile(csvfile)
-samplePeaks <- loadBedFiles(sampleinfo)
-consPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps=2)
-plotConsensusPeaks(samplepeaks = consPeaks)
+csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+samplePeaks <- loadBedFiles(csvfile)
+consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
+minreps = 2)
 TSSannot <- getTSS()
-consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
-                                          TSS = TSSannot,
-                                          merge = TRUE,
-                                          regionspecific = TRUE,
-                                          distancefromTSSdist = 1500,
-                                          distancefromTSSprox = 1000 )
-
-counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
-                             sampleinfo = sampleinfo,
-                             reference = 'SAEC',
-                             chrom = 'chr21')
-plotGetCounts(counts_consPeaks)
-}
+consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
+TSS = TSSannot,
+merge = TRUE,
+regionspecific = TRUE,
+distancefromTSSdist = 1500,
+distancefromTSSprox = 1000)
+consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
+                                 sampleinfo = csvfile,
+                                 reference = 'SAEC',
+                                 chrom = 'chr21')
+plotGetCounts(consensusPeaksCounts)}
 }
 

@@ -8,7 +8,8 @@ shared TSS-proximal and TSS-distal regions.}
 plotDistCountAnalysis(analysisresults, counts, palette = NULL)
 }
 \arguments{
-\item{analysisresults}{output generated from countanalysis() then categAltrePeaks()}
+\item{analysisresults}{output generated from countanalysis() then
+categAltrePeaks()}
 
 \item{counts}{output generated from getCounts()}
 
@@ -19,37 +20,36 @@ a highcharter object
 }
 \description{
 Takes the rlog transformation of the RRKM (Reads Per Kilobase of transcript
-per Million) of the read counts of type-specific and shared regulatory regions
-and plots the distribution of those read counts in all sample types analyzed
-in the workflow.
+per Million) of the read counts of type-specific and shared regulatory
+regions and plots the distribution of those read counts in all sample types
+analyzed in the workflow.
 }
 \examples{
 \dontrun{
-csvfile <- file.path(dir="yourfilepath", 'sampleinfo.csv')
-sampleinfo <- loadCSVFile(csvfile)
-samplePeaks <- loadBedFiles(sampleinfo)
-consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
-plotConsensusPeaks(samplepeaks=consPeaks)
-TSSannot<- getTSS()
-consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
-                                          TSS = TSSannot,
-                                          merge = TRUE,
-                                          regionspecific = TRUE,
-                                          distancefromTSSdist = 1500,
-                                          distancefromTSSprox = 1000)
-counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
-                              sampleinfo = sampleinfo,
-                              reference = 'SAEC',
-                              chrom = 'chr21')
-altre_peaks <- countanalysis(counts = counts_consPeaks,
-                             pval = 0.01,
-                             lfcvalue = 1)
-categaltre_peaks <- categAltrePeaks(altre_peaks,
-                                    lfctypespecific = 1.5,
-                                    lfcshared = 1.2,
-                                    pvaltypespecific = 0.01,
-                                    pvalshared = 0.05)
-plotDistCountAnalysis(categaltre_peaks, counts_consPeaks)
+csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+samplePeaks <- loadBedFiles(csvfile)
+consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
+minreps = 2)
+TSSannot <- getTSS()
+consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
+TSS = TSSannot,
+merge = TRUE,
+regionspecific = TRUE,
+distancefromTSSdist = 1500,
+distancefromTSSprox = 1000)
+consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
+                                 sampleinfo = csvfile,
+                                 reference = 'SAEC',
+                                 chrom = 'chr21')
+alteredPeaks <- countanalysis(counts = consensusPeaksCounts,
+pval = 0.01,
+lfcvalue = 1)
+alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
+                                          lfctypespecific = 1.5,
+                                          lfcshared = 1.2,
+                                          pvaltypespecific = 0.01,
+                                          pvalshared = 0.05)
+plotDistCountAnalysis(alteredPeaksCategorized, consensusPeaksCounts)
 }
 }
 
