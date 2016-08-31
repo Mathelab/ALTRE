@@ -146,7 +146,7 @@ plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE,
         mergeStatsAfter <- dplyr::filter(mergeStatsTotal,
                                          thecondition == "after")
 
-        p1 <- highchart(height = 1000) %>%
+        p1 <- highchart(height = 400) %>%
             hc_title(text = "Number of REs",
                      style = list(color = '#2E1717',
                                   fontWeight = 'bold')) %>%
@@ -206,7 +206,7 @@ plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE,
                                        thecondition == "after")
 
 
-        p2 <- highchart(height = 1000) %>%
+        p2 <- highchart(height = 400) %>%
             hc_title(text = "Mean length of REs",
                      style = list(color = '#2E1717',
                                   fontWeight = 'bold')) %>%
