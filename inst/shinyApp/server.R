@@ -323,24 +323,24 @@ shinyServer(function(input, output, session) {
     plotCountAnalysis(req(categAltreObj()), viewer = FALSE)
   })
 
-  output$boxplot <- highcharter::renderHighchart({
+  output$boxplotCounts <- highcharter::renderHighchart({
     plotDistCountAnalysis(req(categAltreObj()), req(getCountsObj()))
   })
 
-  output$heatplotMF <- renderPlot({
+  output$heatplotMF <- highcharter::renderHighchart({
       enrichHeatmap(req(pathenrichMFObj()), title = "GO:MF")
   })
 
-  output$heatplotBP <- renderPlot({
+  output$heatplotBP <- highcharter::renderHighchart({
         enrichHeatmap(req(pathenrichBPObj()), title = "GO:BP")
   })
 
-  output$heatplotCC <- renderPlot({
+  output$heatplotCC <- highcharter::renderHighchart({
     enrichHeatmap(req(pathenrichCCObj()), title = "GO:CC")
   })
 
-  output$vennplot <- renderPlot({
-    plotallvenn(req(comparePeaksObj()))
+  output$vennplot <- renderUI({
+    plotCompareMethodsAll(req(comparePeaksObj()), viewer = FALSE)
   })
 
 
@@ -644,12 +644,12 @@ shinyServer(function(input, output, session) {
     }
   })
 
-  output$getlocalpath <- renderPrint({
-	if (!is.null(input$testfile)) {
-	print( parseFilePaths(roots = rootVolumes, input$file)$datapath)
-	}
-
-  })
+#   output$getlocalpath <- renderPrint({
+# 	if (!is.null(input$testfile)) {
+# 	print( parseFilePaths(roots = rootVolumes, input$file)$datapath)
+# 	}
+#
+#   })
 
 
   ##########################################################

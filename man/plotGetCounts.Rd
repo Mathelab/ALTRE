@@ -5,13 +5,12 @@
 \title{Given the output from getCounts, plot a density plot of
 log2 RPKM values of regulation regions}
 \usage{
-plotGetCounts(countsConsPeaks, cols = c("#00cc00", "#ffb3d9", "#33ffff",
-  "#ffe680"))
+plotGetCounts(countsConsPeaks, palette)
 }
 \arguments{
 \item{countsConsPeaks}{output generated from getCounts}
 
-\item{cols}{hex colors for points in this order: Experiment-Specific, Reference-Specific, Shared}
+\item{palette}{RColorBrewer palette to change graph colors}
 }
 \value{
 a highcharter object

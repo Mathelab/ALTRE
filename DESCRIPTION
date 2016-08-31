@@ -24,7 +24,6 @@ Imports:
     DESeq2,
     GenomicAlignments,
     SummarizedExperiment,
-    ggplot2,
     reshape2,
     GenomicRanges,
     Rsamtools,
@@ -37,14 +36,14 @@ Imports:
     dplyr,
     GO.db,
     grid,
-    venneuler,
     stringr,
     tibble,
     magrittr,
     rGREAT
     highcharter,
     htmltools,
-    rGREAT
+    rGREAT,
+    RColorBrewer
 License: GPL-2
 LazyData: TRUE
 RoxygenNote: 5.0.1

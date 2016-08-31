@@ -5,8 +5,7 @@
 \title{Given the output from getCounts, plot a density plot
  of log2 RPKM values of regulation regions}
 \usage{
-plotCountAnalysis(altrepeakscateg, viewer = TRUE, cols = c("#d3d3d3",
-  "#C71585", "#FFD700", "#000080"))
+plotCountAnalysis(altrepeakscateg, viewer = TRUE, palette = NULL)
 }
 \arguments{
 \item{altrepeakscateg}{output generated from countanalysis() then
@@ -15,7 +14,7 @@ categAltrePeaks()}
 \item{viewer}{whether the plot should be displayed in the RStudio viewer or
 in Shiny/Knittr}
 
-\item{cols}{hex colors for points in this order: Ambiguous, Experiment-Specific, Reference-Specific, Shared}
+\item{palette}{RColorBrewer palette to change graph colors}
 }
 \value{
 a highcharter object

@@ -7,7 +7,7 @@ differential counts.  The type of regulatory region (TSS-proximal, TSS-distal, o
 and type of peak comparison (intensity or peak) must be specified.}
 \usage{
 plotCompareMethods(analysisresultsmatrix, region = "both",
-  method = "intensity", cols = c("#FFD700", "#C71585", "#000080"))
+  method = "Intensity", palette = NULL)
 }
 \arguments{
 \item{analysisresultsmatrix}{analysisresults of Intensity analysis place into
@@ -16,10 +16,10 @@ analysisresults matrix by the analyzeanalysisresults function}
 \item{region}{pick a region, regions can be 'TSS-distal', 'TSS-proximal', or 'both'
 INCLUDE quotes}
 
-\item{method}{pick a method, methods can be 'intensity' or 'peak'
+\item{method}{pick a method, methods can be 'Intensity' or 'Peak'
 include quotes}
 
-\item{cols}{hex colors for points in this order: Ambiguous, Experiment-Specific, Reference-Specific, Shared}
+\item{palette}{RColorBrewer palette to change graph colors}
 }
 \value{
 venn diagram

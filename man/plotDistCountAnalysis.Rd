@@ -5,15 +5,14 @@
 \title{Creates a boxplot to see the distribution of read counts in type-specific and
 shared TSS-proximal and TSS-distal regions.}
 \usage{
-plotDistCountAnalysis(analysisresults, counts, cols = c("#C71585", "#d3d3d3",
-  "#000080", "#FFD700"))
+plotDistCountAnalysis(analysisresults, counts, palette = NULL)
 }
 \arguments{
 \item{analysisresults}{output generated from countanalysis() then categAltrePeaks()}
 
 \item{counts}{output generated from getCounts()}
 
-\item{cols}{hex colors for points in this order: Experiment-Specific, Reference-Specific, Shared}
+\item{palette}{RColorBrewer palette to change graph colors}
 }
 \value{
 a highcharter object
