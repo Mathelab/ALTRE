@@ -39,8 +39,10 @@ Imports:
     stringr,
     tibble,
     magrittr,
+    rGREAT
     highcharter,
     htmltools,
+    rGREAT,
     RColorBrewer
 License: GPL-2
 LazyData: TRUE
