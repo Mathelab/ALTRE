@@ -11,7 +11,9 @@ runGREAT(peaks, species = "hg19", rule = "basalPlusExt", adv_upstream = 5,
   adv_oneDistance = 1000, pathway_category = "GO")
 }
 \arguments{
-\item{peaks}{list, output of categAltrePeaks() function}
+\item{peaks}{list, output of categAltrePeaks() function
+#@param peaktype character, "Experiment Specific", "Reference Specific",
+#    "Ambiguous", "Shared", or "All" (All is default)}
 
 \item{species}{default hg19}
 
@@ -32,9 +34,6 @@ See https://bioconductor.org/packages/release/bioc/html/chipenrich.html for more
 \item{pathway_category}{character, "GO", "Pathway Data", "Regulatory Motifs",
 "Phenotype Data and Human Disease", "Gene Expression", "Gene Families"
 (default is "GO")}
-
-\item{peaktype}{character, "Experiment Specific", "Reference Specific",
-"Ambiguous", "Shared", or "All" (All is default)}
 }
 \value{
 ways --

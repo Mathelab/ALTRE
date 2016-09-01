@@ -2,8 +2,8 @@
 #' to identify putative pathways of interest for further
 #' investigation
 #' @param peaks list, output of categAltrePeaks() function
-##' @param peaktype character, "Experiment Specific", "Reference Specific",
-##' 	"Ambiguous", "Shared", or "All" (All is default)
+#' #@param peaktype character, "Experiment Specific", "Reference Specific",
+#' #	"Ambiguous", "Shared", or "All" (All is default)
 #' @param species default hg19
 #' @param rule character, "basalPlusExt", "twoClosest", "oneClosest" rule that associates
 #' 	genomic regions to genes (default is "basalPlusExt").
