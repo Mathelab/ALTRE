@@ -2,13 +2,7 @@
 % Please edit documentation in R/plottingfunctions.R
 \name{plotCountAnalysisTemp}
 \alias{plotCountAnalysisTemp}
-\title{#' Create a volcano plot from the output of categAltrePeaks
-#'
-#' @param altrepeakscateg output generated from countanalysis() then
-#' categAltrePeaks()
-#' @param viewer whether the plot should be displayed in the RStudio viewer or
-#'        in Shiny/Knittr
-#' @param palette RColorBrewer palette to change graph colors}
+\title{Create a volcano plot from the output of categAltrePeaks}
 \usage{
 plotCountAnalysisTemp(altrepeakscateg = NULL, viewer = TRUE,
   palette = NULL)
@@ -26,37 +20,6 @@ in Shiny/Knittr}
 a highcharter object
 }
 \description{
-#'
-#' @return a highcharter object
-#'
-#' @examples
-#'
-#' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
-#' samplePeaks <- loadBedFiles(csvfile)
-#' consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
-#' minreps = 2)
-#' TSSannot <- getTSS()
-#' consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
-#' TSS = TSSannot,
-#' merge = TRUE,
-#' regionspecific = TRUE,
-#' distancefromTSSdist = 1500,
-#' distancefromTSSprox = 1000)
-#' consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
-#'                                  sampleinfo = csvfile,
-#'                                  reference = 'SAEC',
-#'                                  chrom = 'chr21')
-#' alteredPeaks <- countanalysis(counts = consensusPeaksCounts,
-#' pval = 0.01,
-#' lfcvalue = 1)
-#' alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
-#'                                           lfctypespecific = 1.5,
-#'                                           lfcshared = 1.2,
-#'                                           pvaltypespecific = 0.01,
-#'                                           pvalshared = 0.05)
-#' plotCountAnalysis(alteredPeaksCategorized)
-#'
-#' @export
 Create a volcano plot from the output of categAltrePeaks
 }
 

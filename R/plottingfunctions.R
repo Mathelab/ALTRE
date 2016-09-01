@@ -330,130 +330,130 @@ plotGetCounts <- function(countsConsPeaks, palette = "Set1") {
   return(p)
 }
 
-#'
-#' #' Create a volcano plot from the output of categAltrePeaks
-#' #'
-#' #' @param altrepeakscateg output generated from countanalysis() then
-#' #' categAltrePeaks()
-#' #' @param viewer whether the plot should be displayed in the RStudio viewer or
-#' #'        in Shiny/Knittr
-#' #' @param palette RColorBrewer palette to change graph colors
-#'
-#' #'
-#' #' @return a highcharter object
-#' #'
-#' #' @examples
-#' #'
-#' #' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
-#' #' samplePeaks <- loadBedFiles(csvfile)
-#' #' consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
-#' #' minreps = 2)
-#' #' TSSannot <- getTSS()
-#' #' consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
-#' #' TSS = TSSannot,
-#' #' merge = TRUE,
-#' #' regionspecific = TRUE,
-#' #' distancefromTSSdist = 1500,
-#' #' distancefromTSSprox = 1000)
-#' #' consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
-#' #'                                  sampleinfo = csvfile,
-#' #'                                  reference = 'SAEC',
-#' #'                                  chrom = 'chr21')
-#' #' alteredPeaks <- countanalysis(counts = consensusPeaksCounts,
-#' #' pval = 0.01,
-#' #' lfcvalue = 1)
-#' #' alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
-#' #'                                           lfctypespecific = 1.5,
-#' #'                                           lfcshared = 1.2,
-#' #'                                           pvaltypespecific = 0.01,
-#' #'                                           pvalshared = 0.05)
-#' #' plotCountAnalysis(alteredPeaksCategorized)
-#' #'
-#' #' @export
 
-# plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) {
-#
-#
-#   if ( !is.null(palette) ) {
-#     cols <- RColorBrewer::brewer.pal(4, palette) }
-#   else{cols <- c("#d3d3d3", "#C71585", "#00E5EE","#000080")}
-#                         #grey (ambiguous)
-#                         #magenta (experiment-specific)
-#                         #blue (reference specific)
-#   #blue (shared)
-#
-#   log2FoldChange <- NULL
-#   padj <- NULL
-#   REaltrecateg <- NULL
-#   #To prevent R CMD check error
-#
-#   colnames(altrepeakscateg$analysisresults)
-#
-#   toplot <- altrepeakscateg$analysisresults[ ,c("region",
-#                                                 "log2FoldChange",
-#                                                 "padj",
-#                                                 "REaltrecateg")]
-#   tssdist <- toplot[which(toplot$region == "TSS-distal"), ]
-#   tssdist$padj <- round(-log10(tssdist$padj), 2)
-#   tssdist$log2FoldChange <- round(tssdist$log2FoldChange, 2)
-#   tssprox <- toplot[which(toplot$region == "TSS-proximal"), ]
-#   tssprox$padj <- round(-log10(tssprox$padj), 2)
-#   tssprox$log2FoldChange <- round(tssprox$log2FoldChange, 2)
-#   lengthRE <- rep("", length(tssdist$REaltrecateg))
-#
-#   p1 <- highchart() %>%
-#     hc_chart(type = "scatter") %>%
-#     hc_title(text = "TSS-distal",
-#              style = list(color = '#2E1717',
-#                           fontWeight = 'bold')) %>%
-#     hc_add_series_df(data = tssdist, x = log2FoldChange, y = padj,
-#                      type = "scatter", group = REaltrecateg)  %>%
-#     hc_xAxis(title = list(text = "log2fold change")) %>%
-#     hc_yAxis(title = list(text = "-log10 pvalue")) %>%
-#     hc_tooltip(headerFormat = "",
-#                pointFormat  = "<b>log2FC</b> = {point.x}<br> <b>-log10pvalue</b>
-#                = {point.y}<br>") %>%
-#     hc_colors(cols) %>%
-#     hc_exporting(enabled = TRUE)
-#
-#   lengthRE <- rep("", length(tssprox$REaltrecateg))
-#
-#   num1 <- min(which(tssprox$REaltrecateg == "Experiment Specific"))
-#   num2 <- min(which(tssprox$REaltrecateg == "Reference Specific"))
-#   num3 <- min(which(tssprox$REaltrecateg == "Shared"))
-#   num4 <- min(which(tssprox$REaltrecateg == "Ambiguous"))
-#
-#   lengthRE[num1] <- "Experiment Specific"
-#   lengthRE[num2] <- "Reference Specific"
-#   lengthRE[num3] <- "Shared"
-#   lengthRE[num4] <- "Ambiguous"
-#
-#
-#   p2 <- highchart() %>%
-#     hc_chart(type = "scatter") %>%
-#     hc_title(text = "TSS-proximal",
-#              style = list(color = '#2E1717',
-#                           fontWeight = 'bold')) %>%
-#     hc_add_series_df(data = tssprox, x = log2FoldChange, y = padj,
-#                      type = "scatter", group = REaltrecateg)  %>%
-#     hc_xAxis(title = list(text = "log2fold change")) %>%
-#     hc_yAxis(title = list(text = "-log10 pvalue")) %>%
-#     hc_tooltip(headerFormat = "",
-#                pointFormat  = "<b>log2FC</b> = {point.x}<br> <b>-log10pvalue</b>
-#                = {point.y}<br>") %>%
-#     hc_colors(cols) %>%
-#     hc_exporting(enabled = TRUE)
-#
-#
-#   if (viewer == TRUE) {
-#     p <- htmltools::browsable(hw_grid(p1, p2, ncol = 2, rowheight = 700))
-#   }
-#   else {
-#     p <- hw_grid(p1, p2, ncol = 2)
-#   }
-#   return(p)
-# }
-#
+#' Create a volcano plot from the output of categAltrePeaks
+#'
+#' @param altrepeakscateg output generated from countanalysis() then
+#' categAltrePeaks()
+#' @param viewer whether the plot should be displayed in the RStudio viewer or
+#'        in Shiny/Knittr
+#' @param palette RColorBrewer palette to change graph colors
+
+#'
+#' @return a highcharter object
+#'
+#' @examples
+#' \dontrun{
+#' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+#' samplePeaks <- loadBedFiles(csvfile)
+#' consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
+#' minreps = 2)
+#' TSSannot <- getTSS()
+#' consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
+#' TSS = TSSannot,
+#' merge = TRUE,
+#' regionspecific = TRUE,
+#' distancefromTSSdist = 1500,
+#' distancefromTSSprox = 1000)
+#' consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
+#'                                  sampleinfo = csvfile,
+#'                                  reference = 'SAEC',
+#'                                  chrom = 'chr21')
+#' alteredPeaks <- countanalysis(counts = consensusPeaksCounts,
+#' pval = 0.01,
+#' lfcvalue = 1)
+#' alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
+#'                                           lfctypespecific = 1.5,
+#'                                           lfcshared = 1.2,
+#'                                           pvaltypespecific = 0.01,
+#'                                           pvalshared = 0.05)
+#' plotCountAnalysis(alteredPeaksCategorized)
+#' }
+#' @export
+
+plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) {
+
+
+  if ( !is.null(palette) ) {
+    cols <- RColorBrewer::brewer.pal(4, palette) }
+  else{cols <- c("#d3d3d3", "#C71585", "#00E5EE","#000080")}
+                        #grey (ambiguous)
+                        #magenta (experiment-specific)
+                        #blue (reference specific)
+  #blue (shared)
+
+  log2FoldChange <- NULL
+  padj <- NULL
+  REaltrecateg <- NULL
+  #To prevent R CMD check error
+
+  colnames(altrepeakscateg$analysisresults)
+
+  toplot <- altrepeakscateg$analysisresults[ ,c("region",
+                                                "log2FoldChange",
+                                                "padj",
+                                                "REaltrecateg")]
+  tssdist <- toplot[which(toplot$region == "TSS-distal"), ]
+  tssdist$padj <- round(-log10(tssdist$padj), 2)
+  tssdist$log2FoldChange <- round(tssdist$log2FoldChange, 2)
+  tssprox <- toplot[which(toplot$region == "TSS-proximal"), ]
+  tssprox$padj <- round(-log10(tssprox$padj), 2)
+  tssprox$log2FoldChange <- round(tssprox$log2FoldChange, 2)
+  lengthRE <- rep("", length(tssdist$REaltrecateg))
+
+  p1 <- highchart() %>%
+    hc_chart(type = "scatter") %>%
+    hc_title(text = "TSS-distal",
+             style = list(color = '#2E1717',
+                          fontWeight = 'bold')) %>%
+    hc_add_series_df(data = tssdist, x = log2FoldChange, y = padj,
+                     type = "scatter", group = REaltrecateg)  %>%
+    hc_xAxis(title = list(text = "log2fold change")) %>%
+    hc_yAxis(title = list(text = "-log10 pvalue")) %>%
+    hc_tooltip(headerFormat = "",
+               pointFormat  = "<b>log2FC</b> = {point.x}<br> <b>-log10pvalue</b>
+               = {point.y}<br>") %>%
+    hc_colors(cols) %>%
+    hc_exporting(enabled = TRUE)
+
+  lengthRE <- rep("", length(tssprox$REaltrecateg))
+
+  num1 <- min(which(tssprox$REaltrecateg == "Experiment Specific"))
+  num2 <- min(which(tssprox$REaltrecateg == "Reference Specific"))
+  num3 <- min(which(tssprox$REaltrecateg == "Shared"))
+  num4 <- min(which(tssprox$REaltrecateg == "Ambiguous"))
+
+  lengthRE[num1] <- "Experiment Specific"
+  lengthRE[num2] <- "Reference Specific"
+  lengthRE[num3] <- "Shared"
+  lengthRE[num4] <- "Ambiguous"
+
+
+  p2 <- highchart() %>%
+    hc_chart(type = "scatter") %>%
+    hc_title(text = "TSS-proximal",
+             style = list(color = '#2E1717',
+                          fontWeight = 'bold')) %>%
+    hc_add_series_df(data = tssprox, x = log2FoldChange, y = padj,
+                     type = "scatter", group = REaltrecateg)  %>%
+    hc_xAxis(title = list(text = "log2fold change")) %>%
+    hc_yAxis(title = list(text = "-log10 pvalue")) %>%
+    hc_tooltip(headerFormat = "",
+               pointFormat  = "<b>log2FC</b> = {point.x}<br> <b>-log10pvalue</b>
+               = {point.y}<br>") %>%
+    hc_colors(cols) %>%
+    hc_exporting(enabled = TRUE)
+
+
+  if (viewer == TRUE) {
+    p <- htmltools::browsable(hw_grid(p1, p2, ncol = 2, rowheight = 700))
+  }
+  else {
+    p <- hw_grid(p1, p2, ncol = 2)
+  }
+  return(p)
+}
+
 
 
 #' Create a volcano plot from the output of categAltrePeaks
