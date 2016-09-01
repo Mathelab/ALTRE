@@ -21,7 +21,8 @@ enrichHeatmap(input, title, pvalfilt = 0.01, removeonlyshared = FALSE,
 \item{removeonlyshared}{removes regions that come up signifigant only shared
 regulatory regions when set to TRUE. Default is FALSE.}
 
-\item{numshow}{number of top pathways (ranked according to p-value) of each type (expt, reference, shared) to show in the plot (default=10)}
+\item{numshow}{number of top pathways (ranked according to p-value) of each
+type (expt, reference, shared) to show in the plot (default=10)}
 }
 \value{
 heatmap

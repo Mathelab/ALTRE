@@ -3,9 +3,10 @@
 \name{plotCompareMethodsAll}
 \alias{plotCompareMethodsAll}
 \title{Plots venn diagrams for comparison of two methods of identifying altered
-regulatory regions Makes venn diagrams for TSS-proximal, TSS-distal, and combined
-for both intensity-based peaks and for peaks identified by hotspot calling
-algorithms.  There is no return value. Six venn diagrams will be plotted}
+regulatory regions Makes venn diagrams for TSS-proximal, TSS-distal, and
+combined for both intensity-based peaks and for peaks identified by hotspot
+calling algorithms.  There is no return value. Six venn diagrams will be
+plotted}
 \usage{
 plotCompareMethodsAll(analysisresultsmatrix, viewer = TRUE, palette = NULL)
 }
@@ -20,9 +21,10 @@ in Shiny/Knittr}
 }
 \description{
 Plots venn diagrams for comparison of two methods of identifying altered
-regulatory regions Makes venn diagrams for TSS-proximal, TSS-distal, and combined
-for both intensity-based peaks and for peaks identified by hotspot calling
-algorithms.  There is no return value. Six venn diagrams will be plotted
+regulatory regions Makes venn diagrams for TSS-proximal, TSS-distal, and
+combined for both intensity-based peaks and for peaks identified by hotspot
+calling algorithms.  There is no return value. Six venn diagrams will be
+plotted
 }
 \examples{
 \dontrun{

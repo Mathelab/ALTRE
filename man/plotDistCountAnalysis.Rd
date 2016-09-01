@@ -8,7 +8,8 @@ shared TSS-proximal and TSS-distal regions.}
 plotDistCountAnalysis(analysisresults, counts, palette = NULL)
 }
 \arguments{
-\item{analysisresults}{output generated from countanalysis() then categAltrePeaks()}
+\item{analysisresults}{output generated from countanalysis() then
+categAltrePeaks()}
 
 \item{counts}{output generated from getCounts()}
 
@@ -19,9 +20,9 @@ a highcharter object
 }
 \description{
 Takes the rlog transformation of the RRKM (Reads Per Kilobase of transcript
-per Million) of the read counts of type-specific and shared regulatory regions
-and plots the distribution of those read counts in all sample types analyzed
-in the workflow.
+per Million) of the read counts of type-specific and shared regulatory
+regions and plots the distribution of those read counts in all sample types
+analyzed in the workflow.
 }
 \examples{
 \dontrun{

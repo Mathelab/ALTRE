@@ -2,8 +2,8 @@
 #' to identify putative pathways of interest for further
 #' investigation
 #' @param peaks list, output of categAltrePeaks() function
-##' @param peaktype character, "Experiment Specific", "Reference Specific", 
-##' 	"Ambiguous", "Shared", or "All" (All is default)
+## @param peaktype character, "Experiment Specific", "Reference Specific", 
+## 	"Ambiguous", "Shared", or "All" (All is default)
 #' @param species default hg19
 #' @param rule character, "basalPlusExt", "twoClosest", "oneClosest" rule that associates
 #' 	genomic regions to genes (default is "basalPlusExt"). 
@@ -17,10 +17,9 @@
 #'	"Phenotype Data and Human Disease", "Gene Expression", "Gene Families"
 #'	(default is "GO")
 #' 
-#' @examples 
-#' runGREAT(peaks=categaltre_peaks)
-#' @return ways --
-#' pathways also annotated with additional information
+# @examples 
+# runGREAT(peaks=categaltre_peaks)
+#' @return list pathways also annotated with additional information
 
 # run with categaltre_peaks
 
@@ -83,38 +82,63 @@ runGREAT <- function(peaks,
 #' @param pathway_category character, "GO", "Pathway Data", "Regulatory Motifs",
 #'      "Phenotype Data and Human Disease", "Gene Expression", "Gene Families"
 #'      (default is "GO")
-#' @param adjpvalcutoff: numeric, adjusted p-value cutoff to determine enriched pathways,
+#' @param enrichcutoff numeric, fold change enrichment cutoff to determine enriched pathways,
+#' default is 2
+#' @param adjpvalcutoff numeric, Bonferroni adjusted p-value cutoff to determine enriched pathways,
 #'	default is 0.05
-#'
+#' @param adjustby character, "fdr" or "bonferroni", default is "bonferroni"
+#' @param test character, "Both" denotes hypergeometric and binomical tests are used to
+#' 	determine enriched pathways, "Binom" denotes binomial tests used, "Hyper" denotes
+#'	hypergeometric tests are used.  Default is "Binom"
+#' 
 #' @return list of dataframes for enriched pathways - each dataframe in the list
-#' represents one pathway type (e.g. "GO MOlecular Function")
+#' represents one pathway type (e.g. "GO Molecular Function")
 
 processPathways <- function(GREATpath, 
 	pathway_category="GO",
+	adjustby="bonferroni",
+	test="Binom",
+	enrichcutoff=2,
 	adjpvalcutoff=0.05) {
 
 finaloutput=list()
   for (job in names(GREATpath)) {
     if(!is(GREATpath[[job]], "GreatJob")) {
 	stop("GREATpath is not a list of 'GreatJob' objects.  
-		Input shoudl be the output of runGREAT()")
+		Input should be the output of runGREAT()")
     }
 	
     output= rGREAT::getEnrichmentTables(GREATpath[[job]],category=pathway_category)
-    stats=data.frame(Pathway=names(output),NumSig_Binom=rep(NA,length(names(output))),
-	NumSig_Hyper=rep(NA,length(names(output))))
+    names(output)=gsub(" ","_",names(output))
+    stats=data.frame(Pathway=names(output),NumSig=rep(NA,length(names(output))))
 
     for (i in names(output)) {
-	output[[i]]$Binom_adj_PValue=stats::p.adjust(output[[i]]$"Binom_Raw_PValue",method="fdr")
-	output[[i]]$Hyper_adj_PValue=stats::p.adjust(output[[i]]$"Hyper_Raw_PValue",method="fdr")
-	keepers=unique(c(which(output[[i]]$Binom_adj_PValue<=adjpvalcutoff),
-		which(output[[i]]$Hyper_adj_PValue<=adjpvalcutoff)))
+	output[[i]]$Binom_adj_PValue=stats::p.adjust(output[[i]]$"Binom_Raw_PValue",
+		method=adjustby)
+	output[[i]]$Hyper_adj_PValue=stats::p.adjust(output[[i]]$"Hyper_Raw_PValue",
+		method=adjustby)
+	if(test=="Both") {
+		keepers=base::Reduce(intersect, list(which(output[[i]]$Binom_Fold_Enrichment>enrichcutoff),
+			which(output[[i]]$Hyper_Fold_Enrichment>enrichcutoff),
+			which(output[[i]]$Binom_adj_PValue<=adjpvalcutoff),
+			which(output[[i]]$Hyper_adj_PValue<=adjpvalcutoff)))
+	}
+	else if (test=="Binom") {
+		 keepers=base::Reduce(intersect, list(which(output[[i]]$Binom_Fold_Enrichment>enrichcutoff),
+                        which(output[[i]]$Binom_adj_PValue<=adjpvalcutoff)))
+	}
+	else if (test=="Hyper") {
+		 keepers=base::Reduce(intersect, list(which(output[[i]]$Hyper_Fold_Enrichment>enrichcutoff),
+                        which(output[[i]]$Hyper_adj_PValue<=adjpvalcutoff)))
+	}
+	else {
+		stop("test should be 'Both', 'Binom', or 'Hyper'")
+	}
+	print(length(keepers))
 	output[[i]]=output[[i]][keepers,]
 	output[[i]]=output[[i]][base::order(output[[i]]$Binom_adj_PValue),]
-	stats$NumSig_Binom[which(stats$Pathway==i)]=
+	stats$NumSig[which(stats$Pathway==i)]=
 		length(which(output[[i]]$Binom_adj_PValue<=adjpvalcutoff))
-	stats$NumSig_Hyper[which(stats$Pathway==i)]=
-		length(which(output[[i]]$Hyper_adj_PValue<=adjpvalcutoff))
     }
     finaloutput[[job]]=list(Sig_Pathways=output, stats=stats)
  } # end looping through each GREAT job

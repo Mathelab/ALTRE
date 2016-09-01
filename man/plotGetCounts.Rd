@@ -5,7 +5,7 @@
 \title{Given the output from getCounts, plot a density plot of
 log2 RPKM values of regulation regions}
 \usage{
-plotGetCounts(countsConsPeaks, palette)
+plotGetCounts(countsConsPeaks, palette = "Set1")
 }
 \arguments{
 \item{countsConsPeaks}{output generated from getCounts}
