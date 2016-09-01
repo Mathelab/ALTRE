@@ -6,7 +6,8 @@
 to identify putative pathways of interest for further
 investigation}
 \usage{
-processPathways(GREATpath, pathway_category = "GO", adjpvalcutoff = 0.05)
+processPathways(GREATpath, pathway_category = "GO", adjustby = "bonferroni",
+  test = "Binom", enrichcutoff = 2, adjpvalcutoff = 0.05)
 }
 \arguments{
 \item{GREATpath}{output of runGREAT()}
@@ -15,12 +16,21 @@ processPathways(GREATpath, pathway_category = "GO", adjpvalcutoff = 0.05)
 "Phenotype Data and Human Disease", "Gene Expression", "Gene Families"
 (default is "GO")}
 
-\item{adjpvalcutoff:}{numeric, adjusted p-value cutoff to determine enriched pathways,
+\item{adjustby}{character, "fdr" or "bonferroni", default is "bonferroni"}
+
+\item{test}{character, "Both" denotes hypergeometric and binomical tests are used to
+    determine enriched pathways, "Binom" denotes binomial tests used, "Hyper" denotes
+hypergeometric tests are used.  Default is "Binom"}
+
+\item{enrichcutoff}{numeric, fold change enrichment cutoff to determine enriched pathways,
+default is 2}
+
+\item{adjpvalcutoff}{numeric, Bonferroni adjusted p-value cutoff to determine enriched pathways,
 default is 0.05}
 }
 \value{
 list of dataframes for enriched pathways - each dataframe in the list
-represents one pathway type (e.g. "GO MOlecular Function")
+represents one pathway type (e.g. "GO Molecular Function")
 }
 \description{
 Enrichment analysis using GREAT package
