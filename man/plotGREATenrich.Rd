@@ -55,10 +55,9 @@ categaltre_peaks <- categAltrePeaks(altre_peaks,
                              lfcshared = 1.2,
                              pvaltypespecific = 0.01,
                              pvalshared = 0.05)
-GREAToutput <- runGREAT(peaks=categaltre_peaks)
+GREAToutput <- runGREAT(peaks = categaltre_peaks)
 GREATpathways <- processPathways(temp)
 names(GREATpathways$Sig_Pathways)
-plot <- plotGREATenrich(GREATpathways, title="GREAT Enrichment Analysis", pathwaycateg="GO Molecular Function")
 }
 
 }

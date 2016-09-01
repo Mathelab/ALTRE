@@ -199,6 +199,19 @@ shinyServer(function(input, output, session) {
                  })
     return(BPenrich)
   })
+
+  runGREATObj <- eventReactive(input$buttongreat, {
+    withProgress(message = 'In progress',
+                 detail = 'This may take a while...',
+                 value = 0,
+                 {
+                   setProgress(value = 0.2, detail = "Comparing Methods")
+                   runGREATOut <- runGREAT(req(categAltreObj()))
+                   setProgress(value = 1, detail = "Done!")
+                   Sys.sleep(0.5)
+                 })
+    return(runGREATOut)
+  })
   ############################################################################
    #  get input
 
@@ -304,6 +317,11 @@ shinyServer(function(input, output, session) {
   }, options = list(searching = FALSE,
                     paging = FALSE))
 
+  output$table6 <- renderDataTable({
+    rGREAT::getEnrichmentTables(req(runGREATObj())[[1]])$`GO Molecular Function`
+  }, options = list(searching = FALSE,
+                    paging = TRUE))
+
   ############################################################################
   # plots
 
@@ -320,7 +338,7 @@ shinyServer(function(input, output, session) {
   })
 
   output$volcano <- renderUI({
-    plotCombineAnnotatePeaks(combineAnnotateObj(), viewer = FALSE)
+    plotCountAnalysisTemp()
     #plotCountAnalysis(categAltreObj(), viewer = FALSE)
   })
 
@@ -644,6 +662,41 @@ shinyServer(function(input, output, session) {
       )
     }
   })
+
+
+  output$statusbox9 <- renderInfoBox({
+    if (input$buttongreat == 0) {
+      infoBox(
+        "Status",
+        "Run GREAT Button Not Clicked Yet!",
+        icon = icon("flag", lib = "glyphicon"),
+        color = "aqua",
+        fill = TRUE)
+    }
+    else if (input$buttongreat > 0 && (input$buttoncat    == 0 ||
+                                        input$buttondefine == 0 ||
+                                        input$buttoncounts == 0 ||
+                                        input$buttonannot  == 0 ||
+                                        input$buttonmerge  == 0 ||
+                                        is.null(input$file))) {
+      infoBox(
+        "Status",
+        "Step 6 is Not Complete Yet. Categorize Altered Regions Button Not
+        Clicked Yet! Please Run Previous Steps Before Proceeding!",
+        icon = icon("warning-sign", lib = "glyphicon"),
+        color = "red",
+        fill = TRUE)
+    }
+    else if (input$buttongreat > 0 && !is.null(runGREATObj())) {
+      infoBox(
+        "Status",
+        "RUN GREAT Completed.",
+        icon = icon("thumbs-up", lib = "glyphicon"),
+        color = "green",
+        fill = TRUE)
+    }
+  })
+
 
 #   output$getlocalpath <- renderPrint({
 # 	if (!is.null(input$testfile)) {

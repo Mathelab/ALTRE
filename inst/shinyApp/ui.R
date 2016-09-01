@@ -492,7 +492,7 @@ body <- dashboardBody(
               )
             ),
     tabItem(
-      tabName ="pathways",
+      tabName = "pathways",
       tabBox(
         title = strong("Pathway Enrichment Analysis"),
         width = 12,
@@ -644,7 +644,34 @@ body <- dashboardBody(
                   )
       )
        )
-      )
+      ),
+		tabItem(tabName = "greatpathways",
+		        fluidRow(
+		          HTML("<div class='col-sm-3' style='min-width:
+		               400px !important;'>"),
+		          box(
+		            width = NULL,
+		            title = strong("GREAT Pathways"),
+		            h5("This step does the following: "),
+		            tags$ul(
+		              tags$li("Runs GREAT."),
+		              tags$li(" Outputs a ..")
+		            ),
+		            hr(),
+		            actionButton("buttongreat", strong("Run GREAT")),
+		            hr()
+		          ),
+		          HTML("</div>"),
+		          HTML("<div class='col-sm-8' style='min-width:
+                   750px !important;'>"),
+		          box(
+		            width = NULL,
+		            dataTableOutput("table6")
+		          ),
+		          infoBoxOutput("statusbox9", width = NULL),
+		          HTML("</div>")
+		          )
+  )
     )
 )
 
