@@ -8,12 +8,12 @@
 #' @param rule character, "basalPlusExt", "twoClosest", "oneClosest" rule that associates
 #' 	genomic regions to genes (default is "basalPlusExt").
 #' 	See https://bioconductor.org/packages/release/bioc/html/chipenrich.html for more detail.
-#' @param adv_upstream: kb, extension to upstream (if rule is basalPlusExt), default 5
-#' @param adv_downstream: kb, extension to downstream (if rule is basalPlusExt), default 1.0
-#' @param adv_span: kb, max extension (if rule is basalPlusExt), default 1000.0
-#' @param adv_twoDistance: kb, max extension (if rule is twoClosest), default 1000.0
-#' @param adv_oneDistance: kb, max extension (if rule is oneClosest), default 1000.0
-#' @param pathway_category: character, "GO", "Pathway Data", "Regulatory Motifs",
+#' @param adv_upstream kb, extension to upstream (if rule is basalPlusExt), default 5
+#' @param adv_downstream kb, extension to downstream (if rule is basalPlusExt), default 1.0
+#' @param adv_span kb, max extension (if rule is basalPlusExt), default 1000.0
+#' @param adv_twoDistance kb, max extension (if rule is twoClosest), default 1000.0
+#' @param adv_oneDistance kb, max extension (if rule is oneClosest), default 1000.0
+#' @param pathway_category character, "GO", "Pathway Data", "Regulatory Motifs",
 #'	"Phenotype Data and Human Disease", "Gene Expression", "Gene Families"
 #'	(default is "GO")
 #' @examples

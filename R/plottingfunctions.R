@@ -343,7 +343,7 @@ plotGetCounts <- function(countsConsPeaks, palette = "Set1") {
 #' #' @return a highcharter object
 #' #'
 #' #' @examples
-#' #' \dontrun{
+#' #'
 #' #' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
 #' #' samplePeaks <- loadBedFiles(csvfile)
 #' #' consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
@@ -368,7 +368,7 @@ plotGetCounts <- function(countsConsPeaks, palette = "Set1") {
 #' #'                                           pvaltypespecific = 0.01,
 #' #'                                           pvalshared = 0.05)
 #' #' plotCountAnalysis(alteredPeaksCategorized)
-#' #' }
+#' #'
 #' #' @export
 
 # plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) {
@@ -1027,11 +1027,11 @@ enrichHeatmap <- function(input,
 #' log2fold change, low p-value) and shared (no change, higher p-value)
 #' regulatory regions is plotted.
 #'
-#' @param input results from GREAT enrichment analysis
-#' @param title title of the heatmap
-#' @param pathwaycateg ontology
-#' @param numshow number of top pathways (ranked according to p-value) of each type (expt, reference, shared) to show in the plot (default=10)
-#'
+#' #@param input results from GREAT enrichment analysis
+#' #@param title title of the heatmap
+#' #@param pathwaycateg ontology
+#' #@param numshow number of top pathways (ranked according to p-value) of each type (expt, reference, shared) to show in the plot (default=10)
+
 #' @return heatmap
 #'
 #' @examples

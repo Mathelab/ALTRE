@@ -20,7 +20,7 @@ a highcharter object
 #' @return a highcharter object
 #'
 #' @examples
-#' \dontrun{
+#'
 #' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
 #' samplePeaks <- loadBedFiles(csvfile)
 #' consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
@@ -45,7 +45,7 @@ a highcharter object
 #'                                           pvaltypespecific = 0.01,
 #'                                           pvalshared = 0.05)
 #' plotCountAnalysis(alteredPeaksCategorized)
-#' }
+#'
 #' @export
 Create a volcano plot from the output of categAltrePeaks
 }

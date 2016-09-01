@@ -19,22 +19,22 @@ runGREAT(peaks, species = "hg19", rule = "basalPlusExt", adv_upstream = 5,
 genomic regions to genes (default is "basalPlusExt").
 See https://bioconductor.org/packages/release/bioc/html/chipenrich.html for more detail.}
 
-\item{peaktype}{character, "Experiment Specific", "Reference Specific",
-"Ambiguous", "Shared", or "All" (All is default)}
+\item{adv_upstream}{kb, extension to upstream (if rule is basalPlusExt), default 5}
 
-\item{adv_upstream:}{kb, extension to upstream (if rule is basalPlusExt), default 5}
+\item{adv_downstream}{kb, extension to downstream (if rule is basalPlusExt), default 1.0}
 
-\item{adv_downstream:}{kb, extension to downstream (if rule is basalPlusExt), default 1.0}
+\item{adv_span}{kb, max extension (if rule is basalPlusExt), default 1000.0}
 
-\item{adv_span:}{kb, max extension (if rule is basalPlusExt), default 1000.0}
+\item{adv_twoDistance}{kb, max extension (if rule is twoClosest), default 1000.0}
 
-\item{adv_twoDistance:}{kb, max extension (if rule is twoClosest), default 1000.0}
+\item{adv_oneDistance}{kb, max extension (if rule is oneClosest), default 1000.0}
 
-\item{adv_oneDistance:}{kb, max extension (if rule is oneClosest), default 1000.0}
-
-\item{pathway_category:}{character, "GO", "Pathway Data", "Regulatory Motifs",
+\item{pathway_category}{character, "GO", "Pathway Data", "Regulatory Motifs",
 "Phenotype Data and Human Disease", "Gene Expression", "Gene Families"
 (default is "GO")}
+
+\item{peaktype}{character, "Experiment Specific", "Reference Specific",
+"Ambiguous", "Shared", or "All" (All is default)}
 }
 \value{
 ways --

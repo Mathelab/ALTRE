@@ -10,24 +10,14 @@ regulatory regions is plotted.}
 \usage{
 plotGREATenrich()
 }
-\arguments{
-\item{input}{results from GREAT enrichment analysis}
-
-\item{title}{title of the heatmap}
-
-\item{pathwaycateg}{ontology}
-
-\item{numshow}{number of top pathways (ranked according to p-value) of each type (expt, reference, shared) to show in the plot (default=10)}
-}
 \value{
 heatmap
 }
 \description{
-Given the output from processPathways(), creates a heatmap from
-the ouput of the GREAT enrichment analysis. Presence or absence of
-the pathway in enrichment of both type-specific (increased or decreased
-log2fold change, low p-value) and shared (no change, higher p-value)
-regulatory regions is plotted.
+#@param input results from GREAT enrichment analysis
+#@param title title of the heatmap
+#@param pathwaycateg ontology
+#@param numshow number of top pathways (ranked according to p-value) of each type (expt, reference, shared) to show in the plot (default=10)
 }
 \examples{
 \dontrun{
