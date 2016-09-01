@@ -2,8 +2,7 @@
 % Please edit documentation in R/plottingfunctions.R
 \name{plotCompareMethods}
 \alias{plotCompareMethods}
-\title{Plots a venn diagram that compares altered regions as determined by peak presence or by
-differential counts.  The type of regulatory region (TSS-proximal, TSS-distal, or both)
+\title{Plots a venn diagram that compares altered regions as determined by peak presence or by #' differential counts.  The type of regulatory region (TSS-proximal, TSS-distal, or both)
 and type of peak comparison (intensity or peak) must be specified.
 Plots a venn diagram that compares altered regions as determined by peak
 presence or by differential counts.  The type of regulatory region
@@ -29,8 +28,7 @@ include quotes}
 venn diagram
 }
 \description{
-Plots a venn diagram that compares altered regions as determined by peak presence or by
-differential counts.  The type of regulatory region (TSS-proximal, TSS-distal, or both)
+Plots a venn diagram that compares altered regions as determined by peak presence or by #' differential counts.  The type of regulatory region (TSS-proximal, TSS-distal, or both)
 and type of peak comparison (intensity or peak) must be specified.
 Plots a venn diagram that compares altered regions as determined by peak
 presence or by differential counts.  The type of regulatory region

@@ -8,16 +8,32 @@ the pathway in enrichment of both type-specific (increased or decreased
 log2fold change, low p-value) and shared (no change, higher p-value)
 regulatory regions is plotted.}
 \usage{
-plotGREATenrich()
+plotGREATenrich(input, title = "GREAT Enrichment Analysis",
+  pathwaycateg = NULL, test = "Binom", numshow = 10)
+}
+\arguments{
+\item{input}{results from GREAT enrichment analysis}
+
+\item{title}{title of the heatmap}
+
+\item{pathwaycateg}{ontology, to see available ontologies in your input results (e.g. named
+GREATpathways, type getOntologies(GREATpathways)}
+
+\item{test}{character, "Binom" uses binomial test restuls, "Hyper" uses
+hypergeometric test results.  Default is "Binom"}
+
+\item{numshow}{number of top pathways (ranked according to p-value) of each type 
+(expt, reference, shared) to show in the plot (default=10)}
 }
 \value{
 heatmap
 }
 \description{
-#@param input results from GREAT enrichment analysis
-#@param title title of the heatmap
-#@param pathwaycateg ontology
-#@param numshow number of top pathways (ranked according to p-value) of each type (expt, reference, shared) to show in the plot (default=10)
+Given the output from processPathways(), creates a heatmap from
+the ouput of the GREAT enrichment analysis. Presence or absence of
+the pathway in enrichment of both type-specific (increased or decreased
+log2fold change, low p-value) and shared (no change, higher p-value)
+regulatory regions is plotted.
 }
 \examples{
 \dontrun{
@@ -48,6 +64,9 @@ categaltre_peaks <- categAltrePeaks(altre_peaks,
 GREAToutput <- runGREAT(peaks = categaltre_peaks)
 GREATpathways <- processPathways(temp)
 names(GREATpathways$Sig_Pathways)
+ plotGREATenrich(GREATpathways,
+                title = "GREAT Enrichment Analysis",
+                pathwaycateg ="GO Molecular Function")
 }
 
 }

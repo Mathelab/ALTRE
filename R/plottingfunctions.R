@@ -1058,10 +1058,14 @@ enrichHeatmap <- function(input,
 #' log2fold change, low p-value) and shared (no change, higher p-value)
 #' regulatory regions is plotted.
 #'
-#' #@param input results from GREAT enrichment analysis
-#' #@param title title of the heatmap
-#' #@param pathwaycateg ontology
-#' #@param numshow number of top pathways (ranked according to p-value) of each type (expt, reference, shared) to show in the plot (default=10)
+#' @param input results from GREAT enrichment analysis
+#' @param title title of the heatmap
+#' @param pathwaycateg ontology, to see available ontologies in your input results (e.g. named
+#'	GREATpathways, type getOntologies(GREATpathways)
+#' @param test character, "Binom" uses binomial test restuls, "Hyper" uses
+#'      hypergeometric test results.  Default is "Binom"
+#' @param numshow number of top pathways (ranked according to p-value) of each type 
+#' 	(expt, reference, shared) to show in the plot (default=10)
 
 #' @return heatmap
 #'
@@ -1094,39 +1098,190 @@ enrichHeatmap <- function(input,
 #' GREAToutput <- runGREAT(peaks = categaltre_peaks)
 #' GREATpathways <- processPathways(temp)
 #' names(GREATpathways$Sig_Pathways)
-# plotGREATenrich(GREATpathways,
-#                 title = "GREAT Enrichment Analysis",
-#                 pathwaycateg ="GO Molecular Function")
+#'  plotGREATenrich(GREATpathways,
+#'                 title = "GREAT Enrichment Analysis",
+#'                 pathwaycateg ="GO Molecular Function")
 #' }
 #'
 #' @export
-plotGREATenrich <- function(){}
-###plotGREATenrich <- function(input,
-###                          title,
-###                          pathwaycateg,
-###                          numshow=10) {
-###
-###
-###  if (is.list(input) == FALSE) {
-###    stop("The input is not a list! Please make sure you are
-###         using the output from the enrichment analysis (function processPathways())")
-###
-###  if (is.data.frame(input$expt) == FALSE |
-###      is.data.frame(input$reference) == FALSE |
-###      is.data.frame(input$shared) == FALSE |
-###      length(input) != 3 |
-###      all(names(input) != c("expt", "reference", "shared"))) {
-###    stop("The input is not a list of three dataframes or
-###         there are no enriched pathways to plot")
-###  }
+plotGREATenrich <- function(input,
+                          title="GREAT Enrichment Analysis",
+                          pathwaycateg=NULL,
+			  test="Binom",
+                          numshow=10) {
+
+  if(is.null(pathwaycateg)) {
+	stop("Please designate a pathway with the paramter pathwaycateg")
+  }
+
+  if (is.list(input) == FALSE) {
+    stop("The input is not a list! Please make sure you are
+         using the output from the enrichment analysis")
+  }
+
+  if(is.na(match(test,c("Hyper","Binom")))) {
+        stop("test must be either 'Hyper' or 'Binom'")
+  }
+
+  mycols=c("name",paste0(test,"_Fold_Enrichment"),paste0(test,"_adj_PValue"))
+
+  if (is.list(input$Experiment_Specific$Sig_Pathways) == FALSE |
+      is.list(input$Reference_Specific$Sig_Pathways) == FALSE |
+      is.list(input$Shared$Sig_Pathways) == FALSE |
+      length(input) != 3 |
+      length(which(!is.na(match(mycols,colnames(input$Experiment_Specific$Sig_Pathways[[pathwaycateg]]))))) !=
+	length(mycols) |
+      length(which(!is.na(match(mycols,colnames(input$Reference_Specific$Sig_Pathways[[pathwaycateg]]))))) !=
+        length(mycols) |
+      length(match(mycols,colnames(input$Shared$Sig_Pathways[[pathwaycateg]]))) !=
+        length(mycols) |
+      all(names(input) != c("Experiment_Specific", "Reference_Specific", "Shared$Sig_Pathways"))) {
+    stop("The input is not a list of three dataframes or there are no enriched pathways to plot. 
+		Be sure the input is the output from running processPathways(()")
+  }
+
+  up <- input$Experiment_Specific$Sig_Pathways[[pathwaycateg]][,mycols]
+  if (is.null(nrow(up))) {
+	up$name <- NA
+  } else {
+  	if ( nrow(up) > numshow ) {
+	   # order by last row, which is always adjusted p-value
+      	   up <- up[order(up[,3])[1:numshow],] 
+    	}
+  }
+
+  reference <- input$Reference_Specific$Sig_Pathways[[pathwaycateg]][,mycols]
+  if (is.null(nrow(reference))) {
+        reference$name <- NA
+  } else {
+        if ( nrow(reference) > numshow ) {
+	   # order by last row, which is always adjusted p-value
+           reference <- reference[order(reference[,3])[1:numshow],] 
+        }
+  }
+
+  shared <- input$Shared$Sig_Pathways[[pathwaycateg]][,mycols]
+  if (is.null(nrow(shared))) {
+        shared$name <- NA
+  } else {
+        if ( nrow(shared) > numshow ) {
+           # order by last row, which is always adjusted p-value
+           shared <- shared[order(shared[,3])[1:numshow],]
+        }
+  }
+
+  # make a list of all the pathways in up, down, and shared
+  pathways <- unique(c(up$name,
+                       reference$name,
+                       shared$name))
+  pathways <- pathways[!is.na(pathways)]
+  if (is.na(pathways) || length(pathways) == 0) {
+    stop("No pathways are significant!")
+  }
+
+  # make a matrix with as many row as there are pathways
+  heatmapmatrix <- matrix(data = NA,
+                          nrow = length(pathways),
+                          ncol = 3)
+  # name the rows with the pathway names
+  row.names(heatmapmatrix) <- pathways
+
+  colnames(heatmapmatrix) <- c("Experiment_specific", "Reference_specific", "Shared")
+
+  # places the adjusted p-value in the matrix is there is one
+  for (i in 1:nrow(heatmapmatrix)) {
+    #print(row.names(heatmapmatrix)[i])
+    if (row.names(heatmapmatrix)[i] %in% up$name) {
+      num1 <- which(up$name == row.names(heatmapmatrix)[i])
+      heatmapmatrix[i, 1] <- up[num1, mycols[3]]
+    }
+
+    if (row.names(heatmapmatrix)[i] %in% reference$name) {
+      num2 <- which(reference$name == row.names(heatmapmatrix)[i])
+      heatmapmatrix[i, 2] <- reference[num2, mycols[3]]
+    }
+
+    if (row.names(heatmapmatrix)[i] %in% shared$name) {
+      num3 <- which(shared$name == row.names(heatmapmatrix)[i])
+      heatmapmatrix[i, 3] <- shared[num3, mycols[3]]
+    }
+  }
+
+  # Create a data.frame of the heatmapmatrix and sort
+  heatmapdata <- as.data.frame(heatmapmatrix)
+  heatmapdata <- heatmapdata[order(heatmapdata$Reference_specific,
+                                   heatmapdata$Experiment_specific,
+                                   heatmapdata$Shared,
+                                   decreasing = TRUE), ]
+  # Create ids:
+  heatmapdata$id <- rownames(heatmapdata)
+  rownames(heatmapdata) <- c(1:nrow(heatmapdata))
+
+  suppressMessages(meltedheatmapdata <- reshape2::melt(heatmapdata))
+
+  meltedheatmapdata$newid <- stringr::str_wrap(meltedheatmapdata$id, width = 80)
+
+  meltedheatmapdata$id <- factor(meltedheatmapdata$id,
+                                 levels = unique(meltedheatmapdata$id))
+  #all possible values of X (type) and Y (pathways)
+  theXAxis <- as.character(meltedheatmapdata[,2])
+  theYAxis <- meltedheatmapdata[,4]
+
+  #unique values of X and Y
+  theUniqueY <- unique(meltedheatmapdata$newid)
+  theUniqueX <- c("Experiment_specific", "Shared", "Reference_specific")
+
+  # Substitute words with position on the meatrix
+  for (i in 0:(length(theUniqueY) - 1))
+  {
+    num <- which(theYAxis == theUniqueY[i + 1])
+    theYAxis[num] <- i
+  }
+  for (i in 0:(length(theUniqueX) - 1))
+  {
+    num <- which(theXAxis == theUniqueX[i + 1])
+    theXAxis[num] <- i
+  }
+
+  #create final formatting
+  dataforHeatmap <- as.data.frame(cbind(as.numeric(theXAxis),
+                                      as.numeric(theYAxis),
+                                      round(as.numeric(meltedheatmapdata$value)
+                                              ,3)))
+
+  formattedHeatmapData <- list_parse2(dataforHeatmap)
+
+  fntltp <- JS("function(){
+                  return this.series.xAxis.categories[this.point.x] + ' ~ ' +
+               this.series.yAxis.categories[this.point.y] + ': <b>' +
+               Highcharts.numberFormat(this.point.value, 2)+'</b>';
+               ; }")
+
+  hc <- highchart() %>%
+    hc_chart(type = "heatmap") %>%
+    hc_title(text = title) %>%
+    hc_xAxis(categories = c("Experiment-specific", "Shared", "Reference-specific")) %>%
+    hc_yAxis(categories = theUniqueY) %>%
+    hc_add_series(name = "matrix location, p-value",
+                  data = formattedHeatmapData) %>%
+      hc_tooltip(formatter = fntltp) %>%
+    hc_legend(
+      title = "p-value",
+      enabled = TRUE
+    ) %>%
+    hc_exporting(enabled = TRUE)
+  p <- hc_colorAxis(hc, minColor = "#000080", maxColor = "#FFFFFF")
+  #create final formatting
+
+
+  return(p)
+  } # end plotGREATenrich
 
 
 
 
 
-
-#' Plots a venn diagram that compares altered regions as determined by peak presence or by
-#' differential counts.  The type of regulatory region (TSS-proximal, TSS-distal, or both)
+#' Plots a venn diagram that compares altered regions as determined by peak presence or by #' differential counts.  The type of regulatory region (TSS-proximal, TSS-distal, or both)
 #' and type of peak comparison (intensity or peak) must be specified.
 #' Plots a venn diagram that compares altered regions as determined by peak
 #' presence or by differential counts.  The type of regulatory region
