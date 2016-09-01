@@ -10,7 +10,17 @@
 #'        in Shiny/Knittr
 #' @param palette RColorBrewer palette to change graph colors}
 \usage{
-plotCountAnalysisTemp()
+plotCountAnalysisTemp(altrepeakscateg = NULL, viewer = TRUE,
+  palette = NULL)
+}
+\arguments{
+\item{altrepeakscateg}{output generated from countanalysis() then
+categAltrePeaks()}
+
+\item{viewer}{whether the plot should be displayed in the RStudio viewer or
+in Shiny/Knittr}
+
+\item{palette}{RColorBrewer palette to change graph colors}
 }
 \value{
 a highcharter object

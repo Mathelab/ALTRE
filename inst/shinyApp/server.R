@@ -338,7 +338,7 @@ shinyServer(function(input, output, session) {
   })
 
   output$volcano <- renderUI({
-    plotCountAnalysisTemp()
+    plotCountAnalysisTemp(viewer = FALSE)
     #plotCountAnalysis(categAltreObj(), viewer = FALSE)
   })
 

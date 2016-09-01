@@ -458,11 +458,26 @@ plotGetCounts <- function(countsConsPeaks, palette = "Set1") {
 
 #' Create a volcano plot from the output of categAltrePeaks
 #'
+#' @param altrepeakscateg output generated from countanalysis() then
+#' categAltrePeaks()
+#' @param viewer whether the plot should be displayed in the RStudio viewer or
+#'         in Shiny/Knittr
+#' @param palette RColorBrewer palette to change graph colors
+#'
 #' @return a highcharter object
 #'
 #' @export
 #'
-plotCountAnalysisTemp <- function() {
+plotCountAnalysisTemp <- function(altrepeakscateg = NULL, viewer = TRUE, palette = NULL) {
+
+    if ( !is.null(palette) ) {
+      cols <- RColorBrewer::brewer.pal(4, palette) }
+    else{cols <- c("#d3d3d3", "#C71585", "#00E5EE","#000080")}
+                          #grey (ambiguous)
+                          #magenta (experiment-specific)
+                          #blue (reference specific)
+
+  cat(altrepeakscateg)
 
   dataraw <-
   ' DOK6 0.51 1.861e-08 0.0003053
@@ -589,6 +604,7 @@ plotCountAnalysisTemp <- function() {
          hc_yAxis(title = list(text = "-log10 pvalue")) %>%
     hc_tooltip(headerFormat = "",
                pointFormat  = "<b>log2FC</b> = {point.x}<br> <b>-log10pvalue</b> = {point.y}<br>") %>%
+    hc_colors(cols) %>%
     hc_exporting(enabled = TRUE)
 
 
@@ -604,11 +620,16 @@ plotCountAnalysisTemp <- function() {
          hc_yAxis(title = list(text = "-log10 pvalue")) %>%
     hc_tooltip(headerFormat = "",
                pointFormat  = "<b>log2FC</b> = {point.x}<br> <b>-log10pvalue</b> = {point.y}<br>") %>%
+    hc_colors(cols) %>%
     hc_exporting(enabled = TRUE)
 
 
-    p <- hw_grid(p1, p2, ncol = 2)
-
+    if (viewer == TRUE) {
+      p <- htmltools::browsable(hw_grid(p1, p2, ncol = 2, rowheight = 700))
+    }
+    else {
+      p <- hw_grid(p1, p2, ncol = 2)
+    }
   return(p)
 }
 
