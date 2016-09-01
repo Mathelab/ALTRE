@@ -8,16 +8,19 @@ the pathway in enrichment of both type-specific (increased or decreased
 log2fold change, low p-value) and shared (no change, higher p-value)
 regulatory regions is plotted.}
 \usage{
-plotGREATenrich(input, title, pathwaycateg, numshow = 10)
+plotGREATenrich()
 }
 \arguments{
 \item{input}{results from GREAT enrichment analysis}
 
 \item{title}{title of the heatmap}
 
-\item{pathwaycateg}{}
+\item{pathwaycateg}{ontology}
 
 \item{numshow}{number of top pathways (ranked according to p-value) of each type (expt, reference, shared) to show in the plot (default=10)}
+}
+\value{
+heatmap
 }
 \description{
 Given the output from processPathways(), creates a heatmap from
@@ -55,7 +58,8 @@ categaltre_peaks <- categAltrePeaks(altre_peaks,
 GREAToutput <- runGREAT(peaks=categaltre_peaks)
 GREATpathways <- processPathways(temp)
 names(GREATpathways$Sig_Pathways)
-plot <- plotGREATenrich(GREATpathways, title="GREAT Enrichment Analysis", pathwaycateg="GO Molecular Function") 
+plot <- plotGREATenrich(GREATpathways, title="GREAT Enrichment Analysis", pathwaycateg="GO Molecular Function")
 }
+
 }
 

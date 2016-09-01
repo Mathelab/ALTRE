@@ -16,8 +16,11 @@ runGREAT(peaks, species = "hg19", rule = "basalPlusExt", adv_upstream = 5,
 \item{species}{default hg19}
 
 \item{rule}{character, "basalPlusExt", "twoClosest", "oneClosest" rule that associates
-genomic regions to genes (default is "basalPlusExt"). 
+genomic regions to genes (default is "basalPlusExt").
 See https://bioconductor.org/packages/release/bioc/html/chipenrich.html for more detail.}
+
+\item{peaktype}{character, "Experiment Specific", "Reference Specific",
+"Ambiguous", "Shared", or "All" (All is default)}
 
 \item{adv_upstream:}{kb, extension to upstream (if rule is basalPlusExt), default 5}
 
@@ -34,11 +37,17 @@ See https://bioconductor.org/packages/release/bioc/html/chipenrich.html for more
 (default is "GO")}
 }
 \value{
-list pathways also annotated with additional information
+ways --
+pathways also annotated with additional information
 }
 \description{
 Enrichment analysis using GREAT package
 to identify putative pathways of interest for further
 investigation
+}
+\examples{
+\dontrun{
+runGREAT(peaks=categaltre_peaks)
+}
 }
 

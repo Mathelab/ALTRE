@@ -31,31 +31,32 @@
 #' @param regionsubset  'TSS-proximal' or 'TSS-distal'. Default is "TSS-distal".
 #' @examples
 #' \dontrun{
-#' csvfile <- file.path(dir="yourfilepath", 'sampleinfo.csv')
-#' sampleinfo <- loadCSVFile(csvfile)
-#' samplePeaks <- loadBedFiles(sampleinfo)
-#' consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
+#' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+#' samplePeaks <- loadBedFiles(csvfile)
+#' consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
 #' TSSannot <- getTSS()
-#' consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
-#'                                           TSS = TSSannot,
-#'                                           merge = TRUE,
-#'                                           regionspecific = TRUE,
-#'                                           distancefromTSSdist = 1500,
-#'                                           distancefromTSSprox = 1000 )
-#' #Need to run getcounts on all chromosomes
-#' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
-#'                              sampleinfo = sampleinfo,
-#'                              reference = 'SAEC')
-#' altre_peaks <- countanalysis(counts=counts_consPeaks,
-#'                              pval=0.01,
-#'                              lfcvalue=1)
-#' MFenrich <- pathenrich(analysisresults = altre_peaks,
-#'                        ontoltype = 'MF',
-#'                        enrichpvalfilt = 0.01)
-#' BPenrich <- pathenrich(analysisresults=altre_peaks,
-#'                        ontoltype='BP',
-#'                        enrichpvalfilt=0.01)
-#'}
+#' consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
+#'    TSS = TSSannot,
+#'    merge = TRUE,
+#'    regionspecific = TRUE,
+#'    distancefromTSSdist = 1500,
+#'    distancefromTSSprox = 1000)
+#' consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
+#'    sampleinfo = csvfile,
+#'    reference = 'SAEC',
+#'    chrom = 'chr21')
+#' alteredPeaks <- countanalysis(counts = consensusPeaksCounts,
+#'    pval = 0.01,
+#'    lfcvalue = 1)
+#' alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
+#'    lfctypespecific = 1.5,
+#'    lfcshared = 1.2,
+#'    pvaltypespecific = 0.01,
+#'    pvalshared = 0.05)
+#' comparePeaksAnalysisResults <- comparePeaksAltre(alteredPeaksCategorized, reference = "SAEC")
+#' MFenrich <- pathenrich(analysisresults = alteredPeaksCategorized,
+#'    ontoltype = 'MF',
+#'    enrichpvalfilt = 0.99)}
 #' @return dataframe identifying p-values for enriched pathways --
 #' pathways also annotated with additional information
 #'

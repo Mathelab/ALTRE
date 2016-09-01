@@ -19,21 +19,20 @@
 #'
 #' @examples
 #' \dontrun{
+#' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+#' samplePeaks <- loadBedFiles(csvfile)
+#' consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
 #' TSSannot <- getTSS()
-#' csvfile <- file.path(dir="yourfilepath", 'sampleinfo.csv')
-#' sampleinfo <- loadCSVFile(csvfile)
-#' samplePeaks <- loadBedFiles(sampleinfo)
-#' consPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps=2)
-#' consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
-#'                                           TSS = TSSannot,
-#'                                           merge = TRUE,
-#'                                           regionspecific = TRUE,
-#'                                           distancefromTSSdist = 1500,
-#'                                           distancefromTSSprox = 1000 )
-#' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
-#'                               sampleinfo = sampleinfo,
-#'                               reference = 'SAEC',
-#'                               chrom = 'chr21')
+#' consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
+#'    TSS = TSSannot,
+#'    merge = TRUE,
+#'    regionspecific = TRUE,
+#'    distancefromTSSdist = 1500,
+#'    distancefromTSSprox = 1000)
+#' consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
+#'    sampleinfo = csvfile,
+#'    reference = 'SAEC',
+#'    chrom = 'chr21')
 #' }
 #' @export
 
@@ -73,9 +72,9 @@ getCounts <- function(annotpeaks, sampleinfo, reference, chrom = NULL) {
 
   # Calculate RPKM for plotting densities multiply by 10^6 and divide by
   # regions size to get rpkm
-  myrpkm <- as.data.frame(normcountssedds[, 1] * 10^6/regionsize)
+  myrpkm <- as.data.frame(normcountssedds[, 1] * 10 ^ 6/regionsize)
   for (i in 2:ncol(normcountssedds)) {
-    myrpkm[, i] <- normcountssedds[, i] * 10^6/regionsize
+    myrpkm[, i] <- normcountssedds[, i] * 10 ^ 6/regionsize
   }
   # take the log2 so that it is a normalized distribution
   myrpkmlog2 <- log2(as.matrix(myrpkm) + 1)

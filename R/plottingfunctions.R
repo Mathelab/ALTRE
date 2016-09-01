@@ -7,12 +7,11 @@
 #'
 #' @examples
 #' \dontrun{
-#' csvfile <- file.path(dir="yourfilepath", 'sampleinfo.csv')
-#' sampleinfo <- loadCSVFile(csvfile)
-#' samplePeaks <- loadBedFiles(sampleinfo)
-#' consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks, minreps=2)
-#' plotConsensusPeaks(samplepeaks = consPeaks)
-#' }
+#' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+#' samplePeaks <- loadBedFiles(csvfile)
+#' consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
+#' minreps = 2)
+#' plotConsensusPeaks(samplepeaks = consensusPeaks)}
 #' @export
 #'
 plotConsensusPeaks <- function(samplepeaks, palette = "Set1") {
@@ -101,19 +100,18 @@ plotConsensusPeaks <- function(samplepeaks, palette = "Set1") {
 #'
 #' @examples
 #' \dontrun{
-#' csvfile <- file.path(dir="yourfilepath", 'sampleinfo.csv')
-#' sampleinfo <- loadCSVFile(csvfile)
-#' samplePeaks <- loadBedFiles(sampleinfo)
-#' consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
-#' plotConsensusPeaks(samplepeaks=consPeaks)
+#' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+#' samplePeaks <- loadBedFiles(csvfile)
+#' consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
+#' minreps = 2)
 #' TSSannot <- getTSS()
-#' consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
-#'                                           TSS = TSSannot,
-#'                                           merge = TRUE,
-#'                                           regionspecific = TRUE,
-#'                                           distancefromTSSdist = 1500,
-#'                                           distancefromTSSprox = 1000)
-#' plotCombineAnnotatePeaks(consPeaksAnnotated)
+#' consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
+#' TSS = TSSannot,
+#' merge = TRUE,
+#' regionspecific = TRUE,
+#' distancefromTSSdist = 1500,
+#' distancefromTSSprox = 1000)
+#' plotCombineAnnotatePeaks(consensusPeaksAnnotated)
 #' }
 #' @export
 #'
@@ -148,7 +146,7 @@ plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE,
         mergeStatsAfter <- dplyr::filter(mergeStatsTotal,
                                          thecondition == "after")
 
-        p1 <- highchart(height = 1000) %>%
+        p1 <- highchart(height = 400) %>%
             hc_title(text = "Number of REs",
                      style = list(color = '#2E1717',
                                   fontWeight = 'bold')) %>%
@@ -208,7 +206,7 @@ plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE,
                                        thecondition == "after")
 
 
-        p2 <- highchart(height = 1000) %>%
+        p2 <- highchart(height = 400) %>%
             hc_title(text = "Mean length of REs",
                      style = list(color = '#2E1717',
                                   fontWeight = 'bold')) %>%
@@ -277,25 +275,22 @@ plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE,
 #'
 #' @examples
 #' \dontrun{
-#' csvfile <- file.path(dir="yourfilepath", 'sampleinfo.csv')
-#' sampleinfo <- loadCSVFile(csvfile)
-#' samplePeaks <- loadBedFiles(sampleinfo)
-#' consPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps=2)
-#' plotConsensusPeaks(samplepeaks = consPeaks)
+#' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+#' samplePeaks <- loadBedFiles(csvfile)
+#' consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
+#' minreps = 2)
 #' TSSannot <- getTSS()
-#' consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
-#'                                           TSS = TSSannot,
-#'                                           merge = TRUE,
-#'                                           regionspecific = TRUE,
-#'                                           distancefromTSSdist = 1500,
-#'                                           distancefromTSSprox = 1000 )
-#'
-#' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
-#'                              sampleinfo = sampleinfo,
-#'                              reference = 'SAEC',
-#'                              chrom = 'chr21')
-#' plotGetCounts(counts_consPeaks)
-#' }
+#' consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
+#' TSS = TSSannot,
+#' merge = TRUE,
+#' regionspecific = TRUE,
+#' distancefromTSSdist = 1500,
+#' distancefromTSSprox = 1000)
+#' consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
+#'                                  sampleinfo = csvfile,
+#'                                  reference = 'SAEC',
+#'                                  chrom = 'chr21')
+#' plotGetCounts(consensusPeaksCounts)}
 #' @export
 
 plotGetCounts <- function(countsConsPeaks, palette = "Set1") {
@@ -336,8 +331,7 @@ plotGetCounts <- function(countsConsPeaks, palette = "Set1") {
 }
 
 
-#' Given the output from getCounts, plot a density plot
-#'  of log2 RPKM values of regulation regions
+#' Create a volcano plot from the output of categAltrePeaks
 #'
 #' @param altrepeakscateg output generated from countanalysis() then
 #' categAltrePeaks()
@@ -350,31 +344,30 @@ plotGetCounts <- function(countsConsPeaks, palette = "Set1") {
 #'
 #' @examples
 #' \dontrun{
-#' csvfile <- file.path(dir="yourfilepath", 'sampleinfo.csv')
-#' sampleinfo <- loadCSVFile(csvfile)
-#' samplePeaks <- loadBedFiles(sampleinfo)
-#' consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
-#' plotConsensusPeaks(samplepeaks=consPeaks)
-#' TSSannot<- getTSS()
-#' consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
-#'                                           TSS = TSSannot,
-#'                                           merge = TRUE,
-#'                                           regionspecific = TRUE,
-#'                                           distancefromTSSdist = 1500,
-#'                                           distancefromTSSprox = 1000)
-#' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
-#'                               sampleinfo = sampleinfo,
-#'                               reference = 'SAEC',
-#'                               chrom = 'chr21')
-#' altre_peaks <- countanalysis(counts = counts_consPeaks,
-#'                              pval = 0.01,
-#'                              lfcvalue = 1)
-#' categaltre_peaks <- categAltrePeaks(altre_peaks,
-#'                                     lfctypespecific = 1.5,
-#'                                     lfcshared = 1.2,
-#'                                     pvaltypespecific = 0.01,
-#'                                     pvalshared = 0.05)
-#' plotCountAnalysis(categaltre_peaks)
+#' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+#' samplePeaks <- loadBedFiles(csvfile)
+#' consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
+#' minreps = 2)
+#' TSSannot <- getTSS()
+#' consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
+#' TSS = TSSannot,
+#' merge = TRUE,
+#' regionspecific = TRUE,
+#' distancefromTSSdist = 1500,
+#' distancefromTSSprox = 1000)
+#' consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
+#'                                  sampleinfo = csvfile,
+#'                                  reference = 'SAEC',
+#'                                  chrom = 'chr21')
+#' alteredPeaks <- countanalysis(counts = consensusPeaksCounts,
+#' pval = 0.01,
+#' lfcvalue = 1)
+#' alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
+#'                                           lfctypespecific = 1.5,
+#'                                           lfcshared = 1.2,
+#'                                           pvaltypespecific = 0.01,
+#'                                           pvalshared = 0.05)
+#' plotCountAnalysis(alteredPeaksCategorized)
 #' }
 #' @export
 
@@ -479,31 +472,30 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) {
 #'
 #' @examples
 #' \dontrun{
-#' csvfile <- file.path(dir="yourfilepath", 'sampleinfo.csv')
-#' sampleinfo <- loadCSVFile(csvfile)
-#' samplePeaks <- loadBedFiles(sampleinfo)
-#' consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
-#' plotConsensusPeaks(samplepeaks=consPeaks)
-#' TSSannot<- getTSS()
-#' consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
-#'                                           TSS = TSSannot,
-#'                                           merge = TRUE,
-#'                                           regionspecific = TRUE,
-#'                                           distancefromTSSdist = 1500,
-#'                                           distancefromTSSprox = 1000)
-#' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
-#'                               sampleinfo = sampleinfo,
-#'                               reference = 'SAEC',
-#'                               chrom = 'chr21')
-#' altre_peaks <- countanalysis(counts = counts_consPeaks,
-#'                              pval = 0.01,
-#'                              lfcvalue = 1)
-#' categaltre_peaks <- categAltrePeaks(altre_peaks,
-#'                                     lfctypespecific = 1.5,
-#'                                     lfcshared = 1.2,
-#'                                     pvaltypespecific = 0.01,
-#'                                     pvalshared = 0.05)
-#' plotDistCountAnalysis(categaltre_peaks, counts_consPeaks)
+#' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+#' samplePeaks <- loadBedFiles(csvfile)
+#' consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
+#' minreps = 2)
+#' TSSannot <- getTSS()
+#' consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
+#' TSS = TSSannot,
+#' merge = TRUE,
+#' regionspecific = TRUE,
+#' distancefromTSSdist = 1500,
+#' distancefromTSSprox = 1000)
+#' consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
+#'                                  sampleinfo = csvfile,
+#'                                  reference = 'SAEC',
+#'                                  chrom = 'chr21')
+#' alteredPeaks <- countanalysis(counts = consensusPeaksCounts,
+#' pval = 0.01,
+#' lfcvalue = 1)
+#' alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
+#'                                           lfctypespecific = 1.5,
+#'                                           lfcshared = 1.2,
+#'                                           pvaltypespecific = 0.01,
+#'                                           pvalshared = 0.05)
+#' plotDistCountAnalysis(alteredPeaksCategorized, consensusPeaksCounts)
 #' }
 #' @export
 #'
@@ -671,38 +663,33 @@ plotDistCountAnalysis <- function(analysisresults, counts, palette = NULL){
 #'
 #' @examples
 #' \dontrun{
-#' csvfile <- file.path(dir="yourfilepath", 'sampleinfo.csv')
-#' sampleinfo <- loadCSVFile(csvfile)
-#' samplePeaks <- loadBedFiles(sampleinfo)
-#' consPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
-#' plotConsensusPeaks(samplepeaks = consPeaks)
+#' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+#' samplePeaks <- loadBedFiles(csvfile)
+#' consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
+#' minreps = 2)
 #' TSSannot <- getTSS()
-#' consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
-#'                                           TSS = TSSannot,
-#'                                           merge = TRUE,
-#'                                           regionspecific = TRUE,
-#'                                           distancefromTSSdist = 1500,
-#'                                           distancefromTSSprox = 1000)
-#' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
-#'                               sampleinfo = sampleinfo,
-#'                               reference = 'SAEC',
-#'                               chrom = 'chr21')
-#' altre_peaks <- countanalysis(counts=counts_consPeaks,
-#'                              pval=0.01,
-#'                              lfcvalue=1)
-#' categaltre_peaks <- categAltrePeaks(altre_peaks,
-#'				lfctypespecific = 1.5,
-#'				lfcshared = 1.2,
-#'				pvaltypespecific = 0.01,
-#'				pvalshared = 0.05)
-#' MFenrich <- pathenrich(analysisresults = categaltre_peaks,
-#'                        ontoltype = 'MF',
-#'                        enrichpvalfilt = 0.01)
-#' BPenrich <- pathenrich(analysisresults=categaltre_peaks,
-#'                        ontoltype='BP',
-#'                        enrichpvalfilt=0.01)
-#' plot1 <- enrichHeatmap(MFenrich, title='GO:MF, p<0.01')
-#' plot2 <- enrichHeatmap(BPenrich, title='GO:BP, p<0.01')
+#' consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
+#' TSS = TSSannot,
+#' merge = TRUE,
+#' regionspecific = TRUE,
+#' distancefromTSSdist = 1500,
+#' distancefromTSSprox = 1000)
+#' consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
+#'                                  sampleinfo = csvfile,
+#'                                  reference = 'SAEC',
+#'                                  chrom = 'chr21')
+#' alteredPeaks <- countanalysis(counts = consensusPeaksCounts,
+#' pval = 0.01,
+#' lfcvalue = 1)
+#' alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
+#'                                           lfctypespecific = 1.5,
+#'                                           lfcshared = 1.2,
+#'                                           pvaltypespecific = 0.01,
+#'                                           pvalshared = 0.05)
+#' MFenrich <- pathenrich(analysisresults = alteredPeaksCategorized,
+#' ontoltype = 'MF',
+#' enrichpvalfilt = 0.99)
+#' enrichHeatmap(MFenrich, title = "TSS-distal GO:MF", pvalfilt = 0.99)
 #' }
 #' @export
 
@@ -885,8 +872,10 @@ enrichHeatmap <- function(input,
 #'
 #' @param input results from GREAT enrichment analysis
 #' @param title title of the heatmap
-#' @param pathwaycateg 
+#' @param pathwaycateg ontology
 #' @param numshow number of top pathways (ranked according to p-value) of each type (expt, reference, shared) to show in the plot (default=10)
+#'
+#' @return heatmap
 #'
 #' @examples
 #' \dontrun{
@@ -917,15 +906,18 @@ enrichHeatmap <- function(input,
 #' GREAToutput <- runGREAT(peaks=categaltre_peaks)
 #' GREATpathways <- processPathways(temp)
 #' names(GREATpathways$Sig_Pathways)
-#' plot <- plotGREATenrich(GREATpathways, title="GREAT Enrichment Analysis", pathwaycateg="GO Molecular Function") 
+#' plot <- plotGREATenrich(GREATpathways, title="GREAT Enrichment Analysis", pathwaycateg="GO Molecular Function")
 #' }
-plotGREATenrich <- function(input,
-                          title,
-                          pathwaycateg,
-                          numshow=10) {
-	return(NULL)
-}
+#'
+#' @export
 
+plotGREATenrich <- function(){}
+###plotGREATenrich <- function(input,
+###                          title,
+###                          pathwaycateg,
+###                          numshow=10) {
+###
+###
 ###  if (is.list(input) == FALSE) {
 ###    stop("The input is not a list! Please make sure you are
 ###         using the output from the enrichment analysis (function processPathways())")
@@ -947,6 +939,9 @@ plotGREATenrich <- function(input,
 
 
 
+#' Plots a venn diagram that compares altered regions as determined by peak presence or by
+#' differential counts.  The type of regulatory region (TSS-proximal, TSS-distal, or both)
+#' and type of peak comparison (intensity or peak) must be specified.
 #' Plots a venn diagram that compares altered regions as determined by peak
 #' presence or by differential counts.  The type of regulatory region
 #' (TSS-proximal, TSS-distal, or both) and type of peak comparison
@@ -961,33 +956,30 @@ plotGREATenrich <- function(input,
 #' @return venn diagram
 #' @examples
 #' \dontrun{
-#' csvfile <- file.path(dir="yourfilepath", 'sampleinfo.csv')
-#' sampleinfo <- loadCSVFile(csvfile)
-#' samplePeaks <- loadBedFiles(sampleinfo)
-#' consPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
-#' plotConsensusPeaks(samplepeaks = consPeaks)
+#' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+#' samplePeaks <- loadBedFiles(csvfile)
+#' consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
+#' minreps = 2)
 #' TSSannot <- getTSS()
-#' consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
-#'                                            TSS = TSSannot,
-#'                                            merge = TRUE,
-#'                                            regionspecific = TRUE,
-#'                                            distancefromTSSdist = 1500,
-#'                                            distancefromTSSprox = 1000)
-#' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
-#'                               sampleinfo = sampleinfo,
-#'                               reference = 'SAEC')
-#' altre_peaks <- countanalysis(counts=counts_consPeaks,
-#'                              pval=0.01,
-#'                              lfcvalue=1)
-#' categaltre_peaks=categAltrePeaks(altre_peaks,
-#'	lfctypespecific=1.5,
-#' 	lfcshared=1.2,
-#' 	pvaltypespecific=0.01,
-#' 	pvalshared=0.05)
-#' analysisresults <- comparePeaksAltre(categaltre_peaks, reference= "SAEC")
-#' plot1 <- plotvenn(analysisresults,
-#'                   region='TSS-distal',
-#'                   method='intensity')
+#' consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
+#' TSS = TSSannot,
+#' merge = TRUE,
+#' regionspecific = TRUE,
+#' distancefromTSSdist = 1500,
+#' distancefromTSSprox = 1000)
+#' consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
+#'                                  sampleinfo = csvfile,
+#'                                  reference = 'SAEC',
+#'                                  chrom = 'chr21')
+#' alteredPeaks <- countanalysis(counts = consensusPeaksCounts,
+#' pval = 0.01,
+#' lfcvalue = 1)
+#' alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
+#'                                           lfctypespecific = 1.5,
+#'                                           lfcshared = 1.2,
+#'                                           pvaltypespecific = 0.01,
+#'                                           pvalshared = 0.05)
+#'plotCompareMethods(comparePeaksAnalysisResults)
 #'}
 
 plotCompareMethods <- function(analysisresultsmatrix,
@@ -1093,31 +1085,30 @@ plotCompareMethods <- function(analysisresultsmatrix,
 #' @param palette RColorBrewer palette to change graph colors
 #' @examples
 #' \dontrun{
-#' csvfile <- file.path(dir="yourfilepath", 'sampleinfo.csv')
-#' sampleinfo <- loadCSVFile(csvfile)
-#' samplePeaks <- loadBedFiles(sampleinfo)
-#' consPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
-#' plotConsensusPeaks(samplepeaks = consPeaks)
+#' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+#' samplePeaks <- loadBedFiles(csvfile)
+#' consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
+#' minreps = 2)
 #' TSSannot <- getTSS()
-#' consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
-#'                                            TSS = TSSannot,
-#'                                            merge = TRUE,
-#'                                            regionspecific = TRUE,
-#'                                            distancefromTSSdist = 1500,
-#'                                            distancefromTSSprox = 1000 )
-#' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
-#'                               sampleinfo = sampleinfo,
-#'                               reference = 'SAEC')
-#' altre_peaks <- countanalysis(counts=counts_consPeaks,
-#'                              pval=0.01,
-#'                              lfcvalue=1)
-#' categaltre_peaks=categAltrePeaks(altre_peaks,
-#'      lfctypespecific=1.5,
-#'      lfcshared=1.2,
-#'      pvaltypespecific=0.01,
-#'      pvalshared=0.05)
-#' analysisresults <- resultsComparison(altre_peaks, reference= "SAEC")
-#' plotallvenn(analysisresults)
+#' consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
+#' TSS = TSSannot,
+#' merge = TRUE,
+#' regionspecific = TRUE,
+#' distancefromTSSdist = 1500,
+#' distancefromTSSprox = 1000)
+#' consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
+#'                                  sampleinfo = csvfile,
+#'                                  reference = 'SAEC',
+#'                                  chrom = 'chr21')
+#' alteredPeaks <- countanalysis(counts = consensusPeaksCounts,
+#' pval = 0.01,
+#' lfcvalue = 1)
+#' alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
+#'                                           lfctypespecific = 1.5,
+#'                                           lfcshared = 1.2,
+#'                                           pvaltypespecific = 0.01,
+#'                                           pvalshared = 0.05)
+#'plotCompareMethodsAll(comparePeaksAnalysisResults)
 #' }
 #' @export
 #'

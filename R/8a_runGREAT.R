@@ -2,30 +2,32 @@
 #' to identify putative pathways of interest for further
 #' investigation
 #' @param peaks list, output of categAltrePeaks() function
-## @param peaktype character, "Experiment Specific", "Reference Specific", 
-## 	"Ambiguous", "Shared", or "All" (All is default)
+##' @param peaktype character, "Experiment Specific", "Reference Specific",
+##' 	"Ambiguous", "Shared", or "All" (All is default)
 #' @param species default hg19
 #' @param rule character, "basalPlusExt", "twoClosest", "oneClosest" rule that associates
-#' 	genomic regions to genes (default is "basalPlusExt"). 
-#' 	See https://bioconductor.org/packages/release/bioc/html/chipenrich.html for more detail.  
+#' 	genomic regions to genes (default is "basalPlusExt").
+#' 	See https://bioconductor.org/packages/release/bioc/html/chipenrich.html for more detail.
 #' @param adv_upstream: kb, extension to upstream (if rule is basalPlusExt), default 5
-#' @param adv_downstream: kb, extension to downstream (if rule is basalPlusExt), default 1.0  
+#' @param adv_downstream: kb, extension to downstream (if rule is basalPlusExt), default 1.0
 #' @param adv_span: kb, max extension (if rule is basalPlusExt), default 1000.0
 #' @param adv_twoDistance: kb, max extension (if rule is twoClosest), default 1000.0
 #' @param adv_oneDistance: kb, max extension (if rule is oneClosest), default 1000.0
 #' @param pathway_category: character, "GO", "Pathway Data", "Regulatory Motifs",
 #'	"Phenotype Data and Human Disease", "Gene Expression", "Gene Families"
 #'	(default is "GO")
-#' 
-# @examples 
-# runGREAT(peaks=categaltre_peaks)
-#' @return list pathways also annotated with additional information
+#' @examples
+#' \dontrun{
+#' runGREAT(peaks=categaltre_peaks)
+#' }
+#' @return ways --
+#' pathways also annotated with additional information
 
 # run with categaltre_peaks
 
-runGREAT <- function(peaks, 
+runGREAT <- function(peaks,
 #	peaktype="All",
-	species="hg19", 
+	species="hg19",
 	rule="basalPlusExt",
 	adv_upstream=5.0,
 	adv_downstream=1.0,
@@ -94,7 +96,7 @@ runGREAT <- function(peaks,
 #' @return list of dataframes for enriched pathways - each dataframe in the list
 #' represents one pathway type (e.g. "GO Molecular Function")
 
-processPathways <- function(GREATpath, 
+processPathways <- function(GREATpath,
 	pathway_category="GO",
 	adjustby="bonferroni",
 	test="Binom",
@@ -104,10 +106,10 @@ processPathways <- function(GREATpath,
 finaloutput=list()
   for (job in names(GREATpath)) {
     if(!is(GREATpath[[job]], "GreatJob")) {
-	stop("GREATpath is not a list of 'GreatJob' objects.  
+	stop("GREATpath is not a list of 'GreatJob' objects.
 		Input should be the output of runGREAT()")
     }
-	
+
     output= rGREAT::getEnrichmentTables(GREATpath[[job]],category=pathway_category)
     names(output)=gsub(" ","_",names(output))
     stats=data.frame(Pathway=names(output),NumSig=rep(NA,length(names(output))))
@@ -144,5 +146,5 @@ finaloutput=list()
  } # end looping through each GREAT job
   return(finaloutput)
 } # end function
- 
+
 

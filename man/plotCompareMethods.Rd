@@ -2,7 +2,10 @@
 % Please edit documentation in R/plottingfunctions.R
 \name{plotCompareMethods}
 \alias{plotCompareMethods}
-\title{Plots a venn diagram that compares altered regions as determined by peak
+\title{Plots a venn diagram that compares altered regions as determined by peak presence or by
+differential counts.  The type of regulatory region (TSS-proximal, TSS-distal, or both)
+and type of peak comparison (intensity or peak) must be specified.
+Plots a venn diagram that compares altered regions as determined by peak
 presence or by differential counts.  The type of regulatory region
 (TSS-proximal, TSS-distal, or both) and type of peak comparison
 (intensity or peak) must be specified.}
@@ -26,6 +29,9 @@ include quotes}
 venn diagram
 }
 \description{
+Plots a venn diagram that compares altered regions as determined by peak presence or by
+differential counts.  The type of regulatory region (TSS-proximal, TSS-distal, or both)
+and type of peak comparison (intensity or peak) must be specified.
 Plots a venn diagram that compares altered regions as determined by peak
 presence or by differential counts.  The type of regulatory region
 (TSS-proximal, TSS-distal, or both) and type of peak comparison
@@ -33,33 +39,30 @@ presence or by differential counts.  The type of regulatory region
 }
 \examples{
 \dontrun{
-csvfile <- file.path(dir="yourfilepath", 'sampleinfo.csv')
-sampleinfo <- loadCSVFile(csvfile)
-samplePeaks <- loadBedFiles(sampleinfo)
-consPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
-plotConsensusPeaks(samplepeaks = consPeaks)
+csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+samplePeaks <- loadBedFiles(csvfile)
+consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
+minreps = 2)
 TSSannot <- getTSS()
-consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
-                                           TSS = TSSannot,
-                                           merge = TRUE,
-                                           regionspecific = TRUE,
-                                           distancefromTSSdist = 1500,
-                                           distancefromTSSprox = 1000)
-counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
-                              sampleinfo = sampleinfo,
-                              reference = 'SAEC')
-altre_peaks <- countanalysis(counts=counts_consPeaks,
-                             pval=0.01,
-                             lfcvalue=1)
-categaltre_peaks=categAltrePeaks(altre_peaks,
-lfctypespecific=1.5,
-	lfcshared=1.2,
-	pvaltypespecific=0.01,
-	pvalshared=0.05)
-analysisresults <- comparePeaksAltre(categaltre_peaks, reference= "SAEC")
-plot1 <- plotvenn(analysisresults,
-                  region='TSS-distal',
-                  method='intensity')
+consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
+TSS = TSSannot,
+merge = TRUE,
+regionspecific = TRUE,
+distancefromTSSdist = 1500,
+distancefromTSSprox = 1000)
+consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
+                                 sampleinfo = csvfile,
+                                 reference = 'SAEC',
+                                 chrom = 'chr21')
+alteredPeaks <- countanalysis(counts = consensusPeaksCounts,
+pval = 0.01,
+lfcvalue = 1)
+alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
+                                          lfctypespecific = 1.5,
+                                          lfcshared = 1.2,
+                                          pvaltypespecific = 0.01,
+                                          pvalshared = 0.05)
+plotCompareMethods(comparePeaksAnalysisResults)
 }
 }
 
