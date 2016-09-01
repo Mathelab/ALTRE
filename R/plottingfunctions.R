@@ -867,12 +867,12 @@ plotDistCountAnalysis <- function(analysisresults, counts, palette = NULL){
 #' MFenrich <- pathenrich(analysisresults = alteredPeaksCategorized,
 #' ontoltype = 'MF',
 #' enrichpvalfilt = 0.99)
-#' enrichHeatmap(MFenrich, title = "TSS-distal GO:MF", pvalfilt = 0.99)
+#' enrichHeatmap(input=MFenrich, title = "TSS-distal GO:MF", pvalfilt = 0.99)
 #' }
 #' @export
 
 enrichHeatmap <- function(input,
-                          title,
+                          title="enrichment",
                           pvalfilt = 0.01,
                           removeonlyshared = FALSE,
                           numshow=10) {
@@ -937,7 +937,7 @@ enrichHeatmap <- function(input,
   row.names(heatmapmatrix) <- pathways
   # name the rows with the pathway names
 
-  colnames(heatmapmatrix) <- c("up", "down", "shared")
+  colnames(heatmapmatrix) <- c("Experiment_specific", "Reference_specific", "Shared")
   # put up, down, and shared as the pathway names
 
   #print(paste("Dim heatmapmatrix", dim(heatmapmatrix)))
@@ -976,9 +976,9 @@ enrichHeatmap <- function(input,
 
 
   heatmapdata <- as.data.frame(heatmapinput)
-  heatmapdata <- heatmapdata[order(heatmapdata$down,
-                                   heatmapdata$up,
-                                   heatmapdata$shared,
+  heatmapdata <- heatmapdata[order(heatmapdata$Reference_specific,
+                                   heatmapdata$Experiment_specific,
+                                   heatmapdata$Shared,
                                    decreasing = TRUE), ]
   # sorts matrix
   heatmapdata$id <- rownames(heatmapdata)
@@ -987,7 +987,7 @@ enrichHeatmap <- function(input,
 
 
   suppressMessages(meltedheatmapdata <- reshape2::melt(heatmapdata))
-
+  
   meltedheatmapdata$newid <- stringr::str_wrap(meltedheatmapdata$id, width = 80)
 
   meltedheatmapdata$id <- factor(meltedheatmapdata$id,
@@ -998,7 +998,7 @@ enrichHeatmap <- function(input,
   #all possible values of X (type) and Y (pathways)
 
   theUniqueY <- unique(meltedheatmapdata$newid)
-  theUniqueX <- c("up", "down", "shared")
+  theUniqueX <- c("Experiment_specific", "Shared", "Reference_specific")
   #unique values of X and Y
 
 
@@ -1018,16 +1018,25 @@ enrichHeatmap <- function(input,
                                       as.numeric(theYAxis),
                                       round(as.numeric(meltedheatmapdata$value)
                                               ,3)))
+  
   formattedHeatmapData <- list_parse2(dataforHeatmap)
   #create final formatting
 
+  
+  fntltp <- JS("function(){
+                  return this.series.xAxis.categories[this.point.x] + ' ~ ' +
+               this.series.yAxis.categories[this.point.y] + ': <b>' +
+               Highcharts.numberFormat(this.point.value, 2)+'</b>';
+               ; }")
+  
   hc <- highchart() %>%
     hc_chart(type = "heatmap") %>%
     hc_title(text = title) %>%
-    hc_xAxis(categories = theUniqueX) %>%
+    hc_xAxis(categories = c("Experiment-specific", "Shared", "Reference-specific")) %>%
     hc_yAxis(categories = theUniqueY) %>%
     hc_add_series(name = "matrix location, p-value",
                   data = formattedHeatmapData) %>%
+      hc_tooltip(formatter = fntltp) %>% 
     hc_legend(
       title = "p-value",
       enabled = TRUE
@@ -1035,6 +1044,7 @@ enrichHeatmap <- function(input,
     hc_exporting(enabled = TRUE)
   p <- hc_colorAxis(hc, minColor = "#000080", maxColor = "#FFFFFF")
   #create final formatting
+
 
   return(p)
   }
