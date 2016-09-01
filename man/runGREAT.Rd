@@ -37,8 +37,8 @@ See https://bioconductor.org/packages/release/bioc/html/chipenrich.html for more
 (default is "GO")}
 }
 \value{
-ways -- pathways also annotated with additional information run
-with categaltre_peaks
+ways --
+pathways also annotated with additional information
 }
 \description{
 Enrichment analysis using GREAT package
@@ -47,7 +47,7 @@ investigation
 }
 \examples{
 \dontrun{
-runGREAT(peaks =categaltre_peaks)
+runGREAT(peaks=categaltre_peaks)
 }
 }
 

@@ -22,9 +22,9 @@
 #' }
 #' @return ways --
 #' pathways also annotated with additional information
-
 # run with categaltre_peaks
-
+#' @export
+#'
 runGREAT <- function(peaks,
                      #	peaktype="All",
                      species = "hg19",
@@ -113,7 +113,8 @@ runGREAT <- function(peaks,
 #'
 #' @return list of dataframes for enriched pathways - each dataframe in the list
 #' represents one pathway type (e.g. "GO Molecular Function")
-
+#' @export
+#'
 processPathways <- function(GREATpath,
                             pathway_category = "GO",
                             adjustby = "bonferroni",
