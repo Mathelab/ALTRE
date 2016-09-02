@@ -46,11 +46,15 @@
  	lfcshared = 1.2,
  	pvaltypespecific = 0.01,
  	pvalshared = 0.05){
-
-   #quick fix
-   #names(analysisresults$results)[10:12] <- c("region","A549","SAEC")
-
-   analysisresults <- analysisresults[[1]]
+    
+    #Make sure to names things are from the user-entered sample names 
+    reference <- analysisresults[[2]] 
+    allSamples <- colnames(analysisresults[[1]])[11:length(analysisresults[[1]])]
+    experimentSpecific <- allSamples[which(!(allSamples %in% reference))]
+    referenceSpecific <- paste0(reference, "SpecificByIntensity")
+    experimentSpecific <- paste0(experimentSpecific, "SpecificByIntensity")
+    
+    analysisresults <- analysisresults[[1]]
 
    if (is.data.frame(analysisresults) == FALSE ||
        is.null(analysisresults$padj) ||
@@ -73,8 +77,8 @@
                            is.na(analysisresults$padj)))
    ambigind <- setdiff(1:nrow(analysisresults), c(exptind, refind, sharedind))
    REaltrecateg <- rep(NA, nrow(analysisresults))
-   REaltrecateg[exptind] <- "Experiment Specific"
-   REaltrecateg[refind] <- "Reference Specific"
+   REaltrecateg[exptind] <- experimentSpecific
+   REaltrecateg[refind] <- referenceSpecific
    REaltrecateg[sharedind] <- "Shared"
    REaltrecateg[ambigind] <- "Ambiguous"
 
@@ -90,20 +94,20 @@
      Expt_Specific = c(length(intersect(
        which(analysisresults$region == "TSS-proximal"),
        which(analysisresults$REaltrecateg ==
-               "Experiment Specific")
+               experimentSpecific)
      )),
      length(intersect(
        which(analysisresults$region == "TSS-distal"),
        which(analysisresults$REaltrecateg ==
-               "Experiment Specific")
+               experimentSpecific)
      ))),
      Ref_Specific = c(length(intersect(
        which(analysisresults$region ==  "TSS-proximal"),
-       which(analysisresults$REaltrecateg == "Reference Specific")
+       which(analysisresults$REaltrecateg == referenceSpecific)
      )),
      length(intersect(
        which(analysisresults$region == "TSS-distal"),
-       which(analysisresults$REaltrecateg == "Reference Specific")
+       which(analysisresults$REaltrecateg == referenceSpecific)
      ))),
      Shared = c(length(intersect(
        which(analysisresults$region == "TSS-proximal"),
@@ -122,7 +126,9 @@
      )))
    )
 
-
-   return(list(analysisresults = analysisresults, stats = stats))
+    listToReturn <-list(analysisresults = analysisresults, stats = stats, reference)
+    names(listToReturn)[3] <- c("reference")
+    
+   return(listToReturn)
 } # end function
 

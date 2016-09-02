@@ -4,14 +4,11 @@
 \alias{comparePeaksAltre}
 \title{Comparison of methods for identifying altered regulatory regions}
 \usage{
-comparePeaksAltre(analysisresults, reference, lfctypespecific = 1.5,
-  lfcshared = 1.2, pvaltypespecific = 0.01, pvalshared = 0.05)
+comparePeaksAltre(analysisresults, lfctypespecific = 1.5, lfcshared = 1.2,
+  pvaltypespecific = 0.01, pvalshared = 0.05)
 }
 \arguments{
 \item{analysisresults}{analysisresults of countanalysis.}
-
-\item{reference}{cell type to be considered "reference" or "reference" to which
-other cell types will be compared}
 
 \item{lfctypespecific}{log2fold change for type specific TSS-dists/TSS-proxs}
 
@@ -55,7 +52,7 @@ alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
    lfcshared = 1.2,
    pvaltypespecific = 0.01,
    pvalshared = 0.05)
-comparePeaksAnalysisResults <- comparePeaksAltre(alteredPeaksCategorized, reference = "SAEC")
+comparePeaksAnalysisResults <- comparePeaksAltre(alteredPeaksCategorized)
 }
 }
 

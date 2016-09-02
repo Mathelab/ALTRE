@@ -5,8 +5,6 @@
 #'  determined by hotspot calling algorithms.
 #'
 #' @param analysisresults analysisresults of countanalysis.
-#' @param reference cell type to be considered "reference" or "reference" to which
-#' other cell types will be compared
 #' @param lfctypespecific log2fold change for type specific TSS-dists/TSS-proxs
 #' @param lfcshared log2fold chance for shared TSS-dists/TSS-proxs
 #' @param pvaltypespecific p-value for type specific TSS-dists/TSS-proxs
@@ -39,30 +37,27 @@
 #'    lfcshared = 1.2,
 #'    pvaltypespecific = 0.01,
 #'    pvalshared = 0.05)
-#' comparePeaksAnalysisResults <- comparePeaksAltre(alteredPeaksCategorized, reference = "SAEC")
+#' comparePeaksAnalysisResults <- comparePeaksAltre(alteredPeaksCategorized)
 #' }
 #' @export
 #'
 comparePeaksAltre <- function(analysisresults,
-	reference,
 	lfctypespecific=1.5,
 	lfcshared=1.2,
 	pvaltypespecific=0.01,
 	pvalshared=0.05){
 
-  analysisresults <- analysisresults[[1]]
+  analysisresults_firstitem <- analysisresults[[1]]
 
-  if (!is.data.frame(analysisresults)) {
+  if (!is.data.frame(analysisresults_firstitem)) {
     stop("Make sure the output of the analysis is from categAltrePeaks() function")
   }
-
-  if (!reference %in% colnames(analysisresults)) {
-	stop("Make sure the reference sample exists!")
-  }
-
-  samplenames <- colnames(analysisresults)[11:(ncol(analysisresults) - 1)]
+  
+  #Make sure to names things are from the user-entered sample names 
+  allSamples <- colnames(analysisresults_firstitem)[11:(ncol(analysisresults_firstitem) - 1)]
+  reference <- analysisresults[[3]]
   analysisresultsmatrix <-  matrix(nrow = 9, ncol = 2)
-  nonreference <-  samplenames[!(samplenames %in% reference)]
+  nonreference <-  allSamples[!(allSamples %in% reference)]
 
   if (length(nonreference) == 1) {
     string <- nonreference
@@ -87,52 +82,52 @@ comparePeaksAltre <- function(analysisresults,
   rownames(analysisresultsmatrix) <- matrixrownames
   colnames(analysisresultsmatrix) <- c("intensity", "peak")
 
-  # create a matrix for my analysisresults which says how mant of one-specific
+  # create a matrix for my analysisresults_firstitem which says how mant of one-specific
   # total, two-specific TSS-proxs, etc.
 
   analysisresultsmatrix[1, 1] <-
-    length(which(analysisresults$log2FoldChange > lfctypespecific &
-                   analysisresults$padj < pvaltypespecific &
-                   analysisresults$region == "TSS-distal"))
+    length(which(analysisresults_firstitem$log2FoldChange > lfctypespecific &
+                   analysisresults_firstitem$padj < pvaltypespecific &
+                   analysisresults_firstitem$region == "TSS-distal"))
   analysisresultsmatrix[2, 1] <-
-    length(which(analysisresults$log2FoldChange > lfctypespecific &
-                   analysisresults$padj <  pvaltypespecific &
-                   analysisresults$region == "TSS-proximal"))
+    length(which(analysisresults_firstitem$log2FoldChange > lfctypespecific &
+                   analysisresults_firstitem$padj <  pvaltypespecific &
+                   analysisresults_firstitem$region == "TSS-proximal"))
   analysisresultsmatrix[3, 1] <-
-    length(which(analysisresults$log2FoldChange > lfctypespecific &
-                   analysisresults$padj <  pvaltypespecific))
+    length(which(analysisresults_firstitem$log2FoldChange > lfctypespecific &
+                   analysisresults_firstitem$padj <  pvaltypespecific))
   analysisresultsmatrix[4, 1] <-
-    length(which(analysisresults$log2FoldChange < -lfctypespecific &
-                   analysisresults$padj <  pvaltypespecific &
-                   analysisresults$region ==  "TSS-distal"))
+    length(which(analysisresults_firstitem$log2FoldChange < -lfctypespecific &
+                   analysisresults_firstitem$padj <  pvaltypespecific &
+                   analysisresults_firstitem$region ==  "TSS-distal"))
   analysisresultsmatrix[5, 1] <-
-    length(which(analysisresults$log2FoldChange <  -lfctypespecific &
-                   analysisresults$padj <   pvaltypespecific &
-                   analysisresults$region ==  "TSS-proximal"))
+    length(which(analysisresults_firstitem$log2FoldChange <  -lfctypespecific &
+                   analysisresults_firstitem$padj <   pvaltypespecific &
+                   analysisresults_firstitem$region ==  "TSS-proximal"))
   analysisresultsmatrix[6, 1] <-
-    length(which(analysisresults$log2FoldChange <   -lfctypespecific &
-                   analysisresults$padj <   pvaltypespecific))
+    length(which(analysisresults_firstitem$log2FoldChange <   -lfctypespecific &
+                   analysisresults_firstitem$padj <   pvaltypespecific))
   analysisresultsmatrix[7, 1] <-
-    length(which((analysisresults$log2FoldChange >= -lfcshared &
-                    analysisresults$log2FoldChange <= lfcshared) &
-                   (analysisresults$padj >=   pvalshared |
-                      is.na(analysisresults$padj)) &
-                   analysisresults$region == "TSS-distal"))
+    length(which((analysisresults_firstitem$log2FoldChange >= -lfcshared &
+                    analysisresults_firstitem$log2FoldChange <= lfcshared) &
+                   (analysisresults_firstitem$padj >=   pvalshared |
+                      is.na(analysisresults_firstitem$padj)) &
+                   analysisresults_firstitem$region == "TSS-distal"))
   analysisresultsmatrix[8, 1] <-
-    length(which((analysisresults$log2FoldChange >= -lfcshared &
-                    analysisresults$log2FoldChange <= lfcshared) &
-                   (analysisresults$padj >= pvalshared |
-                      is.na(analysisresults$padj)) &
-                   analysisresults$region == "TSS-proximal"))
+    length(which((analysisresults_firstitem$log2FoldChange >= -lfcshared &
+                    analysisresults_firstitem$log2FoldChange <= lfcshared) &
+                   (analysisresults_firstitem$padj >= pvalshared |
+                      is.na(analysisresults_firstitem$padj)) &
+                   analysisresults_firstitem$region == "TSS-proximal"))
   analysisresultsmatrix[9, 1] <-
-    length(which((analysisresults$log2FoldChange >= -lfcshared &
-                    analysisresults$log2FoldChange <= lfcshared) &
-                   analysisresults$padj >= pvalshared))
+    length(which((analysisresults_firstitem$log2FoldChange >= -lfcshared &
+                    analysisresults_firstitem$log2FoldChange <= lfcshared) &
+                   analysisresults_firstitem$padj >= pvalshared))
 
-  typespecsub <- analysisresults[, 11:ncol(analysisresults)]
+  typespecsub <- analysisresults_firstitem[, 11:ncol(analysisresults_firstitem)]
 
-  referencesub <- as.matrix(analysisresults[,  reference])
-  nonreferencesub <- as.matrix(analysisresults[,  nonreference])
+  referencesub <- as.matrix(analysisresults_firstitem[,  reference])
+  nonreferencesub <- as.matrix(analysisresults_firstitem[,  nonreference])
 
   analysisresultsmatrix[1, 2] <-
     tssdistnonreference <-
@@ -140,14 +135,14 @@ comparePeaksAltre <- function(analysisresults,
                        1,
                        function(x) {any(is.na(x) == FALSE)}) &
                    apply(referencesub, 1, function(x) {any(is.na(x))}) &
-                   analysisresults$region == "TSS-distal"))
+                   analysisresults_firstitem$region == "TSS-distal"))
   analysisresultsmatrix[2, 2] <-
     tssproxnonreference <-
     length(which(apply(nonreferencesub,
                        1,
                        function(x) {any(is.na(x) == FALSE)}) &
                    apply(referencesub, 1, function(x) {any(is.na(x))}) &
-                   analysisresults$region == "TSS-proximal"))
+                   analysisresults_firstitem$region == "TSS-proximal"))
   analysisresultsmatrix[3, 2] <-
     allnonreference <-
     length(which(apply(nonreferencesub,
@@ -164,7 +159,7 @@ comparePeaksAltre <- function(analysisresults,
                    apply(nonreferencesub,
                          1,
                          function(x) { all(is.na(x))}) &
-                   analysisresults$region == "TSS-distal"))
+                   analysisresults_firstitem$region == "TSS-distal"))
   analysisresultsmatrix[5, 2] <-
     tssproxreference <-
     length(which(apply(referencesub,
@@ -173,7 +168,7 @@ comparePeaksAltre <- function(analysisresults,
                    apply(nonreferencesub,
                          1,
                          function(x) { all(is.na(x))}) &
-                   analysisresults$region == "TSS-proximal"))
+                   analysisresults_firstitem$region == "TSS-proximal"))
   analysisresultsmatrix[6, 2] <-
     allreference <-
     length(which(apply(referencesub,
@@ -189,7 +184,7 @@ comparePeaksAltre <- function(analysisresults,
                          any(is.na(x) == FALSE)
                        }) & apply(nonreferencesub, 1, function(x) {
                          any(is.na(x) == FALSE)
-                       }) & analysisresults$region == "TSS-distal"))
+                       }) & analysisresults_firstitem$region == "TSS-distal"))
   analysisresultsmatrix[8, 2] <-
     tssproxshared <-
     length(which(apply(referencesub,
@@ -197,7 +192,7 @@ comparePeaksAltre <- function(analysisresults,
                          any(is.na(x) == FALSE)
                        }) & apply(nonreferencesub, 1, function(x) {
                          any(is.na(x) == FALSE)
-                       }) & analysisresults$region == "TSS-proximal"))
+                       }) & analysisresults_firstitem$region == "TSS-proximal"))
   analysisresultsmatrix[9, 2] <-
     allshared <-
     length(which(apply(referencesub,
@@ -207,6 +202,8 @@ comparePeaksAltre <- function(analysisresults,
                          any(is.na(x) == FALSE)
                        })))
 
-  return(list(analysisresultsmatrix))
+  listToReturn <- list(analysisresultsmatrix, reference)
+  names(listToReturn)[2] <- c("analysisresultsmatrix", "reference")
+  return(listToReturn)
 }
 

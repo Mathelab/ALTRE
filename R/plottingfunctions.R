@@ -374,32 +374,45 @@ plotGetCounts <- function(countsConsPeaks, palette = "Set1") {
 plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) {
 
 
-  if ( !is.null(palette) ) {
-    cols <- RColorBrewer::brewer.pal(4, palette) }
-  else{cols <- c("#d3d3d3", "#C71585", "#00E5EE","#000080")}
+    if ( !is.null(palette) ) {
+        cols <- RColorBrewer::brewer.pal(4, palette) 
+    }else {cols <- c("#C71585", "#d3d3d3", "#000080", "#00E5EE")}
                         #grey (ambiguous)
                         #magenta (experiment-specific)
                         #blue (reference specific)
-  #blue (shared)
+                            #blue (shared)
 
   log2FoldChange <- NULL
   padj <- NULL
   REaltrecateg <- NULL
   #To prevent R CMD check error
-
-  colnames(altrepeakscateg$analysisresults)
+    
+  
+  Referencespecificsamples <- altrepeakscateg[[3]] 
+  allsamples <- colnames(altrepeakscateg[[1]])[12:length(altrepeakscateg[[1]])-1]
+  Experimentspecificsamples<-allsamples[which(!(allsamples %in% Referencespecificsamples))]
+  
+  Referencespecific <- paste0(Referencespecificsamples, "SpecificByIntensity")
+  Experimentspecific <- paste0(Experimentspecificsamples, "SpecificByIntensity")
+  
+  Referencespecificlabels <- paste0(Referencespecificsamples, "-Specific (by intensity)")
+  Experimentspecificlabels <- paste0(Experimentspecificsamples, "-Specific (by intensity)")
+  
 
   toplot <- altrepeakscateg$analysisresults[ ,c("region",
                                                 "log2FoldChange",
                                                 "padj",
                                                 "REaltrecateg")]
+  replacement <- sub(Referencespecific, Referencespecificlabels, toplot$REaltrecateg)
+  replacement <- sub(Experimentspecific, Experimentspecificlabels, replacement)
+  toplot$REaltrecateg <- replacement
+  
   tssdist <- toplot[which(toplot$region == "TSS-distal"), ]
   tssdist$padj <- round(-log10(tssdist$padj), 2)
   tssdist$log2FoldChange <- round(tssdist$log2FoldChange, 2)
   tssprox <- toplot[which(toplot$region == "TSS-proximal"), ]
   tssprox$padj <- round(-log10(tssprox$padj), 2)
   tssprox$log2FoldChange <- round(tssprox$log2FoldChange, 2)
-  lengthRE <- rep("", length(tssdist$REaltrecateg))
 
   p1 <- highchart() %>%
     hc_chart(type = "scatter") %>%
@@ -415,19 +428,6 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) {
                = {point.y}<br>") %>%
     hc_colors(cols) %>%
     hc_exporting(enabled = TRUE)
-
-  lengthRE <- rep("", length(tssprox$REaltrecateg))
-
-  num1 <- min(which(tssprox$REaltrecateg == "Experiment Specific"))
-  num2 <- min(which(tssprox$REaltrecateg == "Reference Specific"))
-  num3 <- min(which(tssprox$REaltrecateg == "Shared"))
-  num4 <- min(which(tssprox$REaltrecateg == "Ambiguous"))
-
-  lengthRE[num1] <- "Experiment Specific"
-  lengthRE[num2] <- "Reference Specific"
-  lengthRE[num3] <- "Shared"
-  lengthRE[num4] <- "Ambiguous"
-
 
   p2 <- highchart() %>%
     hc_chart(type = "scatter") %>%
@@ -678,10 +678,18 @@ plotCountAnalysisTemp <- function(altrepeakscateg = NULL, viewer = TRUE, palette
 #' @export
 #'
 plotDistCountAnalysis <- function(analysisresults, counts, palette = NULL){
-
+    
+    
+    #Make sure to names things are from the user-entered sample names 
+    reference <- analysisresults[[3]] 
+    allSamples <- colnames(analysisresults[[1]])[12:length(analysisresults[[1]])-1]
+    nonreference <- allSamples[which(!(allSamples %in% reference))]
+    Referencespecific <- paste0(reference, "SpecificByIntensity")
+    Experimentspecific <- paste0(nonreference, "SpecificByIntensity")
+    
   if ( !is.null(palette) ) {
-    cols <- RColorBrewer::brewer.pal(4, palette) }
-  else{cols <- c("#C71585", "#d3d3d3", "#000080", "#00E5EE")}
+    cols <- RColorBrewer::brewer.pal(4, palette) 
+    } else{cols <- c("#C71585", "#d3d3d3", "#000080", "#00E5EE")}
            #magenta (experiment-specific) #grey (ambiguous) #blue (shared))
   #blue (reference specific)
 
@@ -731,16 +739,16 @@ plotDistCountAnalysis <- function(analysisresults, counts, palette = NULL){
                     PEcateg = PEcateg,
                     altrecateg = altrecateg)
   TSSdistal <- dplyr::filter(mydf, PEcateg == "TSS-distal")
-  distal1 <- dplyr::filter(mydf, altrecateg == "Experiment Specific")
+  distal1 <- dplyr::filter(mydf, altrecateg == Experimentspecific)
   distal2 <- dplyr::filter(mydf, altrecateg == "Ambiguous")
   distal3 <- dplyr::filter(mydf, altrecateg == "Shared")
-  distal4 <- dplyr::filter(mydf, altrecateg == "Reference Specific")
+  distal4 <- dplyr::filter(mydf, altrecateg == Referencespecific)
 
   TSSproximal <- dplyr::filter(mydf, PEcateg == "TSS-proximal")
-  proximal1 <- dplyr::filter(mydf, altrecateg == "Experiment Specific")
+  proximal1 <- dplyr::filter(mydf, altrecateg == Experimentspecific)
   proximal2 <- dplyr::filter(mydf, altrecateg == "Ambiguous")
   proximal3 <- dplyr::filter(mydf, altrecateg == "Shared")
-  proximal4 <- dplyr::filter(mydf, altrecateg == "Reference Specific")
+  proximal4 <- dplyr::filter(mydf, altrecateg == Referencespecific)
 
   distal1_5num_A549 <- stats::fivenum(distal1$meanlog2FPM.A549)
   proximal1_5num_A549 <- stats::fivenum(proximal1$meanlog2FPM.A549)
@@ -779,8 +787,12 @@ plotDistCountAnalysis <- function(analysisresults, counts, palette = NULL){
                                  round(distal4_5num_SAEC,3),
                                  round(proximal4_5num_SAEC,3))
 
-  categ <- c('A549-specific TSS-distal', 'A549-specific TSS-proximal',
-             'SAEC-specific TSS-distal', 'SAEC-specific TSS-proximal')
+  categ <- c('A549-specific (by peaks) TSS-distal', 'A549-specific (by peaks) TSS-proximal',
+             'SAEC-specific (by peaks) TSS-distal', 'SAEC-specific (by peaks) TSS-proximal')
+  
+  explabel <- paste0(nonreference, "-specific (by intensity)")
+  reflabel <- paste0(reference, "-specific (by intensity)")
+  
   p <- highchart() %>%
     hc_title(text = "Distribution of Normalized Counts",
              style = list(color = '#2E1717',
@@ -800,7 +812,7 @@ plotDistCountAnalysis <- function(analysisresults, counts, palette = NULL){
       )
     ) %>%
     hc_add_series(data = Experimentspecific_list,
-                  name = 'Experiment Specific',
+                  name = explabel,
                   type = "boxplot") %>%
     hc_add_series(data = Ambiguous_list,
                   name = 'Ambiguous',
@@ -809,7 +821,7 @@ plotDistCountAnalysis <- function(analysisresults, counts, palette = NULL){
                   name = 'Shared',
                   type = "boxplot") %>%
     hc_add_series(data = Referencespecific_list,
-                  name = 'Reference Specific',
+                  name = reflabel,
                   type = "boxplot") %>%
     hc_yAxis(title = list(text = "Observations"),
              labels = list(format = "{value}")) %>%
@@ -883,16 +895,16 @@ enrichHeatmap <- function(input,
          using the output from the enrichment analysis")
   }
 
-  if (is.data.frame(input$expt) == FALSE |
-      is.data.frame(input$reference) == FALSE |
-      is.data.frame(input$shared) == FALSE |
+  if (is.data.frame(input[[1]]) == FALSE |
+      is.data.frame(input[[2]]) == FALSE |
+      is.data.frame(input[[3]]) == FALSE |
       length(input) != 3 |
       all(names(input) != c("expt", "reference", "shared"))) {
     stop("The input is not a list of three dataframes or
          there are no enriched pathways to plot")
   }
 
-  up <- input$expt
+  up <- input[[1]]
   if (length(up) <= 1) {
     up$Description <- NA
   } else {
@@ -901,7 +913,7 @@ enrichHeatmap <- function(input,
       up <- up[order(up$p.adjust)[1:numshow],]
     }
   }
-  reference <- input$reference
+  reference <- input[[2]]
   if (length(reference) <= 1) {
     reference$Description <- NA
   } else {
@@ -910,7 +922,7 @@ enrichHeatmap <- function(input,
       reference <- reference[order(reference$p.adjust)[1:numshow],]
     }
   }
-  shared <- input$shared
+  shared <- input[[3]]
   if (length(shared) <= 1) {
     shared$Description <- NA
   } else {
@@ -1024,6 +1036,9 @@ enrichHeatmap <- function(input,
   #create final formatting
 
   
+  names(input)=gsub("SpecificByIntensity", "", names(input))
+  
+  
   fntltp <- JS("function(){
                   return this.series.xAxis.categories[this.point.x] + ' ~ ' +
                this.series.yAxis.categories[this.point.y] + ': <b>' +
@@ -1033,7 +1048,7 @@ enrichHeatmap <- function(input,
   hc <- highchart() %>%
     hc_chart(type = "heatmap") %>%
     hc_title(text = title) %>%
-    hc_xAxis(categories = c("Experiment-specific", "Shared", "Reference-specific")) %>%
+    hc_xAxis(categories = c(paste0(names(input)[[1]], "-specific (by intensity)"), "Shared", paste0(names(input)[[2]], "-specific (by intensity)"))) %>%
     hc_yAxis(categories = theUniqueY) %>%
     hc_add_series(name = "matrix location, p-value",
                   data = formattedHeatmapData) %>%
