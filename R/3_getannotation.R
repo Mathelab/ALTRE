@@ -22,9 +22,9 @@
 #'  peaks (e.g. merge promoters, then merge enhancers)
 #' @param mergedist merge promoters and enhancers if they are < mergedist apart
 #'  (set when regionspecific is FALSE)
-#' @param mergedistprom merge promoters if they are < mergedistprom apart
+#' @param distancefromTSSprox merge promoters if they are < distancefromTSSprox apart
 #'  (set when regionspecific is TRUE)
-#' @param mergedistenh merge enhancers peaks if they are < mergedistenh apart
+#' @param distancefromTSSdist merge enhancers peaks if they are < distancefromTSSdist apart
 #'  (set when regionspecific is TRUE)
 #'
 #' @return List containing two items:
@@ -46,16 +46,16 @@
 #'                                           TSS = TSSannot,
 #'                                           merge = TRUE,
 #'                                           regionspecific = TRUE,
-#'                                           mergedistenh = 1500,
-#'                                           mergedistprom = 1000)
+#'                                           distancefromTSSdist = 1500,
+#'                                           distancefromTSSprox = 1000)
 #'}
 #' @export
 
 combineAnnotatePeaks <- function(conspeaks,
                                  TSS,
                                  merge = FALSE,
-                                 mergedistenh = 0,
-                                 mergedistprom = 0,
+                                 distancefromTSSdist = 0,
+                                 distancefromTSSprox = 0,
                                  mergedist = 0,
                                  regionspecific = NA,
                                  distancefromTSS = 1500) {
@@ -83,12 +83,12 @@ combineAnnotatePeaks <- function(conspeaks,
   # If merge is set to false, don't merge
   if (merge == FALSE)
   {
-    if (mergedistenh > 0 || mergedistprom >
+    if (distancefromTSSdist > 0 || distancefromTSSprox >
         0) {
       mergestats <- as.data.frame("No merging because merge is set to FALSE")
     } else {
-      mergestats <- as.data.frame("No merging because mergedistenh
-                                  and mergedistprom were set to zero")
+      mergestats <- as.data.frame("No merging because distancefromTSSdist
+                                  and distancefromTSSprox were set to zero")
     }
     namesvector <- c()
     for (i in 1:length(peaklist)) {
@@ -126,9 +126,9 @@ combineAnnotatePeaks <- function(conspeaks,
     # (WITHOUT reducing or you will lose the
     # annotation)
     if (regionspecific == TRUE) {
-      if (is.na(mergedistprom) || is.na(mergedistenh)) {
+      if (is.na(distancefromTSSprox) || is.na(distancefromTSSdist)) {
         stop("If regionspecific is true,
-             then mergedistprom and mergedistenh must be set")
+             then distancefromTSSprox and distancefromTSSdist must be set")
       }
       dataframeformerge <- grangestodataframe(TSSgranges)
       enhancerbeforemergedata <- dataframeformerge[dataframeformerge$region ==
@@ -140,11 +140,11 @@ combineAnnotatePeaks <- function(conspeaks,
       # if they're within user defined distances
       enhancerafter <- mergeclosepeaks(peaklist,
                                        enhancerbeforemergedata,
-                                       mergedist = mergedistenh,
+                                       mergedist = distancefromTSSdist,
                                        TSS, distancefromTSS)
       promoterafter <- mergeclosepeaks(peaklist,
                                        promoterbeforemergedata,
-                                       mergedist = mergedistprom,
+                                       mergedist = distancefromTSSprox,
                                        TSS, distancefromTSS)
 
       bothafter <- sort(GenomeInfoDb::sortSeqlevels(c(enhancerafter,

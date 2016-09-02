@@ -4,8 +4,8 @@
 \alias{combineAnnotatePeaks}
 \title{Combine and annotate peaks from different sample types. Optionally merge nearby regions.}
 \usage{
-combineAnnotatePeaks(conspeaks, TSS, merge = FALSE, mergedistenh = 0,
-  mergedistprom = 0, mergedist = 0, regionspecific = NA,
+combineAnnotatePeaks(conspeaks, TSS, merge = FALSE, distancefromTSSdist = 0,
+  distancefromTSSprox = 0, mergedist = 0, regionspecific = NA,
   distancefromTSS = 1500)
 }
 \arguments{
@@ -17,10 +17,10 @@ combineAnnotatePeaks(conspeaks, TSS, merge = FALSE, mergedistenh = 0,
 \item{merge}{whether or not regions should be merged if they are within a
 user set distance to each other (default is FALSE)}
 
-\item{mergedistenh}{merge enhancers peaks if they are < mergedistenh apart
+\item{distancefromTSSdist}{merge enhancers peaks if they are < distancefromTSSdist apart
 (set when regionspecific is TRUE)}
 
-\item{mergedistprom}{merge promoters if they are < mergedistprom apart
+\item{distancefromTSSprox}{merge promoters if they are < distancefromTSSprox apart
 (set when regionspecific is TRUE)}
 
 \item{mergedist}{merge promoters and enhancers if they are < mergedist apart
@@ -62,8 +62,8 @@ consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
                                           TSS = TSSannot,
                                           merge = TRUE,
                                           regionspecific = TRUE,
-                                          mergedistenh = 1500,
-                                          mergedistprom = 1000)
+                                          distancefromTSSdist = 1500,
+                                          distancefromTSSprox = 1000)
 }
 }
 

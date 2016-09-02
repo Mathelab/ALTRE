@@ -61,8 +61,8 @@ shinyServer(function(input, output, session) {
                      merge = input$mergeradio,
                      regionspecific = input$regionradio,
                      mergedist = input$dist,
-                     mergedistenh = input$distenh,
-                     mergedistprom = input$distprom,
+                     distancefromTSSdist = input$distenh,
+                     distancefromTSSprox = input$distprom,
                      distancefromTSS = input$distTSS)
                    setProgress(value = 1, detail = "Done!")
                    Sys.sleep(0.5)
