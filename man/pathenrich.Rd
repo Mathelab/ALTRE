@@ -80,7 +80,7 @@ alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
    lfcshared = 1.2,
    pvaltypespecific = 0.01,
    pvalshared = 0.05)
-comparePeaksAnalysisResults <- comparePeaksAltre(alteredPeaksCategorized, reference = "SAEC")
+comparePeaksAnalysisResults <- comparePeaksAltre(alteredPeaksCategorized)
 MFenrich <- pathenrich(analysisresults = alteredPeaksCategorized,
    ontoltype = 'MF',
    enrichpvalfilt = 0.99)}

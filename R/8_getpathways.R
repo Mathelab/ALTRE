@@ -53,7 +53,7 @@
 #'    lfcshared = 1.2,
 #'    pvaltypespecific = 0.01,
 #'    pvalshared = 0.05)
-#' comparePeaksAnalysisResults <- comparePeaksAltre(alteredPeaksCategorized, reference = "SAEC")
+#' comparePeaksAnalysisResults <- comparePeaksAltre(alteredPeaksCategorized)
 #' MFenrich <- pathenrich(analysisresults = alteredPeaksCategorized,
 #'    ontoltype = 'MF',
 #'    enrichpvalfilt = 0.99)}
@@ -74,53 +74,43 @@ pathenrich <- function(analysisresults,
                        offspring = 300,
                        regionsubset = "TSS-distal") {
 
-  analysisresults <- analysisresults$analysisresults
+  analysisResults <- analysisresults$analysisresults
 
-  if (is.data.frame(analysisresults) == FALSE) {
+  if (is.data.frame(analysisResults) == FALSE) {
     stop("analysisresults parameter is not in the correct format,
          make sure you are using the output from countanalysis()")
   }
-#  analysisresultsdata <- as.data.frame(analysisresults)
 
+  #make sure the sample names are the user-entered names 
+  reference <- analysisresults[[3]] 
+  allSamples <- colnames(analysisResults)[12:length(analysisResults)-1]
+  nonreference<-allSamples[which(!(allSamples %in% reference))]
+  referenceSpecific <- paste0(reference, "SpecificByIntensity")
+  experimentSpecific <- paste0(nonreference, "SpecificByIntensity")
+  
 
   if (regionsubset == "all") {
-    newanalysisresults <- analysisresults
+    newanalysisresults <- analysisResults
   } else {
-    newanalysisresults <- analysisresults[analysisresults$region ==
+    newanalysisresults <- analysisResults[analysisResults$region ==
                                                 regionsubset, ]
   }
 
-  # Define regions that are more open, less
-  # open, or shared
-#  up <- newanalysisresults[!(is.na(newanalysisresults$padj)) &
-#                             newanalysisresults$log2FoldChange >
-#                             lfctypespecific &
-#                             newanalysisresults$padj < pvaltypespecific,]
-#  down <- newanalysisresults[!(is.na(newanalysisresults$padj)) &
-#                               newanalysisresults$log2FoldChange <
-#                               -lfctypespecific &
-#                               newanalysisresults$padj < pvaltypespecific, ]
-#  shared <- newanalysisresults[(newanalysisresults$log2FoldChange <=
-#                                  lfcshared &
-#                                newanalysisresults$log2FoldChange >=
-#                                  -lfcshared) &
-#                                (newanalysisresults$padj >= pvalshared |
-#                                    is.na(newanalysisresults$padj)), ]
   up <- newanalysisresults[which(newanalysisresults$REaltrecateg ==
-                                   "Experiment Specific"), ]
+                                     experimentSpecific), ]
   down <- newanalysisresults[which(newanalysisresults$REaltrecateg ==
-                                     "Reference Specific"), ]
+                                       referenceSpecific), ]
   shared <- newanalysisresults[which(newanalysisresults$REaltrecateg ==
                                        "Shared"), ]
   all <- rbind(up, down, shared)
   subsets <- list(up, down, shared, newanalysisresults)
-  names(subsets) <- c("up", "down", "shared", "all")
+  names(subsets) <- c(experimentSpecific, referenceSpecific, "shared", "all")
 
   message("finding expt-specific...")
-  if (nrow(subsets[["up"]]) == 0) {
+  if (nrow(subsets[[experimentSpecific]]) == 0) {
     expt <- as.data.frame("No REs higher in experiment group")
   } else {
-    expt <- rundose(set = subsets[["up"]],
+    expt <- rundose(set = subsets[[experimentSpecific]],
                     background = subsets[["all"]],
                     log2FoldChange = lfctypespecific,
                     ontoltype = ontoltype,
@@ -133,10 +123,10 @@ pathenrich <- function(analysisresults,
   }
 
   message("finding reference-specific...")
-  if (nrow(subsets[["down"]]) == 0) {
+  if (nrow(subsets[[referenceSpecific]]) == 0) {
     reference <- as.data.frame("No REs higher in reference group")
   } else {
-    reference <- rundose(set = subsets[["down"]],
+    reference <- rundose(set = subsets[[referenceSpecific]],
                          background = subsets[["all"]],
                          log2FoldChange = lfctypespecific,
                          ontoltype = ontoltype,
@@ -164,12 +154,13 @@ pathenrich <- function(analysisresults,
       shared <- as.data.frame("No enrichment found for shared REs")
     }
   }
+  
 
-  # enrichstats=data.frame(
-
+ 
   allthree <- list(expt = as.data.frame(expt),
                    reference = as.data.frame(reference),
                    shared = as.data.frame(shared))
+  names(allthree) <- c(experimentSpecific, referenceSpecific, "shared")
 
   return(allthree)
 }

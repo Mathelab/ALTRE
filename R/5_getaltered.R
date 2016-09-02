@@ -64,7 +64,7 @@ countanalysis <- function(counts, pval = 0.01,
    colnames(fulldataframe)[metacols] <-
      gsub("metab.","", colnames(fulldataframe)[metacols])
 
-  return(list(results <- as.data.frame(fulldataframe)))  #,
+  return(list(results <- as.data.frame(fulldataframe), counts[[4]]))  #,
    #           stats = stats,
   #             dftoplot = list(toplot = toplot,
                              # pval = pval,

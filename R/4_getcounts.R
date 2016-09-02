@@ -101,5 +101,5 @@ getCounts <- function(annotpeaks, sampleinfo, reference, chrom = NULL) {
 
 
   return(list(regioncounts = countssedds, regioncountstats = statdf,
-              regioncountsforplot = forplotdf))
+              regioncountsforplot = forplotdf, reference))
 }
