@@ -986,8 +986,9 @@ enrichHeatmap <- function(input,
   rownames(heatmapdata) <- c(1:nrow(heatmapdata))
 
 
-  suppressMessages(meltedheatmapdata <- reshape2::melt(heatmapdata))
-  
+ # suppressMessages(meltedheatmapdata <- reshape2::melt(heatmapdata))
+    suppressMessages(meltedheatmapdata <- tidyr::gather(heatmapdata,variable, value,Experiment_specific, Reference_specific, Shared))
+
   meltedheatmapdata$newid <- stringr::str_wrap(meltedheatmapdata$id, width = 80)
 
   meltedheatmapdata$id <- factor(meltedheatmapdata$id,
@@ -1217,7 +1218,8 @@ plotGREATenrich <- function(input,
   heatmapdata$id <- rownames(heatmapdata)
   rownames(heatmapdata) <- c(1:nrow(heatmapdata))
 
-  suppressMessages(meltedheatmapdata <- reshape2::melt(heatmapdata))
+  #suppressMessages(meltedheatmapdata <- reshape2::melt(heatmapdata))
+   suppressMessages(meltedheatmapdata <- tidyr::gather(heatmapdata,variable, value,Experiment_specific, Reference_specific, Shared))
 
   meltedheatmapdata$newid <- stringr::str_wrap(meltedheatmapdata$id, width = 80)
 
