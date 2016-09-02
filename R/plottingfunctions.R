@@ -296,35 +296,42 @@ plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE,
 plotGetCounts <- function(countsConsPeaks, palette = "Set1") {
   region <- NULL
   variable <- NULL
+  value=Reference_specific=Shared=Experiment_specific=c()
   #set to null forR CMD Check error: Undefined global functions/variables
 
   cols <- RColorBrewer::brewer.pal(4, palette)
 
   mydf <- countsConsPeaks$regioncountsforplot
-  varstack <- suppressMessages(reshape2::melt(mydf))
-  TSSdistal_A549 <- dplyr::filter(varstack, region == "TSS-distal"
-                                  & variable == "A549")
-  TSSproximal_A549 <- dplyr::filter(varstack, region == "TSS-proximal"
-                                    & variable == "A549")
-  TSSdistal_SAEC <- dplyr::filter(varstack, region == "TSS-distal"
-                                  & variable == "SAEC")
-  TSSproximal_SAEC <- dplyr::filter(varstack, region == "TSS-proximal"
-                                    & variable == "SAEC")
+#  varstack <- suppressMessages(reshape2::melt(mydf))
+  varstack <- suppressMessages(tidyr::gather(mydf,variable,value,-region))
+  varstack$variable=gsub("_.*","",varstack$variable)
+  
+  mysamps <- unique(varstack$variable)
 
-  p <- hchart(stats::density(TSSdistal_A549$value), area = TRUE,
-              name = "A549 TSS-distal") %>%
+  samp1dist <- dplyr::filter(varstack, 
+	region == "TSS-distal" & variable == mysamps[1])
+  samp2dist <- dplyr::filter(varstack,
+        region == "TSS-distal" & variable == mysamps[2])
+  samp1prox <- dplyr::filter(varstack,
+        region == "TSS-proximal" & variable == mysamps[1])
+  samp2prox <- dplyr::filter(varstack,
+        region == "TSS-proximal" & variable == mysamps[2])
+
+
+  p <- hchart(stats::density(samp1dist$value), area = TRUE,
+              name = paste(mysamps[1],"TSS-distal")) %>%
     hc_title(text = "Density of log2 read counts
              (normalized by library and region sizes)",
              style = list(color = '#2E1717',
                           fontWeight = 'bold')) %>%
     hc_yAxis(title = "density") %>%
     hc_xAxis(title = "log2 read counts") %>%
-    hc_add_series_density(stats::density(TSSproximal_A549$value),
-                          area = TRUE, name = "A549 TSS-proximal") %>%
-    hc_add_series_density(stats::density(TSSdistal_SAEC$value),
-                          area = TRUE, name = "SAEC TSS-distal") %>%
-    hc_add_series_density(stats::density(TSSproximal_SAEC$value),
-                          area = TRUE, name = "SAEC TSS-proximal") %>%
+    hc_add_series_density(stats::density(samp1prox$value),
+                          area = TRUE, name = paste(mysamps[1],"TSS-proximal")) %>%
+    hc_add_series_density(stats::density(samp2dist$value),
+                          area = TRUE, name = paste(mysamps[2],"TSS-distal")) %>%
+    hc_add_series_density(stats::density(samp2prox$value),
+                          area = TRUE, name = paste(mysamps[2],"TSS-proximal")) %>%
     hc_colors(cols) %>%
     hc_exporting(enabled = TRUE)
   return(p)
@@ -877,6 +884,8 @@ enrichHeatmap <- function(input,
                           removeonlyshared = FALSE,
                           numshow=10) {
   # input=input[[1]]
+  
+  variable=value=Experiment_specific=Reference_specific=Shared=c()
 
   if (is.list(input) == FALSE) {
     stop("The input is not a list! Please make sure you are
@@ -987,7 +996,8 @@ enrichHeatmap <- function(input,
 
 
  # suppressMessages(meltedheatmapdata <- reshape2::melt(heatmapdata))
-    suppressMessages(meltedheatmapdata <- tidyr::gather(heatmapdata,variable, value,Experiment_specific, Reference_specific, Shared))
+    suppressMessages(meltedheatmapdata <- tidyr::gather(heatmapdata,variable, 
+	value,Experiment_specific, Reference_specific, Shared))
 
   meltedheatmapdata$newid <- stringr::str_wrap(meltedheatmapdata$id, width = 80)
 
@@ -1111,6 +1121,8 @@ plotGREATenrich <- function(input,
 			  test="Binom",
                           numshow=10) {
 
+  variable=value=Experiment_specific=Reference_specific=Shared=c()
+
   if(is.null(pathwaycateg)) {
 	stop("Please designate a pathway with the parameter pathwaycateg")
   }
@@ -1219,7 +1231,8 @@ plotGREATenrich <- function(input,
   rownames(heatmapdata) <- c(1:nrow(heatmapdata))
 
   #suppressMessages(meltedheatmapdata <- reshape2::melt(heatmapdata))
-   suppressMessages(meltedheatmapdata <- tidyr::gather(heatmapdata,variable, value,Experiment_specific, Reference_specific, Shared))
+   suppressMessages(meltedheatmapdata <- tidyr::gather(heatmapdata,variable, 
+	value,Experiment_specific, Reference_specific, Shared))
 
   meltedheatmapdata$newid <- stringr::str_wrap(meltedheatmapdata$id, width = 80)
 

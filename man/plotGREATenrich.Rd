@@ -66,7 +66,7 @@ GREATpathways <- processPathways(temp)
 names(GREATpathways$Sig_Pathways)
  plotGREATenrich(GREATpathways,
                 title = "GREAT Enrichment Analysis",
-                pathwaycateg ="GO Molecular Function")
+                pathwaycateg ="GO_Molecular_Function")
 }
 
 }
