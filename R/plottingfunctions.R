@@ -688,8 +688,9 @@ plotDistCountAnalysis <- function(analysisresults, counts, palette = NULL){
     
     
     #Make sure to names things are from the user-entered sample names 
-    reference <- analysisresults[[3]] 
-    allSamples <- colnames(analysisresults[[1]])[12:length(analysisresults[[1]])-1]
+    reference <- analysisresults$reference
+    allSamples <- colnames(analysisresults$analysisresults[12:
+	length(analysisresults$analysisresults)-1])
     nonreference <- allSamples[which(!(allSamples %in% reference))]
     Referencespecific <- paste0(reference, "SpecificByIntensity")
     Experimentspecific <- paste0(nonreference, "SpecificByIntensity")
@@ -701,7 +702,7 @@ plotDistCountAnalysis <- function(analysisresults, counts, palette = NULL){
   #blue (reference specific)
 
   readcounts <- counts$regioncounts
-  analysisresults <- analysisresults[[1]]
+  analysisresults <- analysisresults$analysisresults
   errortest = try(SummarizedExperiment::assay(readcounts), silent = TRUE)
   if (inherits(errortest, 'try-error') == TRUE) {
     stop("The input for the readcounts arguement is
@@ -757,45 +758,64 @@ plotDistCountAnalysis <- function(analysisresults, counts, palette = NULL){
   proximal3 <- dplyr::filter(mydf, altrecateg == "Shared")
   proximal4 <- dplyr::filter(mydf, altrecateg == Referencespecific)
 
-  distal1_5num_A549 <- stats::fivenum(distal1$meanlog2FPM.A549)
-  proximal1_5num_A549 <- stats::fivenum(proximal1$meanlog2FPM.A549)
-  distal1_5num_SAEC <- stats::fivenum(distal1$meanlog2FPM.SAEC)
-  proximal1_5num_SAEC <- stats::fivenum(proximal1$meanlog2FPM.SAEC)
+  mysamps=as.character(unique(sampletypes))
+  distal1_5num_samp1 <- 
+	stats::fivenum(distal1[[paste("meanlog2FPM",mysamps[1],sep=".")]])
+  proximal1_5num_samp1 <- 
+	stats::fivenum(proximal1[[paste("meanlog2FPM",mysamps[1],sep=".")]])
+  distal1_5num_samp2 <- 
+	stats::fivenum(distal1[[paste("meanlog2FPM",mysamps[2],sep=".")]])
+  proximal1_5num_samp2 <- 
+	stats::fivenum(proximal1[[paste("meanlog2FPM",mysamps[2],sep=".")]])
 
-  distal2_5num_A549 <- stats::fivenum(distal2$meanlog2FPM.A549)
-  proximal2_5num_A549 <- stats::fivenum(proximal2$meanlog2FPM.A549)
-  distal2_5num_SAEC <- stats::fivenum(distal2$meanlog2FPM.SAEC)
-  proximal2_5num_SAEC <- stats::fivenum(proximal2$meanlog2FPM.SAEC)
+  distal2_5num_samp1 <- 
+	stats::fivenum(distal2[[paste("meanlog2FPM",mysamps[1],sep=".")]])
+  proximal2_5num_samp1 <- 
+	stats::fivenum(proximal2[[paste("meanlog2FPM",mysamps[1],sep=".")]])
+  distal2_5num_samp2 <- 
+	stats::fivenum(distal2[[paste("meanlog2FPM",mysamps[2],sep=".")]])
+  proximal2_5num_samp2 <- 
+	stats::fivenum(proximal2[[paste("meanlog2FPM",mysamps[2],sep=".")]])
 
-  distal3_5num_A549 <- stats::fivenum(distal3$meanlog2FPM.A549)
-  proximal3_5num_A549 <- stats::fivenum(proximal3$meanlog2FPM.A549)
-  distal3_5num_SAEC <- stats::fivenum(distal3$meanlog2FPM.SAEC)
-  proximal3_5num_SAEC <- stats::fivenum(proximal3$meanlog2FPM.SAEC)
+  distal3_5num_samp1 <- 
+	stats::fivenum(distal3[[paste("meanlog2FPM",mysamps[1],sep=".")]])
+  proximal3_5num_samp1 <- 
+	stats::fivenum(proximal3[[paste("meanlog2FPM",mysamps[1],sep=".")]])
+  distal3_5num_samp2 <- 
+	stats::fivenum(distal3[[paste("meanlog2FPM",mysamps[2],sep=".")]])
+  proximal3_5num_samp2 <- 
+	stats::fivenum(proximal3[[paste("meanlog2FPM",mysamps[2],sep=".")]])
 
-  distal4_5num_A549 <- stats::fivenum(distal4$meanlog2FPM.A549)
-  proximal4_5num_A549 <- stats::fivenum(proximal4$meanlog2FPM.A549)
-  distal4_5num_SAEC <- stats::fivenum(distal4$meanlog2FPM.SAEC)
-  proximal4_5num_SAEC <- stats::fivenum(proximal4$meanlog2FPM.SAEC)
+  distal4_5num_samp1 <- 
+	stats::fivenum(distal4[[paste("meanlog2FPM",mysamps[1],sep=".")]])
+  proximal4_5num_samp1 <- 
+	stats::fivenum(proximal4[[paste("meanlog2FPM",mysamps[1],sep=".")]])
+  distal4_5num_samp2 <- 
+	stats::fivenum(distal4[[paste("meanlog2FPM",mysamps[2],sep=".")]])
+  proximal4_5num_samp2 <- 
+	stats::fivenum(proximal4[[paste("meanlog2FPM",mysamps[2],sep=".")]])
 
-  Experimentspecific_list <- list(round(distal1_5num_A549,3),
-                                  round(proximal1_5num_A549, 3),
-                                  round(distal1_5num_SAEC,3),
-                                  round(proximal1_5num_SAEC,3))
-  Ambiguous_list <- list(round(distal2_5num_A549,3),
-                         round(proximal2_5num_A549,3),
-                         round(distal2_5num_SAEC,3),
-                         round(proximal2_5num_SAEC,3))
-  Shared_list <- list(round(distal3_5num_A549,3),
-                      round(proximal3_5num_A549,3),
-                      round(distal3_5num_SAEC,3),
-                      round(proximal3_5num_SAEC,3))
-  Referencespecific_list <- list(round(distal4_5num_A549,3),
-                                 round(proximal4_5num_A549,3),
-                                 round(distal4_5num_SAEC,3),
-                                 round(proximal4_5num_SAEC,3))
+  Experimentspecific_list <- list(round(distal1_5num_samp1,3),
+                                  round(proximal1_5num_samp1, 3),
+                                  round(distal1_5num_samp2,3),
+                                  round(proximal1_5num_samp2,3))
+  Ambiguous_list <- list(round(distal2_5num_samp1,3),
+                         round(proximal2_5num_samp1,3),
+                         round(distal2_5num_samp2,3),
+                         round(proximal2_5num_samp2,3))
+  Shared_list <- list(round(distal3_5num_samp1,3),
+                      round(proximal3_5num_samp1,3),
+                      round(distal3_5num_samp2,3),
+                      round(proximal3_5num_samp2,3))
+  Referencespecific_list <- list(round(distal4_5num_samp1,3),
+                                 round(proximal4_5num_samp1,3),
+                                 round(distal4_5num_samp2,3),
+                                 round(proximal4_5num_samp2,3))
 
-  categ <- c('A549-specific (by peaks) TSS-distal', 'A549-specific (by peaks) TSS-proximal',
-             'SAEC-specific (by peaks) TSS-distal', 'SAEC-specific (by peaks) TSS-proximal')
+  categ <- c(paste0(mysamps[1],'-specific (by peaks) TSS-distal'), 
+	paste0(mysamps[1],'-specific (by peaks) TSS-proximal'),
+        paste0(mysamps[2],'-specific (by peaks) TSS-distal'), 
+	paste0(mysamps[2],'-specific (by peaks) TSS-proximal'))
   
   explabel <- paste0(nonreference, "-specific (by intensity)")
   reflabel <- paste0(reference, "-specific (by intensity)")
