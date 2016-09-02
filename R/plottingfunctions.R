@@ -1101,7 +1101,7 @@ enrichHeatmap <- function(input,
 #' names(GREATpathways$Sig_Pathways)
 #'  plotGREATenrich(GREATpathways,
 #'                 title = "GREAT Enrichment Analysis",
-#'                 pathwaycateg ="GO Molecular Function")
+#'                 pathwaycateg ="GO_Molecular_Function")
 #' }
 #'
 #' @export
@@ -1112,7 +1112,7 @@ plotGREATenrich <- function(input,
                           numshow=10) {
 
   if(is.null(pathwaycateg)) {
-	stop("Please designate a pathway with the paramter pathwaycateg")
+	stop("Please designate a pathway with the parameter pathwaycateg")
   }
 
   if (is.list(input) == FALSE) {
