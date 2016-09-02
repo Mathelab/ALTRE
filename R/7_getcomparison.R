@@ -55,7 +55,7 @@ comparePeaksAltre <- function(analysisresults,
   
   #Make sure to names things are from the user-entered sample names 
   allSamples <- colnames(analysisresults_firstitem)[11:(ncol(analysisresults_firstitem) - 1)]
-  reference <- analysisresults[[3]]
+  reference <- analysisresults[[2]]
   analysisresultsmatrix <-  matrix(nrow = 9, ncol = 2)
   nonreference <-  allSamples[!(allSamples %in% reference)]
 
@@ -203,7 +203,7 @@ comparePeaksAltre <- function(analysisresults,
                        })))
 
   listToReturn <- list(analysisresultsmatrix, reference)
-  names(listToReturn)[2] <- c("analysisresultsmatrix", "reference")
+  names(listToReturn) <- c("analysisresultsmatrix", "reference")
   return(listToReturn)
 }
 

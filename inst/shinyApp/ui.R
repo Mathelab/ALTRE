@@ -654,8 +654,13 @@ body <- dashboardBody(
 		            title = strong("GREAT Pathways"),
 		            h5("This step does the following: "),
 		            tags$ul(
-		              tags$li("Runs GREAT."),
-		              tags$li(" Outputs a ..")
+			      tags$li("Perform pathway analysis with GREAT"),
+		              tags$li("Determines which pathways are overrepresented in 
+                                altered TSS-proximal/distal regions"),
+                              tags$li("Outputs a heatmap of the top enriched pathways"),
+                              tags$li(tags$a(href=
+                                "http://bejerano.stanford.edu/great/public/html/",
+                                "Click here for more information on GREAT"))
 		            ),
 		            hr(),
 		            actionButton("buttongreat", strong("Run GREAT")),
@@ -668,6 +673,11 @@ body <- dashboardBody(
 		            width = NULL,
 		            dataTableOutput("table6")
 		          ),
+                           box(
+                             width = NULL,
+                             #title = "Heat Plot",
+                             highcharter::highchartOutput('heatplotGREAT')
+                          ),
 		          infoBoxOutput("statusbox9", width = NULL),
 		          HTML("</div>")
 		          )

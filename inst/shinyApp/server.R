@@ -137,9 +137,7 @@ shinyServer(function(input, output, session) {
                  {
                    setProgress(value = 0.2, detail = "Comparing Methods")
                    comparePeaksOut <- comparePeaksAltre(
-                     req(categAltreObj()),
-                     reference = req(input$reference)
-                     )
+                     req(categAltreObj()))
                    setProgress(value = 1, detail = "Done!")
                    Sys.sleep(0.5)
                  })
@@ -318,7 +316,7 @@ shinyServer(function(input, output, session) {
                     paging = FALSE))
 
   output$table6 <- renderDataTable({
-    rGREAT::getEnrichmentTables(req(runGREATObj())[[1]])$`GO Molecular Function`
+    rGREAT::getEnrichmentTables(req(runGREATObj())[[1]])$`GO_Molecular_Function`
   }, options = list(searching = FALSE,
                     paging = TRUE))
 
