@@ -336,8 +336,8 @@ shinyServer(function(input, output, session) {
   })
 
   output$volcano <- renderUI({
-    plotCountAnalysisTemp(viewer = FALSE)
-    #plotCountAnalysis(categAltreObj(), viewer = FALSE)
+    #plotCountAnalysisTemp(viewer = FALSE)
+    plotCountAnalysis(categAltreObj(), viewer = FALSE)
   })
 
   output$boxplotCounts <- highcharter::renderHighchart({
