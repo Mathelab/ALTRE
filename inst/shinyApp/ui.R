@@ -169,7 +169,10 @@ body <- dashboardBody(
                   max = 10
                 ),
                 hr(),
-                dataTableOutput("table2")
+                dataTableOutput("table2"),
+                hr(),
+                uiOutput("choosePalette1"),
+                hr()
               ),
               HTML("</div>"),
               HTML("<div class='col-sm-7' style='min-width:
@@ -262,6 +265,8 @@ body <- dashboardBody(
                                                        Annotated Regions ")
                                  )
                 ),
+                hr(),
+                uiOutput("choosePalette2"),
                 hr()
                 ),
               HTML("</div>"),
@@ -312,6 +317,8 @@ body <- dashboardBody(
                 ),
                 hr(),
                 uiOutput("chooseref"),
+                hr(),
+                uiOutput("choosePalette3"),
                 hr()
               ),
               HTML("</div>"),
@@ -427,6 +434,8 @@ body <- dashboardBody(
                                                 strong("Download BED File")
                                  )
                 ),
+                hr(),
+                uiOutput("choosePalette4"),
                 hr()
               ),
               HTML("</div>"),
@@ -478,6 +487,8 @@ body <- dashboardBody(
                 #                                 strong("Download Data Table")
                 #                  )
                 # ),
+                hr(),
+                uiOutput("choosePalette5"),
                 hr()
               ),
               HTML("</div>"),
@@ -655,7 +666,7 @@ body <- dashboardBody(
 		            h5("This step does the following: "),
 		            tags$ul(
 			      tags$li("Perform pathway analysis with GREAT"),
-		              tags$li("Determines which pathways are overrepresented in 
+		              tags$li("Determines which pathways are overrepresented in
                                 altered TSS-proximal/distal regions"),
                               tags$li("Outputs a heatmap of the top enriched pathways"),
                               tags$li(tags$a(href=

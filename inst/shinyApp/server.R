@@ -229,6 +229,43 @@ shinyServer(function(input, output, session) {
 
   })
 
+  ### palettes
+  colrs <-   rownames(RColorBrewer::brewer.pal.info)
+
+  output$choosePalette1 <- renderUI({
+    selectInput("palette1",
+                "Select color palette",
+                colrs ,
+                selected = colrs[15])
+  })
+
+  output$choosePalette2 <- renderUI({
+    selectInput("palette2",
+                "Select color palette",
+                colrs ,
+                selected = colrs[15])
+  })
+
+  output$choosePalette3 <- renderUI({
+    selectInput("palette3",
+                "Select color palette",
+                colrs ,
+                selected = colrs[15])
+  })
+
+  output$choosePalette4 <- renderUI({
+    selectInput("palette4",
+                "Select color palette",
+                colrs ,
+                selected = colrs[15])
+  })
+
+  output$choosePalette5 <- renderUI({
+    selectInput("palette5",
+                "Select color palette",
+                colrs ,
+                selected = colrs[15])
+  })
   ############################################################################
   # download buttons
   output$downloadAnnotate <- downloadHandler(
@@ -324,24 +361,32 @@ shinyServer(function(input, output, session) {
   # plots
 
   output$barplot <- highcharter::renderHighchart({
-    plotConsensusPeaks(getConsensusObj())
+    plotConsensusPeaks(getConsensusObj(),
+                       palette = input$palette1)
   })
 
   output$annotatebarplot <- renderUI({
-    plotCombineAnnotatePeaks(combineAnnotateObj(), viewer = FALSE)
+    plotCombineAnnotatePeaks(combineAnnotateObj(),
+                             viewer = FALSE,
+                             palette = input$palette2)
   })
 
   output$densityplot <- highcharter::renderHighchart({
-    plotGetCounts(getCountsObj())
+    plotGetCounts(getCountsObj(),
+                  palette = input$palette3)
   })
 
   output$volcano <- renderUI({
-    #plotCountAnalysisTemp(viewer = FALSE)
-    plotCountAnalysis(categAltreObj(), viewer = FALSE)
+    plotCountAnalysisTemp(viewer = FALSE)
+    #plotCountAnalysis(categAltreObj(),
+    #                  viewer = FALSE,
+     #                 palette = input$palette4)
   })
 
   output$boxplotCounts <- highcharter::renderHighchart({
-    plotDistCountAnalysis(req(categAltreObj()), req(getCountsObj()))
+    plotDistCountAnalysis(req(categAltreObj()),
+                          req(getCountsObj()),
+                          palette = input$palette5)
   })
 
   output$heatplotMF <- highcharter::renderHighchart({
