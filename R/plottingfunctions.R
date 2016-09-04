@@ -1569,6 +1569,7 @@ plotCompareMethods <- function(analysisresultsmatrix,
   )
 
   stringsplit <- strsplit(string, " ")
+  uniquestringsplit <- unique(stringsplit[[1]])
   split <-
     unlist(strsplit(rownames(analysisresultsmatrix)[1], split = " "))
   names <- split[!(split %in% c("TSS-dists"))]
