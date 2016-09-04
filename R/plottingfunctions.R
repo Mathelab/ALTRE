@@ -549,7 +549,7 @@ plotCountAnalysisTemp <-
     cat(altrepeakscateg)
 
     dataraw <-
-      ' DOK6 0.51 1.861e-08 0.0003053
+    ' DOK6 0.51 1.861e-08 0.0003053
     TBX5 -2.129 5.655e-08 0.0004191
     SLC32A1 0.9003 7.664e-08 0.0004191
     IFITM1 -1.687 3.735e-06 0.006809
