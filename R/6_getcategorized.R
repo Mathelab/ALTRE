@@ -129,8 +129,7 @@
      )))
    )
 
-    listToReturn <-list(analysisresults = analysisresults, stats = stats, reference)
-    names(listToReturn)[3] <- c("reference")
+    listToReturn <-list(analysisresults = analysisresults, stats = stats, reference=reference)
     
    return(listToReturn)
 } # end function

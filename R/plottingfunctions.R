@@ -380,7 +380,6 @@ plotGetCounts <- function(countsConsPeaks, palette = "Set1") {
 
 plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) {
 
-
     if ( !is.null(palette) ) {
         cols <- RColorBrewer::brewer.pal(4, palette) 
     }else {cols <- c("#C71585", "#d3d3d3", "#000080", "#00E5EE")}
@@ -391,7 +390,7 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) {
 
   log2FoldChange <- NULL
   padj <- NULL
-  REaltrecateg <- NULL
+  REaltrecateg <- REaltrecategplot <- NULL
   #To prevent R CMD check error
     
   
@@ -686,7 +685,7 @@ plotCountAnalysisTemp <- function(altrepeakscateg = NULL, viewer = TRUE, palette
 #'
 plotDistCountAnalysis <- function(analysisresults, counts, palette = NULL){
     
-    
+    altrecateg <- REaltrecategplot <- c()
     #Make sure to names things are from the user-entered sample names 
     reference <- analysisresults$reference
     allSamples <- colnames(analysisresults$analysisresults)[11:12]
@@ -1172,22 +1171,23 @@ plotGREATenrich <- function(input,
 
   mycols=c("name",paste0(test,"_Fold_Enrichment"),paste0(test,"_adj_PValue"))
 
-  if (is.list(input$Experiment_Specific$Sig_Pathways) == FALSE |
-      is.list(input$Reference_Specific$Sig_Pathways) == FALSE |
+  if (is.list(input$ExperimentSpecificByIntensity$Sig_Pathways) == FALSE |
+      is.list(input$ReferenceSpecificByIntensity$Sig_Pathways) == FALSE |
       is.list(input$Shared$Sig_Pathways) == FALSE |
       length(input) != 3 |
-      length(which(!is.na(match(mycols,colnames(input$Experiment_Specific$Sig_Pathways[[pathwaycateg]]))))) !=
+      length(which(!is.na(match(mycols,colnames(input$ExperimentSpecificByIntensity$Sig_Pathways[[pathwaycateg]]))))) !=
 	length(mycols) |
-      length(which(!is.na(match(mycols,colnames(input$Reference_Specific$Sig_Pathways[[pathwaycateg]]))))) !=
+      length(which(!is.na(match(mycols,colnames(input$ReferenceSpecificByIntensity$Sig_Pathways[[pathwaycateg]]))))) !=
         length(mycols) |
       length(match(mycols,colnames(input$Shared$Sig_Pathways[[pathwaycateg]]))) !=
         length(mycols) |
-      all(names(input) != c("Experiment_Specific", "Reference_Specific", "Shared$Sig_Pathways"))) {
+      all(names(input) != c("ExperimentSpecificByIntensity", "ReferenceSpecificByIntensity", 
+		"Shared"))) {
     stop("The input is not a list of three dataframes or there are no enriched pathways to plot. 
 		Be sure the input is the output from running processPathways(()")
   }
 
-  up <- input$Experiment_Specific$Sig_Pathways[[pathwaycateg]][,mycols]
+  up <- input$ExperimentSpecificByIntensity$Sig_Pathways[[pathwaycateg]][,mycols]
   if (is.null(nrow(up))) {
 	up$name <- NA
   } else {
@@ -1197,7 +1197,7 @@ plotGREATenrich <- function(input,
     	}
   }
 
-  reference <- input$Reference_Specific$Sig_Pathways[[pathwaycateg]][,mycols]
+  reference <- input$ReferenceSpecificByIntensity$Sig_Pathways[[pathwaycateg]][,mycols]
   if (is.null(nrow(reference))) {
         reference$name <- NA
   } else {

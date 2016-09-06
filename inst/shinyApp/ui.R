@@ -652,7 +652,9 @@ body <- dashboardBody(
 		          box(
 		            width = NULL,
 		            title = strong("GREAT Pathways"),
-		            h5("This step does the following: "),
+		            h4("You must be connected to the internet for this step.")
+                            h4("Please be patient, it can take 3-5 minutes to run.")
+                            h5("This step does the following: "),
 		            tags$ul(
 			      tags$li("Perform pathway analysis with GREAT"),
 		              tags$li("Determines which pathways are overrepresented in 

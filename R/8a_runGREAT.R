@@ -53,7 +53,7 @@ runGREAT <- function(peaks,
   }
 
   mygreat = list()
-  for (i in c("Experiment Specific", "Reference Specific", "Shared")) {
+  for (i in c("ExperimentSpecificByIntensity", "ReferenceSpecificByIntensity", "Shared")) {
     print(paste("Running", i))
     mypeaks = as.data.frame(peaks$analysisresults)[which(peaks$analysisresults$REaltrecateg ==
                                                            i),

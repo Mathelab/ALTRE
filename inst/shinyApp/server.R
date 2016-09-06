@@ -203,7 +203,7 @@ shinyServer(function(input, output, session) {
                  detail = 'This may take a while...',
                  value = 0,
                  {
-                   setProgress(value = 0.2, detail = "Comparing Methods")
+                   setProgress(value = 0.2, detail = "Running GREAT")
                    runGREATOut <- runGREAT(req(categAltreObj()))
                    setProgress(value = 1, detail = "Done!")
                    Sys.sleep(0.5)
