@@ -28,7 +28,6 @@ Imports:
     Rsamtools,
     readr,
     org.Hs.eg.db,
-    clusterProfiler,
     ensembldb,
     EnsDb.Hsapiens.v75,
     tidyr,
