@@ -40,8 +40,7 @@ Imports:
     highcharter,
     htmltools,
     rGREAT,
-    RColorBrewer,
-    xlsx
+    RColorBrewer
 License: GPL-2
 LazyData: TRUE
 RoxygenNote: 5.0.1

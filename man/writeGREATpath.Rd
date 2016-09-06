@@ -45,5 +45,6 @@ pathGREAT <- processPathways(callGREAT)
 con <- "GREAToutput.zip"
 writeGREATpath(pathenrichOut = pathGREAT, con = con)
 }
+
 }
 
