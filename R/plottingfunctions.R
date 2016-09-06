@@ -900,15 +900,19 @@ plotDistCountAnalysis <-
         )
       ) %>%
       hc_add_series(data = Experimentspecific_list,
+                    fillColor = cols[1],
                     name = explabel,
                     type = "boxplot") %>%
       hc_add_series(data = Ambiguous_list,
+                    fillColor = cols[2],
                     name = 'Ambiguous',
                     type = "boxplot") %>%
       hc_add_series(data = Shared_list,
+                    fillColor = cols[3],
                     name = 'Shared',
                     type = "boxplot") %>%
       hc_add_series(data = Referencespecific_list,
+                    fillColor = cols[4],
                     name = reflabel,
                     type = "boxplot") %>%
       hc_yAxis(title = list(text = "Observations"),

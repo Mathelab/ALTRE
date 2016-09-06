@@ -68,15 +68,8 @@ sidebar <- dashboardSidebar(
     menuItem(
       "Find Enriched Pathways",
       icon = icon("gears"),
-      tabName = "pathways",
-      badgeLabel = "step 8",
-      badgeColor = "green"
-    ),
-    menuItem(
-      "Find Enriched Pathways",
-      icon = icon("gears"),
       tabName = "greatpathways",
-      badgeLabel = "step 8a",
+      badgeLabel = "step 8",
       badgeColor = "green"
     ),
     menuItem(
@@ -502,160 +495,6 @@ body <- dashboardBody(
               HTML("</div>")
               )
             ),
-    tabItem(
-      tabName = "pathways",
-      tabBox(
-        title = strong("Pathway Enrichment Analysis"),
-        width = 12,
-        tabPanel("(1) Pathway Enrichment for Molecular Function",
-                 fluidRow(
-                   HTML("<div class='col-sm-4' style='min-width:
-                   400px !important;'>"),
-                   box(
-                     width = NULL,
-                     title = strong("Pathway Enrichment for Molecular Function"),
-                     h5("This step does the following: "),
-                     tags$ul(
-                       tags$li("Determines which pathways are overrepresented in
-                             altered TSS-proximal/distal regions as returned by
-                             GO Enrichment Analysis restricted to the Molecular
-                             Function sub-ontology."),
-                       tags$li("Outputs a heatmap plot of the enrichment analysis'
-                             results.")
-                     ),
-                     hr(),
-                     actionButton("buttonpathwayMF",
-                                  strong("Run MF Pathway Enrichment")),
-                     hr(),
-                     sliderInput(
-                       "pathpvaluecutoffMF",
-                       label = strong("Select p-value cutoff"),
-                       min = 0,
-                       max = 1,
-                       value = 0.01
-                     ),
-                     conditionalPanel("input.buttonpathwayMF> 0",
-                                      hr(),
-                                      downloadButton("downloadPathwayMF",
-                                                     strong("Download Zip
-                                                            File with MF
-                                                            Analysis Results")
-                                      )
-                     ),
-                     hr()
-                   ),
-                   HTML("</div>"),
-                   HTML("<div class='col-sm-7' style='min-width:
-                   550px !important;'>"),
-                   box(
-                     width = NULL,
-                     #title = "Heat Plot",
-                     highcharter::highchartOutput('heatplotMF')
-                   ),
-                   infoBoxOutput("statusbox8a", width = NULL),
-                   HTML("</div>")
-                 )
-                 ),
-       tabPanel("(2) Pathway Enrichment for Biological Process",
-                fluidRow(
-                  HTML("<div class='col-sm-4' style='min-width:
-                       400px !important;'>"),
-                  box(
-                    width = NULL,
-                    title = strong("Pathway Enrichment for Biological Process"),
-                    h5("This step does the following: "),
-                    tags$ul(
-                      tags$li("Determines which pathways are overrepresented in
-                             altered TSS-proximal/distal regions as returned by
-                             GO Enrichment Analysis restricted to the Biological
-                             Process sub-ontology."),
-                      tags$li("Outputs a heatmap plot of the enrichment analysis'
-                             results.")
-                    ),
-                    hr(),
-                    actionButton("buttonpathwayBP",
-                                 strong("Run BP Pathway Enrichment")),
-                    hr(),
-                    sliderInput(
-                      "pathpvaluecutoffBP",
-                      label = strong("Select p-value cutoff"),
-                      min = 0,
-                      max = 1,
-                      value = 0.01
-                    ),
-                    conditionalPanel("input.buttonpathwayBP> 0",
-                                     hr(),
-                                     downloadButton("downloadPathwayBP",
-                                                    strong("Download Zip
-                                                            File with BP
-                                                            Analysis Results")
-                                     )
-                    ),
-                    hr()
-                  ),
-                  HTML("</div>"),
-                  HTML("<div class='col-sm-7' style='min-width:
-                       550px !important;'>"),
-                  box(
-                    width = NULL,
-                    #title = "Heat Plot",
-                    highcharter::highchartOutput('heatplotBP')
-                  ),
-                  infoBoxOutput("statusbox8b", width = NULL),
-                  HTML("</div>")
-                  )
-                ),
-       tabPanel("(3) Pathway Enrichment for Cellular Component",
-                fluidRow(
-                  HTML("<div class='col-sm-4' style='min-width:
-                       400px !important;'>"),
-                  box(
-                    width = NULL,
-                    title = strong("Pathway Enrichment for Cellular Component"),
-                    h5("This step does the following: "),
-                    tags$ul(
-                      tags$li("Determines which pathways are overrepresented in
-                              altered TSS-proximal/distal regions as returned by
-                              GO Enrichment Analysis restricted to the
-                              Cellular Component sub-ontology."),
-                      tags$li("Outputs a heatmap plot of the enrichment analysis'
-                              results.")
-                      ),
-                    hr(),
-                    actionButton("buttonpathwayCC",
-                                 strong("Run CC Pathway Enrichment")),
-                    hr(),
-                    sliderInput(
-                      "pathpvaluecutoffCC",
-                      label = strong("Select p-value cutoff"),
-                      min = 0,
-                      max = 1,
-                      value = 0.01
-                    ),
-                    conditionalPanel("input.buttonpathwayCC> 0",
-                                     hr(),
-                                     downloadButton("downloadPathwayCC",
-                                                    strong("Download Zip
-                                                            File with CC
-                                                            Analysis Results")
-                                     )
-                    ),
-                    hr()
-                      ),
-                  HTML("</div>"),
-                  HTML("<div class='col-sm-7' style='min-width:
-                       550px !important;'>"),
-                  box(
-                    width = NULL,
-                    #title = "Heat Plot",
-                    highcharter::highchartOutput('heatplotCC')
-                  ),
-                  infoBoxOutput("statusbox8c", width = NULL),
-                  HTML("</div>")
-                  )
-      )
-       )
-      ),
 		tabItem(tabName = "greatpathways",
 		        fluidRow(
 		          HTML("<div class='col-sm-3' style='min-width:
@@ -691,10 +530,17 @@ body <- dashboardBody(
                              #title = "Heat Plot",
                              highcharter::highchartOutput('heatplotGREAT')
                           ),
+                conditionalPanel("input.buttongreat> 0",
+                                 hr(),
+                                 downloadButton("downloadGREAT",
+                                                strong("Download Excell File with
+                                                       GREAT pathway analysis results")
+                                 )
+                ),
 		          infoBoxOutput("statusbox9", width = NULL),
 		          HTML("</div>")
 		          )
-  )
+                )
     )
 )
 

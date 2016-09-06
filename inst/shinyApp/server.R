@@ -144,71 +144,18 @@ shinyServer(function(input, output, session) {
     return(comparePeaksOut)
   })
 
-  pathenrichMFObj <- eventReactive(input$buttonpathwayMF, {
-    withProgress(message = 'In progress',
-                 detail = 'This may take a while...',
-                 value = 0,
-                 {
-                   setProgress(value = 0.2, detail = "MF: GO Enrichment Analysis")
-                   MFenrich <-
-                       pathenrich(
-                         analysisresults = req(categAltreObj()),
-                         ontoltype = "MF",
-                         enrichpvalfilt = input$pathpvaluecutoffMF
-                       )
-                   setProgress(value = 1, detail = "Done!")
-                   Sys.sleep(0.5)
-                 })
-    return(MFenrich)
-  })
-
-  pathenrichBPObj <- eventReactive(input$buttonpathwayBP, {
-    withProgress(message = 'In progress',
-                 detail = 'This may take a while...',
-                 value = 0,
-                 {
-                   setProgress(value = 0.2, detail = "BP: GO Enrichment Analysis")
-                   BPenrich <-
-                     pathenrich(
-                       analysisresults = req(categAltreObj()),
-                       ontoltype = "BP",
-                       enrichpvalfilt = input$pathpvaluecutoffBP
-                     )
-                   setProgress(value = 1, detail = "Done!")
-                   Sys.sleep(0.5)
-                 })
-    return(BPenrich)
-  })
-
-  pathenrichCCObj <- eventReactive(input$buttonpathwayCC, {
-    withProgress(message = 'In progress',
-                 detail = 'This may take a while...',
-                 value = 0,
-                 {
-                   setProgress(value = 0.2, detail = "CC: GO Enrichment Analysis")
-                   BPenrich <-
-                     pathenrich(
-                       analysisresults = req(categAltreObj()),
-                       ontoltype = "CC",
-                       enrichpvalfilt = input$pathpvaluecutoffCC
-                     )
-                   setProgress(value = 1, detail = "Done!")
-                   Sys.sleep(0.5)
-                 })
-    return(BPenrich)
-  })
-
-  runGREATObj <- eventReactive(input$buttongreat, {
+  pathGREATObj <- eventReactive(input$buttongreat, {
     withProgress(message = 'In progress',
                  detail = 'This may take a while...',
                  value = 0,
                  {
                    setProgress(value = 0.2, detail = "Running GREAT")
-                   runGREATOut <- runGREAT(req(categAltreObj()))
+                   runGREATcalls <- runGREAT(req(categAltreObj()))
+                   runGREATout <- processPathways(req(runGREATcalls))
                    setProgress(value = 1, detail = "Done!")
                    Sys.sleep(0.5)
                  })
-    return(runGREATOut)
+    return(runGREATout)
   })
   ############################################################################
    #  get input
@@ -288,26 +235,12 @@ shinyServer(function(input, output, session) {
     }
   )
 
-  output$downloadPathwayMF <- downloadHandler(
-    filename = "pathEnrichMF.zip",
+  output$downloadGREAT <- downloadHandler(
+    filename = "GREATpathways.zip",
     content = function(con) {
-      writePathEnrich(req(pathenrichMFObj()), con)
-    #contentType = "application/zip"
-    }
-  )
-
-  output$downloadPathwayBP <- downloadHandler(
-    filename = "pathEnrichBP.zip",
-    content = function(con) {
-      writePathEnrich(req(pathenrichBPObj()), con)
-    }
-  )
-
-  output$downloadPathwayCC <- downloadHandler(
-    filename = "pathEnrichCC.zip",
-    content = function(con) {
-      writePathEnrich(req(pathenrichCCObj()), con)
-    }
+      writeGREATpath(req(pathGREATObj()), con)
+    },
+    contentType = "application/zip"
   )
 
   ####
@@ -353,8 +286,13 @@ shinyServer(function(input, output, session) {
                     paging = FALSE))
 
   output$table6 <- renderDataTable({
-    rGREAT::getEnrichmentTables(req(runGREATObj())[[1]])$`GO_Molecular_Function`
-  }, options = list(searching = FALSE,
+	mydf <- req(pathGREATObj())
+	outdf=data.frame(Pathway=mydf$ExperimentSpecificByIntensity$stats[,1],
+	  Experiment_Specific=mydf$ExperimentSpecificByIntensity$stats[,2],
+	  Shared=mydf$Shared$stats[,2],
+	  Reference_Specific=mydf$ReferenceSpecificByIntensity$stats[,2]) 
+	return(outdf)
+ }, options = list(searching = FALSE,
                     paging = TRUE))
 
   ############################################################################
@@ -389,16 +327,10 @@ shinyServer(function(input, output, session) {
                           palette = input$palette5)
   })
 
-  output$heatplotMF <- highcharter::renderHighchart({
-      enrichHeatmap(req(pathenrichMFObj()), title = "GO:MF")
-  })
-
-  output$heatplotBP <- highcharter::renderHighchart({
-        enrichHeatmap(req(pathenrichBPObj()), title = "GO:BP")
-  })
-
-  output$heatplotCC <- highcharter::renderHighchart({
-    enrichHeatmap(req(pathenrichCCObj()), title = "GO:CC")
+  output$heatplotGREAT <- highcharter::renderHighchart({
+    plotGREATenrich(req(pathGREATObj()), 
+		title = "GO Molecular Function", 
+		pathwaycateg ="GO_Molecular_Function")
   })
 
   output$vennplot <- renderUI({
@@ -730,7 +662,7 @@ shinyServer(function(input, output, session) {
         color = "red",
         fill = TRUE)
     }
-    else if (input$buttongreat > 0 && !is.null(runGREATObj())) {
+    else if (input$buttongreat > 0 && !is.null(pathGREATObj())) {
       infoBox(
         "Status",
         "RUN GREAT Completed.",

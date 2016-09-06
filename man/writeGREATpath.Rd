@@ -42,7 +42,7 @@ categaltre_peaks <- categAltrePeaks(altre_peaks,
                                     pvalshared = 0.05)
 callGREAT <- runGREAT(peaks=categaltre_peaks)
 pathGREAT <- processPathways(callGREAT)
-con <- "pathEnrichMF.zip"
+con <- "GREAToutput.zip"
 writeGREATpath(pathenrichOut = pathGREAT, con = con)
 }
 }
