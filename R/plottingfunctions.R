@@ -1278,9 +1278,9 @@ plotGREATenrich <- function(input,
       length(mycols) |
       all(
         names(input) != c(
-          "Experiment_Specific",
-          "Reference_Specific",
-          "Shared$Sig_Pathways"
+          "ExperimentSpecificByIntensity",
+          "ReferenceSpecificByIntensity",
+          "Shared"
         )
       )) {
     stop(
