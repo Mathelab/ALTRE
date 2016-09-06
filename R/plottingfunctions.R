@@ -788,7 +788,7 @@ plotDistCountAnalysis <-
     }
 
     PEcateg <- analysisresults$region
-    altrecateg <- analysisresults$REaltrecategplot
+    altrecategplot <- analysisresults$REaltrecategplot
 
     # Get log2FPM values:
     log2FPM <- log2(DESeq2::fpkm(readcounts, robust = TRUE) + 0.001)
