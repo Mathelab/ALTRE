@@ -463,7 +463,7 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) {
         x = log2FoldChange,
         y = padj,
         type = "scatter",
-        group = REaltrecateg
+        group = REaltrecategplot
       )  %>%
       hc_xAxis(title = list(text = "log2fold change")) %>%
       hc_yAxis(title = list(text = "-log10 pvalue")) %>%
@@ -483,7 +483,7 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) {
         x = log2FoldChange,
         y = padj,
         type = "scatter",
-        group = REaltrecateg
+        group = REaltrecategplot
       )  %>%
       hc_xAxis(title = list(text = "log2fold change")) %>%
       hc_yAxis(title = list(text = "-log10 pvalue")) %>%
