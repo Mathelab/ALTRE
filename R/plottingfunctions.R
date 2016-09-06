@@ -742,21 +742,12 @@ plotCountAnalysisTemp <-
 #' }
 #' @export
 #'
-<<<<<<< HEAD
-plotDistCountAnalysis <- function(analysisresults, counts, palette = NULL){
-    
-    altrecateg <- REaltrecategplot <- c()
+plotDistCountAnalysis <-
+  function(analysisresults, counts, palette = NULL) {    
+    altrecateg <- altrecategplot <- REaltrecategplot <- c()
     #Make sure to names things are from the user-entered sample names 
     reference <- analysisresults$reference
     allSamples <- colnames(analysisresults$analysisresults)[11:12]
-=======
-plotDistCountAnalysis <-
-  function(analysisresults, counts, palette = NULL) {
-    #Make sure to names things are from the user-entered sample names
-    reference <- analysisresults$reference
-    allSamples <- colnames(analysisresults$analysisresults[12:length(analysisresults$analysisresults) -
-                                                             1])
->>>>>>> 56f8fa39532c2d8359c2ec69e0bc10cee0a33dad
     nonreference <- allSamples[which(!(allSamples %in% reference))]
     Referencespecific <- paste0(reference, "SpecificByIntensity")
     Experimentspecific <- paste0(nonreference, "SpecificByIntensity")
@@ -796,13 +787,8 @@ plotDistCountAnalysis <-
       stop("The peaks in the analysisresults and counts are not the same")
     }
 
-<<<<<<< HEAD
-  PEcateg <- analysisresults$region
-  altrecategplot <- analysisresults$REaltrecategplot
-=======
     PEcateg <- analysisresults$region
-    altrecateg <- analysisresults$REaltrecateg
->>>>>>> 56f8fa39532c2d8359c2ec69e0bc10cee0a33dad
+    altrecateg <- analysisresults$REaltrecategplot
 
     # Get log2FPM values:
     log2FPM <- log2(DESeq2::fpkm(readcounts, robust = TRUE) + 0.001)
@@ -811,7 +797,6 @@ plotDistCountAnalysis <-
     sampletypes <- SummarizedExperiment::colData(readcounts)$sample
     meanlog2FPM <- c()
 
-<<<<<<< HEAD
   for (i in unique(sampletypes)) {
     samp <- which(sampletypes == i)
     meanlog2FPM <- cbind(meanlog2FPM,
@@ -896,138 +881,6 @@ plotDistCountAnalysis <-
   explabel <- paste0(nonreference, "-specific (by intensity)")
   reflabel <- paste0(reference, "-specific (by intensity)")
   
-  p <- highchart() %>%
-    hc_title(text = "Distribution of Normalized Counts",
-             style = list(color = '#2E1717',
-                          fontWeight = 'bold')) %>%
-    hc_plotOptions(
-      boxplot = list(
-        fillColor = '#ffffff',
-        lineWidth = 2,
-        medianColor = '#000000',
-        medianWidth = 2,
-        stemColor = '#000000',
-        stemDashStyle = 'dot',
-        stemWidth = 1,
-        whiskerColor = '#000000',
-        whiskerLength = '20%',
-        whiskerWidth = 3
-      )
-    ) %>%
-    hc_add_series(data = Experimentspecific_list,
-                  name = explabel,
-                  type = "boxplot") %>%
-    hc_add_series(data = Ambiguous_list,
-                  name = 'Ambiguous',
-                  type = "boxplot") %>%
-    hc_add_series(data = Shared_list,
-                  name = 'Shared',
-                  type = "boxplot") %>%
-    hc_add_series(data = Referencespecific_list,
-                  name = reflabel,
-                  type = "boxplot") %>%
-    hc_yAxis(title = list(text = "Observations"),
-             labels = list(format = "{value}")) %>%
-    hc_xAxis(categories = categ, title = "Experiment No.") %>%
-    hc_tooltip(headerFormat = "<b>{point.key}</b><br>",
-               pointFormat = "{point.y}") %>%
-    hc_colors(cols) %>%
-    hc_exporting(enabled = TRUE)
-=======
-    for (i in unique(sampletypes)) {
-      samp <- which(sampletypes == i)
-      meanlog2FPM <- cbind(meanlog2FPM,
-                           as.numeric(apply(log2FPM[, samp], 1, mean)))
-    }
-    colnames(meanlog2FPM) <- unique(sampletypes)
-
-    mydf <- data.frame(meanlog2FPM = meanlog2FPM,
-                       PEcateg = PEcateg,
-                       altrecateg = altrecateg)
-    TSSdistal <- dplyr::filter(mydf, PEcateg == "TSS-distal")
-    distal1 <- dplyr::filter(mydf, altrecateg == Experimentspecific)
-    distal2 <- dplyr::filter(mydf, altrecateg == "Ambiguous")
-    distal3 <- dplyr::filter(mydf, altrecateg == "Shared")
-    distal4 <- dplyr::filter(mydf, altrecateg == Referencespecific)
-
-    TSSproximal <- dplyr::filter(mydf, PEcateg == "TSS-proximal")
-    proximal1 <- dplyr::filter(mydf, altrecateg == Experimentspecific)
-    proximal2 <- dplyr::filter(mydf, altrecateg == "Ambiguous")
-    proximal3 <- dplyr::filter(mydf, altrecateg == "Shared")
-    proximal4 <- dplyr::filter(mydf, altrecateg == Referencespecific)
-
-    mysamps = as.character(unique(sampletypes))
-    distal1_5num_samp1 <-
-      stats::fivenum(distal1[[paste("meanlog2FPM", mysamps[1], sep = ".")]])
-    proximal1_5num_samp1 <-
-      stats::fivenum(proximal1[[paste("meanlog2FPM", mysamps[1], sep = ".")]])
-    distal1_5num_samp2 <-
-      stats::fivenum(distal1[[paste("meanlog2FPM", mysamps[2], sep = ".")]])
-    proximal1_5num_samp2 <-
-      stats::fivenum(proximal1[[paste("meanlog2FPM", mysamps[2], sep = ".")]])
-
-    distal2_5num_samp1 <-
-      stats::fivenum(distal2[[paste("meanlog2FPM", mysamps[1], sep = ".")]])
-    proximal2_5num_samp1 <-
-      stats::fivenum(proximal2[[paste("meanlog2FPM", mysamps[1], sep = ".")]])
-    distal2_5num_samp2 <-
-      stats::fivenum(distal2[[paste("meanlog2FPM", mysamps[2], sep = ".")]])
-    proximal2_5num_samp2 <-
-      stats::fivenum(proximal2[[paste("meanlog2FPM", mysamps[2], sep = ".")]])
-
-    distal3_5num_samp1 <-
-      stats::fivenum(distal3[[paste("meanlog2FPM", mysamps[1], sep = ".")]])
-    proximal3_5num_samp1 <-
-      stats::fivenum(proximal3[[paste("meanlog2FPM", mysamps[1], sep = ".")]])
-    distal3_5num_samp2 <-
-      stats::fivenum(distal3[[paste("meanlog2FPM", mysamps[2], sep = ".")]])
-    proximal3_5num_samp2 <-
-      stats::fivenum(proximal3[[paste("meanlog2FPM", mysamps[2], sep = ".")]])
-
-    distal4_5num_samp1 <-
-      stats::fivenum(distal4[[paste("meanlog2FPM", mysamps[1], sep = ".")]])
-    proximal4_5num_samp1 <-
-      stats::fivenum(proximal4[[paste("meanlog2FPM", mysamps[1], sep = ".")]])
-    distal4_5num_samp2 <-
-      stats::fivenum(distal4[[paste("meanlog2FPM", mysamps[2], sep = ".")]])
-    proximal4_5num_samp2 <-
-      stats::fivenum(proximal4[[paste("meanlog2FPM", mysamps[2], sep = ".")]])
-
-    Experimentspecific_list <- list(
-      round(distal1_5num_samp1, 3),
-      round(proximal1_5num_samp1, 3),
-      round(distal1_5num_samp2, 3),
-      round(proximal1_5num_samp2, 3)
-    )
-    Ambiguous_list <- list(
-      round(distal2_5num_samp1, 3),
-      round(proximal2_5num_samp1, 3),
-      round(distal2_5num_samp2, 3),
-      round(proximal2_5num_samp2, 3)
-    )
-    Shared_list <- list(
-      round(distal3_5num_samp1, 3),
-      round(proximal3_5num_samp1, 3),
-      round(distal3_5num_samp2, 3),
-      round(proximal3_5num_samp2, 3)
-    )
-    Referencespecific_list <- list(
-      round(distal4_5num_samp1, 3),
-      round(proximal4_5num_samp1, 3),
-      round(distal4_5num_samp2, 3),
-      round(proximal4_5num_samp2, 3)
-    )
-
-    categ <- c(
-      paste0(mysamps[1], '-specific (by peaks) TSS-distal'),
-      paste0(mysamps[1], '-specific (by peaks) TSS-proximal'),
-      paste0(mysamps[2], '-specific (by peaks) TSS-distal'),
-      paste0(mysamps[2], '-specific (by peaks) TSS-proximal')
-    )
-
-    explabel <- paste0(nonreference, "-specific (by intensity)")
-    reflabel <- paste0(reference, "-specific (by intensity)")
-
     p <- highchart() %>%
       hc_title(text = "Distribution of Normalized Counts",
                style = list(color = '#2E1717',
@@ -1065,7 +918,6 @@ plotDistCountAnalysis <-
                  pointFormat = "{point.y}") %>%
       hc_colors(cols) %>%
       hc_exporting(enabled = TRUE)
->>>>>>> 56f8fa39532c2d8359c2ec69e0bc10cee0a33dad
     return(p)
     }
 
@@ -1414,27 +1266,12 @@ plotGREATenrich <- function(input,
       is.list(input$ReferenceSpecificByIntensity$Sig_Pathways) == FALSE |
       is.list(input$Shared$Sig_Pathways) == FALSE |
       length(input) != 3 |
-<<<<<<< HEAD
-      length(which(!is.na(match(mycols,colnames(input$ExperimentSpecificByIntensity$Sig_Pathways[[pathwaycateg]]))))) !=
-	length(mycols) |
-      length(which(!is.na(match(mycols,colnames(input$ReferenceSpecificByIntensity$Sig_Pathways[[pathwaycateg]]))))) !=
-        length(mycols) |
-      length(match(mycols,colnames(input$Shared$Sig_Pathways[[pathwaycateg]]))) !=
-        length(mycols) |
-      all(names(input) != c("ExperimentSpecificByIntensity", "ReferenceSpecificByIntensity", 
-		"Shared"))) {
-    stop("The input is not a list of three dataframes or there are no enriched pathways to plot. 
-		Be sure the input is the output from running processPathways(()")
-  }
-
-  up <- input$ExperimentSpecificByIntensity$Sig_Pathways[[pathwaycateg]][,mycols]
-=======
       length(which(!is.na(match(
-        mycols, colnames(input$Experiment_Specific$Sig_Pathways[[pathwaycateg]])
+        mycols, colnames(input$ExperimentSpecificByIntensity$Sig_Pathways[[pathwaycateg]])
       )))) !=
       length(mycols) |
       length(which(!is.na(match(
-        mycols, colnames(input$Reference_Specific$Sig_Pathways[[pathwaycateg]])
+        mycols, colnames(input$ReferenceSpecificByIntensity$Sig_Pathways[[pathwaycateg]])
       )))) !=
       length(mycols) |
       length(match(mycols, colnames(input$Shared$Sig_Pathways[[pathwaycateg]]))) !=
@@ -1453,8 +1290,8 @@ plotGREATenrich <- function(input,
   }
 
   up <-
-    input$Experiment_Specific$Sig_Pathways[[pathwaycateg]][, mycols]
->>>>>>> 56f8fa39532c2d8359c2ec69e0bc10cee0a33dad
+    input$ExperimentSpecificByIntensity$Sig_Pathways[[pathwaycateg]][, mycols]
+
   if (is.null(nrow(up))) {
     up$name <- NA
   } else {
@@ -1464,12 +1301,8 @@ plotGREATenrich <- function(input,
     }
   }
 
-<<<<<<< HEAD
-  reference <- input$ReferenceSpecificByIntensity$Sig_Pathways[[pathwaycateg]][,mycols]
-=======
-  reference <-
-    input$Reference_Specific$Sig_Pathways[[pathwaycateg]][, mycols]
->>>>>>> 56f8fa39532c2d8359c2ec69e0bc10cee0a33dad
+  reference <- 
+    input$ReferenceSpecificByIntensity$Sig_Pathways[[pathwaycateg]][,mycols]
   if (is.null(nrow(reference))) {
     reference$name <- NA
   } else {
