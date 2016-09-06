@@ -22,7 +22,7 @@ GREATpathways, type getOntologies(GREATpathways)}
 \item{test}{character, "Binom" uses binomial test restuls, "Hyper" uses
 hypergeometric test results.  Default is "Binom"}
 
-\item{numshow}{number of top pathways (ranked according to p-value) of each type 
+\item{numshow}{number of top pathways (ranked according to p-value) of each type
 (expt, reference, shared) to show in the plot (default=10)}
 }
 \value{

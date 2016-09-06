@@ -15,7 +15,6 @@
 #' @export
 #'
 plotConsensusPeaks <- function(samplepeaks, palette = "Set1") {
-
   cols <- RColorBrewer::brewer.pal(3, palette)
 
 
@@ -24,9 +23,12 @@ plotConsensusPeaks <- function(samplepeaks, palette = "Set1") {
 
   consPeaksStats <- samplepeaks$consPeaksStats
   row.names(consPeaksStats) <- NULL
-  consPeaksStats[ , 2] <-  as.numeric(as.character(consPeaksStats[[2]]))
-  consPeaksStats[ , 3] <-  as.numeric(as.character(consPeaksStats[[3]]))
-  statsFormated <- tidyr::gather(consPeaksStats, "CellType", "Count", 2:3)
+  consPeaksStats[, 2] <-
+    as.numeric(as.character(consPeaksStats[[2]]))
+  consPeaksStats[, 3] <-
+    as.numeric(as.character(consPeaksStats[[3]]))
+  statsFormated <-
+    tidyr::gather(consPeaksStats, "CellType", "Count", 2:3)
 
   plottingData <- statsFormated %>%
     split(levels(as.factor(statsFormated$CellType)))
@@ -115,152 +117,164 @@ plotConsensusPeaks <- function(samplepeaks, palette = "Set1") {
 #' }
 #' @export
 #'
-plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE,
+plotCombineAnnotatePeaks <- function(conspeaks,
+                                     viewer = TRUE,
                                      palette = "Set1") {
+  cols <- RColorBrewer::brewer.pal(3, palette)
+  CellType <- NULL
+  #R CMD check throws no visible binding for global variable error
 
-    cols <- RColorBrewer::brewer.pal(3, palette)
-    CellType <- NULL
-    #R CMD check throws no visible binding for global variable error
-
-    mergeStats <- conspeaks$mergestats
-    row.names(mergeStats) <- NULL
-    mergeStats[ , 2] <-  as.numeric(as.character(mergeStats[[2]]))
-    mergeStats[ , 3] <-  as.numeric(as.character(mergeStats[[3]]))
-    mergeStatsFormatted <- tidyr::gather(mergeStats, "CellType", "Count", 2:3)
-
-
-    if ( nrow(mergeStatsFormatted) == 1 ) {
-        stop("No plot to show since merging was not performed
-             when calling combineAnnotatePeaks function")
-    }
+  mergeStats <- conspeaks$mergestats
+  row.names(mergeStats) <- NULL
+  mergeStats[, 2] <-  as.numeric(as.character(mergeStats[[2]]))
+  mergeStats[, 3] <-  as.numeric(as.character(mergeStats[[3]]))
+  mergeStatsFormatted <-
+    tidyr::gather(mergeStats, "CellType", "Count", 2:3)
 
 
-    feature <- "TotalNumber"
-    if ( feature == "TotalNumber") {
-        mergeStatsTotal <- dplyr::filter(mergeStatsFormatted,
-                                         CellType == "TotalNumber")
-        thecondition <- matrix(unlist(strsplit(mergeStatsTotal$Condition, "_")),
-                               nrow = 3, ncol = 4)[2,]
-        mergeStatsBefore <- dplyr::filter(mergeStatsTotal,
-                                          thecondition == "before")
-        mergeStatsAfter <- dplyr::filter(mergeStatsTotal,
-                                         thecondition == "after")
-
-        p1 <- highchart(height = 400) %>%
-            hc_title(text = "Number of REs",
-                     style = list(color = '#2E1717',
-                                  fontWeight = 'bold')) %>%
-            hc_add_series(
-                data = mergeStatsBefore$Count,
-                name = c("TSS-distal"),
-                type = "column",
-                dataLabels = list(
-                    enabled = TRUE,
-                    rotation = 270,
-                    color = '#FFFFFF',
-                    y = 40
-                )) %>%
-            hc_add_series(
-                data = mergeStatsAfter$Count,
-                name = c("TSS-proximal"),
-                type = "column",
-                dataLabels = list(
-                    enabled = TRUE,
-                    rotation = 270,
-                    color = '#FFFFFF',
-                    y = 40
-                )) %>%
-            hc_yAxis(title = list(text = "Number of REs"),
-                     labels = list(format = "{value}")) %>%
-            hc_xAxis(categories = c("Before Merging", "After Merging")) %>%
-            hc_legend(
-                enabled = TRUE,
-                layout = "horizontal",
-                align = "center",
-                verticalAlign = "bottom",
-                floating = FALSE,
-                maxHeight = 100,
-                x = 0,
-                y = 17
-            ) %>%
-            hc_tooltip(
-                headerFormat = "<b>{series.name}_{point.key}</b><br>",
-                pointFormat = "{point.y}",
-                valueSuffix = ' peaks'
-            ) %>%
-            hc_colors(cols) %>%
-            hc_exporting(enabled = TRUE)
-
-    }
-
-    feature <- "MeanLength"
-    if ( feature == "MeanLength" ) {
-      mergeStatsMean <- dplyr::filter(mergeStatsFormatted,
-                                      CellType == "MeanLength")
-      thecondition <- matrix(unlist(strsplit(mergeStatsMean$Condition, "_")),
-                             nrow = 3,
-                             ncol = 4)[2, ]
-      mergeStatsBefore <- dplyr::filter(mergeStatsMean,
-                                        thecondition == "before")
-      mergeStatsAfter <- dplyr::filter(mergeStatsMean,
-                                       thecondition == "after")
+  if (nrow(mergeStatsFormatted) == 1) {
+    stop(
+      "No plot to show since merging was not performed
+      when calling combineAnnotatePeaks function"
+    )
+  }
 
 
-        p2 <- highchart(height = 400) %>%
-            hc_title(text = "Mean length of REs",
-                     style = list(color = '#2E1717',
-                                  fontWeight = 'bold')) %>%
-            hc_add_series(
-                data = mergeStatsBefore$Count,
-                name = c("TSS-distal"),
-                type = "column",
-                dataLabels = list(
-                    enabled = TRUE,
-                    rotation = 270,
-                    color = '#FFFFFF',
-                    y = 40
-                )) %>%
-            hc_add_series(
-                data = mergeStatsAfter$Count,
-                name = c("TSS-proximal"),
-                type = "column",
-                dataLabels = list(
-                    enabled = TRUE,
-                    rotation = 270,
-                    color = '#FFFFFF',
-                    y = 40
-                )) %>%
-            hc_yAxis(title = list(text = "Mean Length of REs"),
-                     labels = list(format = "{value}")) %>%
-            hc_xAxis(categories = c("Before Merging", "After Merging")) %>%
-            hc_legend(
-                enabled = TRUE,
-                layout = "horizontal",
-                align = "center",
-                verticalAlign = "bottom",
-                floating = FALSE,
-                maxHeight = 100,
-                x = 0,
-                y = 17
-            ) %>%
-            hc_tooltip(
-                headerFormat = "<b>{series.name}_{point.key}</b><br>",
-                pointFormat = "{point.y}",
-                valueSuffix = ' peaks'
-            ) %>%
-            hc_colors(cols) %>%
-            hc_exporting(enabled = TRUE)
-    }
+  feature <- "TotalNumber"
+  if (feature == "TotalNumber") {
+    mergeStatsTotal <- dplyr::filter(mergeStatsFormatted,
+                                     CellType == "TotalNumber")
+    thecondition <-
+      matrix(unlist(strsplit(mergeStatsTotal$Condition, "_")),
+             nrow = 3, ncol = 4)[2, ]
+    mergeStatsBefore <- dplyr::filter(mergeStatsTotal,
+                                      thecondition == "before")
+    mergeStatsAfter <- dplyr::filter(mergeStatsTotal,
+                                     thecondition == "after")
+
+    p1 <- highchart(height = 400) %>%
+      hc_title(text = "Number of REs",
+               style = list(color = '#2E1717',
+                            fontWeight = 'bold')) %>%
+      hc_add_series(
+        data = mergeStatsBefore$Count,
+        name = c("TSS-distal"),
+        type = "column",
+        dataLabels = list(
+          enabled = TRUE,
+          rotation = 270,
+          color = '#FFFFFF',
+          y = 40
+        )
+      ) %>%
+      hc_add_series(
+        data = mergeStatsAfter$Count,
+        name = c("TSS-proximal"),
+        type = "column",
+        dataLabels = list(
+          enabled = TRUE,
+          rotation = 270,
+          color = '#FFFFFF',
+          y = 40
+        )
+      ) %>%
+      hc_yAxis(title = list(text = "Number of REs"),
+               labels = list(format = "{value}")) %>%
+      hc_xAxis(categories = c("Before Merging", "After Merging")) %>%
+      hc_legend(
+        enabled = TRUE,
+        layout = "horizontal",
+        align = "center",
+        verticalAlign = "bottom",
+        floating = FALSE,
+        maxHeight = 100,
+        x = 0,
+        y = 17
+      ) %>%
+      hc_tooltip(
+        headerFormat = "<b>{series.name}_{point.key}</b><br>",
+        pointFormat = "{point.y}",
+        valueSuffix = ' peaks'
+      ) %>%
+      hc_colors(cols) %>%
+      hc_exporting(enabled = TRUE)
+
+  }
+
+  feature <- "MeanLength"
+  if (feature == "MeanLength") {
+    mergeStatsMean <- dplyr::filter(mergeStatsFormatted,
+                                    CellType == "MeanLength")
+    thecondition <-
+      matrix(unlist(strsplit(mergeStatsMean$Condition, "_")),
+             nrow = 3,
+             ncol = 4)[2,]
+    mergeStatsBefore <- dplyr::filter(mergeStatsMean,
+                                      thecondition == "before")
+    mergeStatsAfter <- dplyr::filter(mergeStatsMean,
+                                     thecondition == "after")
 
 
-    if (viewer == TRUE) {
-    p <- htmltools::browsable(hw_grid(p1, p2, ncol = 2, rowheight = 550))
-    }
-    else {
+    p2 <- highchart(height = 400) %>%
+      hc_title(text = "Mean length of REs",
+               style = list(color = '#2E1717',
+                            fontWeight = 'bold')) %>%
+      hc_add_series(
+        data = mergeStatsBefore$Count,
+        name = c("TSS-distal"),
+        type = "column",
+        dataLabels = list(
+          enabled = TRUE,
+          rotation = 270,
+          color = '#FFFFFF',
+          y = 40
+        )
+      ) %>%
+      hc_add_series(
+        data = mergeStatsAfter$Count,
+        name = c("TSS-proximal"),
+        type = "column",
+        dataLabels = list(
+          enabled = TRUE,
+          rotation = 270,
+          color = '#FFFFFF',
+          y = 40
+        )
+      ) %>%
+      hc_yAxis(
+        title = list(text = "Mean Length of REs"),
+        labels = list(format = "{value}")
+      ) %>%
+      hc_xAxis(categories = c("Before Merging", "After Merging")) %>%
+      hc_legend(
+        enabled = TRUE,
+        layout = "horizontal",
+        align = "center",
+        verticalAlign = "bottom",
+        floating = FALSE,
+        maxHeight = 100,
+        x = 0,
+        y = 17
+      ) %>%
+      hc_tooltip(
+        headerFormat = "<b>{series.name}_{point.key}</b><br>",
+        pointFormat = "{point.y}",
+        valueSuffix = ' peaks'
+      ) %>%
+      hc_colors(cols) %>%
+      hc_exporting(enabled = TRUE)
+  }
+
+
+  if (viewer == TRUE) {
+    p <-
+      htmltools::browsable(hw_grid(p1, p2, ncol = 2, rowheight = 550))
+  }
+  else {
     p <- hw_grid(p1, p2)
-    }
-    return(p)
-}
+  }
+  return(p)
+  }
 
 ###############################################################################
 
@@ -296,42 +310,61 @@ plotCombineAnnotatePeaks <- function(conspeaks, viewer = TRUE,
 plotGetCounts <- function(countsConsPeaks, palette = "Set1") {
   region <- NULL
   variable <- NULL
-  value=Reference_specific=Shared=Experiment_specific=c()
+  value = Reference_specific = Shared = Experiment_specific = c()
   #set to null forR CMD Check error: Undefined global functions/variables
 
   cols <- RColorBrewer::brewer.pal(4, palette)
 
   mydf <- countsConsPeaks$regioncountsforplot
-#  varstack <- suppressMessages(reshape2::melt(mydf))
-  varstack <- suppressMessages(tidyr::gather(mydf,variable,value,-region))
-  varstack$variable=gsub("_.*","",varstack$variable)
-  
+  #  varstack <- suppressMessages(reshape2::melt(mydf))
+  varstack <-
+    suppressMessages(tidyr::gather(mydf, variable, value, -region))
+  varstack$variable = gsub("_.*", "", varstack$variable)
+
   mysamps <- unique(varstack$variable)
 
-  samp1dist <- dplyr::filter(varstack, 
-	region == "TSS-distal" & variable == mysamps[1])
+  samp1dist <- dplyr::filter(varstack,
+                             region == "TSS-distal" &
+                               variable == mysamps[1])
   samp2dist <- dplyr::filter(varstack,
-        region == "TSS-distal" & variable == mysamps[2])
+                             region == "TSS-distal" &
+                               variable == mysamps[2])
   samp1prox <- dplyr::filter(varstack,
-        region == "TSS-proximal" & variable == mysamps[1])
+                             region == "TSS-proximal" &
+                               variable == mysamps[1])
   samp2prox <- dplyr::filter(varstack,
-        region == "TSS-proximal" & variable == mysamps[2])
+                             region == "TSS-proximal" &
+                               variable == mysamps[2])
 
 
-  p <- hchart(stats::density(samp1dist$value), area = TRUE,
-              name = paste(mysamps[1],"TSS-distal")) %>%
-    hc_title(text = "Density of log2 read counts
-             (normalized by library and region sizes)",
-             style = list(color = '#2E1717',
-                          fontWeight = 'bold')) %>%
+  p <- hchart(
+    stats::density(samp1dist$value),
+    area = TRUE,
+    name = paste(mysamps[1], "TSS-distal")
+  ) %>%
+    hc_title(
+      text = "Density of log2 read counts
+      (normalized by library and region sizes)",
+      style = list(color = '#2E1717',
+                   fontWeight = 'bold')
+    ) %>%
     hc_yAxis(title = "density") %>%
     hc_xAxis(title = "log2 read counts") %>%
-    hc_add_series_density(stats::density(samp1prox$value),
-                          area = TRUE, name = paste(mysamps[1],"TSS-proximal")) %>%
-    hc_add_series_density(stats::density(samp2dist$value),
-                          area = TRUE, name = paste(mysamps[2],"TSS-distal")) %>%
-    hc_add_series_density(stats::density(samp2prox$value),
-                          area = TRUE, name = paste(mysamps[2],"TSS-proximal")) %>%
+    hc_add_series_density(
+      stats::density(samp1prox$value),
+      area = TRUE,
+      name = paste(mysamps[1], "TSS-proximal")
+    ) %>%
+    hc_add_series_density(
+      stats::density(samp2dist$value),
+      area = TRUE,
+      name = paste(mysamps[2], "TSS-distal")
+    ) %>%
+    hc_add_series_density(
+      stats::density(samp2prox$value),
+      area = TRUE,
+      name = paste(mysamps[2], "TSS-proximal")
+    ) %>%
     hc_colors(cols) %>%
     hc_exporting(enabled = TRUE)
   return(p)
@@ -382,7 +415,7 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) {
 
     if ( !is.null(palette) ) {
         cols <- RColorBrewer::brewer.pal(4, palette) 
-    }else {cols <- c("#C71585", "#d3d3d3", "#000080", "#00E5EE")}
+    } else {cols <- c("#C71585", "#d3d3d3", "#000080", "#00E5EE")}
                         #grey (ambiguous)
                         #magenta (experiment-specific)
                         #blue (reference specific)
@@ -420,45 +453,56 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) {
   tssprox$padj <- round(-log10(tssprox$padj), 2)
   tssprox$log2FoldChange <- round(tssprox$log2FoldChange, 2)
 
-  p1 <- highchart() %>%
-    hc_chart(type = "scatter") %>%
-    hc_title(text = "TSS-distal",
-             style = list(color = '#2E1717',
-                          fontWeight = 'bold')) %>%
-    hc_add_series_df(data = tssdist, x = log2FoldChange, y = padj,
-                     type = "scatter", group = REaltrecategplot)  %>%
-    hc_xAxis(title = list(text = "log2fold change")) %>%
-    hc_yAxis(title = list(text = "-log10 pvalue")) %>%
-    hc_tooltip(headerFormat = "",
-               pointFormat  = "<b>log2FC</b> = {point.x}<br> <b>-log10pvalue</b>
-               = {point.y}<br>") %>%
-    hc_colors(cols) %>%
-    hc_exporting(enabled = TRUE)
+    p1 <- highchart() %>%
+      hc_chart(type = "scatter") %>%
+      hc_title(text = "TSS-distal",
+               style = list(color = '#2E1717',
+                            fontWeight = 'bold')) %>%
+      hc_add_series_df(
+        data = tssdist,
+        x = log2FoldChange,
+        y = padj,
+        type = "scatter",
+        group = REaltrecateg
+      )  %>%
+      hc_xAxis(title = list(text = "log2fold change")) %>%
+      hc_yAxis(title = list(text = "-log10 pvalue")) %>%
+      hc_tooltip(headerFormat = "",
+                 pointFormat  = "<b>log2FC</b> = {point.x}<br> <b>-log10pvalue</b>
+                 = {point.y}<br>") %>%
+      hc_colors(cols) %>%
+      hc_exporting(enabled = TRUE)
 
-  p2 <- highchart() %>%
-    hc_chart(type = "scatter") %>%
-    hc_title(text = "TSS-proximal",
-             style = list(color = '#2E1717',
-                          fontWeight = 'bold')) %>%
-    hc_add_series_df(data = tssprox, x = log2FoldChange, y = padj,
-                     type = "scatter", group = REaltrecategplot)  %>%
-    hc_xAxis(title = list(text = "log2fold change")) %>%
-    hc_yAxis(title = list(text = "-log10 pvalue")) %>%
-    hc_tooltip(headerFormat = "",
-               pointFormat  = "<b>log2FC</b> = {point.x}<br> <b>-log10pvalue</b>
-               = {point.y}<br>") %>%
-    hc_colors(cols) %>%
-    hc_exporting(enabled = TRUE)
+    p2 <- highchart() %>%
+      hc_chart(type = "scatter") %>%
+      hc_title(text = "TSS-proximal",
+               style = list(color = '#2E1717',
+                            fontWeight = 'bold')) %>%
+      hc_add_series_df(
+        data = tssprox,
+        x = log2FoldChange,
+        y = padj,
+        type = "scatter",
+        group = REaltrecateg
+      )  %>%
+      hc_xAxis(title = list(text = "log2fold change")) %>%
+      hc_yAxis(title = list(text = "-log10 pvalue")) %>%
+      hc_tooltip(headerFormat = "",
+                 pointFormat  = "<b>log2FC</b> = {point.x}<br> <b>-log10pvalue</b>
+                 = {point.y}<br>") %>%
+      hc_colors(cols) %>%
+      hc_exporting(enabled = TRUE)
 
 
-  if (viewer == TRUE) {
-    p <- htmltools::browsable(hw_grid(p1, p2, ncol = 2, rowheight = 700))
+    if (viewer == TRUE) {
+      p <-
+        htmltools::browsable(hw_grid(p1, p2, ncol = 2, rowheight = 700))
+    }
+    else {
+      p <- hw_grid(p1, p2, ncol = 2)
+    }
+    return(p)
   }
-  else {
-    p <- hw_grid(p1, p2, ncol = 2)
-  }
-  return(p)
-}
 
 
 
@@ -474,16 +518,21 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) {
 #'
 #' @export
 #'
-plotCountAnalysisTemp <- function(altrepeakscateg = NULL, viewer = TRUE, palette = NULL) {
+plotCountAnalysisTemp <-
+  function(altrepeakscateg = NULL,
+           viewer = TRUE,
+           palette = NULL) {
+    if (!is.null(palette)) {
+      cols <- RColorBrewer::brewer.pal(4, palette)
+    }
+    else{
+      cols <- c("#d3d3d3", "#C71585", "#00E5EE", "#000080")
+    }
+    #grey (ambiguous)
+    #magenta (experiment-specific)
+    #blue (reference specific)
 
-    if ( !is.null(palette) ) {
-      cols <- RColorBrewer::brewer.pal(4, palette) }
-    else{cols <- c("#d3d3d3", "#C71585", "#00E5EE","#000080")}
-                          #grey (ambiguous)
-                          #magenta (experiment-specific)
-                          #blue (reference specific)
-
-  cat(altrepeakscateg)
+    cat(altrepeakscateg)
 
   dataraw <-
   ' DOK6 0.51 1.861e-08 0.0003053
@@ -587,57 +636,67 @@ plotCountAnalysisTemp <- function(altrepeakscateg = NULL, viewer = TRUE, palette
   ZNRF2 0.0002994 0.9988 0.9998
   ZNF559 0.0002839 0.9994 0.9998'
 
-  datmat <- t(matrix(unlist(strsplit(unlist(strsplit(dataraw,"\n " ))," ")), 5, 100))[,-1]
+    datmat <-
+      t(matrix(unlist(strsplit(
+        unlist(strsplit(dataraw, "\n ")), " "
+      )), 5, 100))[, -1]
 
-  dat <- data.frame(log2FoldChange = as.numeric(datmat[ , 2]),
-                       pvalue = as.numeric(datmat[ , 3]),
-                       padj = as.numeric(datmat[ , 4]),
-                       categ = rep(c("A", "B"), c(50, 50)))
-  rownames(dat) <- datmat[ , 1]
+    dat <- data.frame(
+      log2FoldChange = as.numeric(datmat[, 2]),
+      pvalue = as.numeric(datmat[, 3]),
+      padj = as.numeric(datmat[, 4]),
+      categ = rep(c("A", "B"), c(50, 50))
+    )
+    rownames(dat) <- datmat[, 1]
 
-  ind <- as.logical(stats::rbinom(100, 1, 0.5))
-  dat1 <- dat[ind, ]
-  dat2 <- dat[!ind, ]
-  p1 <- highchart() %>%
-         hc_title(text = "TSS-distal",
-                  style = list(color = '#2E1717',
-                               fontWeight = 'bold')) %>%
-    hc_add_series_scatter(x = -log10(dat1$pvalue),
-                          y = dat1$log2FoldChange,
-                          color = dat1$categ,
-                          label = rownames(dat1))  %>%
-         hc_xAxis(title = list(text = "log2fold change")) %>%
-         hc_yAxis(title = list(text = "-log10 pvalue")) %>%
-    hc_tooltip(headerFormat = "",
-               pointFormat  = "<b>log2FC</b> = {point.x}<br> <b>-log10pvalue</b> = {point.y}<br>") %>%
-    hc_colors(cols) %>%
-    hc_exporting(enabled = TRUE)
+    ind <- as.logical(stats::rbinom(100, 1, 0.5))
+    dat1 <- dat[ind,]
+    dat2 <- dat[!ind,]
+    p1 <- highchart() %>%
+      hc_title(text = "TSS-distal",
+               style = list(color = '#2E1717',
+                            fontWeight = 'bold')) %>%
+      hc_add_series_scatter(
+        x = -log10(dat1$pvalue),
+        y = dat1$log2FoldChange,
+        color = dat1$categ,
+        label = rownames(dat1)
+      )  %>%
+      hc_xAxis(title = list(text = "log2fold change")) %>%
+      hc_yAxis(title = list(text = "-log10 pvalue")) %>%
+      hc_tooltip(headerFormat = "",
+                 pointFormat  = "<b>log2FC</b> = {point.x}<br> <b>-log10pvalue</b> = {point.y}<br>") %>%
+      hc_colors(cols) %>%
+      hc_exporting(enabled = TRUE)
 
 
-  p2 <- highchart() %>%
-         hc_title(text = "TSS-proximal",
-                  style = list(color = '#2E1717',
-                               fontWeight = 'bold')) %>%
-    hc_add_series_scatter(x = -log10(dat2$pvalue),
-                          y = dat2$log2FoldChange,
-                          color = dat2$categ,
-                          label = rownames(dat2))  %>%
-         hc_xAxis(title = list(text = "log2fold change")) %>%
-         hc_yAxis(title = list(text = "-log10 pvalue")) %>%
-    hc_tooltip(headerFormat = "",
-               pointFormat  = "<b>log2FC</b> = {point.x}<br> <b>-log10pvalue</b> = {point.y}<br>") %>%
-    hc_colors(cols) %>%
-    hc_exporting(enabled = TRUE)
+    p2 <- highchart() %>%
+      hc_title(text = "TSS-proximal",
+               style = list(color = '#2E1717',
+                            fontWeight = 'bold')) %>%
+      hc_add_series_scatter(
+        x = -log10(dat2$pvalue),
+        y = dat2$log2FoldChange,
+        color = dat2$categ,
+        label = rownames(dat2)
+      )  %>%
+      hc_xAxis(title = list(text = "log2fold change")) %>%
+      hc_yAxis(title = list(text = "-log10 pvalue")) %>%
+      hc_tooltip(headerFormat = "",
+                 pointFormat  = "<b>log2FC</b> = {point.x}<br> <b>-log10pvalue</b> = {point.y}<br>") %>%
+      hc_colors(cols) %>%
+      hc_exporting(enabled = TRUE)
 
 
     if (viewer == TRUE) {
-      p <- htmltools::browsable(hw_grid(p1, p2, ncol = 2, rowheight = 700))
+      p <-
+        htmltools::browsable(hw_grid(p1, p2, ncol = 2, rowheight = 700))
     }
     else {
       p <- hw_grid(p1, p2, ncol = 2)
     }
-  return(p)
-}
+    return(p)
+  }
 
 ###############################################################################
 #' Creates a boxplot to see the distribution of read counts in type-specific and
@@ -683,57 +742,76 @@ plotCountAnalysisTemp <- function(altrepeakscateg = NULL, viewer = TRUE, palette
 #' }
 #' @export
 #'
+<<<<<<< HEAD
 plotDistCountAnalysis <- function(analysisresults, counts, palette = NULL){
     
     altrecateg <- REaltrecategplot <- c()
     #Make sure to names things are from the user-entered sample names 
     reference <- analysisresults$reference
     allSamples <- colnames(analysisresults$analysisresults)[11:12]
+=======
+plotDistCountAnalysis <-
+  function(analysisresults, counts, palette = NULL) {
+    #Make sure to names things are from the user-entered sample names
+    reference <- analysisresults$reference
+    allSamples <- colnames(analysisresults$analysisresults[12:length(analysisresults$analysisresults) -
+                                                             1])
+>>>>>>> 56f8fa39532c2d8359c2ec69e0bc10cee0a33dad
     nonreference <- allSamples[which(!(allSamples %in% reference))]
     Referencespecific <- paste0(reference, "SpecificByIntensity")
     Experimentspecific <- paste0(nonreference, "SpecificByIntensity")
-    
-  if ( !is.null(palette) ) {
-    cols <- RColorBrewer::brewer.pal(4, palette) 
-    } else{cols <- c("#C71585", "#d3d3d3", "#000080", "#00E5EE")}
-           #magenta (experiment-specific) #grey (ambiguous) #blue (shared))
-  #blue (reference specific)
 
-  readcounts <- counts$regioncounts
-  analysisresults <- analysisresults$analysisresults
-  errortest = try(SummarizedExperiment::assay(readcounts), silent = TRUE)
-  if (inherits(errortest, 'try-error') == TRUE) {
-    stop("The input for the readcounts arguement is
-         not a summerized experiment object!")
-  }
+    if (!is.null(palette)) {
+      cols <- RColorBrewer::brewer.pal(4, palette)
+    } else{
+      cols <- c("#C71585", "#d3d3d3", "#000080", "#00E5EE")
+    }
+    #magenta (experiment-specific) #grey (ambiguous) #blue (shared))
+    #blue (reference specific)
 
-  if (is.data.frame(analysisresults) == FALSE)
-  {
-    stop("The input for the analysisresults arguement is not a dataframe!")
+    readcounts <- counts$regioncounts
+    analysisresults <- analysisresults$analysisresults
+    errortest = try(SummarizedExperiment::assay(readcounts), silent = TRUE)
+    if (inherits(errortest, 'try-error') == TRUE) {
+      stop("The input for the readcounts arguement is
+           not a summerized experiment object!")
+    }
 
-  }
+    if (is.data.frame(analysisresults) == FALSE)
+    {
+      stop("The input for the analysisresults arguement is not a dataframe!")
 
-  # Check that counts and analysisresults are in the same order
-  countsinfo <- as.data.frame(SummarizedExperiment::rowRanges(readcounts))
-  countcoord <- paste0(countsinfo$seqnames, countsinfo$start, countsinfo$end)
-  analcoord <- paste0(analysisresults$chr,
-                     analysisresults$start,
-                     analysisresults$stop)
+    }
 
-  if (!all.equal(analcoord, countcoord)) {
-    stop("The peaks in the analysisresults and counts are not the same")
-  }
+    # Check that counts and analysisresults are in the same order
+    countsinfo <-
+      as.data.frame(SummarizedExperiment::rowRanges(readcounts))
+    countcoord <-
+      paste0(countsinfo$seqnames, countsinfo$start, countsinfo$end)
+    analcoord <- paste0(analysisresults$chr,
+                        analysisresults$start,
+                        analysisresults$stop)
 
+    if (!all.equal(analcoord, countcoord)) {
+      stop("The peaks in the analysisresults and counts are not the same")
+    }
+
+<<<<<<< HEAD
   PEcateg <- analysisresults$region
   altrecategplot <- analysisresults$REaltrecategplot
+=======
+    PEcateg <- analysisresults$region
+    altrecateg <- analysisresults$REaltrecateg
+>>>>>>> 56f8fa39532c2d8359c2ec69e0bc10cee0a33dad
 
-  # Get log2FPM values:
-  log2FPM <- log2(DESeq2::fpkm(readcounts, robust = TRUE) + 0.001)
+    # Get log2FPM values:
+    log2FPM <- log2(DESeq2::fpkm(readcounts, robust = TRUE) + 0.001)
 
-  # Average log2FPM values over replicats:
-  sampletypes <- SummarizedExperiment::colData(readcounts)$sample
-  meanlog2FPM <- c()
+    # Average log2FPM values over replicats:
+    sampletypes <- SummarizedExperiment::colData(readcounts)$sample
+    meanlog2FPM <- c()
 
+<<<<<<< HEAD
   for (i in unique(sampletypes)) {
     samp <- which(sampletypes == i)
     meanlog2FPM <- cbind(meanlog2FPM,
@@ -855,8 +933,141 @@ plotDistCountAnalysis <- function(analysisresults, counts, palette = NULL){
                pointFormat = "{point.y}") %>%
     hc_colors(cols) %>%
     hc_exporting(enabled = TRUE)
+=======
+    for (i in unique(sampletypes)) {
+      samp <- which(sampletypes == i)
+      meanlog2FPM <- cbind(meanlog2FPM,
+                           as.numeric(apply(log2FPM[, samp], 1, mean)))
+    }
+    colnames(meanlog2FPM) <- unique(sampletypes)
+
+    mydf <- data.frame(meanlog2FPM = meanlog2FPM,
+                       PEcateg = PEcateg,
+                       altrecateg = altrecateg)
+    TSSdistal <- dplyr::filter(mydf, PEcateg == "TSS-distal")
+    distal1 <- dplyr::filter(mydf, altrecateg == Experimentspecific)
+    distal2 <- dplyr::filter(mydf, altrecateg == "Ambiguous")
+    distal3 <- dplyr::filter(mydf, altrecateg == "Shared")
+    distal4 <- dplyr::filter(mydf, altrecateg == Referencespecific)
+
+    TSSproximal <- dplyr::filter(mydf, PEcateg == "TSS-proximal")
+    proximal1 <- dplyr::filter(mydf, altrecateg == Experimentspecific)
+    proximal2 <- dplyr::filter(mydf, altrecateg == "Ambiguous")
+    proximal3 <- dplyr::filter(mydf, altrecateg == "Shared")
+    proximal4 <- dplyr::filter(mydf, altrecateg == Referencespecific)
+
+    mysamps = as.character(unique(sampletypes))
+    distal1_5num_samp1 <-
+      stats::fivenum(distal1[[paste("meanlog2FPM", mysamps[1], sep = ".")]])
+    proximal1_5num_samp1 <-
+      stats::fivenum(proximal1[[paste("meanlog2FPM", mysamps[1], sep = ".")]])
+    distal1_5num_samp2 <-
+      stats::fivenum(distal1[[paste("meanlog2FPM", mysamps[2], sep = ".")]])
+    proximal1_5num_samp2 <-
+      stats::fivenum(proximal1[[paste("meanlog2FPM", mysamps[2], sep = ".")]])
+
+    distal2_5num_samp1 <-
+      stats::fivenum(distal2[[paste("meanlog2FPM", mysamps[1], sep = ".")]])
+    proximal2_5num_samp1 <-
+      stats::fivenum(proximal2[[paste("meanlog2FPM", mysamps[1], sep = ".")]])
+    distal2_5num_samp2 <-
+      stats::fivenum(distal2[[paste("meanlog2FPM", mysamps[2], sep = ".")]])
+    proximal2_5num_samp2 <-
+      stats::fivenum(proximal2[[paste("meanlog2FPM", mysamps[2], sep = ".")]])
+
+    distal3_5num_samp1 <-
+      stats::fivenum(distal3[[paste("meanlog2FPM", mysamps[1], sep = ".")]])
+    proximal3_5num_samp1 <-
+      stats::fivenum(proximal3[[paste("meanlog2FPM", mysamps[1], sep = ".")]])
+    distal3_5num_samp2 <-
+      stats::fivenum(distal3[[paste("meanlog2FPM", mysamps[2], sep = ".")]])
+    proximal3_5num_samp2 <-
+      stats::fivenum(proximal3[[paste("meanlog2FPM", mysamps[2], sep = ".")]])
+
+    distal4_5num_samp1 <-
+      stats::fivenum(distal4[[paste("meanlog2FPM", mysamps[1], sep = ".")]])
+    proximal4_5num_samp1 <-
+      stats::fivenum(proximal4[[paste("meanlog2FPM", mysamps[1], sep = ".")]])
+    distal4_5num_samp2 <-
+      stats::fivenum(distal4[[paste("meanlog2FPM", mysamps[2], sep = ".")]])
+    proximal4_5num_samp2 <-
+      stats::fivenum(proximal4[[paste("meanlog2FPM", mysamps[2], sep = ".")]])
+
+    Experimentspecific_list <- list(
+      round(distal1_5num_samp1, 3),
+      round(proximal1_5num_samp1, 3),
+      round(distal1_5num_samp2, 3),
+      round(proximal1_5num_samp2, 3)
+    )
+    Ambiguous_list <- list(
+      round(distal2_5num_samp1, 3),
+      round(proximal2_5num_samp1, 3),
+      round(distal2_5num_samp2, 3),
+      round(proximal2_5num_samp2, 3)
+    )
+    Shared_list <- list(
+      round(distal3_5num_samp1, 3),
+      round(proximal3_5num_samp1, 3),
+      round(distal3_5num_samp2, 3),
+      round(proximal3_5num_samp2, 3)
+    )
+    Referencespecific_list <- list(
+      round(distal4_5num_samp1, 3),
+      round(proximal4_5num_samp1, 3),
+      round(distal4_5num_samp2, 3),
+      round(proximal4_5num_samp2, 3)
+    )
+
+    categ <- c(
+      paste0(mysamps[1], '-specific (by peaks) TSS-distal'),
+      paste0(mysamps[1], '-specific (by peaks) TSS-proximal'),
+      paste0(mysamps[2], '-specific (by peaks) TSS-distal'),
+      paste0(mysamps[2], '-specific (by peaks) TSS-proximal')
+    )
+
+    explabel <- paste0(nonreference, "-specific (by intensity)")
+    reflabel <- paste0(reference, "-specific (by intensity)")
+
+    p <- highchart() %>%
+      hc_title(text = "Distribution of Normalized Counts",
+               style = list(color = '#2E1717',
+                            fontWeight = 'bold')) %>%
+      hc_plotOptions(
+        boxplot = list(
+          fillColor = '#ffffff',
+          lineWidth = 2,
+          medianColor = '#000000',
+          medianWidth = 2,
+          stemColor = '#000000',
+          stemDashStyle = 'dot',
+          stemWidth = 1,
+          whiskerColor = '#000000',
+          whiskerLength = '20%',
+          whiskerWidth = 3
+        )
+      ) %>%
+      hc_add_series(data = Experimentspecific_list,
+                    name = explabel,
+                    type = "boxplot") %>%
+      hc_add_series(data = Ambiguous_list,
+                    name = 'Ambiguous',
+                    type = "boxplot") %>%
+      hc_add_series(data = Shared_list,
+                    name = 'Shared',
+                    type = "boxplot") %>%
+      hc_add_series(data = Referencespecific_list,
+                    name = reflabel,
+                    type = "boxplot") %>%
+      hc_yAxis(title = list(text = "Observations"),
+               labels = list(format = "{value}")) %>%
+      hc_xAxis(categories = categ, title = "Experiment No.") %>%
+      hc_tooltip(headerFormat = "<b>{point.key}</b><br>",
+                 pointFormat = "{point.y}") %>%
+      hc_colors(cols) %>%
+      hc_exporting(enabled = TRUE)
+>>>>>>> 56f8fa39532c2d8359c2ec69e0bc10cee0a33dad
     return(p)
-}
+    }
 
 ##############################################################################
 
@@ -909,17 +1120,20 @@ plotDistCountAnalysis <- function(analysisresults, counts, palette = NULL){
 #' @export
 
 enrichHeatmap <- function(input,
-                          title="enrichment",
+                          title = "enrichment",
                           pvalfilt = 0.01,
                           removeonlyshared = FALSE,
-                          numshow=10) {
+                          numshow = 10) {
   # input=input[[1]]
-  
-  variable=value=Experiment_specific=Reference_specific=Shared=c()
+
+  variable = value = Experiment_specific = Reference_specific = Shared =
+    c()
 
   if (is.list(input) == FALSE) {
-    stop("The input is not a list! Please make sure you are
-         using the output from the enrichment analysis")
+    stop(
+      "The input is not a list! Please make sure you are
+      using the output from the enrichment analysis"
+    )
   }
 
   if (is.data.frame(input[[1]]) == FALSE |
@@ -935,27 +1149,27 @@ enrichHeatmap <- function(input,
   if (length(up) <= 1) {
     up$Description <- NA
   } else {
-    up <- up[up$p.adjust < pvalfilt, ]
-    if ( nrow(up) > numshow ) {
-      up <- up[order(up$p.adjust)[1:numshow],]
+    up <- up[up$p.adjust < pvalfilt,]
+    if (nrow(up) > numshow) {
+      up <- up[order(up$p.adjust)[1:numshow], ]
     }
   }
   reference <- input[[2]]
   if (length(reference) <= 1) {
     reference$Description <- NA
   } else {
-    reference <- reference[reference$p.adjust < pvalfilt, ]
-    if ( nrow(reference) > numshow) {
-      reference <- reference[order(reference$p.adjust)[1:numshow],]
+    reference <- reference[reference$p.adjust < pvalfilt,]
+    if (nrow(reference) > numshow) {
+      reference <- reference[order(reference$p.adjust)[1:numshow], ]
     }
   }
   shared <- input[[3]]
   if (length(shared) <= 1) {
     shared$Description <- NA
   } else {
-    shared <- shared[shared$p.adjust < pvalfilt, ]
-    if ( nrow(shared) > numshow ) {
-      shared <- shared[order(shared$p.adjust)[1:numshow],]
+    shared <- shared[shared$p.adjust < pvalfilt,]
+    if (nrow(shared) > numshow) {
+      shared <- shared[order(shared$p.adjust)[1:numshow], ]
     }
   }
 
@@ -976,7 +1190,8 @@ enrichHeatmap <- function(input,
   row.names(heatmapmatrix) <- pathways
   # name the rows with the pathway names
 
-  colnames(heatmapmatrix) <- c("Experiment_specific", "Reference_specific", "Shared")
+  colnames(heatmapmatrix) <-
+    c("Experiment_specific", "Reference_specific", "Shared")
   # put up, down, and shared as the pathway names
 
   #print(paste("Dim heatmapmatrix", dim(heatmapmatrix)))
@@ -1005,9 +1220,10 @@ enrichHeatmap <- function(input,
     # finds the shared pathways the are not present in up or down
     mycounts <- as.numeric(apply(heatmapmatrix,
                                  1,
-                                 function(x) is.na(x[1]) & is.na(x[2])))
+                                 function(x)
+                                   is.na(x[1]) & is.na(x[2])))
     # keeps those that are not only shared
-    heatmapinput <- heatmapmatrix[mycounts == 0, ]
+    heatmapinput <- heatmapmatrix[mycounts == 0,]
   }
   if (removeonlyshared == FALSE) {
     heatmapinput <- heatmapmatrix
@@ -1015,31 +1231,43 @@ enrichHeatmap <- function(input,
 
 
   heatmapdata <- as.data.frame(heatmapinput)
-  heatmapdata <- heatmapdata[order(heatmapdata$Reference_specific,
-                                   heatmapdata$Experiment_specific,
-                                   heatmapdata$Shared,
-                                   decreasing = TRUE), ]
+  heatmapdata <- heatmapdata[order(
+    heatmapdata$Reference_specific,
+    heatmapdata$Experiment_specific,
+    heatmapdata$Shared,
+    decreasing = TRUE
+  ),]
   # sorts matrix
   heatmapdata$id <- rownames(heatmapdata)
   # makes id
   rownames(heatmapdata) <- c(1:nrow(heatmapdata))
 
 
- # suppressMessages(meltedheatmapdata <- reshape2::melt(heatmapdata))
-    suppressMessages(meltedheatmapdata <- tidyr::gather(heatmapdata,variable, 
-	value,Experiment_specific, Reference_specific, Shared))
+  # suppressMessages(meltedheatmapdata <- reshape2::melt(heatmapdata))
+  suppressMessages(
+    meltedheatmapdata <- tidyr::gather(
+      heatmapdata,
+      variable,
+      value,
+      Experiment_specific,
+      Reference_specific,
+      Shared
+    )
+  )
 
-  meltedheatmapdata$newid <- stringr::str_wrap(meltedheatmapdata$id, width = 80)
+  meltedheatmapdata$newid <-
+    stringr::str_wrap(meltedheatmapdata$id, width = 80)
 
   meltedheatmapdata$id <- factor(meltedheatmapdata$id,
                                  levels = unique(meltedheatmapdata$id))
 
-  theXAxis <- as.character(meltedheatmapdata[,2])
-  theYAxis <- meltedheatmapdata[,4]
+  theXAxis <- as.character(meltedheatmapdata[, 2])
+  theYAxis <- meltedheatmapdata[, 4]
   #all possible values of X (type) and Y (pathways)
 
   theUniqueY <- unique(meltedheatmapdata$newid)
-  theUniqueX <- c("Experiment_specific", "Shared", "Reference_specific")
+  theUniqueX <-
+    c("Experiment_specific", "Shared", "Reference_specific")
   #unique values of X and Y
 
 
@@ -1055,36 +1283,44 @@ enrichHeatmap <- function(input,
   }
   #Subsitute words with position on the matrix
 
-  dataforHeatmap <- as.data.frame(cbind(as.numeric(theXAxis),
-                                      as.numeric(theYAxis),
-                                      round(as.numeric(meltedheatmapdata$value)
-                                              ,3)))
-  
+  dataforHeatmap <- as.data.frame(cbind(
+    as.numeric(theXAxis),
+    as.numeric(theYAxis),
+    round(as.numeric(meltedheatmapdata$value)
+          , 3)
+  ))
+
   formattedHeatmapData <- list_parse2(dataforHeatmap)
   #create final formatting
 
-  
-  names(input)=gsub("SpecificByIntensity", "", names(input))
-  
-  
-  fntltp <- JS("function(){
-                  return this.series.xAxis.categories[this.point.x] + ' ~ ' +
-               this.series.yAxis.categories[this.point.y] + ': <b>' +
-               Highcharts.numberFormat(this.point.value, 2)+'</b>';
-               ; }")
-  
+
+  names(input) = gsub("SpecificByIntensity", "", names(input))
+
+
+  fntltp <- JS(
+    "function(){
+    return this.series.xAxis.categories[this.point.x] + ' ~ ' +
+    this.series.yAxis.categories[this.point.y] + ': <b>' +
+    Highcharts.numberFormat(this.point.value, 2)+'</b>';
+    ; }"
+  )
+
   hc <- highchart() %>%
     hc_chart(type = "heatmap") %>%
     hc_title(text = title) %>%
-    hc_xAxis(categories = c(paste0(names(input)[[1]], "-specific (by intensity)"), "Shared", paste0(names(input)[[2]], "-specific (by intensity)"))) %>%
+    hc_xAxis(categories = c(
+      paste0(names(input)[[1]],
+             "-specific (by intensity)"),
+      "Shared",
+      paste0(names(input)[[2]],
+             "-specific (by intensity)")
+    )) %>%
     hc_yAxis(categories = theUniqueY) %>%
     hc_add_series(name = "matrix location, p-value",
                   data = formattedHeatmapData) %>%
-      hc_tooltip(formatter = fntltp) %>% 
-    hc_legend(
-      title = "p-value",
-      enabled = TRUE
-    ) %>%
+    hc_tooltip(formatter = fntltp) %>%
+    hc_legend(title = "p-value",
+              enabled = TRUE) %>%
     hc_exporting(enabled = TRUE)
   p <- hc_colorAxis(hc, minColor = "#000080", maxColor = "#FFFFFF")
   #create final formatting
@@ -1108,7 +1344,7 @@ enrichHeatmap <- function(input,
 #'	GREATpathways, type getOntologies(GREATpathways)
 #' @param test character, "Binom" uses binomial test restuls, "Hyper" uses
 #'      hypergeometric test results.  Default is "Binom"
-#' @param numshow number of top pathways (ranked according to p-value) of each type 
+#' @param numshow number of top pathways (ranked according to p-value) of each type
 #' 	(expt, reference, shared) to show in the plot (default=10)
 
 #' @return heatmap
@@ -1149,32 +1385,36 @@ enrichHeatmap <- function(input,
 #'
 #' @export
 plotGREATenrich <- function(input,
-                          title="GREAT Enrichment Analysis",
-                          pathwaycateg=NULL,
-			  test="Binom",
-                          numshow=10) {
+                            title = "GREAT Enrichment Analysis",
+                            pathwaycateg = NULL,
+                            test = "Binom",
+                            numshow = 10) {
+  variable = value = Experiment_specific = Reference_specific = Shared = c()
 
-  variable=value=Experiment_specific=Reference_specific=Shared=c()
-
-  if(is.null(pathwaycateg)) {
-	stop("Please designate a pathway with the parameter pathwaycateg")
+  if (is.null(pathwaycateg)) {
+    stop("Please designate a pathway with the parameter pathwaycateg")
   }
 
   if (is.list(input) == FALSE) {
-    stop("The input is not a list! Please make sure you are
-         using the output from the enrichment analysis")
+    stop(
+      "The input is not a list! Please make sure you are
+      using the output from the enrichment analysis"
+    )
   }
 
-  if(is.na(match(test,c("Hyper","Binom")))) {
-        stop("test must be either 'Hyper' or 'Binom'")
+  if (is.na(match(test, c("Hyper", "Binom")))) {
+    stop("test must be either 'Hyper' or 'Binom'")
   }
 
-  mycols=c("name",paste0(test,"_Fold_Enrichment"),paste0(test,"_adj_PValue"))
+  mycols = c("name",
+             paste0(test, "_Fold_Enrichment"),
+             paste0(test, "_adj_PValue"))
 
   if (is.list(input$ExperimentSpecificByIntensity$Sig_Pathways) == FALSE |
       is.list(input$ReferenceSpecificByIntensity$Sig_Pathways) == FALSE |
       is.list(input$Shared$Sig_Pathways) == FALSE |
       length(input) != 3 |
+<<<<<<< HEAD
       length(which(!is.na(match(mycols,colnames(input$ExperimentSpecificByIntensity$Sig_Pathways[[pathwaycateg]]))))) !=
 	length(mycols) |
       length(which(!is.na(match(mycols,colnames(input$ReferenceSpecificByIntensity$Sig_Pathways[[pathwaycateg]]))))) !=
@@ -1188,33 +1428,65 @@ plotGREATenrich <- function(input,
   }
 
   up <- input$ExperimentSpecificByIntensity$Sig_Pathways[[pathwaycateg]][,mycols]
+=======
+      length(which(!is.na(match(
+        mycols, colnames(input$Experiment_Specific$Sig_Pathways[[pathwaycateg]])
+      )))) !=
+      length(mycols) |
+      length(which(!is.na(match(
+        mycols, colnames(input$Reference_Specific$Sig_Pathways[[pathwaycateg]])
+      )))) !=
+      length(mycols) |
+      length(match(mycols, colnames(input$Shared$Sig_Pathways[[pathwaycateg]]))) !=
+      length(mycols) |
+      all(
+        names(input) != c(
+          "Experiment_Specific",
+          "Reference_Specific",
+          "Shared$Sig_Pathways"
+        )
+      )) {
+    stop(
+      "The input is not a list of three dataframes or there are no enriched pathways to plot.
+      Be sure the input is the output from running processPathways(()"
+      )
+  }
+
+  up <-
+    input$Experiment_Specific$Sig_Pathways[[pathwaycateg]][, mycols]
+>>>>>>> 56f8fa39532c2d8359c2ec69e0bc10cee0a33dad
   if (is.null(nrow(up))) {
-	up$name <- NA
+    up$name <- NA
   } else {
-  	if ( nrow(up) > numshow ) {
-	   # order by last row, which is always adjusted p-value
-      	   up <- up[order(up[,3])[1:numshow],] 
-    	}
+    if (nrow(up) > numshow) {
+      # order by last row, which is always adjusted p-value
+      up <- up[order(up[, 3])[1:numshow], ]
+    }
   }
 
+<<<<<<< HEAD
   reference <- input$ReferenceSpecificByIntensity$Sig_Pathways[[pathwaycateg]][,mycols]
+=======
+  reference <-
+    input$Reference_Specific$Sig_Pathways[[pathwaycateg]][, mycols]
+>>>>>>> 56f8fa39532c2d8359c2ec69e0bc10cee0a33dad
   if (is.null(nrow(reference))) {
-        reference$name <- NA
+    reference$name <- NA
   } else {
-        if ( nrow(reference) > numshow ) {
-	   # order by last row, which is always adjusted p-value
-           reference <- reference[order(reference[,3])[1:numshow],] 
-        }
+    if (nrow(reference) > numshow) {
+      # order by last row, which is always adjusted p-value
+      reference <- reference[order(reference[, 3])[1:numshow], ]
+    }
   }
 
-  shared <- input$Shared$Sig_Pathways[[pathwaycateg]][,mycols]
+  shared <- input$Shared$Sig_Pathways[[pathwaycateg]][, mycols]
   if (is.null(nrow(shared))) {
-        shared$name <- NA
+    shared$name <- NA
   } else {
-        if ( nrow(shared) > numshow ) {
-           # order by last row, which is always adjusted p-value
-           shared <- shared[order(shared[,3])[1:numshow],]
-        }
+    if (nrow(shared) > numshow) {
+      # order by last row, which is always adjusted p-value
+      shared <- shared[order(shared[, 3])[1:numshow], ]
+    }
   }
 
   # make a list of all the pathways in up, down, and shared
@@ -1233,7 +1505,8 @@ plotGREATenrich <- function(input,
   # name the rows with the pathway names
   row.names(heatmapmatrix) <- pathways
 
-  colnames(heatmapmatrix) <- c("Experiment_specific", "Reference_specific", "Shared")
+  colnames(heatmapmatrix) <-
+    c("Experiment_specific", "Reference_specific", "Shared")
 
   # places the adjusted p-value in the matrix is there is one
   for (i in 1:nrow(heatmapmatrix)) {
@@ -1256,29 +1529,41 @@ plotGREATenrich <- function(input,
 
   # Create a data.frame of the heatmapmatrix and sort
   heatmapdata <- as.data.frame(heatmapmatrix)
-  heatmapdata <- heatmapdata[order(heatmapdata$Reference_specific,
-                                   heatmapdata$Experiment_specific,
-                                   heatmapdata$Shared,
-                                   decreasing = TRUE), ]
+  heatmapdata <- heatmapdata[order(
+    heatmapdata$Reference_specific,
+    heatmapdata$Experiment_specific,
+    heatmapdata$Shared,
+    decreasing = TRUE
+  ),]
   # Create ids:
   heatmapdata$id <- rownames(heatmapdata)
   rownames(heatmapdata) <- c(1:nrow(heatmapdata))
 
   #suppressMessages(meltedheatmapdata <- reshape2::melt(heatmapdata))
-   suppressMessages(meltedheatmapdata <- tidyr::gather(heatmapdata,variable, 
-	value,Experiment_specific, Reference_specific, Shared))
+  suppressMessages(
+    meltedheatmapdata <- tidyr::gather(
+      heatmapdata,
+      variable,
+      value,
+      Experiment_specific,
+      Reference_specific,
+      Shared
+    )
+  )
 
-  meltedheatmapdata$newid <- stringr::str_wrap(meltedheatmapdata$id, width = 80)
+  meltedheatmapdata$newid <-
+    stringr::str_wrap(meltedheatmapdata$id, width = 80)
 
   meltedheatmapdata$id <- factor(meltedheatmapdata$id,
                                  levels = unique(meltedheatmapdata$id))
   #all possible values of X (type) and Y (pathways)
-  theXAxis <- as.character(meltedheatmapdata[,2])
-  theYAxis <- meltedheatmapdata[,4]
+  theXAxis <- as.character(meltedheatmapdata[, 2])
+  theYAxis <- meltedheatmapdata[, 4]
 
   #unique values of X and Y
   theUniqueY <- unique(meltedheatmapdata$newid)
-  theUniqueX <- c("Experiment_specific", "Shared", "Reference_specific")
+  theUniqueX <-
+    c("Experiment_specific", "Shared", "Reference_specific")
 
   # Substitute words with position on the meatrix
   for (i in 0:(length(theUniqueY) - 1))
@@ -1293,18 +1578,22 @@ plotGREATenrich <- function(input,
   }
 
   #create final formatting
-  dataforHeatmap <- as.data.frame(cbind(as.numeric(theXAxis),
-                                      as.numeric(theYAxis),
-                                      round(as.numeric(meltedheatmapdata$value)
-                                              ,3)))
+  dataforHeatmap <- as.data.frame(cbind(
+    as.numeric(theXAxis),
+    as.numeric(theYAxis),
+    round(as.numeric(meltedheatmapdata$value)
+          , 3)
+  ))
 
   formattedHeatmapData <- list_parse2(dataforHeatmap)
 
-  fntltp <- JS("function(){
-                  return this.series.xAxis.categories[this.point.x] + ' ~ ' +
-               this.series.yAxis.categories[this.point.y] + ': <b>' +
-               Highcharts.numberFormat(this.point.value, 2)+'</b>';
-               ; }")
+  fntltp <- JS(
+    "function(){
+    return this.series.xAxis.categories[this.point.x] + ' ~ ' +
+    this.series.yAxis.categories[this.point.y] + ': <b>' +
+    Highcharts.numberFormat(this.point.value, 2)+'</b>';
+    ; }"
+  )
 
   hc <- highchart() %>%
     hc_chart(type = "heatmap") %>%
@@ -1313,11 +1602,9 @@ plotGREATenrich <- function(input,
     hc_yAxis(categories = theUniqueY) %>%
     hc_add_series(name = "matrix location, p-value",
                   data = formattedHeatmapData) %>%
-      hc_tooltip(formatter = fntltp) %>%
-    hc_legend(
-      title = "p-value",
-      enabled = TRUE
-    ) %>%
+    hc_tooltip(formatter = fntltp) %>%
+    hc_legend(title = "p-value",
+              enabled = TRUE) %>%
     hc_exporting(enabled = TRUE)
   p <- hc_colorAxis(hc, minColor = "#000080", maxColor = "#FFFFFF")
   #create final formatting
@@ -1373,12 +1660,15 @@ plotGREATenrich <- function(input,
 #'}
 
 plotCompareMethods <- function(analysisresultsmatrix,
-                     region = "both", method = "Intensity", palette = NULL) {
-
-
-  if ( !is.null(palette) ) {
-    cols <- RColorBrewer::brewer.pal(3, palette) }
-  else{cols <- c("#00E5EE", "#C71585","#000080")}
+                               region = "both",
+                               method = "Intensity",
+                               palette = NULL) {
+  if (!is.null(palette)) {
+    cols <- RColorBrewer::brewer.pal(3, palette)
+  }
+  else{
+    cols <- c("#00E5EE", "#C71585", "#000080")
+  }
 
   if (region == "TSS-proximal") {
     feature <- c("TSS-proxs")
@@ -1410,24 +1700,28 @@ plotCompareMethods <- function(analysisresultsmatrix,
   # identifies the correct numbers from the
   # analysisresults matrix based on the
   # method of region
-  string <- paste(rownames(analysisresultsmatrix)[1],
-                  rownames(analysisresultsmatrix)[2],
-                  rownames(analysisresultsmatrix)[3],
-                  rownames(analysisresultsmatrix)[4],
-                  rownames(analysisresultsmatrix)[5],
-                  rownames(analysisresultsmatrix)[6],
-                  rownames(analysisresultsmatrix)[7],
-                  rownames(analysisresultsmatrix)[8],
-                  rownames(analysisresultsmatrix)[9])
+  string <- paste(
+    rownames(analysisresultsmatrix)[1],
+    rownames(analysisresultsmatrix)[2],
+    rownames(analysisresultsmatrix)[3],
+    rownames(analysisresultsmatrix)[4],
+    rownames(analysisresultsmatrix)[5],
+    rownames(analysisresultsmatrix)[6],
+    rownames(analysisresultsmatrix)[7],
+    rownames(analysisresultsmatrix)[8],
+    rownames(analysisresultsmatrix)[9]
+  )
 
   stringsplit <- strsplit(string, " ")
   uniquestringsplit <- unique(stringsplit[[1]])
-  split <- unlist(strsplit(rownames(analysisresultsmatrix)[1], split = " "))
+  split <-
+    unlist(strsplit(rownames(analysisresultsmatrix)[1], split = " "))
   names <- split[!(split %in% c("TSS-dists"))]
   names <- paste(names, collapse = " ")
   casename <- names
 
-  split <- unlist(strsplit(rownames(analysisresultsmatrix)[4], split = " "))
+  split <-
+    unlist(strsplit(rownames(analysisresultsmatrix)[4], split = " "))
   names <- split[!(split %in% c("TSS-dists"))]
   names <- paste(names, collapse = " ")
   referencename <- names
@@ -1437,12 +1731,12 @@ plotCompareMethods <- function(analysisresultsmatrix,
 
   p <- highchart() %>%
     hc_chart(type = "pie") %>%
-    hc_title(text = paste(region, method),
-             style = list(color = '#2E1717',
-                          fontWeight = 'bold')) %>%
-    hc_plotOptions(
-      series = list(showInLegend = TRUE)
+    hc_title(
+      text = paste(region, method),
+      style = list(color = '#2E1717',
+                   fontWeight = 'bold')
     ) %>%
+    hc_plotOptions(series = list(showInLegend = TRUE)) %>%
     hc_legend(
       enabled = TRUE,
       layout = "horizontal",
@@ -1454,10 +1748,23 @@ plotCompareMethods <- function(analysisresultsmatrix,
       y = 16
     ) %>%
     hc_add_series(data = list(
-      list(y = case, name = casename, dataLabels = FALSE),
-      list(y = reference, name = referencename, dataLabels = FALSE),
-      list(y = shared, name = "Shared", dataLabels = FALSE)
-    ), name = paste(region, method)) %>%
+      list(
+        y = case,
+        name = casename,
+        dataLabels = FALSE
+      ),
+      list(
+        y = reference,
+        name = referencename,
+        dataLabels = FALSE
+      ),
+      list(
+        y = shared,
+        name = "Shared",
+        dataLabels = FALSE
+      )
+    ),
+    name = paste(region, method)) %>%
     hc_colors(cols)  %>%
     hc_exporting(enabled = TRUE)
   return(p)
@@ -1502,43 +1809,47 @@ plotCompareMethods <- function(analysisresultsmatrix,
 #' }
 #' @export
 #'
-plotCompareMethodsAll <- function(analysisresultsmatrix, viewer = TRUE,
-                                  palette = NULL) {
+plotCompareMethodsAll <-
+  function(analysisresultsmatrix,
+           viewer = TRUE,
+           palette = NULL) {
+    if (!is.null(palette)) {
+      cols <- RColorBrewer::brewer.pal(3, palette)
+    }
+    else{
+      cols <- c("#00E5EE", "#C71585", "#000080")
+    }
 
+    analysisresultsmatrix <- analysisresultsmatrix[[1]]
 
-  if ( !is.null(palette) ) {
-    cols <- RColorBrewer::brewer.pal(3, palette) }
-  else{cols <- c("#00E5EE", "#C71585","#000080")}
+    if (is.matrix(analysisresultsmatrix) ==
+        FALSE) {
+      stop("The input is not a matrix!")
+    }
 
-  analysisresultsmatrix <- analysisresultsmatrix[[1]]
+    p1 <- plotCompareMethods(analysisresultsmatrix,
+                             "TSS-proximal",
+                             "Intensity",
+                             palette = palette)
+    p2 <- plotCompareMethods(analysisresultsmatrix,
+                             "TSS-distal", "Intensity", palette = palette)
+    p3 <- plotCompareMethods(analysisresultsmatrix,
+                             "both", "Intensity", palette = palette)
+    p4 <- plotCompareMethods(analysisresultsmatrix,
+                             "TSS-proximal", "Peak", palette = palette)
+    p5 <- plotCompareMethods(analysisresultsmatrix,
+                             "TSS-distal", "Peak", palette = palette)
+    p6 <- plotCompareMethods(analysisresultsmatrix,
+                             "both", "Peak", palette = palette)
 
-  if (is.matrix(analysisresultsmatrix) ==
-      FALSE) {
-    stop("The input is not a matrix!")
+    if (viewer == TRUE) {
+      p <- htmltools::browsable(hw_grid(p1, p2, p3, p4, p5, p6, ncol = 3,
+                                        rowheight = 300))
+    }
+    else {
+      p <- hw_grid(p1, p2, p3, p4, p5, p6, ncol = 3)
+    }
+    return(p)
+
+    return(p)
   }
-
-  p1 <- plotCompareMethods(analysisresultsmatrix,
-                    "TSS-proximal", "Intensity", palette = palette)
-  p2 <- plotCompareMethods(analysisresultsmatrix,
-                    "TSS-distal", "Intensity", palette = palette)
-  p3 <- plotCompareMethods(analysisresultsmatrix,
-                    "both", "Intensity", palette = palette)
-  p4 <- plotCompareMethods(analysisresultsmatrix,
-                    "TSS-proximal", "Peak", palette = palette)
-  p5 <- plotCompareMethods(analysisresultsmatrix,
-                    "TSS-distal", "Peak", palette = palette)
-  p6 <- plotCompareMethods(analysisresultsmatrix,
-                    "both", "Peak", palette = palette)
-
-  if (viewer == TRUE) {
-    p <- htmltools::browsable(hw_grid(p1, p2, p3, p4, p5, p6, ncol = 3,
-                                      rowheight = 300))
-  }
-  else {
-    p <- hw_grid(p1, p2, p3, p4, p5, p6, ncol = 3)
-  }
-  return(p)
-
-return(p)
-}
-
