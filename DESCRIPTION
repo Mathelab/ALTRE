@@ -41,7 +41,8 @@ Imports:
     highcharter,
     htmltools,
     rGREAT,
-    RColorBrewer
+    RColorBrewer,
+    xlsx
 License: GPL-2
 LazyData: TRUE
 RoxygenNote: 5.0.1

@@ -215,33 +215,41 @@ writeCompareRE <-
 #'                                     lfcshared = 1.2,
 #'                                     pvaltypespecific = 0.01,
 #'                                     pvalshared = 0.05)
-#' comparePeaksOut <- comparePeaksAltre(categaltre_peaks, reference= 'SAEC')
-#'
-#'
-#' MFenrich <- pathenrich(analysisresults = altre_peaks,
-#'                        ontoltype = 'MF',
-#'                        enrichpvalfilt = 0.01)
-#' con <- "pathEnrichMF.zip"
-#' writePathEnrich(pathenrichOut = MFenrich, con = con)
+#' callGREAT <- runGREAT(peaks=categaltre_peaks)
+#' pathGREAT <- processPathways(callGREAT)
+#' con <- "GREAToutput.zip"
+#' writeGREATpath(pathenrichOut = pathGREAT, con = con)
 #' }
 #' @export
 
-writePathEnrich <-
+writeGREATpath <-
   function(pathenrichOut, con) {
 
-    fileExt <- tools::file_ext(con)
     listNames <- names(pathenrichOut)
+    pathNames <- names(pathenrichOut[[1]]$Sig_Pathways)
+    fileExt <- tools::file_ext(con)
     fileCon <- stringr::str_replace(con,
                                     fileExt ,
                                     stringr::str_c(listNames,
-                                                   "csv",
-                                                   sep = "."))
-    mapply(readr::write_csv, pathenrichOut, fileCon)
+                                                   "xlsx",
+                                                   sep = "."))     
+    
+    for(i in 1:length(pathNames)) {
+	xlsx::write.xlsx(pathenrichOut[[1]]$Sig_Pathways[[i]],file=fileCon[[1]],
+		sheetName=pathNames[i],append=TRUE,row.names=FALSE)
+    }
+
+    for(files in 2:length(fileCon)) {
+	for(i in 1:length(pathNames)) {
+        	xlsx::write.xlsx(pathenrichOut[[files]]$Sig_Pathways[[i]],
+		file=fileCon[[files]],
+                sheetName=pathNames[i],append=TRUE, row.names=FALSE)
+    	}
+    }
 
     utils::zip(zipfile = con, files = fileCon)
     #if(file.exists(con)) {
     #  file.rename(paste0(con, ".zip"), con)}
     #tar(pathenrichOut,fileCon)
-
   }
 
