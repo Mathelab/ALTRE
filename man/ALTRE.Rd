@@ -86,11 +86,11 @@ accessibility);
 To visualize differences in the number of regulatory elements called as specific
 or shared, use the function plotCompareMethods().
 
-\item \code{\link{pathenrich}}
+\item \code{\link{runGREAT} and \link{processPathways}}
 
-Determines which pathways are overrepresented in altered TSS-proximal or TSS-distal regions.
-This function leverages Gene Ontology pathway annotations.
-To visualize the pathways that are enriched, use the function enrichHeatmap().
+Determines which pathways are overrepresented in altered TSS-proximal or TSS-distal regions
+using GREAT.  By default, Gene Ontology pathway annotations are used.
+To visualize the pathways that are enriched, use the function plotGREATenrich().
 }
 }
 
