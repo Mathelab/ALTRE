@@ -76,11 +76,13 @@
                         (analysisresults$padj >= pvalshared |
                            is.na(analysisresults$padj)))
    ambigind <- setdiff(1:nrow(analysisresults), c(exptind, refind, sharedind))
-   REaltrecateg <- rep(NA, nrow(analysisresults))
-   REaltrecateg[exptind] <- experimentSpecific
-   REaltrecateg[refind] <- referenceSpecific
-   REaltrecateg[sharedind] <- "Shared"
-   REaltrecateg[ambigind] <- "Ambiguous"
+   REaltrecateg <- REaltrecategplot <- rep(NA, nrow(analysisresults))
+   REaltrecategplot[exptind] <- experimentSpecific
+   REaltrecategplot[refind] <- referenceSpecific
+   REaltrecateg[exptind] <- "ExperimentSpecificByIntensity"
+   REaltrecateg[refind] <- "ReferenceSpecificByIntensity"
+   REaltrecategplot[sharedind] <- REaltrecateg[sharedind] <- "Shared"
+   REaltrecategplot[ambigind] <- REaltrecateg[ambigind] <- "Ambiguous"
 
 
    if (!all.equal(sum(table(REaltrecateg)), nrow(analysisresults))) {
@@ -88,41 +90,42 @@
    }
 
    analysisresults$REaltrecateg <- REaltrecateg
+   analysisresults$REaltrecategplot <- REaltrecategplot
 
    stats <- data.frame(
      REtype = c("TSS-proximal", "TSS-distal"),
      Expt_Specific = c(length(intersect(
        which(analysisresults$region == "TSS-proximal"),
-       which(analysisresults$REaltrecateg ==
+       which(analysisresults$REaltrecategplot ==
                experimentSpecific)
      )),
      length(intersect(
        which(analysisresults$region == "TSS-distal"),
-       which(analysisresults$REaltrecateg ==
+       which(analysisresults$REaltrecategplot ==
                experimentSpecific)
      ))),
      Ref_Specific = c(length(intersect(
        which(analysisresults$region ==  "TSS-proximal"),
-       which(analysisresults$REaltrecateg == referenceSpecific)
+       which(analysisresults$REaltrecategplot == referenceSpecific)
      )),
      length(intersect(
        which(analysisresults$region == "TSS-distal"),
-       which(analysisresults$REaltrecateg == referenceSpecific)
+       which(analysisresults$REaltrecategplot == referenceSpecific)
      ))),
      Shared = c(length(intersect(
        which(analysisresults$region == "TSS-proximal"),
-       which(analysisresults$REaltrecateg == "Shared")
+       which(analysisresults$REaltrecategplot == "Shared")
      )),
      length(intersect(
        which(analysisresults$region == "TSS-distal"),
-       which(analysisresults$REaltrecateg == "Shared")
+       which(analysisresults$REaltrecategplot == "Shared")
      ))),
      Ambiguous = c(length(intersect(
        which(analysisresults$region == "TSS-proximal"),
-       which(analysisresults$REaltrecateg == "Ambiguous")
+       which(analysisresults$REaltrecategplot == "Ambiguous")
      )), length(intersect(
        which(analysisresults$region == "TSS-distal"),
-       which(analysisresults$REaltrecateg == "Ambiguous")
+       which(analysisresults$REaltrecategplot == "Ambiguous")
      )))
    )
 

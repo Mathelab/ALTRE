@@ -396,7 +396,7 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) {
     
   
   Referencespecificsamples <- altrepeakscateg[[3]] 
-  allsamples <- colnames(altrepeakscateg[[1]])[12:length(altrepeakscateg[[1]])-1]
+  allsamples <- colnames(altrepeakscateg$analysisresults)[11:12]
   Experimentspecificsamples<-allsamples[which(!(allsamples %in% Referencespecificsamples))]
   
   Referencespecific <- paste0(Referencespecificsamples, "SpecificByIntensity")
@@ -409,10 +409,10 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) {
   toplot <- altrepeakscateg$analysisresults[ ,c("region",
                                                 "log2FoldChange",
                                                 "padj",
-                                                "REaltrecateg")]
-  replacement <- sub(Referencespecific, Referencespecificlabels, toplot$REaltrecateg)
+                                                "REaltrecategplot")]
+  replacement <- sub(Referencespecific, Referencespecificlabels, toplot$REaltrecategplot)
   replacement <- sub(Experimentspecific, Experimentspecificlabels, replacement)
-  toplot$REaltrecateg <- replacement
+  toplot$REaltrecategplot <- replacement
   
   tssdist <- toplot[which(toplot$region == "TSS-distal"), ]
   tssdist$padj <- round(-log10(tssdist$padj), 2)
@@ -427,7 +427,7 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) {
              style = list(color = '#2E1717',
                           fontWeight = 'bold')) %>%
     hc_add_series_df(data = tssdist, x = log2FoldChange, y = padj,
-                     type = "scatter", group = REaltrecateg)  %>%
+                     type = "scatter", group = REaltrecategplot)  %>%
     hc_xAxis(title = list(text = "log2fold change")) %>%
     hc_yAxis(title = list(text = "-log10 pvalue")) %>%
     hc_tooltip(headerFormat = "",
@@ -442,7 +442,7 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) {
              style = list(color = '#2E1717',
                           fontWeight = 'bold')) %>%
     hc_add_series_df(data = tssprox, x = log2FoldChange, y = padj,
-                     type = "scatter", group = REaltrecateg)  %>%
+                     type = "scatter", group = REaltrecategplot)  %>%
     hc_xAxis(title = list(text = "log2fold change")) %>%
     hc_yAxis(title = list(text = "-log10 pvalue")) %>%
     hc_tooltip(headerFormat = "",
@@ -689,8 +689,7 @@ plotDistCountAnalysis <- function(analysisresults, counts, palette = NULL){
     
     #Make sure to names things are from the user-entered sample names 
     reference <- analysisresults$reference
-    allSamples <- colnames(analysisresults$analysisresults[12:
-	length(analysisresults$analysisresults)-1])
+    allSamples <- colnames(analysisresults$analysisresults)[11:12]
     nonreference <- allSamples[which(!(allSamples %in% reference))]
     Referencespecific <- paste0(reference, "SpecificByIntensity")
     Experimentspecific <- paste0(nonreference, "SpecificByIntensity")
@@ -727,7 +726,7 @@ plotDistCountAnalysis <- function(analysisresults, counts, palette = NULL){
   }
 
   PEcateg <- analysisresults$region
-  altrecateg <- analysisresults$REaltrecateg
+  altrecategplot <- analysisresults$REaltrecategplot
 
   # Get log2FPM values:
   log2FPM <- log2(DESeq2::fpkm(readcounts, robust = TRUE) + 0.001)
@@ -745,7 +744,7 @@ plotDistCountAnalysis <- function(analysisresults, counts, palette = NULL){
 
   mydf <- data.frame(meanlog2FPM = meanlog2FPM,
                     PEcateg = PEcateg,
-                    altrecateg = altrecateg)
+                    altrecateg = altrecategplot)
   TSSdistal <- dplyr::filter(mydf, PEcateg == "TSS-distal")
   distal1 <- dplyr::filter(mydf, altrecateg == Experimentspecific)
   distal2 <- dplyr::filter(mydf, altrecateg == "Ambiguous")
