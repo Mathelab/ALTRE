@@ -414,7 +414,7 @@ plotGetCounts <- function(countsConsPeaks, palette = "Set1") {
 plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) {
 
     if ( !is.null(palette) ) {
-        cols <- RColorBrewer::brewer.pal(4, palette) 
+        cols <- RColorBrewer::brewer.pal(4, palette)
     } else {cols <- c("#C71585", "#d3d3d3", "#000080", "#00E5EE")}
                         #grey (ambiguous)
                         #magenta (experiment-specific)
@@ -425,18 +425,18 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) {
   padj <- NULL
   REaltrecateg <- REaltrecategplot <- NULL
   #To prevent R CMD check error
-    
-  
-  Referencespecificsamples <- altrepeakscateg[[3]] 
+
+
+  Referencespecificsamples <- altrepeakscateg[[3]]
   allsamples <- colnames(altrepeakscateg$analysisresults)[11:12]
   Experimentspecificsamples<-allsamples[which(!(allsamples %in% Referencespecificsamples))]
-  
+
   Referencespecific <- paste0(Referencespecificsamples, "SpecificByIntensity")
   Experimentspecific <- paste0(Experimentspecificsamples, "SpecificByIntensity")
-  
+
   Referencespecificlabels <- paste0(Referencespecificsamples, "-Specific (by intensity)")
   Experimentspecificlabels <- paste0(Experimentspecificsamples, "-Specific (by intensity)")
-  
+
 
   toplot <- altrepeakscateg$analysisresults[ ,c("region",
                                                 "log2FoldChange",
@@ -445,7 +445,7 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) {
   replacement <- sub(Referencespecific, Referencespecificlabels, toplot$REaltrecategplot)
   replacement <- sub(Experimentspecific, Experimentspecificlabels, replacement)
   toplot$REaltrecategplot <- replacement
-  
+
   tssdist <- toplot[which(toplot$region == "TSS-distal"), ]
   tssdist$padj <- round(-log10(tssdist$padj), 2)
   tssdist$log2FoldChange <- round(tssdist$log2FoldChange, 2)
@@ -743,9 +743,9 @@ plotCountAnalysisTemp <-
 #' @export
 #'
 plotDistCountAnalysis <-
-  function(analysisresults, counts, palette = NULL) {    
+  function(analysisresults, counts, palette = NULL) {
     altrecateg <- altrecategplot <- REaltrecategplot <- c()
-    #Make sure to names things are from the user-entered sample names 
+    #Make sure to names things are from the user-entered sample names
     reference <- analysisresults$reference
     allSamples <- colnames(analysisresults$analysisresults)[11:12]
     nonreference <- allSamples[which(!(allSamples %in% reference))]
@@ -819,42 +819,42 @@ plotDistCountAnalysis <-
   proximal3 <- dplyr::filter(mydf, altrecateg == "Shared")
   proximal4 <- dplyr::filter(mydf, altrecateg == Referencespecific)
 
-  mysamps=as.character(unique(sampletypes))
-  distal1_5num_samp1 <- 
-	stats::fivenum(distal1[[paste("meanlog2FPM",mysamps[1],sep=".")]])
-  proximal1_5num_samp1 <- 
-	stats::fivenum(proximal1[[paste("meanlog2FPM",mysamps[1],sep=".")]])
-  distal1_5num_samp2 <- 
-	stats::fivenum(distal1[[paste("meanlog2FPM",mysamps[2],sep=".")]])
-  proximal1_5num_samp2 <- 
-	stats::fivenum(proximal1[[paste("meanlog2FPM",mysamps[2],sep=".")]])
+  mysamps = as.character(unique(sampletypes))
+  distal1_5num_samp1 <-
+    stats::fivenum(distal1[[paste("meanlog2FPM", mysamps[1], sep = ".")]])
+  proximal1_5num_samp1 <-
+    stats::fivenum(proximal1[[paste("meanlog2FPM", mysamps[1], sep = ".")]])
+  distal1_5num_samp2 <-
+    stats::fivenum(distal1[[paste("meanlog2FPM", mysamps[2], sep = ".")]])
+  proximal1_5num_samp2 <-
+    stats::fivenum(proximal1[[paste("meanlog2FPM", mysamps[2], sep = ".")]])
 
-  distal2_5num_samp1 <- 
-	stats::fivenum(distal2[[paste("meanlog2FPM",mysamps[1],sep=".")]])
-  proximal2_5num_samp1 <- 
-	stats::fivenum(proximal2[[paste("meanlog2FPM",mysamps[1],sep=".")]])
-  distal2_5num_samp2 <- 
-	stats::fivenum(distal2[[paste("meanlog2FPM",mysamps[2],sep=".")]])
-  proximal2_5num_samp2 <- 
-	stats::fivenum(proximal2[[paste("meanlog2FPM",mysamps[2],sep=".")]])
+  distal2_5num_samp1 <-
+    stats::fivenum(distal2[[paste("meanlog2FPM", mysamps[1], sep = ".")]])
+  proximal2_5num_samp1 <-
+    stats::fivenum(proximal2[[paste("meanlog2FPM", mysamps[1], sep = ".")]])
+  distal2_5num_samp2 <-
+    stats::fivenum(distal2[[paste("meanlog2FPM", mysamps[2], sep = ".")]])
+  proximal2_5num_samp2 <-
+    stats::fivenum(proximal2[[paste("meanlog2FPM", mysamps[2], sep = ".")]])
 
-  distal3_5num_samp1 <- 
-	stats::fivenum(distal3[[paste("meanlog2FPM",mysamps[1],sep=".")]])
-  proximal3_5num_samp1 <- 
-	stats::fivenum(proximal3[[paste("meanlog2FPM",mysamps[1],sep=".")]])
-  distal3_5num_samp2 <- 
-	stats::fivenum(distal3[[paste("meanlog2FPM",mysamps[2],sep=".")]])
-  proximal3_5num_samp2 <- 
-	stats::fivenum(proximal3[[paste("meanlog2FPM",mysamps[2],sep=".")]])
+  distal3_5num_samp1 <-
+    stats::fivenum(distal3[[paste("meanlog2FPM", mysamps[1], sep = ".")]])
+  proximal3_5num_samp1 <-
+    stats::fivenum(proximal3[[paste("meanlog2FPM", mysamps[1], sep = ".")]])
+  distal3_5num_samp2 <-
+    stats::fivenum(distal3[[paste("meanlog2FPM", mysamps[2], sep = ".")]])
+  proximal3_5num_samp2 <-
+    stats::fivenum(proximal3[[paste("meanlog2FPM", mysamps[2], sep = ".")]])
 
-  distal4_5num_samp1 <- 
-	stats::fivenum(distal4[[paste("meanlog2FPM",mysamps[1],sep=".")]])
-  proximal4_5num_samp1 <- 
-	stats::fivenum(proximal4[[paste("meanlog2FPM",mysamps[1],sep=".")]])
-  distal4_5num_samp2 <- 
-	stats::fivenum(distal4[[paste("meanlog2FPM",mysamps[2],sep=".")]])
-  proximal4_5num_samp2 <- 
-	stats::fivenum(proximal4[[paste("meanlog2FPM",mysamps[2],sep=".")]])
+  distal4_5num_samp1 <-
+    stats::fivenum(distal4[[paste("meanlog2FPM", mysamps[1], sep = ".")]])
+  proximal4_5num_samp1 <-
+    stats::fivenum(proximal4[[paste("meanlog2FPM", mysamps[1], sep = ".")]])
+  distal4_5num_samp2 <-
+    stats::fivenum(distal4[[paste("meanlog2FPM", mysamps[2], sep = ".")]])
+  proximal4_5num_samp2 <-
+    stats::fivenum(proximal4[[paste("meanlog2FPM", mysamps[2], sep = ".")]])
 
   Experimentspecific_list <- list(round(distal1_5num_samp1,3),
                                   round(proximal1_5num_samp1, 3),
@@ -873,14 +873,14 @@ plotDistCountAnalysis <-
                                  round(distal4_5num_samp2,3),
                                  round(proximal4_5num_samp2,3))
 
-  categ <- c(paste0(mysamps[1],'-specific (by peaks) TSS-distal'), 
+  categ <- c(paste0(mysamps[1],'-specific (by peaks) TSS-distal'),
 	paste0(mysamps[1],'-specific (by peaks) TSS-proximal'),
-        paste0(mysamps[2],'-specific (by peaks) TSS-distal'), 
+        paste0(mysamps[2],'-specific (by peaks) TSS-distal'),
 	paste0(mysamps[2],'-specific (by peaks) TSS-proximal'))
-  
+
   explabel <- paste0(nonreference, "-specific (by intensity)")
   reflabel <- paste0(reference, "-specific (by intensity)")
-  
+
     p <- highchart() %>%
       hc_title(text = "Distribution of Normalized Counts",
                style = list(color = '#2E1717',
@@ -924,272 +924,6 @@ plotDistCountAnalysis <-
       hc_exporting(enabled = TRUE)
     return(p)
     }
-
-##############################################################################
-
-#' Given the output from processPathways(), creates a heatmap from
-#' the ouput of the GREAT enrichment analysis. Presence or absence of
-#' the pathway in enrichment of both type-specific (increased or decreased
-#' log2fold change, low p-value) and shared (no change, higher p-value)
-#' regulatory regions is plotted.
-#'
-#' @param input results from GREAT enrichment analysis
-#' @param title title of the heatmap
-#' @param pathwaycateg ontology, to see available ontologies in your input results (e.g. named
-#'	GREATpathways, type getOntologies(GREATpathways)
-#' @param test character, "Binom" uses binomial test restuls, "Hyper" uses
-#'      hypergeometric test results.  Default is "Binom"
-#' @param numshow number of top pathways (ranked according to p-value) of each type
-#' 	(expt, reference, shared) to show in the plot (default=10)
-
-#' @return heatmap
-#'
-#' @examples
-#' \dontrun{
-#' csvfile <- file.path(dir="yourfilepath", 'sampleinfo.csv')
-#' sampleinfo <- loadCSVFile(csvfile)
-#' samplePeaks <- loadBedFiles(sampleinfo)
-#' consPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
-#' plotConsensusPeaks(samplepeaks = consPeaks)
-#' TSSannot <- getTSS()
-#' consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
-#'                                           TSS = TSSannot,
-#'                                           merge = TRUE,
-#'                                           regionspecific = TRUE,
-#'                                           distancefromTSSdist = 1500,
-#'                                           distancefromTSSprox = 1000)
-#' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
-#'                               sampleinfo = sampleinfo,
-#'                               reference = 'SAEC',
-#'                               chrom = 'chr21')
-#' altre_peaks <- countanalysis(counts=counts_consPeaks,
-#'                              pval=0.01,
-#'                              lfcvalue=1)
-#' categaltre_peaks <- categAltrePeaks(altre_peaks,
-#'                              lfctypespecific = 1.5,
-#'                              lfcshared = 1.2,
-#'                              pvaltypespecific = 0.01,
-#'                              pvalshared = 0.05)
-#' GREAToutput <- runGREAT(peaks = categaltre_peaks)
-#' GREATpathways <- processPathways(temp)
-#' names(GREATpathways$Sig_Pathways)
-#'  plotGREATenrich(GREATpathways,
-#'                 title = "GREAT Enrichment Analysis",
-#'                 pathwaycateg ="GO_Molecular_Function")
-#' }
-#'
-#' @export
-plotGREATenrich <- function(input,
-                            title = "GREAT Enrichment Analysis",
-                            pathwaycateg = NULL,
-                            test = "Binom",
-                            numshow = 10) {
-  variable = value = Experiment_specific = Reference_specific = Shared = c()
-
-  if (is.null(pathwaycateg)) {
-    stop("Please designate a pathway with the parameter pathwaycateg")
-  }
-
-  if (is.list(input) == FALSE) {
-    stop(
-      "The input is not a list! Please make sure you are
-      using the output from the enrichment analysis"
-    )
-  }
-
-  if (is.na(match(test, c("Hyper", "Binom")))) {
-    stop("test must be either 'Hyper' or 'Binom'")
-  }
-
-  mycols = c("name",
-             paste0(test, "_Fold_Enrichment"),
-             paste0(test, "_adj_PValue"))
-
-  if (is.list(input$ExperimentSpecificByIntensity$Sig_Pathways) == FALSE |
-      is.list(input$ReferenceSpecificByIntensity$Sig_Pathways) == FALSE |
-      is.list(input$Shared$Sig_Pathways) == FALSE |
-      length(input) != 3 |
-      length(which(!is.na(match(
-        mycols, colnames(input$ExperimentSpecificByIntensity$Sig_Pathways[[pathwaycateg]])
-      )))) !=
-      length(mycols) |
-      length(which(!is.na(match(
-        mycols, colnames(input$ReferenceSpecificByIntensity$Sig_Pathways[[pathwaycateg]])
-      )))) !=
-      length(mycols) |
-      length(match(mycols, colnames(input$Shared$Sig_Pathways[[pathwaycateg]]))) !=
-      length(mycols) |
-      all(
-        names(input) != c(
-          "ExperimentSpecificByIntensity",
-          "ReferenceSpecificByIntensity",
-          "Shared"
-        )
-      )) {
-    stop(
-      "The input is not a list of three dataframes or there are no enriched pathways to plot.
-      Be sure the input is the output from running processPathways(()"
-      )
-  }
-
-  up <-
-    input$ExperimentSpecificByIntensity$Sig_Pathways[[pathwaycateg]][, mycols]
-
-  if (is.null(nrow(up))) {
-    up$name <- NA
-  } else {
-    if (nrow(up) > numshow) {
-      # order by last row, which is always adjusted p-value
-      up <- up[order(up[, 3])[1:numshow], ]
-    }
-  }
-
-  reference <- 
-    input$ReferenceSpecificByIntensity$Sig_Pathways[[pathwaycateg]][,mycols]
-  if (is.null(nrow(reference))) {
-    reference$name <- NA
-  } else {
-    if (nrow(reference) > numshow) {
-      # order by last row, which is always adjusted p-value
-      reference <- reference[order(reference[, 3])[1:numshow], ]
-    }
-  }
-
-  shared <- input$Shared$Sig_Pathways[[pathwaycateg]][, mycols]
-  if (is.null(nrow(shared))) {
-    shared$name <- NA
-  } else {
-    if (nrow(shared) > numshow) {
-      # order by last row, which is always adjusted p-value
-      shared <- shared[order(shared[, 3])[1:numshow], ]
-    }
-  }
-
-  # make a list of all the pathways in up, down, and shared
-  pathways <- unique(c(up$name,
-                       reference$name,
-                       shared$name))
-  pathways <- pathways[!is.na(pathways)]
-  if (is.na(pathways) || length(pathways) == 0) {
-    stop("No pathways are significant!")
-  }
-
-  # make a matrix with as many row as there are pathways
-  heatmapmatrix <- matrix(data = NA,
-                          nrow = length(pathways),
-                          ncol = 3)
-  # name the rows with the pathway names
-  row.names(heatmapmatrix) <- pathways
-
-  colnames(heatmapmatrix) <-
-    c("Experiment_specific", "Reference_specific", "Shared")
-
-  # places the adjusted p-value in the matrix is there is one
-  for (i in 1:nrow(heatmapmatrix)) {
-    #print(row.names(heatmapmatrix)[i])
-    if (row.names(heatmapmatrix)[i] %in% up$name) {
-      num1 <- which(up$name == row.names(heatmapmatrix)[i])
-      heatmapmatrix[i, 1] <- up[num1, mycols[3]]
-    }
-
-    if (row.names(heatmapmatrix)[i] %in% reference$name) {
-      num2 <- which(reference$name == row.names(heatmapmatrix)[i])
-      heatmapmatrix[i, 2] <- reference[num2, mycols[3]]
-    }
-
-    if (row.names(heatmapmatrix)[i] %in% shared$name) {
-      num3 <- which(shared$name == row.names(heatmapmatrix)[i])
-      heatmapmatrix[i, 3] <- shared[num3, mycols[3]]
-    }
-  }
-
-  # Create a data.frame of the heatmapmatrix and sort
-  heatmapdata <- as.data.frame(heatmapmatrix)
-  heatmapdata <- heatmapdata[order(
-    heatmapdata$Reference_specific,
-    heatmapdata$Experiment_specific,
-    heatmapdata$Shared,
-    decreasing = TRUE
-  ),]
-  # Create ids:
-  heatmapdata$id <- rownames(heatmapdata)
-  rownames(heatmapdata) <- c(1:nrow(heatmapdata))
-
-  #suppressMessages(meltedheatmapdata <- reshape2::melt(heatmapdata))
-  suppressMessages(
-    meltedheatmapdata <- tidyr::gather(
-      heatmapdata,
-      variable,
-      value,
-      Experiment_specific,
-      Reference_specific,
-      Shared
-    )
-  )
-
-  meltedheatmapdata$newid <-
-    stringr::str_wrap(meltedheatmapdata$id, width = 80)
-
-  meltedheatmapdata$id <- factor(meltedheatmapdata$id,
-                                 levels = unique(meltedheatmapdata$id))
-  #all possible values of X (type) and Y (pathways)
-  theXAxis <- as.character(meltedheatmapdata[, 2])
-  theYAxis <- meltedheatmapdata[, 4]
-
-  #unique values of X and Y
-  theUniqueY <- unique(meltedheatmapdata$newid)
-  theUniqueX <-
-    c("Experiment_specific", "Shared", "Reference_specific")
-
-  # Substitute words with position on the meatrix
-  for (i in 0:(length(theUniqueY) - 1))
-  {
-    num <- which(theYAxis == theUniqueY[i + 1])
-    theYAxis[num] <- i
-  }
-  for (i in 0:(length(theUniqueX) - 1))
-  {
-    num <- which(theXAxis == theUniqueX[i + 1])
-    theXAxis[num] <- i
-  }
-
-  #create final formatting
-  dataforHeatmap <- as.data.frame(cbind(
-    as.numeric(theXAxis),
-    as.numeric(theYAxis),
-    round(as.numeric(meltedheatmapdata$value)
-          , 3)
-  ))
-
-  formattedHeatmapData <- list_parse2(dataforHeatmap)
-
-  fntltp <- JS(
-    "function(){
-    return this.series.xAxis.categories[this.point.x] + ' ~ ' +
-    this.series.yAxis.categories[this.point.y] + ': <b>' +
-    Highcharts.numberFormat(this.point.value, 2)+'</b>';
-    ; }"
-  )
-
-  hc <- highchart() %>%
-    hc_chart(type = "heatmap") %>%
-    hc_title(text = title) %>%
-    hc_xAxis(categories = c("Experiment-specific", "Shared", "Reference-specific")) %>%
-    hc_yAxis(categories = theUniqueY) %>%
-    hc_add_series(name = "matrix location, p-value",
-                  data = formattedHeatmapData) %>%
-    hc_tooltip(formatter = fntltp) %>%
-    hc_legend(title = "p-value",
-              enabled = TRUE) %>%
-    hc_exporting(enabled = TRUE)
-  p <- hc_colorAxis(hc, minColor = "#000080", maxColor = "#FFFFFF")
-  #create final formatting
-
-
-  return(p)
-  } # end plotGREATenrich
-
-
 
 
 
@@ -1429,3 +1163,268 @@ plotCompareMethodsAll <-
 
     return(p)
   }
+
+
+##############################################################################
+
+#' Given the output from processPathways(), creates a heatmap from
+#' the ouput of the GREAT enrichment analysis. Presence or absence of
+#' the pathway in enrichment of both type-specific (increased or decreased
+#' log2fold change, low p-value) and shared (no change, higher p-value)
+#' regulatory regions is plotted.
+#'
+#' @param input results from GREAT enrichment analysis
+#' @param title title of the heatmap
+#' @param pathwaycateg ontology, to see available ontologies in your input results (e.g. named
+#'	GREATpathways, type getOntologies(GREATpathways)
+#' @param test character, "Binom" uses binomial test restuls, "Hyper" uses
+#'      hypergeometric test results.  Default is "Binom"
+#' @param numshow number of top pathways (ranked according to p-value) of each type
+#' 	(expt, reference, shared) to show in the plot (default=10)
+
+#' @return heatmap
+#'
+#' @examples
+#' \dontrun{
+#' csvfile <- file.path(dir="yourfilepath", 'sampleinfo.csv')
+#' sampleinfo <- loadCSVFile(csvfile)
+#' samplePeaks <- loadBedFiles(sampleinfo)
+#' consPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
+#' plotConsensusPeaks(samplepeaks = consPeaks)
+#' TSSannot <- getTSS()
+#' consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
+#'                                           TSS = TSSannot,
+#'                                           merge = TRUE,
+#'                                           regionspecific = TRUE,
+#'                                           distancefromTSSdist = 1500,
+#'                                           distancefromTSSprox = 1000)
+#' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
+#'                               sampleinfo = sampleinfo,
+#'                               reference = 'SAEC',
+#'                               chrom = 'chr21')
+#' altre_peaks <- countanalysis(counts=counts_consPeaks,
+#'                              pval=0.01,
+#'                              lfcvalue=1)
+#' categaltre_peaks <- categAltrePeaks(altre_peaks,
+#'                              lfctypespecific = 1.5,
+#'                              lfcshared = 1.2,
+#'                              pvaltypespecific = 0.01,
+#'                              pvalshared = 0.05)
+#' GREAToutput <- runGREAT(peaks = categaltre_peaks)
+#' GREATpathways <- processPathways(temp)
+#' names(GREATpathways$Sig_Pathways)
+#'  plotGREATenrich(GREATpathways,
+#'                 title = "GREAT Enrichment Analysis",
+#'                 pathwaycateg ="GO_Molecular_Function")
+#' }
+#'
+#' @export
+plotGREATenrich <- function(input,
+                            title = "GREAT Enrichment Analysis",
+                            pathwaycateg = NULL,
+                            test = "Binom",
+                            numshow = 10) {
+  variable = value = Experiment_specific = Reference_specific = Shared = c()
+
+  if (is.null(pathwaycateg)) {
+    stop("Please designate a pathway with the parameter pathwaycateg")
+  }
+
+  if (is.list(input) == FALSE) {
+    stop(
+      "The input is not a list! Please make sure you are
+      using the output from the enrichment analysis"
+    )
+  }
+
+  if (is.na(match(test, c("Hyper", "Binom")))) {
+    stop("test must be either 'Hyper' or 'Binom'")
+  }
+
+  mycols = c("name",
+             paste0(test, "_Fold_Enrichment"),
+             paste0(test, "_adj_PValue"))
+
+  if (is.list(input$ExperimentSpecificByIntensity$Sig_Pathways) == FALSE |
+      is.list(input$ReferenceSpecificByIntensity$Sig_Pathways) == FALSE |
+      is.list(input$Shared$Sig_Pathways) == FALSE |
+      length(input) != 3 |
+      length(which(!is.na(match(
+        mycols, colnames(input$ExperimentSpecificByIntensity$Sig_Pathways[[pathwaycateg]])
+      )))) !=
+      length(mycols) |
+      length(which(!is.na(match(
+        mycols, colnames(input$ReferenceSpecificByIntensity$Sig_Pathways[[pathwaycateg]])
+      )))) !=
+      length(mycols) |
+      length(match(mycols, colnames(input$Shared$Sig_Pathways[[pathwaycateg]]))) !=
+      length(mycols) |
+      all(
+        names(input) != c(
+          "ExperimentSpecificByIntensity",
+          "ReferenceSpecificByIntensity",
+          "Shared"
+        )
+      )) {
+    stop(
+      "The input is not a list of three dataframes or there are no enriched pathways to plot.
+      Be sure the input is the output from running processPathways(()"
+    )
+  }
+
+  up <-
+    input$ExperimentSpecificByIntensity$Sig_Pathways[[pathwaycateg]][, mycols]
+
+  if (is.null(nrow(up))) {
+    up$name <- NA
+  } else {
+    if (nrow(up) > numshow) {
+      # order by last row, which is always adjusted p-value
+      up <- up[order(up[, 3])[1:numshow], ]
+    }
+  }
+
+  reference <-
+    input$ReferenceSpecificByIntensity$Sig_Pathways[[pathwaycateg]][,mycols]
+  if (is.null(nrow(reference))) {
+    reference$name <- NA
+  } else {
+    if (nrow(reference) > numshow) {
+      # order by last row, which is always adjusted p-value
+      reference <- reference[order(reference[, 3])[1:numshow], ]
+    }
+  }
+
+  shared <- input$Shared$Sig_Pathways[[pathwaycateg]][, mycols]
+  if (is.null(nrow(shared))) {
+    shared$name <- NA
+  } else {
+    if (nrow(shared) > numshow) {
+      # order by last row, which is always adjusted p-value
+      shared <- shared[order(shared[, 3])[1:numshow], ]
+    }
+  }
+
+  # make a list of all the pathways in up, down, and shared
+  pathways <- unique(c(up$name,
+                       reference$name,
+                       shared$name))
+  pathways <- pathways[!is.na(pathways)]
+  if (is.na(pathways) || length(pathways) == 0) {
+    stop("No pathways are significant!")
+  }
+
+  # make a matrix with as many row as there are pathways
+  heatmapmatrix <- matrix(data = NA,
+                          nrow = length(pathways),
+                          ncol = 3)
+  # name the rows with the pathway names
+  row.names(heatmapmatrix) <- pathways
+
+  colnames(heatmapmatrix) <-
+    c("Experiment_specific", "Reference_specific", "Shared")
+
+  # places the adjusted p-value in the matrix is there is one
+  for (i in 1:nrow(heatmapmatrix)) {
+    #print(row.names(heatmapmatrix)[i])
+    if (row.names(heatmapmatrix)[i] %in% up$name) {
+      num1 <- which(up$name == row.names(heatmapmatrix)[i])
+      heatmapmatrix[i, 1] <- up[num1, mycols[3]]
+    }
+
+    if (row.names(heatmapmatrix)[i] %in% reference$name) {
+      num2 <- which(reference$name == row.names(heatmapmatrix)[i])
+      heatmapmatrix[i, 2] <- reference[num2, mycols[3]]
+    }
+
+    if (row.names(heatmapmatrix)[i] %in% shared$name) {
+      num3 <- which(shared$name == row.names(heatmapmatrix)[i])
+      heatmapmatrix[i, 3] <- shared[num3, mycols[3]]
+    }
+  }
+
+  # Create a data.frame of the heatmapmatrix and sort
+  heatmapdata <- as.data.frame(heatmapmatrix)
+  heatmapdata <- heatmapdata[order(
+    heatmapdata$Reference_specific,
+    heatmapdata$Experiment_specific,
+    heatmapdata$Shared,
+    decreasing = TRUE
+  ),]
+  # Create ids:
+  heatmapdata$id <- rownames(heatmapdata)
+  rownames(heatmapdata) <- c(1:nrow(heatmapdata))
+
+  #suppressMessages(meltedheatmapdata <- reshape2::melt(heatmapdata))
+  suppressMessages(
+    meltedheatmapdata <- tidyr::gather(
+      heatmapdata,
+      variable,
+      value,
+      Experiment_specific,
+      Reference_specific,
+      Shared
+    )
+  )
+
+  meltedheatmapdata$newid <-
+    stringr::str_wrap(meltedheatmapdata$id, width = 80)
+
+  meltedheatmapdata$id <- factor(meltedheatmapdata$id,
+                                 levels = unique(meltedheatmapdata$id))
+  #all possible values of X (type) and Y (pathways)
+  theXAxis <- as.character(meltedheatmapdata[, 2])
+  theYAxis <- meltedheatmapdata[, 4]
+
+  #unique values of X and Y
+  theUniqueY <- unique(meltedheatmapdata$newid)
+  theUniqueX <-
+    c("Experiment_specific", "Shared", "Reference_specific")
+
+  # Substitute words with position on the meatrix
+  for (i in 0:(length(theUniqueY) - 1))
+  {
+    num <- which(theYAxis == theUniqueY[i + 1])
+    theYAxis[num] <- i
+  }
+  for (i in 0:(length(theUniqueX) - 1))
+  {
+    num <- which(theXAxis == theUniqueX[i + 1])
+    theXAxis[num] <- i
+  }
+
+  #create final formatting
+  dataforHeatmap <- as.data.frame(cbind(
+    as.numeric(theXAxis),
+    as.numeric(theYAxis),
+    round(as.numeric(meltedheatmapdata$value)
+          , 3)
+  ))
+
+  formattedHeatmapData <- list_parse2(dataforHeatmap)
+
+  fntltp <- JS(
+    "function(){
+    return this.series.xAxis.categories[this.point.x] + ' ~ ' +
+    this.series.yAxis.categories[this.point.y] + ': <b>' +
+    Highcharts.numberFormat(this.point.value, 2)+'</b>';
+    ; }"
+  )
+
+  hc <- highchart() %>%
+    hc_chart(type = "heatmap") %>%
+    hc_title(text = title) %>%
+    hc_xAxis(categories = c("Experiment-specific", "Shared", "Reference-specific")) %>%
+    hc_yAxis(categories = theUniqueY) %>%
+    hc_add_series(name = "matrix location, p-value",
+                  data = formattedHeatmapData) %>%
+    hc_tooltip(formatter = fntltp) %>%
+    hc_legend(title = "p-value",
+              enabled = TRUE) %>%
+    hc_exporting(enabled = TRUE)
+  p <- hc_colorAxis(hc, minColor = "#000080", maxColor = "#FFFFFF")
+  #create final formatting
+
+
+  return(p)
+} # end plotGREATenrich
