@@ -11,22 +11,8 @@ presence or by differential counts.  The type of regulatory region
 \usage{
 plotCompareMethods(analysisresultsmatrix, region = "both",
   method = "Intensity", palette = NULL)
-
-plotCompareMethods(analysisresultsmatrix, region = "both",
-  method = "Intensity", palette = NULL)
 }
 \arguments{
-\item{analysisresultsmatrix}{analysisresults of Intensity analysis place into
-analysisresults matrix by the analyzeanalysisresults function}
-
-\item{region}{pick a region, regions can be 'TSS-distal', 'TSS-proximal',
-or 'both' -- INCLUDE quotes}
-
-\item{method}{pick a method, methods can be 'Intensity' or 'Peak'
-include quotes}
-
-\item{palette}{RColorBrewer palette to change graph colors}
-
 \item{analysisresultsmatrix}{analysisresults of Intensity analysis place into
 analysisresults matrix by the analyzeanalysisresults function}
 
@@ -40,8 +26,6 @@ include quotes}
 }
 \value{
 venn diagram
-
-venn diagram
 }
 \description{
 Plots a venn diagram that compares altered regions as determined by peak presence or by #' differential counts.  The type of regulatory region (TSS-proximal, TSS-distal, or both)
@@ -50,41 +34,8 @@ Plots a venn diagram that compares altered regions as determined by peak
 presence or by differential counts.  The type of regulatory region
 (TSS-proximal, TSS-distal, or both) and type of peak comparison
 (intensity or peak) must be specified.
-
-Plots a venn diagram that compares altered regions as determined by peak presence or by #' differential counts.  The type of regulatory region (TSS-proximal, TSS-distal, or both)
-and type of peak comparison (intensity or peak) must be specified.
-Plots a venn diagram that compares altered regions as determined by peak
-presence or by differential counts.  The type of regulatory region
-(TSS-proximal, TSS-distal, or both) and type of peak comparison
-(intensity or peak) must be specified.
 }
 \examples{
-\dontrun{
-csvfile <- loadCSVFile("DNAseEncodeExample.csv")
-samplePeaks <- loadBedFiles(csvfile)
-consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
-minreps = 2)
-TSSannot <- getTSS()
-consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
-TSS = TSSannot,
-merge = TRUE,
-regionspecific = TRUE,
-distancefromTSSdist = 1500,
-distancefromTSSprox = 1000)
-consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
-                                 sampleinfo = csvfile,
-                                 reference = 'SAEC',
-                                 chrom = 'chr21')
-alteredPeaks <- countanalysis(counts = consensusPeaksCounts,
-pval = 0.01,
-lfcvalue = 1)
-alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
-                                          lfctypespecific = 1.5,
-                                          lfcshared = 1.2,
-                                          pvaltypespecific = 0.01,
-                                          pvalshared = 0.05)
-plotCompareMethods(comparePeaksAnalysisResults)
-}
 \dontrun{
 csvfile <- loadCSVFile("DNAseEncodeExample.csv")
 samplePeaks <- loadBedFiles(csvfile)
