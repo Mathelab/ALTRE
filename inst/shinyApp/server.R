@@ -299,26 +299,26 @@ shinyServer(function(input, output, session) {
   # plots
 
   output$barplot <- highcharter::renderHighchart({
-    plotConsensusPeaks(getConsensusObj(),
+    plotConsensusPeaks(req(getConsensusObj()),
                        palette = input$palette1)
   })
 
   output$annotatebarplot <- renderUI({
-    plotCombineAnnotatePeaks(combineAnnotateObj(),
+    plotCombineAnnotatePeaks(req(combineAnnotateObj()),
                              viewer = FALSE,
                              palette = input$palette2)
   })
 
   output$densityplot <- highcharter::renderHighchart({
-    plotGetCounts(getCountsObj(),
+    plotGetCounts(req(getCountsObj()),
                   palette = input$palette3)
   })
 
   output$volcano <- renderUI({
     plotCountAnalysisTemp(viewer = FALSE)
-    #plotCountAnalysis(categAltreObj(),
+    # plotCountAnalysis(req(categAltreObj()),
     #                  viewer = FALSE,
-     #                 palette = input$palette4)
+    #                 palette = input$palette4)
   })
 
   output$boxplotCounts <- highcharter::renderHighchart({
