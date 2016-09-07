@@ -175,33 +175,50 @@ plotDistCountAnalysis(alteredPeaksCategorized, consensusPeaksCounts)
 
 **8. Get Putative Enrichment Pathways** 
 
-Finally, ALTRE performs pathway enrichment analysis for cell type-specific or shared REs using the *enrichment()* function. This is accomplished by linking each RE to the closest gene, and then linking each gene’s product to the pathway the gene product participates in. Pathways that recur many times in the gene cluster (“enriched” pathways) are likely to be regulated by the REs linked to the gene cluster (whether type-specific or shared).
+Finally, ALTRE performs pathway enrichment analysis, using [rGREAT](https://bioconductor.org/packages/release/bioc/html/rGREAT.html), for cell type-specific or shared REs using the functions *runGREAT()* and *processPathways()*. The GREAT algorithm incorporates proximal and distal binding sites and uses a binomial testing procedure to mitigate false positives.  More information on the algorithm can be found [here](http://bejerano.stanford.edu/great/public/html/). Enriched” pathways are likely to be regulated by the REs linked to the gene cluster (whether type-specific or shared).
 
-Pathways that are unlikely to be of interest can be filtered out of the enrichment results. ALTRE has two metrics to identify “low information” pathways:
-  1. Vague pathways such as “DNA binding” are removed – they encompass a number of other, more precise pathways (termed “offspring” pathways) already present in the enrichment results. The “offspring” argument limits how many offspring a pathway can contain. Generally, the more offspring, the vaguer and less informative the pathway.
-  2. Removal of pathways with low gene counts – these pathways are more likely to be false positives. This is because they are more likely to be elevated in the pathway rankings due to the nature of the statistical test – it is much easier to contain half of a pathway’s genes in the gene cluster under analysis when the pathway contains only four genes, and not 100 genes. The “gene” argument limits how few genes a pathway can contain.
+In the web application, Gene Ontology pathway annotations are used by default, and include 1) Molecular Function (MF); 2) Biological Process (BP); 3) Cellular Component (CC)).  GREAT however allows other pathway categories to be analyzed, including "Pathway Data", "Regulatory Motifs","Phenotype Data and Human Disease", "Gene Expression", and "Gene Families".  These pathway categories can be passed onto the *runGREAT()* function via the paramter pathway_category.
 
-Gene Ontology pathway annotations are used and pathways fall into three categories: 1) Molecular Function (MF); 2) Biological Process (BP); 3) Cellular Component (CC)), and each category must be analyzed separately. The category is selected by supplying an argument to “ontoltype”. No pathways will have low p-values (p < 0.05) since we are using only a chr21 subset of the data in this vignette – the p-value argument is set very high so that the results do not come up as “none” in this example. During a real analysis the p-value should be set to a lower p-value cut-off such as 0.05. The enriched pathways for this entire dataset at a low p-value cut-off can be seen in the published paper.
+By default, the p-values will be adjusted by "bonferroni" and significant pathways will have adjusted p-values < 0.05 and an enrichment of at least 2.
+
+Note that this vignette only uses chr21, therefore the pathway analysis results presented may not be biolofically relevant.  
+
 ```{r, message = FALSE}
-MFenrich <- pathenrich(analysisresults = alteredPeaksCategorized,
-                       ontoltype = 'MF',
-                       enrichpvalfilt = 0.99)
+callpaths <- runGREAT(peaks=alteredPeaksCategorized) 
+pathresults <- processPathways(callpaths, pathway_category = "GO",
+	enrichcutoff = 2; adjpvalcutoff = 0.05))
 ```
 
 
-The function *enrichHeatmap()* creates a heatmap plot of the analysis for all three RE types (SAEC-specific, A549-specific, and shared), with the color-coding corresponding to the significance of the pathway – the lighter the blue, the lower the p-value. No pathways will have low p-values (p < 0.05) since we are using only chr21 subset of the data in this vignette – the p-value argument is set very so that the results do not come up as “none” in this example. During a real analysis the p-value should be set to a lower p-value cut-off such as 0.05. The enriched pathways for this entire dataset at a low p-value cut-off can be seen in the published paper.
+The function *plotGREATenrich()* creates a heatmap plot of the analysis for all three RE types (Reference-specific, Experiment-specific, and Shared), with the color-coding corresponding to the significance of the pathway – the lighter the blue, the lower the p-value. 
 
 ```{r}
-enrichHeatmap(MFenrich, title = "TSS-distal GO:MF", pvalfilt = 0.99)
+plotGREATenrich(pathresults, ,title = "GREAT Enrichment Analysis",
+	pathwaycateg ="GO_Molecular_Function")
 ```
 
 **9. Writing output to files**
 To enable users to write results to files, the following 4 functions are implemented:
 
 1. *writeBedFile()*: writes a BED file in the working directory with the location of REs, color-coded by type-specificity.  The output BED file can be directly loaded in a genome browser. There is no output to the function that can be saved as an object.
+
+```{r, eval = FALSE}
+writeBedFile(alteredPeaksCategorized, "altrecategpeaks.bed")
+```
+
 2. *writeConsensusRE()*: writes a CSV file in the working direcoty with the location of the consensus regulatory elements, along with their annotation (e.g. TSS-proximal/distal, whether the peaks are found in the experiment or reference samples).  The file takes as input the output of the getConsensusPeaks() function and returns no output.  
+
+```{r, eval=FALSE}
+writeConsensusRE(consensusPeaksAnnotated, "altreconspeaks.csv")
+```
+
 3. *writeCompareRE()*: writes a CSV file with the number of peaks called as experiment- or reference-specific and share using qthe quantitative/peak intensity or peak/binary approach. The function takes the output of comparePeaksAltre() as input and returns no output.  
-4. *writePathEnrich()*: writes CSV files showing the results of the enrichHeatmap() function, which it takes as input.  A total of 3 CSV files will be created, one each for the results of pathway enrichment for the experiment-specific, reference-specific, and shared REs.
+
+```{r, eval = FALSE}
+writeCompareRE(comparePeaksAnalysisResults, "comparealtrepeaks.csv")
+```
+
+4. *writeGREATpath()*: writes CSV files showing the results of the functions runGREAT() and processPathways(), which it takes as input.  A zipped folder containing 3xP CSV files will be created, where 3 is the type of REs (e.g. Shared, Reference-specific, and Experiment-specific), and P is the number of pathways (e.g. if GO pathway category is used, then P is 3 - Molecular Function, Cellulcar function, Biological Processes).  
 
 ```{r, eval = FALSE}
 writeBedFile(alteredPeaksCategorized, "output.txt")
