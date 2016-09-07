@@ -414,7 +414,7 @@ plotGetCounts <- function(countsConsPeaks, palette = "Set1") {
 plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) {
 
     if ( !is.null(palette) ) {
-        cols <- RColorBrewer::brewer.pal(4, palette) 
+        cols <- RColorBrewer::brewer.pal(4, palette)
     } else {cols <- c("#C71585", "#d3d3d3", "#000080", "#00E5EE")}
                         #grey (ambiguous)
                         #magenta (experiment-specific)
@@ -425,18 +425,18 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) {
   padj <- NULL
   REaltrecateg <- REaltrecategplot <- NULL
   #To prevent R CMD check error
-    
-  
-  Referencespecificsamples <- altrepeakscateg[[3]] 
+
+
+  Referencespecificsamples <- altrepeakscateg[[3]]
   allsamples <- colnames(altrepeakscateg$analysisresults)[11:12]
   Experimentspecificsamples<-allsamples[which(!(allsamples %in% Referencespecificsamples))]
-  
+
   Referencespecific <- paste0(Referencespecificsamples, "SpecificByIntensity")
   Experimentspecific <- paste0(Experimentspecificsamples, "SpecificByIntensity")
-  
+
   Referencespecificlabels <- paste0(Referencespecificsamples, "-Specific (by intensity)")
   Experimentspecificlabels <- paste0(Experimentspecificsamples, "-Specific (by intensity)")
-  
+
 
   toplot <- altrepeakscateg$analysisresults[ ,c("region",
                                                 "log2FoldChange",
@@ -445,7 +445,7 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) {
   replacement <- sub(Referencespecific, Referencespecificlabels, toplot$REaltrecategplot)
   replacement <- sub(Experimentspecific, Experimentspecificlabels, replacement)
   toplot$REaltrecategplot <- replacement
-  
+
   tssdist <- toplot[which(toplot$region == "TSS-distal"), ]
   tssdist$padj <- round(-log10(tssdist$padj), 2)
   tssdist$log2FoldChange <- round(tssdist$log2FoldChange, 2)
@@ -743,9 +743,9 @@ plotCountAnalysisTemp <-
 #' @export
 #'
 plotDistCountAnalysis <-
-  function(analysisresults, counts, palette = NULL) {    
-    altrecateg <- altrecategplot <- c()
-    #Make sure to names things are from the user-entered sample names 
+  function(analysisresults, counts, palette = NULL) {
+    altrecateg <- altrecategplot <- REaltrecategplot <- c()
+    #Make sure to names things are from the user-entered sample names
     reference <- analysisresults$reference
     allSamples <- colnames(analysisresults$analysisresults)[11:12]
     nonreference <- allSamples[which(!(allSamples %in% reference))]
@@ -819,42 +819,42 @@ plotDistCountAnalysis <-
   proximal3 <- dplyr::filter(mydf, altrecateg == "Shared")
   proximal4 <- dplyr::filter(mydf, altrecateg == Referencespecific)
 
-  mysamps=as.character(unique(sampletypes))
-  distal1_5num_samp1 <- 
-	stats::fivenum(distal1[[paste("meanlog2FPM",mysamps[1],sep=".")]])
-  proximal1_5num_samp1 <- 
-	stats::fivenum(proximal1[[paste("meanlog2FPM",mysamps[1],sep=".")]])
-  distal1_5num_samp2 <- 
-	stats::fivenum(distal1[[paste("meanlog2FPM",mysamps[2],sep=".")]])
-  proximal1_5num_samp2 <- 
-	stats::fivenum(proximal1[[paste("meanlog2FPM",mysamps[2],sep=".")]])
+  mysamps = as.character(unique(sampletypes))
+  distal1_5num_samp1 <-
+    stats::fivenum(distal1[[paste("meanlog2FPM", mysamps[1], sep = ".")]])
+  proximal1_5num_samp1 <-
+    stats::fivenum(proximal1[[paste("meanlog2FPM", mysamps[1], sep = ".")]])
+  distal1_5num_samp2 <-
+    stats::fivenum(distal1[[paste("meanlog2FPM", mysamps[2], sep = ".")]])
+  proximal1_5num_samp2 <-
+    stats::fivenum(proximal1[[paste("meanlog2FPM", mysamps[2], sep = ".")]])
 
-  distal2_5num_samp1 <- 
-	stats::fivenum(distal2[[paste("meanlog2FPM",mysamps[1],sep=".")]])
-  proximal2_5num_samp1 <- 
-	stats::fivenum(proximal2[[paste("meanlog2FPM",mysamps[1],sep=".")]])
-  distal2_5num_samp2 <- 
-	stats::fivenum(distal2[[paste("meanlog2FPM",mysamps[2],sep=".")]])
-  proximal2_5num_samp2 <- 
-	stats::fivenum(proximal2[[paste("meanlog2FPM",mysamps[2],sep=".")]])
+  distal2_5num_samp1 <-
+    stats::fivenum(distal2[[paste("meanlog2FPM", mysamps[1], sep = ".")]])
+  proximal2_5num_samp1 <-
+    stats::fivenum(proximal2[[paste("meanlog2FPM", mysamps[1], sep = ".")]])
+  distal2_5num_samp2 <-
+    stats::fivenum(distal2[[paste("meanlog2FPM", mysamps[2], sep = ".")]])
+  proximal2_5num_samp2 <-
+    stats::fivenum(proximal2[[paste("meanlog2FPM", mysamps[2], sep = ".")]])
 
-  distal3_5num_samp1 <- 
-	stats::fivenum(distal3[[paste("meanlog2FPM",mysamps[1],sep=".")]])
-  proximal3_5num_samp1 <- 
-	stats::fivenum(proximal3[[paste("meanlog2FPM",mysamps[1],sep=".")]])
-  distal3_5num_samp2 <- 
-	stats::fivenum(distal3[[paste("meanlog2FPM",mysamps[2],sep=".")]])
-  proximal3_5num_samp2 <- 
-	stats::fivenum(proximal3[[paste("meanlog2FPM",mysamps[2],sep=".")]])
+  distal3_5num_samp1 <-
+    stats::fivenum(distal3[[paste("meanlog2FPM", mysamps[1], sep = ".")]])
+  proximal3_5num_samp1 <-
+    stats::fivenum(proximal3[[paste("meanlog2FPM", mysamps[1], sep = ".")]])
+  distal3_5num_samp2 <-
+    stats::fivenum(distal3[[paste("meanlog2FPM", mysamps[2], sep = ".")]])
+  proximal3_5num_samp2 <-
+    stats::fivenum(proximal3[[paste("meanlog2FPM", mysamps[2], sep = ".")]])
 
-  distal4_5num_samp1 <- 
-	stats::fivenum(distal4[[paste("meanlog2FPM",mysamps[1],sep=".")]])
-  proximal4_5num_samp1 <- 
-	stats::fivenum(proximal4[[paste("meanlog2FPM",mysamps[1],sep=".")]])
-  distal4_5num_samp2 <- 
-	stats::fivenum(distal4[[paste("meanlog2FPM",mysamps[2],sep=".")]])
-  proximal4_5num_samp2 <- 
-	stats::fivenum(proximal4[[paste("meanlog2FPM",mysamps[2],sep=".")]])
+  distal4_5num_samp1 <-
+    stats::fivenum(distal4[[paste("meanlog2FPM", mysamps[1], sep = ".")]])
+  proximal4_5num_samp1 <-
+    stats::fivenum(proximal4[[paste("meanlog2FPM", mysamps[1], sep = ".")]])
+  distal4_5num_samp2 <-
+    stats::fivenum(distal4[[paste("meanlog2FPM", mysamps[2], sep = ".")]])
+  proximal4_5num_samp2 <-
+    stats::fivenum(proximal4[[paste("meanlog2FPM", mysamps[2], sep = ".")]])
 
   Experimentspecific_list <- list(round(distal1_5num_samp1,3),
                                   round(proximal1_5num_samp1, 3),
@@ -873,14 +873,14 @@ plotDistCountAnalysis <-
                                  round(distal4_5num_samp2,3),
                                  round(proximal4_5num_samp2,3))
 
-  categ <- c(paste0(mysamps[1],'-specific (by peaks) TSS-distal'), 
+  categ <- c(paste0(mysamps[1],'-specific (by peaks) TSS-distal'),
 	paste0(mysamps[1],'-specific (by peaks) TSS-proximal'),
-        paste0(mysamps[2],'-specific (by peaks) TSS-distal'), 
+        paste0(mysamps[2],'-specific (by peaks) TSS-distal'),
 	paste0(mysamps[2],'-specific (by peaks) TSS-proximal'))
-  
+
   explabel <- paste0(nonreference, "-specific (by intensity)")
   reflabel <- paste0(reference, "-specific (by intensity)")
-  
+
     p <- highchart() %>%
       hc_title(text = "Distribution of Normalized Counts",
                style = list(color = '#2E1717',
@@ -924,6 +924,246 @@ plotDistCountAnalysis <-
       hc_exporting(enabled = TRUE)
     return(p)
     }
+
+
+
+#' Plots a venn diagram that compares altered regions as determined by peak presence or by #' differential counts.  The type of regulatory region (TSS-proximal, TSS-distal, or both)
+#' and type of peak comparison (intensity or peak) must be specified.
+#' Plots a venn diagram that compares altered regions as determined by peak
+#' presence or by differential counts.  The type of regulatory region
+#' (TSS-proximal, TSS-distal, or both) and type of peak comparison
+#' (intensity or peak) must be specified.
+#' @param analysisresultsmatrix analysisresults of Intensity analysis place into
+#' analysisresults matrix by the analyzeanalysisresults function
+#' @param region pick a region, regions can be 'TSS-distal', 'TSS-proximal',
+#' or 'both' -- INCLUDE quotes
+#' @param method pick a method, methods can be 'Intensity' or 'Peak'
+#' include quotes
+#' @param palette RColorBrewer palette to change graph colors
+#' @return venn diagram
+#' @examples
+#' \dontrun{
+#' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+#' samplePeaks <- loadBedFiles(csvfile)
+#' consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
+#' minreps = 2)
+#' TSSannot <- getTSS()
+#' consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
+#' TSS = TSSannot,
+#' merge = TRUE,
+#' regionspecific = TRUE,
+#' distancefromTSSdist = 1500,
+#' distancefromTSSprox = 1000)
+#' consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
+#'                                  sampleinfo = csvfile,
+#'                                  reference = 'SAEC',
+#'                                  chrom = 'chr21')
+#' alteredPeaks <- countanalysis(counts = consensusPeaksCounts,
+#' pval = 0.01,
+#' lfcvalue = 1)
+#' alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
+#'                                           lfctypespecific = 1.5,
+#'                                           lfcshared = 1.2,
+#'                                           pvaltypespecific = 0.01,
+#'                                           pvalshared = 0.05)
+#' plotCompareMethods(comparePeaksAnalysisResults)
+#'}
+
+plotCompareMethods <- function(analysisresultsmatrix,
+                               region = "both",
+                               method = "Intensity",
+                               palette = NULL) {
+  if (!is.null(palette)) {
+    cols <- RColorBrewer::brewer.pal(3, palette)
+  }
+  else{
+    cols <- c("#00E5EE", "#C71585", "#000080")
+  }
+
+  if (region == "TSS-proximal") {
+    feature <- c("TSS-proxs")
+    coordinates <- c(2, 5, 8)
+  }
+  if (region == "TSS-distal") {
+    feature <- c("TSS-dists")
+    coordinates <- c(1, 4, 7)
+  }
+  if (region == "both") {
+    region <- c("All")
+    feature <- c("TSS-dists", "TSS-proxs")
+    coordinates <- c(3, 6, 9)
+  }
+  # identifies the correct numbers from the
+  # analysisresults matrix based on the
+  # regulatory region of interest
+  if (method == "Intensity") {
+    case <- analysisresultsmatrix[coordinates[1], 1]
+    reference <- analysisresultsmatrix[coordinates[2], 1]
+    shared <- analysisresultsmatrix[coordinates[3], 1]
+  }
+
+  if (method == "Peak") {
+    case <- analysisresultsmatrix[coordinates[1], 2]
+    reference <- analysisresultsmatrix[coordinates[2], 2]
+    shared <- analysisresultsmatrix[coordinates[3], 2]
+  }
+  # identifies the correct numbers from the
+  # analysisresults matrix based on the
+  # method of region
+  string <- paste(
+    rownames(analysisresultsmatrix)[1],
+    rownames(analysisresultsmatrix)[2],
+    rownames(analysisresultsmatrix)[3],
+    rownames(analysisresultsmatrix)[4],
+    rownames(analysisresultsmatrix)[5],
+    rownames(analysisresultsmatrix)[6],
+    rownames(analysisresultsmatrix)[7],
+    rownames(analysisresultsmatrix)[8],
+    rownames(analysisresultsmatrix)[9]
+  )
+
+  stringsplit <- strsplit(string, " ")
+  uniquestringsplit <- unique(stringsplit[[1]])
+  split <-
+    unlist(strsplit(rownames(analysisresultsmatrix)[1], split = " "))
+  names <- split[!(split %in% c("TSS-dists"))]
+  names <- paste(names, collapse = " ")
+  casename <- names
+
+  split <-
+    unlist(strsplit(rownames(analysisresultsmatrix)[4], split = " "))
+  names <- split[!(split %in% c("TSS-dists"))]
+  names <- paste(names, collapse = " ")
+  referencename <- names
+
+  # this is a way to the name of the 'case'
+  # from the analysisresults matrix
+
+  p <- highchart() %>%
+    hc_chart(type = "pie") %>%
+    hc_title(
+      text = paste(region, method),
+      style = list(color = '#2E1717',
+                   fontWeight = 'bold')
+    ) %>%
+    hc_plotOptions(series = list(showInLegend = TRUE)) %>%
+    hc_legend(
+      enabled = TRUE,
+      layout = "horizontal",
+      align = "center",
+      verticalAlign = "bottom",
+      floating = FALSE,
+      maxHeight = 100,
+      x = 0,
+      y = 16
+    ) %>%
+    hc_add_series(data = list(
+      list(
+        y = case,
+        name = casename,
+        dataLabels = FALSE
+      ),
+      list(
+        y = reference,
+        name = referencename,
+        dataLabels = FALSE
+      ),
+      list(
+        y = shared,
+        name = "Shared",
+        dataLabels = FALSE
+      )
+    ),
+    name = paste(region, method)) %>%
+    hc_colors(cols)  %>%
+    hc_exporting(enabled = TRUE)
+  return(p)
+}
+
+#' Plots venn diagrams for comparison of two methods of identifying altered
+#' regulatory regions Makes venn diagrams for TSS-proximal, TSS-distal, and
+#' combined for both intensity-based peaks and for peaks identified by hotspot
+#' calling algorithms.  There is no return value. Six venn diagrams will be
+#' plotted
+#' @param analysisresultsmatrix analysisresults of countanalysis function
+#' place into a a analysisresults matrix by the analyzeanalysisresults function
+#' @param viewer whether the plot should be displayed in the RStudio viewer or
+#' in Shiny/Knittr
+#' @param palette RColorBrewer palette to change graph colors
+#' @examples
+#' \dontrun{
+#' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+#' samplePeaks <- loadBedFiles(csvfile)
+#' consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
+#' minreps = 2)
+#' TSSannot <- getTSS()
+#' consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
+#' TSS = TSSannot,
+#' merge = TRUE,
+#' regionspecific = TRUE,
+#' distancefromTSSdist = 1500,
+#' distancefromTSSprox = 1000)
+#' consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
+#'                                  sampleinfo = csvfile,
+#'                                  reference = 'SAEC',
+#'                                  chrom = 'chr21')
+#' alteredPeaks <- countanalysis(counts = consensusPeaksCounts,
+#' pval = 0.01,
+#' lfcvalue = 1)
+#' alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
+#'                                           lfctypespecific = 1.5,
+#'                                           lfcshared = 1.2,
+#'                                           pvaltypespecific = 0.01,
+#'                                           pvalshared = 0.05)
+#'plotCompareMethodsAll(comparePeaksAnalysisResults)
+#' }
+#' @export
+#'
+plotCompareMethodsAll <-
+  function(analysisresultsmatrix,
+           viewer = TRUE,
+           palette = NULL) {
+    if (!is.null(palette)) {
+      cols <- RColorBrewer::brewer.pal(3, palette)
+    }
+    else{
+      cols <- c("#00E5EE", "#C71585", "#000080")
+    }
+
+    analysisresultsmatrix <- analysisresultsmatrix[[1]]
+
+    if (is.matrix(analysisresultsmatrix) ==
+        FALSE) {
+      stop("The input is not a matrix!")
+    }
+
+    p1 <- plotCompareMethods(analysisresultsmatrix,
+                             "TSS-proximal",
+                             "Intensity",
+                             palette = palette)
+    p2 <- plotCompareMethods(analysisresultsmatrix,
+                             "TSS-distal", "Intensity", palette = palette)
+    p3 <- plotCompareMethods(analysisresultsmatrix,
+                             "both", "Intensity", palette = palette)
+    p4 <- plotCompareMethods(analysisresultsmatrix,
+                             "TSS-proximal", "Peak", palette = palette)
+    p5 <- plotCompareMethods(analysisresultsmatrix,
+                             "TSS-distal", "Peak", palette = palette)
+    p6 <- plotCompareMethods(analysisresultsmatrix,
+                             "both", "Peak", palette = palette)
+
+    if (viewer == TRUE) {
+      p <- htmltools::browsable(hw_grid(p1, p2, p3, p4, p5, p6, ncol = 3,
+                                        rowheight = 300))
+    }
+    else {
+      p <- hw_grid(p1, p2, p3, p4, p5, p6, ncol = 3)
+    }
+    return(p)
+
+    return(p)
+  }
+
 
 ##############################################################################
 
@@ -1029,7 +1269,7 @@ plotGREATenrich <- function(input,
     stop(
       "The input is not a list of three dataframes or there are no enriched pathways to plot.
       Be sure the input is the output from running processPathways(()"
-      )
+    )
   }
 
   up <-
@@ -1044,7 +1284,7 @@ plotGREATenrich <- function(input,
     }
   }
 
-  reference <- 
+  reference <-
     input$ReferenceSpecificByIntensity$Sig_Pathways[[pathwaycateg]][,mycols]
   if (is.null(nrow(reference))) {
     reference$name <- NA
@@ -1381,7 +1621,7 @@ plotCompareMethods <- function(analysisresultsmatrix,
 #'                                           lfcshared = 1.2,
 #'                                           pvaltypespecific = 0.01,
 #'                                           pvalshared = 0.05)
-#'plotCompareMethodsAll(comparePeaksAnalysisResults)
+#' plotCompareMethodsAll(comparePeaksAnalysisResults)
 #' }
 #' @export
 #'
@@ -1425,7 +1665,5 @@ plotCompareMethodsAll <-
     else {
       p <- hw_grid(p1, p2, p3, p4, p5, p6, ncol = 3)
     }
-    return(p)
-
     return(p)
   }

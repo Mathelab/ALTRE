@@ -9,8 +9,18 @@ calling algorithms.  There is no return value. Six venn diagrams will be
 plotted}
 \usage{
 plotCompareMethodsAll(analysisresultsmatrix, viewer = TRUE, palette = NULL)
+
+plotCompareMethodsAll(analysisresultsmatrix, viewer = TRUE, palette = NULL)
 }
 \arguments{
+\item{analysisresultsmatrix}{analysisresults of countanalysis function
+place into a a analysisresults matrix by the analyzeanalysisresults function}
+
+\item{viewer}{whether the plot should be displayed in the RStudio viewer or
+in Shiny/Knittr}
+
+\item{palette}{RColorBrewer palette to change graph colors}
+
 \item{analysisresultsmatrix}{analysisresults of countanalysis function
 place into a a analysisresults matrix by the analyzeanalysisresults function}
 
@@ -25,8 +35,40 @@ regulatory regions Makes venn diagrams for TSS-proximal, TSS-distal, and
 combined for both intensity-based peaks and for peaks identified by hotspot
 calling algorithms.  There is no return value. Six venn diagrams will be
 plotted
+
+Plots venn diagrams for comparison of two methods of identifying altered
+regulatory regions Makes venn diagrams for TSS-proximal, TSS-distal, and
+combined for both intensity-based peaks and for peaks identified by hotspot
+calling algorithms.  There is no return value. Six venn diagrams will be
+plotted
 }
 \examples{
+\dontrun{
+csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+samplePeaks <- loadBedFiles(csvfile)
+consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
+minreps = 2)
+TSSannot <- getTSS()
+consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
+TSS = TSSannot,
+merge = TRUE,
+regionspecific = TRUE,
+distancefromTSSdist = 1500,
+distancefromTSSprox = 1000)
+consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
+                                 sampleinfo = csvfile,
+                                 reference = 'SAEC',
+                                 chrom = 'chr21')
+alteredPeaks <- countanalysis(counts = consensusPeaksCounts,
+pval = 0.01,
+lfcvalue = 1)
+alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
+                                          lfctypespecific = 1.5,
+                                          lfcshared = 1.2,
+                                          pvaltypespecific = 0.01,
+                                          pvalshared = 0.05)
+plotCompareMethodsAll(comparePeaksAnalysisResults)
+}
 \dontrun{
 csvfile <- loadCSVFile("DNAseEncodeExample.csv")
 samplePeaks <- loadBedFiles(csvfile)

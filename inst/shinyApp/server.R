@@ -213,6 +213,7 @@ shinyServer(function(input, output, session) {
                 colrs ,
                 selected = colrs[15])
   })
+
   ############################################################################
   # download buttons
   output$downloadAnnotate <- downloadHandler(
@@ -287,38 +288,37 @@ shinyServer(function(input, output, session) {
 
   output$table6 <- renderDataTable({
 	mydf <- req(pathGREATObj())
-	outdf=data.frame(Pathway=mydf$ExperimentSpecificByIntensity$stats[,1],
-	  Experiment_Specific=mydf$ExperimentSpecificByIntensity$stats[,2],
-	  Shared=mydf$Shared$stats[,2],
-	  Reference_Specific=mydf$ReferenceSpecificByIntensity$stats[,2]) 
-	return(outdf)
+   data.frame(Pathway = mydf$ExperimentSpecificByIntensity$stats[ , 1],
+              Experiment_Specific = mydf$ExperimentSpecificByIntensity$stats[ , 2],
+              Shared = mydf$Shared$stats[ , 2],
+              Reference_Specific = mydf$ReferenceSpecificByIntensity$stats[ , 2])
  }, options = list(searching = FALSE,
-                    paging = TRUE))
+                    paging = FALSE))
 
   ############################################################################
   # plots
 
   output$barplot <- highcharter::renderHighchart({
-    plotConsensusPeaks(getConsensusObj(),
+    plotConsensusPeaks(req(getConsensusObj()),
                        palette = input$palette1)
   })
 
   output$annotatebarplot <- renderUI({
-    plotCombineAnnotatePeaks(combineAnnotateObj(),
+    plotCombineAnnotatePeaks(req(combineAnnotateObj()),
                              viewer = FALSE,
                              palette = input$palette2)
   })
 
   output$densityplot <- highcharter::renderHighchart({
-    plotGetCounts(getCountsObj(),
+    plotGetCounts(req(getCountsObj()),
                   palette = input$palette3)
   })
 
   output$volcano <- renderUI({
     plotCountAnalysisTemp(viewer = FALSE)
-    #plotCountAnalysis(categAltreObj(),
+    # plotCountAnalysis(req(categAltreObj()),
     #                  viewer = FALSE,
-     #                 palette = input$palette4)
+    #                 palette = input$palette4)
   })
 
   output$boxplotCounts <- highcharter::renderHighchart({
@@ -328,13 +328,15 @@ shinyServer(function(input, output, session) {
   })
 
   output$heatplotGREAT <- highcharter::renderHighchart({
-    plotGREATenrich(req(pathGREATObj()), 
-		title = "GO Molecular Function", 
-		pathwaycateg ="GO_Molecular_Function")
+    plotGREATenrich(req(pathGREATObj()),
+		title = "GO Molecular Function",
+		pathwaycateg = "GO_Molecular_Function")
   })
 
   output$vennplot <- renderUI({
-    plotCompareMethodsAll(req(comparePeaksObj()), viewer = FALSE)
+    plotCompareMethodsAll(req(comparePeaksObj()),
+                          viewer = FALSE,
+                          palette = input$palette5)
   })
 
 
