@@ -170,8 +170,6 @@ body <- dashboardBody(
                 ),
                 hr(),
                 dataTableOutput("table2"),
-                hr(),
-                uiOutput("choosePalette1"),
                 hr()
               ),
               HTML("</div>"),
@@ -184,6 +182,16 @@ body <- dashboardBody(
                 solidHeader = TRUE,
                 highcharter::highchartOutput("barplot")
               ),
+              hr(),
+              HTML("<div class='col-sm-3' style='min-width:
+                   350px !important;'>"),
+              box(
+                title = "Customize Plot",
+                width = NULL,
+                solidHeader = TRUE,
+                uiOutput("choosePalette1")
+              ),
+              HTML("</div>"),
               infoBoxOutput("statusbox2", width = NULL),
               HTML("</div>")
             )
@@ -672,10 +680,10 @@ body <- dashboardBody(
                               tags$li("Outputs a heatmap of the top enriched pathways")
 		            ),
 			         "Note: You must be connected to the internet for this step.
-			           Please be patient, it can take 3-5 minutes to run. Click",
+			           Please be patient. It can take 3-5 minutes to run. Click",
 			          tags$a(href = "http://bejerano.stanford.edu/great/public/html/",
 			             "here"),
-			          "for more information on GREAT",
+			          "for more information on GREAT.",
 		            hr(),
 		            actionButton("buttongreat", strong("Run GREAT")),
 		            hr()
