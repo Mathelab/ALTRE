@@ -469,7 +469,7 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) {
       hc_yAxis(title = list(text = "-log10 pvalue")) %>%
       hc_tooltip(headerFormat = "",
                  pointFormat  = "<b>log2FC</b> = {point.x}<br> <b>-log10pvalue</b>
-                 = {point.y}<br>") %>%
+                = {point.y}<br>") %>%
       hc_colors(cols) %>%
       hc_exporting(enabled = TRUE)
 
