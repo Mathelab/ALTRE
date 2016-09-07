@@ -744,7 +744,7 @@ plotCountAnalysisTemp <-
 #'
 plotDistCountAnalysis <-
   function(analysisresults, counts, palette = NULL) {    
-    altrecateg <- altrecategplot <- REaltrecategplot <- c()
+    altrecateg <- altrecategplot <- c()
     #Make sure to names things are from the user-entered sample names 
     reference <- analysisresults$reference
     allSamples <- colnames(analysisresults$analysisresults)[11:12]
@@ -807,13 +807,13 @@ plotDistCountAnalysis <-
   mydf <- data.frame(meanlog2FPM = meanlog2FPM,
                     PEcateg = PEcateg,
                     altrecateg = altrecategplot)
-  TSSdistal <- dplyr::filter(mydf, PEcateg == "TSS-distal")
+  #TSSdistal <- dplyr::filter(mydf, PEcateg == "TSS-distal")
   distal1 <- dplyr::filter(mydf, altrecateg == Experimentspecific)
   distal2 <- dplyr::filter(mydf, altrecateg == "Ambiguous")
   distal3 <- dplyr::filter(mydf, altrecateg == "Shared")
   distal4 <- dplyr::filter(mydf, altrecateg == Referencespecific)
 
-  TSSproximal <- dplyr::filter(mydf, PEcateg == "TSS-proximal")
+  #TSSproximal <- dplyr::filter(mydf, PEcateg == "TSS-proximal")
   proximal1 <- dplyr::filter(mydf, altrecateg == Experimentspecific)
   proximal2 <- dplyr::filter(mydf, altrecateg == "Ambiguous")
   proximal3 <- dplyr::filter(mydf, altrecateg == "Shared")
@@ -1288,8 +1288,8 @@ plotCompareMethods <- function(analysisresultsmatrix,
     rownames(analysisresultsmatrix)[9]
   )
 
-  stringsplit <- strsplit(string, " ")
-  uniquestringsplit <- unique(stringsplit[[1]])
+  #stringsplit <- strsplit(string, " ")
+  #uniquestringsplit <- unique(stringsplit[[1]])
   split <-
     unlist(strsplit(rownames(analysisresultsmatrix)[1], split = " "))
   names <- split[!(split %in% c("TSS-dists"))]
