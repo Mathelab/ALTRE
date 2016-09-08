@@ -426,8 +426,6 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) {
   REaltrecateg <- REaltrecategplot <- NULL
   #To prevent R CMD check error
 
-  altrepeakscateg <- categaltre_peaks
-
   Referencespecificsamples <- altrepeakscateg[[3]]
   allsamples <- colnames(altrepeakscateg$analysisresults)[11:12]
   Experimentspecificsamples <- allsamples[which(!(allsamples %in% Referencespecificsamples))]
