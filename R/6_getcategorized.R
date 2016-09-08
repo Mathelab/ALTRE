@@ -46,14 +46,14 @@
  	lfcshared = 1.2,
  	pvaltypespecific = 0.01,
  	pvalshared = 0.05){
-    
-    #Make sure to names things are from the user-entered sample names 
-    reference <- analysisresults[[2]] 
+
+    #Make sure to names things are from the user-entered sample names
+    reference <- analysisresults[[2]]
     allSamples <- colnames(analysisresults[[1]])[11:length(analysisresults[[1]])]
     experimentSpecific <- allSamples[which(!(allSamples %in% reference))]
     referenceSpecific <- paste0(reference, "SpecificByIntensity")
     experimentSpecific <- paste0(experimentSpecific, "SpecificByIntensity")
-    
+
     analysisresults <- analysisresults[[1]]
 
    if (is.data.frame(analysisresults) == FALSE ||
@@ -131,8 +131,8 @@
      )))
    )
 
-    listToReturn <-list(analysisresults = analysisresults, stats = stats, reference=reference)
-    
+    listToReturn <- list(analysisresults = analysisresults, stats = stats, reference=reference)
+
    return(listToReturn)
 } # end function
 

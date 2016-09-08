@@ -429,7 +429,7 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) {
 
   Referencespecificsamples <- altrepeakscateg[[3]]
   allsamples <- colnames(altrepeakscateg$analysisresults)[11:12]
-  Experimentspecificsamples<-allsamples[which(!(allsamples %in% Referencespecificsamples))]
+  Experimentspecificsamples <- allsamples[which(!(allsamples %in% Referencespecificsamples))]
 
   Referencespecific <- paste0(Referencespecificsamples, "SpecificByIntensity")
   Experimentspecific <- paste0(Experimentspecificsamples, "SpecificByIntensity")
@@ -453,8 +453,29 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) {
   tssprox$padj <- round(-log10(tssprox$padj), 2)
   tssprox$log2FoldChange <- round(tssprox$log2FoldChange, 2)
 
+  # remove the NAs
+  tssdist <- tssdist[!is.na(tssdist$padj), -1]
+  tssprox <- tssprox[!is.na(tssprox$padj), -1]
+
+  # order values
+  tssdist <- tssdist[order(tssdist$padj, tssdist$log2FoldChange), ]
+  tssprox <- tssprox[order(tssprox$padj, tssprox$log2FoldChange), ]
+
+  #####################
+  # we can also trim the data
+  n1 <- dim(tssdist)[1]
+  n2 <- dim(tssprox)[1]
+  idx1 <- sample((n1 %/% 2):n1, min(3000, n1 %/% 20))
+  idx2 <- sample((n2 %/%  2):n2, min(3000, n2 %/% 20))
+  tssdist <- tssdist[idx1, ]
+  tssprox <- tssprox[idx2, ]
+  ###########################
+
     p1 <- highchart() %>%
       hc_chart(type = "scatter") %>%
+      hc_plotOptions(
+        scatter = list(marker = list(radius = 2))
+      ) %>%
       hc_title(text = "TSS-distal",
                style = list(color = '#2E1717',
                             fontWeight = 'bold')) %>%
@@ -474,6 +495,9 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) {
       hc_exporting(enabled = TRUE)
 
     p2 <- highchart() %>%
+      hc_plotOptions(
+        scatter = list(marker = list(radius = 2))
+      ) %>%
       hc_chart(type = "scatter") %>%
       hc_title(text = "TSS-proximal",
                style = list(color = '#2E1717',
@@ -1535,7 +1559,7 @@ plotCountAnalysis2 <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) 
           panel.grid.minor = ggplot2::element_blank()) +
     ggplot2::labs(x = "log2FC", y = "-log10(pvalue)") +
     ggplot2::ggtitle("TSS-proximal")
- 
+
   return(multiplot(p1,p2))
 }
 

@@ -59,10 +59,10 @@ shinyServer(function(input, output, session) {
                      conspeaks = req(getConsensusObj()),
                      TSS = TSSannot,
                      merge = input$mergeradio,
-                     regionspecific = input$regionradio,
-                     mergedist = input$dist,
                      distancefromTSSdist = input$distTSSdist,
                      distancefromTSSprox = input$distTSSprox,
+                     mergedist = input$dist,
+                     regionspecific = input$regionradio,
                      distancefromTSS = input$distTSS)
                    setProgress(value = 1, detail = "Done!")
                    Sys.sleep(0.5)
@@ -315,10 +315,10 @@ shinyServer(function(input, output, session) {
   })
 
   output$volcano <- renderUI({
-    plotCountAnalysisTemp(viewer = FALSE)
-    # plotCountAnalysis(req(categAltreObj()),
-    #                  viewer = FALSE,
-    #                 palette = input$palette4)
+    #plotCountAnalysisTemp(viewer = FALSE)
+     plotCountAnalysis(req(categAltreObj()),
+                      viewer = FALSE,
+                     palette = input$palette4)
   })
 
   output$boxplotCounts <- highcharter::renderHighchart({
@@ -515,7 +515,7 @@ shinyServer(function(input, output, session) {
         color = "aqua",
         fill = TRUE)
     }
-    else if (input$buttoncompare> 0 && (input$buttoncat    == 0 ||
+    else if (input$buttoncompare > 0 && (input$buttoncat    == 0 ||
                                            input$buttondefine == 0 ||
                                            input$buttoncounts == 0 ||
                                            input$buttonannot  == 0 ||
