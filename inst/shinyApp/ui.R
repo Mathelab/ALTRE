@@ -390,6 +390,10 @@ body <- dashboardBody(
                   tags$li(" Outputs a volcano plot highlighting potential
                           altered regulatory elements.")
                 ),
+                h5("Note that the total number of categorized peaks may be less than the
+                  the total number of peaks evaluated.  This discrepancy is due to DESeq2 
+                  independent filtering to remove regions with low power.  See DESeq2 documentation
+                  for more details."),
                 hr(),
                 actionButton("buttoncat", strong("Categorize Altered Regions")),
                 hr(),

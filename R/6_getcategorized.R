@@ -83,9 +83,11 @@
    REaltrecateg[refind] <- "ReferenceSpecificByIntensity"
    REaltrecategplot[sharedind] <- REaltrecateg[sharedind] <- "Shared"
    REaltrecategplot[ambigind] <- REaltrecateg[ambigind] <- "Ambiguous"
+   # Set NA category for regions with padj NA (removed bc of low counts with DESeq2)
+   REaltrecategplot[which(is.na(analysisresults$padj))]=NA
+   REaltrecateg[which(is.na(analysisresults$padj))]=NA
 
-
-   if (!all.equal(sum(table(REaltrecateg)), nrow(analysisresults))) {
+   if (!all.equal(sum(table(REaltrecateg)), nrow(analysisresults[which(!is.na(analysisresults$padj)),]))) {
      stop("Categorization failed, some REs are not categorized")
    }
 

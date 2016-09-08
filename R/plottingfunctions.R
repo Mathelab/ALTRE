@@ -1426,3 +1426,118 @@ plotGREATenrich <- function(input,
 
   return(p)
   } # end plotGREATenrich
+
+
+#' Create a volcano plot from the output of categAltrePeaks (ggplot2 version)
+#'
+#' @param altrepeakscateg output generated from countanalysis() then
+#' categAltrePeaks()
+#' @param viewer whether the plot should be displayed in the RStudio viewer or
+#'        in Shiny/Knittr
+#' @param palette RColorBrewer palette to change graph colors
+
+#'
+#' @return a highcharter object
+#'
+#' @examples
+#' \dontrun{
+#' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+#' samplePeaks <- loadBedFiles(csvfile)
+#' consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
+#' minreps = 2)
+#' TSSannot <- getTSS()
+#' consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
+#' TSS = TSSannot,
+#' merge = TRUE,
+#' regionspecific = TRUE,
+#' distancefromTSSdist = 1500,
+#' distancefromTSSprox = 1000)
+#' consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
+#'                                  sampleinfo = csvfile,
+#'                                  reference = 'SAEC',
+#'                                  chrom = 'chr21')
+#' alteredPeaks <- countanalysis(counts = consensusPeaksCounts,
+#' pval = 0.01,
+#' lfcvalue = 1)
+#' alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
+#'                                           lfctypespecific = 1.5,
+#'                                           lfcshared = 1.2,
+#'                                           pvaltypespecific = 0.01,
+#'                                           pvalshared = 0.05)
+#' plotCountAnalysis2(alteredPeaksCategorized)
+#' }
+#' @export
+
+#
+plotCountAnalysis2 <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) {
+
+    if ( !is.null(palette) ) {
+        cols <- RColorBrewer::brewer.pal(4, palette)
+    } else {cols <- c("#C71585", "#d3d3d3", "#000080", "#00E5EE")}
+                        #grey (ambiguous)
+                        #magenta (experiment-specific)
+                        #blue (reference specific)
+                            #blue (shared)
+
+  log2FoldChange <- NULL
+  padj <- NULL
+  REaltrecateg <- REaltrecategplot <- NULL
+
+  Referencespecificsamples <- altrepeakscateg$reference
+  allsamples <- colnames(altrepeakscateg$analysisresults)[11:12]
+  Experimentspecificsamples<-allsamples[which(!(allsamples %in% Referencespecificsamples))]
+
+  Referencespecific <- paste0(Referencespecificsamples, "SpecificByIntensity")
+  Experimentspecific <- paste0(Experimentspecificsamples, "SpecificByIntensity")
+
+  Referencespecificlabels <- paste0(Referencespecificsamples, "-Specific (by intensity)")
+  Experimentspecificlabels <- paste0(Experimentspecificsamples, "-Specific (by intensity)")
+
+
+  toplot <- altrepeakscateg$analysisresults[ ,c("region",
+                                                "log2FoldChange",
+                                                "padj",
+                                                "REaltrecategplot")]
+  replacement <- sub(Referencespecific, Referencespecificlabels, toplot$REaltrecategplot)
+  replacement <- sub(Experimentspecific, Experimentspecificlabels, replacement)
+  toplot$REaltrecategplot <- replacement
+
+  # Remove NAs:
+  toplot <- toplot[which(!is.na(toplot$padj)),]
+
+  tssdist <- toplot[which(toplot$region == "TSS-distal"), ]
+  tssdist$padj <- round(-log10(tssdist$padj), 2)
+  tssdist$log2FoldChange <- round(tssdist$log2FoldChange, 2)
+  tssprox <- toplot[which(toplot$region == "TSS-proximal"), ]
+  tssprox$padj <- round(-log10(tssprox$padj), 2)
+  tssprox$log2FoldChange <- round(tssprox$log2FoldChange, 2)
+
+  p1 <- ggplot2::ggplot(tssdist, ggplot2::aes_string('log2FoldChange','padj')) +
+    ggplot2::geom_point(ggplot2::aes(col = factor(tssdist$REaltrecategplot))) +
+    ggplot2::scale_colour_manual(values = cols) +
+    ggplot2::theme_bw(base_size = 15) +
+    ggplot2::theme(legend.title = ggplot2::element_blank()) +
+    ggplot2::scale_x_continuous(expand = c(0, 0)) +
+    ggplot2::scale_y_continuous(expand = c(0, 0)) +
+    ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
+          panel.grid.minor = ggplot2::element_blank()) +
+    ggplot2::labs(x = "log2FC", y = "-log10(pvalue)") +
+    ggplot2::ggtitle("TSS-distal")
+
+  p2 <- ggplot2::ggplot(tssprox, ggplot2::aes_string('log2FoldChange','padj')) +
+    ggplot2::geom_point(ggplot2::aes(col = factor(tssprox$REaltrecategplot))) +
+    ggplot2::scale_colour_manual(values = cols) +
+    ggplot2::theme_bw(base_size = 15) +
+    ggplot2::theme(legend.title = ggplot2::element_blank()) +
+    ggplot2::scale_x_continuous(expand = c(0, 0)) +
+    ggplot2::scale_y_continuous(expand = c(0, 0)) +
+    ggplot2::theme(panel.grid.major = ggplot2::element_blank(),
+          panel.grid.minor = ggplot2::element_blank()) +
+    ggplot2::labs(x = "log2FC", y = "-log10(pvalue)") +
+    ggplot2::ggtitle("TSS-proximal")
+ 
+  return(multiplot(p1,p2))
+}
+
+
+
