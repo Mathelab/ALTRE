@@ -426,6 +426,7 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) {
   REaltrecateg <- REaltrecategplot <- NULL
   #To prevent R CMD check error
 
+  altrepeakscateg <- categaltre_peaks
 
   Referencespecificsamples <- altrepeakscateg[[3]]
   allsamples <- colnames(altrepeakscateg$analysisresults)[11:12]
@@ -465,8 +466,22 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) {
   # we can also trim the data
   n1 <- dim(tssdist)[1]
   n2 <- dim(tssprox)[1]
-  idx1 <- sample((n1 %/% 2):n1, min(3000, n1 %/% 20))
-  idx2 <- sample((n2 %/%  2):n2, min(3000, n2 %/% 20))
+
+
+  upperThresh1 <- max((n1 - 1000), 19 * (n1 %/% 20))
+  upperThresh2 <- max((n2 - 1000), 19 * (n2 %/% 20))
+  lowerThresh1 <-  13 * (n1 %/% 20)
+  lowerThresh2 <-  13 * (n2 %/% 20)
+
+  idx1 <- c(sample((lowerThresh1 + 1):upperThresh1,
+                        min(3000, (upperThresh1 - lowerThresh1))),
+                (upperThresh1 + 1):n1
+                 )
+  idx2 <- c(sample((lowerThresh2 + 1):upperThresh2,
+                        min(3000, (upperThresh2 - lowerThresh2))),
+                (upperThresh2 + 1):n2
+                )
+
   tssdist <- tssdist[idx1, ]
   tssprox <- tssprox[idx2, ]
   ###########################
@@ -516,7 +531,6 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) {
                  = {point.y}<br>") %>%
       hc_colors(cols) %>%
       hc_exporting(enabled = TRUE)
-
 
     if (viewer == TRUE) {
       p <-
