@@ -301,8 +301,8 @@ shinyServer(function(input, output, session) {
   output$barplot <- highcharter::renderHighchart({
        plotConsensusPeaks(req(getConsensusObj()),
                        palette = input$palette1,
-                       maintitle = input$consPlotTitle)
-
+                       maintitle = input$consPlotTitle,
+                       ylabel = input$consPlotylabel)
   })
 
   output$annotatebarplot <- renderUI({
@@ -383,7 +383,7 @@ shinyServer(function(input, output, session) {
     else if (input$buttonmerge > 0 && !is.null(getConsensusObj())) {
       infoBox(
         "Status",
-        "Replicates Have Been Merged. You Can Proceed to Step 3.",
+        "Replicates Have Been Merged. \nYou Can Proceed to Step 3.",
         icon = icon("thumbs-up", lib = "glyphicon"),
         color = "green",
         fill = TRUE)

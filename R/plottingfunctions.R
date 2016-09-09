@@ -110,6 +110,16 @@ plotConsensusPeaks <- function(samplepeaks, palette = "Set1",
 #' @param palette RColorBrewer palette to change graph colors
 #' @param viewer whether the plot should be displayed in the RStudio viewer or
 #'        in Shiny/Knittr
+#' @param xlabels labels for x-axis (default, Before merging/After merging)
+#' @param leftylabel label for y-axis for number of REs plot (default, "Number of REs")
+#' @param rightylabel label for y-axis for mean length plot (default, "Mean length of REs")
+#' @param xlabelsize size of xlabel (default, 15px)
+#' @param leftylabelsize size of leftylabel (default, 15px)
+#' @param rightylabelsize size of rightylabel (default, 15px)
+#' @param leftmaintitle main title for number of REs plot (default, "Number of REs")
+#' @param rightmaintitle main title for mean length of REs plot (default, "Mean length of REs")
+#' @param leftmaintitlesize main title size for number of REs plot (default, 20px)
+#' @param rightmaintitlesize main title size for mean length of REs plot (default 15px)
 #' @return a highcharter object
 #'
 #' @examples
@@ -131,7 +141,18 @@ plotConsensusPeaks <- function(samplepeaks, palette = "Set1",
 #'
 plotCombineAnnotatePeaks <- function(conspeaks,
                                      viewer = TRUE,
-                                     palette = "Set1") {
+                                     palette = "Set1",
+                                     rightmaintitle = "Mean Length of REs",
+                                     leftmaintitle = "Number of REs",
+                                     xlabels = c("Before merging","After merging"),
+                                     leftylabel = "Number of REs",
+                                     rightylabel = "Mean Length of REs",
+                                     xlabelsize = "15px",
+                                     leftylabelsize = "15px",
+                                     rightylabelsize = "15px",
+                                     leftmaintitlesize = "20px",
+                                     rightmaintitlesize = "20px"
+) {
   cols <- RColorBrewer::brewer.pal(3, palette)
   CellType <- NULL
   #R CMD check throws no visible binding for global variable error
@@ -165,8 +186,8 @@ plotCombineAnnotatePeaks <- function(conspeaks,
                                      thecondition == "after")
 
     p1 <- highchart(height = 400) %>%
-      hc_title(text = "Number of REs",
-               style = list(color = '#2E1717',
+      hc_title(text = leftmaintitle,
+               style = list(color = '#2E1717',fontSize=leftmaintitlesize,
                             fontWeight = 'bold')) %>%
       hc_add_series(
         data = mergeStatsBefore$Count,
@@ -190,9 +211,10 @@ plotCombineAnnotatePeaks <- function(conspeaks,
           y = 40
         )
       ) %>%
-      hc_yAxis(title = list(text = "Number of REs"),
+      hc_yAxis(title = list(text = leftylabel,style=list(fontSize=leftylabelsize)),
                labels = list(format = "{value}")) %>%
-      hc_xAxis(categories = c("Before Merging", "After Merging")) %>%
+      hc_xAxis(categories = xlabels,
+               labels=list(style=list(fontSize=xlabelsize))) %>%
       hc_legend(
         enabled = TRUE,
         layout = "horizontal",
@@ -228,8 +250,8 @@ plotCombineAnnotatePeaks <- function(conspeaks,
 
 
     p2 <- highchart(height = 400) %>%
-      hc_title(text = "Mean length of REs",
-               style = list(color = '#2E1717',
+      hc_title(text = rightmaintitle,
+               style = list(color = '#2E1717',fontSize=rightmaintitlesize,
                             fontWeight = 'bold')) %>%
       hc_add_series(
         data = mergeStatsBefore$Count,
@@ -254,10 +276,11 @@ plotCombineAnnotatePeaks <- function(conspeaks,
         )
       ) %>%
       hc_yAxis(
-        title = list(text = "Mean Length of REs"),
+        title = list(text = leftylabel,style=list(fontSize=leftylabelsize)),
         labels = list(format = "{value}")
       ) %>%
-      hc_xAxis(categories = c("Before Merging", "After Merging")) %>%
+      hc_xAxis(categories = xlabels,
+         labels=list(style=list(fontSize=xlabelsize))) %>%
       hc_legend(
         enabled = TRUE,
         layout = "horizontal",

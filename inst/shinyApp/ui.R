@@ -187,6 +187,12 @@ body <- dashboardBody(
                   "Change the main title of the plot",
                   "Peak Counts by Cell Type"
                 ),
+                hr(),
+                textInput(
+                  "consPlotylabel",
+                  "Change the y-axis label of the plot",
+                  "Peak Counts"
+                ),
                 hr()
               ),
               HTML("</div>"),

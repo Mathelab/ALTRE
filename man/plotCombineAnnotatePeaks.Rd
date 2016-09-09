@@ -7,7 +7,12 @@ plot a barplot showing number of peaks before/after merging or length of
 peaks before/after merging
 (only works if peaks were merged)}
 \usage{
-plotCombineAnnotatePeaks(conspeaks, viewer = TRUE, palette = "Set1")
+plotCombineAnnotatePeaks(conspeaks, viewer = TRUE, palette = "Set1",
+  rightmaintitle = "Mean Length of REs", leftmaintitle = "Number of REs",
+  xlabels = c("Before merging", "After merging"),
+  leftylabel = "Number of REs", rightylabel = "Mean Length of REs",
+  xlabelsize = "15px", leftylabelsize = "15px", rightylabelsize = "15px",
+  leftmaintitlesize = "20px", rightmaintitlesize = "20px")
 }
 \arguments{
 \item{conspeaks}{output generated from combineAnnotatePeaks}
@@ -16,6 +21,26 @@ plotCombineAnnotatePeaks(conspeaks, viewer = TRUE, palette = "Set1")
 in Shiny/Knittr}
 
 \item{palette}{RColorBrewer palette to change graph colors}
+
+\item{rightmaintitle}{main title for mean length of REs plot (default, "Mean length of REs")}
+
+\item{leftmaintitle}{main title for number of REs plot (default, "Number of REs")}
+
+\item{xlabels}{labels for x-axis (default, Before merging/After merging)}
+
+\item{leftylabel}{label for y-axis for number of REs plot (default, "Number of REs")}
+
+\item{rightylabel}{label for y-axis for mean length plot (default, "Mean length of REs")}
+
+\item{xlabelsize}{size of xlabel (default, 15px)}
+
+\item{leftylabelsize}{size of leftylabel (default, 15px)}
+
+\item{rightylabelsize}{size of rightylabel (default, 15px)}
+
+\item{leftmaintitlesize}{main title size for number of REs plot (default, 20px)}
+
+\item{rightmaintitlesize}{main title size for mean length of REs plot (default 15px)}
 }
 \value{
 a highcharter object
