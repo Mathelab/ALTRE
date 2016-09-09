@@ -5,12 +5,33 @@
 \title{Given the output from getConsensusPeaks, generate a barplot
 of countstatistics}
 \usage{
-plotConsensusPeaks(samplepeaks, palette = "Set1")
+plotConsensusPeaks(samplepeaks, palette = "Set1",
+  xlabel = as.character(samplepeaks$consPeaksStats$PeakType),
+  ylabel = "Peak Counts", xlabelsize = "15px", ylabelsize = "15px",
+  maintitle = "Peak Counts by Cell Type",
+  subtitle = "For bioreplicates and their merged consensus track",
+  maintitlesize = "20px", subtitlesize = "15px")
 }
 \arguments{
 \item{samplepeaks}{output generated from getConsensusPeaks}
 
 \item{palette}{RColorBrewer palette to change graph colors}
+
+\item{xlabel}{label for x-axis (default, types of peaks - e.g. ConsensusPeaks, rep1, rep2, etc.)}
+
+\item{ylabel}{label for y-axis (default, "Peak Counts")}
+
+\item{xlabelsize}{size of xlabel (default, 15px)}
+
+\item{ylabelsize}{size of ylabel (default, 15px)}
+
+\item{maintitle}{main title (default, "Peak Counts by Cell Type")}
+
+\item{subtitle}{subtitle (default, "For bioreplicates and their merged consensus track")}
+
+\item{maintitlesize}{main title size (default, 20px)}
+
+\item{subtitlesize}{subitle size (default 15px)}
 }
 \value{
 a highcharter object

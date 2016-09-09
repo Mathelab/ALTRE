@@ -3,6 +3,14 @@
 #'
 #' @param samplepeaks output generated from getConsensusPeaks
 #' @param palette RColorBrewer palette to change graph colors
+#' @param xlabel label for x-axis (default, types of peaks - e.g. ConsensusPeaks, rep1, rep2, etc.)
+#' @param ylabel label for y-axis (default, "Peak Counts")
+#' @param xlabelsize size of xlabel (default, 15px)
+#' @param ylabelsize size of ylabel (default, 15px)
+#' @param maintitle main title (default, "Peak Counts by Cell Type")
+#' @param subtitle subtitle (default, "For bioreplicates and their merged consensus track")
+#' @param maintitlesize main title size (default, 20px)
+#' @param subtitlesize subitle size (default 15px)
 #' @return a highcharter object
 #'
 #' @examples
@@ -14,9 +22,12 @@
 #' plotConsensusPeaks(samplepeaks = consensusPeaks)}
 #' @export
 #'
-plotConsensusPeaks <- function(samplepeaks, palette = "Set1") {
+plotConsensusPeaks <- function(samplepeaks, palette = "Set1",
+	xlabel=as.character(samplepeaks$consPeaksStats$PeakType), ylabel="Peak Counts",
+	xlabelsize='15px',ylabelsize='15px', maintitle="Peak Counts by Cell Type",
+        subtitle="For bioreplicates and their merged consensus track",
+        maintitlesize="20px",subtitlesize="15px") {
   cols <- RColorBrewer::brewer.pal(3, palette)
-
 
   CellType <- NULL
   #without this R CMD check throws no visible binding for global variable error
@@ -37,10 +48,10 @@ plotConsensusPeaks <- function(samplepeaks, palette = "Set1") {
   col2 <- cols[2]
 
   p <- highchart(height = 700) %>%
-    hc_title(text = "Peak Counts by Cell Type",
-             style = list(color = '#2E1717',
+    hc_title(text = maintitle,
+             style = list(color = '#2E1717',fontSize = maintitlesize,
                           fontWeight = 'bold')) %>%
-    hc_subtitle(text = "For bioreplicates and their merged consensus track") %>%
+    hc_subtitle(text = subtitle, style = list(fontSize = subtitlesize)) %>%
     hc_add_series(
       color = col1,
       data = plottingData[[1]]$Count,
@@ -65,18 +76,19 @@ plotConsensusPeaks <- function(samplepeaks, palette = "Set1") {
       ),
       type = "column"
     ) %>%
-    hc_yAxis(title = list(text = "Peak Counts"),
+    hc_yAxis(title = list(text = ylabel,style= list(fontSize=ylabelsize)),
              labels = list(format = "{value}")) %>%
-    hc_xAxis(categories = plottingData[[1]]$PeakType) %>%
+    hc_xAxis(categories = xlabel,
+	labels = list(style=list(fontSize=xlabelsize))) %>%
     hc_legend(
       enabled = TRUE,
-      layout = "horizonal",
+      layout = "horizontal",
       align = "center",
-      verticalAlign = "bottom",
+      horizontalAlign = "middle",
+      verticalAlign = "top",
       floating = FALSE,
       maxHeight = 100,
-      x = 15,
-      y = 16
+      y = 50
     ) %>%
     hc_tooltip(
       headerFormat = "<b>{series.name}_{point.key}</b><br>",
@@ -411,7 +423,7 @@ plotGetCounts <- function(countsConsPeaks, palette = "Set1") {
 #' }
 #' @export
 
-plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) {
+plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL) {
 
     if ( !is.null(palette) ) {
         cols <- RColorBrewer::brewer.pal(4, palette)
