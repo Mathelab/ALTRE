@@ -347,8 +347,13 @@ plotGetCounts <- function(countsConsPeaks, palette = "Set1") {
   samp2prox <- dplyr::filter(varstack,
                              region == "TSS-proximal" &
                                variable == mysamps[2])
-
-
+  
+  
+  round <- JS(
+      "function() { return '<b>'+'log2 read count' +'</b>:'+
+    Highcharts.numberFormat(this.x, 2) + ', <b>'+'density' +'</b>:' + Highcharts.numberFormat(this.y, 2); }"
+  )
+  
   p <- hchart(
     stats::density(samp1dist$value),
     area = TRUE,
@@ -378,6 +383,7 @@ plotGetCounts <- function(countsConsPeaks, palette = "Set1") {
       name = paste(mysamps[2], "TSS-proximal")
     ) %>%
     hc_colors(cols) %>%
+    hc_tooltip(formatter = round) %>%
     hc_exporting(enabled = TRUE)
   return(p)
 }
@@ -904,22 +910,22 @@ plotDistCountAnalysis <-
   proximal4_5num_samp2 <-
     stats::fivenum(proximal4[[paste("meanlog2FPM", mysamps[2], sep = ".")]])
 
-  Experimentspecific_list <- list(round(distal1_5num_samp1,3),
-                                  round(proximal1_5num_samp1, 3),
-                                  round(distal1_5num_samp2,3),
-                                  round(proximal1_5num_samp2,3))
-  Ambiguous_list <- list(round(distal2_5num_samp1,3),
-                         round(proximal2_5num_samp1,3),
-                         round(distal2_5num_samp2,3),
-                         round(proximal2_5num_samp2,3))
-  Shared_list <- list(round(distal3_5num_samp1,3),
-                      round(proximal3_5num_samp1,3),
-                      round(distal3_5num_samp2,3),
-                      round(proximal3_5num_samp2,3))
-  Referencespecific_list <- list(round(distal4_5num_samp1,3),
-                                 round(proximal4_5num_samp1,3),
-                                 round(distal4_5num_samp2,3),
-                                 round(proximal4_5num_samp2,3))
+  Experimentspecific_list <- list(distal1_5num_samp1,
+                                  proximal1_5num_samp1,
+                                  distal1_5num_samp2,
+                                  proximal1_5num_samp2)
+  Ambiguous_list <- list(distal2_5num_samp1,
+                         proximal2_5num_samp1,
+                         distal2_5num_samp2,
+                         proximal2_5num_samp2)
+  Shared_list <- list(distal3_5num_samp1,
+                      proximal3_5num_samp1,
+                      distal3_5num_samp2,
+                      proximal3_5num_samp2)
+  Referencespecific_list <- list(distal4_5num_samp1,
+                                 proximal4_5num_samp1,
+                                 distal4_5num_samp2,
+                                 proximal4_5num_samp2)
 
   categ <- c(paste0(mysamps[1],'-specific (by peaks) TSS-distal'),
 	paste0(mysamps[1],'-specific (by peaks) TSS-proximal'),
@@ -929,6 +935,11 @@ plotDistCountAnalysis <-
   explabel <- paste0(nonreference, "-specific (by intensity)")
   reflabel <- paste0(reference, "-specific (by intensity)")
 
+  round <- JS(
+      "function() { return '<b>'+'log2 read count' +'</b>:'+
+    Highcharts.numberFormat(this.x, 2) + ', <b>'+'density' +'</b>:' + Highcharts.numberFormat(this.y, 2); }"
+  )
+  
     p <- highchart() %>%
       hc_title(text = "Distribution of Normalized Counts",
                style = list(color = '#2E1717',
@@ -966,8 +977,7 @@ plotDistCountAnalysis <-
       hc_yAxis(title = list(text = "Observations"),
                labels = list(format = "{value}")) %>%
       hc_xAxis(categories = categ, title = "Experiment No.") %>%
-      hc_tooltip(headerFormat = "<b>{point.key}</b><br>",
-                 pointFormat = "{point.y}") %>%
+      hc_tooltip(valueDecimals = 2) %>%
       hc_colors(cols) %>%
       hc_exporting(enabled = TRUE)
     return(p)
