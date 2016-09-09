@@ -22,16 +22,21 @@
 #' plotConsensusPeaks(samplepeaks = consensusPeaks)}
 #' @export
 #'
-plotConsensusPeaks <- function(samplepeaks, palette = "Set1",
-	xlabel=as.character(samplepeaks$consPeaksStats$PeakType), ylabel="Peak Counts",
-	xlabelsize='15px',ylabelsize='15px', maintitle="Peak Counts by Cell Type",
-        subtitle="For bioreplicates and their merged consensus track",
-        maintitlesize="20px",subtitlesize="15px") {
-  cols <- RColorBrewer::brewer.pal(3, palette)
+plotConsensusPeaks <- function(samplepeaks,
+                               palette = "Set1",
+                               xlabel = as.character(samplepeaks$consPeaksStats$PeakType),
+                               ylabel = "Peak Counts",
+                               xlabelsize = '15px',
+                               ylabelsize ='15px',
+                               maintitle = "Peak Counts by Cell Type",
+                               subtitle = "For bioreplicates and their merged consensus track",
+                               maintitlesize = "20px",
+                               subtitlesize = "15px") {
 
+
+  cols <- RColorBrewer::brewer.pal(3, palette)
   CellType <- NULL
   #without this R CMD check throws no visible binding for global variable error
-
   consPeaksStats <- samplepeaks$consPeaksStats
   row.names(consPeaksStats) <- NULL
   consPeaksStats[, 2] <-
@@ -370,13 +375,13 @@ plotGetCounts <- function(countsConsPeaks, palette = "Set1") {
   samp2prox <- dplyr::filter(varstack,
                              region == "TSS-proximal" &
                                variable == mysamps[2])
-  
-  
+
+
   round <- JS(
       "function() { return '<b>'+'log2 read count' +'</b>:'+
     Highcharts.numberFormat(this.x, 2) + ', <b>'+'density' +'</b>:' + Highcharts.numberFormat(this.y, 2); }"
   )
-  
+
   p <- hchart(
     stats::density(samp1dist$value),
     area = TRUE,
@@ -962,7 +967,7 @@ plotDistCountAnalysis <-
       "function() { return '<b>'+'log2 read count' +'</b>:'+
     Highcharts.numberFormat(this.x, 2) + ', <b>'+'density' +'</b>:' + Highcharts.numberFormat(this.y, 2); }"
   )
-  
+
     p <- highchart() %>%
       hc_title(text = "Distribution of Normalized Counts",
                style = list(color = '#2E1717',
