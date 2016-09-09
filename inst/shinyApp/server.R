@@ -308,7 +308,11 @@ shinyServer(function(input, output, session) {
   output$annotatebarplot <- renderUI({
     plotCombineAnnotatePeaks(req(combineAnnotateObj()),
                              viewer = FALSE,
-                             palette = input$palette2)
+                             palette = input$palette2,
+                             leftmaintitle = input$combLeftPlotTitle,
+                             rightmaintitle = input$combRightPlotTitle,
+                             leftylabel = input$combLeftylabel,
+                             rightylabel = input$combRightylabel)
   })
 
   output$densityplot <- highcharter::renderHighchart({

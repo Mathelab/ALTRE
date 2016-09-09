@@ -276,7 +276,7 @@ plotCombineAnnotatePeaks <- function(conspeaks,
         )
       ) %>%
       hc_yAxis(
-        title = list(text = leftylabel,style=list(fontSize=leftylabelsize)),
+        title = list(text = rightylabel,style=list(fontSize=rightylabelsize)),
         labels = list(format = "{value}")
       ) %>%
       hc_xAxis(categories = xlabels,

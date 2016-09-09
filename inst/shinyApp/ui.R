@@ -208,6 +208,7 @@ body <- dashboardBody(
                 width = NULL,
                 solidHeader = TRUE,
                 title = strong("Combine and Annotate Peaks"),
+                h4("Be sure to scroll all the way down for plotting options"),
                 h5("This step does the following: "),
                 tags$ul(
                   tags$li("Combines peaks from different sample types,
@@ -277,12 +278,9 @@ body <- dashboardBody(
                                                        Annotated Regions ")
                                  )
                 ),
-                hr(),
-                uiOutput("choosePalette2"),
                 hr()
-                ),
+                ),  # end box
               HTML("</div>"),
-
               HTML("<div class='col-sm-7' style='min-width:
                    550px !important;'>"),
               box(
@@ -298,6 +296,42 @@ body <- dashboardBody(
                 hr(),
                 dataTableOutput("table3")
               ),
+              hr(),
+#              HTML("</div>"),
+              HTML("<div class='col-sm-3' style='min-width:
+                   350px !important;'>"),
+              box(
+                title = "Customize Plot",
+                width = NULL,
+                solidHeader = TRUE,
+                uiOutput("choosePalette2"),
+                hr(),
+                textInput(
+                  "combLeftPlotTitle",
+                  "Change the main title of the left-hand plot",
+                  "Number of REs"
+                ),
+                hr(),
+                textInput(
+                  "combRightPlotTitle",
+                  "Change the main title of the right-hand plot",
+                  "Mean Length of REs"
+                ),
+                hr(),
+                textInput(
+                  "combLeftylabel",
+                  "Change the y-label of the left-hand plot",
+                  "Number of REs"
+                ),
+                hr(), 
+                textInput(
+                  "combRightylabel",
+                  "Change the y-label of the right-hand plot",
+                  "Mean Length of REs"
+                ),
+                hr()
+              ),
+              HTML("</div>"),
               infoBoxOutput("statusbox3", width = NULL),
               HTML("</div>")
             )),
