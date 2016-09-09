@@ -161,11 +161,6 @@ body <- dashboardBody(
                   min = 2,
                   max = 10
                 ),
-                textInput(
-                 "consPlotmaintitle",
-                 "Change the main title of the plot (default is 'Peak Counts by Cell Type')",
-                ),
-                hr(),
                 dataTableOutput("table2"),
                 hr()
               ),
@@ -186,7 +181,13 @@ body <- dashboardBody(
                 title = "Customize Plot",
                 width = NULL,
                 solidHeader = TRUE,
-                uiOutput("choosePalette1")
+                uiOutput("choosePalette1"),
+                textInput(
+                  "consPlotTitle",
+                  "Change the main title of the plot",
+                  "Peak Counts by Cell Type"
+                ),
+                hr()
               ),
               HTML("</div>"),
               infoBoxOutput("statusbox2", width = NULL),
@@ -395,7 +396,7 @@ body <- dashboardBody(
                           altered regulatory elements.")
                 ),
                 h5("Note that the total number of categorized peaks may be less than the
-                  the total number of peaks evaluated.  This discrepancy is due to DESeq2 
+                  the total number of peaks evaluated.  This discrepancy is due to DESeq2
                   independent filtering to remove regions with low power.  See DESeq2 documentation
                   for more details."),
                 hr(),
