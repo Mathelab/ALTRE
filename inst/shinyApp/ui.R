@@ -161,6 +161,10 @@ body <- dashboardBody(
                   min = 2,
                   max = 10
                 ),
+                textInput(
+                 "consPlotmaintitle",
+                 "Change the main title of the plot (default is 'Peak Counts by Cell Type')",
+                ),
                 hr(),
                 dataTableOutput("table2"),
                 hr()

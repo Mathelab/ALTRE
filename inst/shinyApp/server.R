@@ -299,8 +299,16 @@ shinyServer(function(input, output, session) {
   # plots
 
   output$barplot <- highcharter::renderHighchart({
-    plotConsensusPeaks(req(getConsensusObj()),
+    consMaintitle <- input$consPlotmaintitle
+    if(consMaintitle == "") {
+    	plotConsensusPeaks(req(getConsensusObj()),
                        palette = input$palette1)
+    }
+    else {
+       plotConsensusPeaks(req(getConsensusObj()),
+                       palette = input$palette1,
+                       maintitle = consMaintitle)
+   }
   })
 
   output$annotatebarplot <- renderUI({
