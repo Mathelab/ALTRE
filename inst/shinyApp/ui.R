@@ -133,7 +133,7 @@ body <- dashboardBody(
     tabItem(tabName = "definerep",
             fluidRow(
               HTML("<div class='col-sm-4' style='min-width:
-                   500px !important;'>"),
+                   400px !important;'>"),
               box(
                 title = strong("Load and Merge Annotation Files") ,
                 width = NULL,
