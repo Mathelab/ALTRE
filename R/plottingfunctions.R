@@ -1457,7 +1457,7 @@ plotGREATenrich <- function(input,
     ; }"
   )
 
-  hc <- highchart() %>%
+  p <- highchart() %>%
     hc_chart(type = "heatmap") %>%
     hc_title(text = title) %>%
     hc_xAxis(categories = c("Experiment-specific", "Shared", "Reference-specific")) %>%
@@ -1465,13 +1465,13 @@ plotGREATenrich <- function(input,
     hc_add_series(name = "matrix location, p-value",
                   data = formattedHeatmapData) %>%
     hc_tooltip(formatter = fntltp) %>%
+    hc_colorAxis(stops = color_stops(2, colors = c("#5097D1", "#FFFFFF")),
+                 min = 0,
+                 max = 1)    %>%
     hc_legend(title = "p-value",
               enabled = TRUE) %>%
     hc_exporting(enabled = TRUE)
-  p <- hc_colorAxis(hc, minColor = "#000080", maxColor = "#FFFFFF")
-  #create final formatting
-
-
+  #create final formatting                 min: 0,max: 1,
   return(p)
   } # end plotGREATenrich
 
