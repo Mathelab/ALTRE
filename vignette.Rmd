@@ -184,7 +184,7 @@ By default, the p-values will be adjusted by "bonferroni" and significant pathwa
 Note that this vignette only uses chr21, therefore the pathway analysis results presented may not be biolofically relevant.  
 
 ```{r, message = FALSE}
-callpaths <- runGREAT(peaks=alteredPeaksCategorized) 
+callpaths <- suppressMessages(runGREAT(peaks=alteredPeaksCategorized))
 pathresults <- processPathways(callpaths, pathway_category = "GO",
 	enrichcutoff = 2; adjpvalcutoff = 0.05))
 ```
@@ -221,7 +221,7 @@ writeCompareRE(comparePeaksAnalysisResults, "comparealtrepeaks.csv")
 4. *writeGREATpath()*: writes CSV files showing the results of the functions runGREAT() and processPathways(), which it takes as input.  A zipped folder containing 3xP CSV files will be created, where 3 is the type of REs (e.g. Shared, Reference-specific, and Experiment-specific), and P is the number of pathways (e.g. if GO pathway category is used, then P is 3 - Molecular Function, Cellulcar function, Biological Processes).  
 
 ```{r, eval = FALSE}
-writeBedFile(alteredPeaksCategorized, "output.txt")
+writeGREATpath(pathresults, "EnrichedPathways.zip")
 ```
 
 ```{r}
