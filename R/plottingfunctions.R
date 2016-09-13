@@ -1305,13 +1305,14 @@ plotCompareMethodsAll <-function(analysisresultsmatrix,
 #' regulatory regions is plotted.
 #'
 #' @param input results from GREAT enrichment analysis
-#' @param title title of the heatmap
 #' @param pathwaycateg ontology, to see available ontologies in your input results (e.g. named
 #'	GREATpathways, type getOntologies(GREATpathways)
 #' @param test character, "Binom" uses binomial test restuls, "Hyper" uses
 #'      hypergeometric test results.  Default is "Binom"
 #' @param numshow number of top pathways (ranked according to p-value) of each type
 #' 	(expt, reference, shared) to show in the plot (default=10)
+#' @param maintitle main title (default, "GREAT Enrichment Analysis")
+#' @param maintitlesize main title size (default, 20px)
 #' @return heatmap
 #'
 #' @examples
@@ -1340,20 +1341,21 @@ plotCompareMethodsAll <-function(analysisresultsmatrix,
 #'                              lfcshared = 1.2,
 #'                              pvaltypespecific = 0.01,
 #'                              pvalshared = 0.05)
-#' GREAToutput <- runGREAT(peaks = categaltre_peaks)
-#' GREATpathways <- processPathways(temp)
-#' names(GREATpathways$Sig_Pathways)
-#'  plotGREATenrich(GREATpathways,
-#'                 title = "GREAT Enrichment Analysis",
-#'                 pathwaycateg ="GO_Molecular_Function")
-#' }
-#'
+#' callpaths <- runGREAT(peaks = alteredPeaksCategorized) 
+#' pathresults <- processPathways(callpaths, pathway_category = "GO",
+#' enrichcutoff = 2, adjpvalcutoff = 0.05)
+#' plotGREATenrich(pathresults, maintitle = "GREAT Enrichment Analysis",
+#' pathwaycateg = "GO_Molecular_Function")
+#'}
 #' @export
 plotGREATenrich <- function(input,
-                            title = "GREAT Enrichment Analysis",
+                            maintitle = "GREAT Enrichment Analysis",
                             pathwaycateg = NULL,
                             test = "Binom",
-                            numshow = 10) {
+                            numshow = 10,
+                            maintitlesize = "20px") {
+  
+
   variable = value = Experiment_specific = Reference_specific = Shared = c()
 
   if (is.null(pathwaycateg)) {
@@ -1541,7 +1543,9 @@ plotGREATenrich <- function(input,
 
   p <- highchart() %>%
     hc_chart(type = "heatmap") %>%
-    hc_title(text = title) %>%
+    hc_title(text = maintitle,
+             style = list(color = '#2E1717',fontSize=maintitlesize,
+                          fontWeight = 'bold')) %>%
     hc_xAxis(categories = c("Experiment-specific", "Shared", "Reference-specific")) %>%
     hc_yAxis(categories = theUniqueY) %>%
     hc_add_series(name = "matrix location, p-value",

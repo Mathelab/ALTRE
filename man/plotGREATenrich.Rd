@@ -8,13 +8,14 @@ the pathway in enrichment of both type-specific (increased or decreased
 log2fold change, low p-value) and shared (no change, higher p-value)
 regulatory regions is plotted.}
 \usage{
-plotGREATenrich(input, title = "GREAT Enrichment Analysis",
-  pathwaycateg = NULL, test = "Binom", numshow = 10)
+plotGREATenrich(input, maintitle = "GREAT Enrichment Analysis",
+  pathwaycateg = NULL, test = "Binom", numshow = 10,
+  maintitlesize = "20px")
 }
 \arguments{
 \item{input}{results from GREAT enrichment analysis}
 
-\item{title}{title of the heatmap}
+\item{maintitle}{main title (default, "GREAT Enrichment Analysis")}
 
 \item{pathwaycateg}{ontology, to see available ontologies in your input results (e.g. named
 GREATpathways, type getOntologies(GREATpathways)}
@@ -24,6 +25,8 @@ hypergeometric test results.  Default is "Binom"}
 
 \item{numshow}{number of top pathways (ranked according to p-value) of each type
 (expt, reference, shared) to show in the plot (default=10)}
+
+\item{maintitlesize}{main title size (default, 20px)}
 }
 \value{
 heatmap
@@ -61,13 +64,11 @@ categaltre_peaks <- categAltrePeaks(altre_peaks,
                              lfcshared = 1.2,
                              pvaltypespecific = 0.01,
                              pvalshared = 0.05)
-GREAToutput <- runGREAT(peaks = categaltre_peaks)
-GREATpathways <- processPathways(temp)
-names(GREATpathways$Sig_Pathways)
- plotGREATenrich(GREATpathways,
-                title = "GREAT Enrichment Analysis",
-                pathwaycateg ="GO_Molecular_Function")
+callpaths <- runGREAT(peaks = alteredPeaksCategorized) 
+pathresults <- processPathways(callpaths, pathway_category = "GO",
+enrichcutoff = 2, adjpvalcutoff = 0.05)
+plotGREATenrich(pathresults, maintitle = "GREAT Enrichment Analysis",
+pathwaycateg = "GO_Molecular_Function")
 }
-
 }
 
