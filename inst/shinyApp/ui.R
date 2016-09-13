@@ -530,12 +530,15 @@ body <- dashboardBody(
                 #title = "Volcano Plot",
                 dataTableOutput("table4")
               ),
+              HTML("<div class='col-sm-3' style='min-width:
+                   350px !important;'>"),
               box(
                 title = "Customize Plot",
                 width = NULL,
                 solidHeader = TRUE,
                 uiOutput("choosePalette4")
               ),
+              HTML("</div>"),
               infoBoxOutput("statusbox6", width = NULL),
               HTML("</div>")
               )
@@ -574,12 +577,15 @@ body <- dashboardBody(
                 width = NULL,
                 htmlOutput('vennplot')
               ),
+              HTML("<div class='col-sm-3' style='min-width:
+                   350px !important;'>"),
               box(
                 title = "Customize Plot",
                 width = NULL,
                 solidHeader = TRUE,
                 uiOutput("choosePalette5")
               ),
+              HTML("</div>"),
               infoBoxOutput("statusbox7", width = NULL),
               HTML("</div>")
               )

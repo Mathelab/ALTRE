@@ -324,17 +324,9 @@ shinyServer(function(input, output, session) {
   })
 
   output$volcano <- renderUI({
-    withProgress(message = 'In progress',
-                 detail = 'This may take a while...',
-                 value = 0,
-                 {
-                   setProgress(value = 0.5, detail = "Rendering Volcano Plot")
                    plotCountAnalysis(req(categAltreObj()),
                                     viewer = FALSE,
                                    palette = input$palette4)
-                   setProgress(value = 1, detail = "Done!")
-                   Sys.sleep(0.5)
-                 })
   })
 
   output$boxplotCounts <- highcharter::renderHighchart({
@@ -431,8 +423,9 @@ shinyServer(function(input, output, session) {
       infoBox(
         "Status",
         HTML(paste("Peaks Have Been Annotated.",
-                   "(If You Change the Parameters, Please Press Button Again.)",
                    "You Can Proceed to Step 4.",
+                   "(If You Change the Parameters,",
+                    "Please Press Button Again.)",
                    sep = "<br/>")),
         icon = icon("thumbs-up", lib = "glyphicon"),
         color = "green",
