@@ -33,11 +33,11 @@ To demonstrate the functionality of ALTRE, we have provided an example dataset (
 *Load Metadata*
 The metadata associated with data files to be analyzed in ALTRE is supplied as a CSV file. The software will automatically retrieve the file path of your input CSV so __it is important that all analysis files are in the same folder as your CSV file.__  
 
-After downlading all files in the example datasets in one folder, download the CSV at <https://raw.githubusercontent.com/mathelab/AltreDataRepo/master/DNAseEncodeExample.csv> and place it in the same folder.  Also, be sure to set your working directory in the R environment to point to the directory where you have placed your CSV file.
+After downlading all files in the example datasets in one folder, download the CSV at <https://raw.githubusercontent.com/mathelab/AltreDataRepo/master/DNaseEncodeExample.csv> and place it in the same folder.  Also, be sure to set your working directory in the R environment to point to the directory where you have placed your CSV file.
 
 ```{r}
 library(ALTRE)
-csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+csvfile <- loadCSVFile("DNaseEncodeExample.csv")
 csvfile
 ```
 
