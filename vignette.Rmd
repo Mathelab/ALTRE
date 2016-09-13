@@ -156,7 +156,7 @@ Once results have been obtained, there are a number of additional functions in A
 To compare resulting altered REs from these two methods, use the function *comparePeaksAltre* as follows:
 
 ```{r}
-comparePeaksAnalysisResults <- comparePeaksAltre(alteredPeaksCategorized, reference = "SAEC")
+comparePeaksAnalysisResults <- comparePeaksAltre(alteredPeaksCategorized)
 ```
 
 The function *plotallvenn()* takes the results from comparePeaksAltre and translates the table into Venn diagrams.
@@ -184,17 +184,17 @@ By default, the p-values will be adjusted by "bonferroni" and significant pathwa
 Note that this vignette only uses chr21, therefore the pathway analysis results presented may not be biolofically relevant.  
 
 ```{r, message = FALSE}
-callpaths <- suppressMessages(runGREAT(peaks=alteredPeaksCategorized))
+callpaths <- suppressMessages(runGREAT(peaks = alteredPeaksCategorized))
 pathresults <- processPathways(callpaths, pathway_category = "GO",
-	enrichcutoff = 2; adjpvalcutoff = 0.05))
+	enrichcutoff = 2, adjpvalcutoff = 0.05)
 ```
 
 
 The function *plotGREATenrich()* creates a heatmap plot of the analysis for all three RE types (Reference-specific, Experiment-specific, and Shared), with the color-coding corresponding to the significance of the pathway – the lighter the blue, the lower the p-value. 
 
 ```{r}
-plotGREATenrich(pathresults, ,title = "GREAT Enrichment Analysis",
-	pathwaycateg ="GO_Molecular_Function")
+plotGREATenrich(pathresults, title = "GREAT Enrichment Analysis",
+	pathwaycateg = "GO_Molecular_Function")
 ```
 
 **9. Writing output to files**
