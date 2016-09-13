@@ -426,7 +426,16 @@ plotGetCounts <- function(countsConsPeaks,
     ) %>%
     hc_colors(cols) %>%
     hc_tooltip(formatter = round) %>%
-    hc_exporting(enabled = TRUE)
+    hc_exporting(enabled = TRUE) %>%
+    hc_legend(
+      enabled = TRUE,
+      layout = "horizontal",
+      align = "center",
+      horizontalAlign = "middle",
+      verticalAlign = "top",
+      floating = FALSE,
+      maxHeight = 100,
+      y = 50)
   return(p)
 }
 
