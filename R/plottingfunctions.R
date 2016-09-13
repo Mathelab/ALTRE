@@ -1052,6 +1052,8 @@ plotDistCountAnalysis <-
 #' @param method pick a method, methods can be 'Intensity' or 'Peak'
 #' include quotes
 #' @param palette RColorBrewer palette to change graph colors
+#' @param maintitle main title (default generated from sample names)
+#' @param maintitlesize main title size (default, 20px)
 #' @return venn diagram
 #' @examples
 #' \dontrun{
@@ -1078,14 +1080,22 @@ plotDistCountAnalysis <-
 #'                                           lfcshared = 1.2,
 #'                                           pvaltypespecific = 0.01,
 #'                                           pvalshared = 0.05)
-#'plotCompareMethods(comparePeaksAnalysisResults)
+#' comparePeaksAnalysisResults <- comparePeaksAltre(alteredPeaksCategorized)
+#' plotCompareMethods(comparePeaksAnalysisResults)
 #'}
 
 plotCompareMethods <- function(analysisresultsmatrix,
                                region = "both",
                                method = "Intensity",
-                               palette = NULL) {
-  if (!is.null(palette)) {
+                               palette = NULL,
+                               maintitle="default",
+                               maintitlesize="20px") {
+  
+  
+    
+    analysisresultsmatrix = analysisresultsmatrix$analysisresultsmatrix
+    
+    if (!is.null(palette)) {
     cols <- RColorBrewer::brewer.pal(3, palette)
   }
   else{
@@ -1150,14 +1160,16 @@ plotCompareMethods <- function(analysisresultsmatrix,
 
   # this is a way to the name of the 'case'
   # from the analysisresults matrix
-
+    
+  if(maintitle=="default")
+  {maintitle = paste(region, method)}
+  
   p <- highchart() %>%
     hc_chart(type = "pie") %>%
     hc_title(
-      text = paste(region, method),
+      text = maintitle,
       style = list(color = '#2E1717',
-                   fontWeight = 'bold')
-    ) %>%
+                   fontWeight = 'bold', fontSize = maintitlesize)) %>%
     hc_plotOptions(series = list(showInLegend = TRUE)) %>%
     hc_legend(
       enabled = TRUE,
@@ -1201,6 +1213,7 @@ plotCompareMethods <- function(analysisresultsmatrix,
 #' place into a a analysisresults matrix by the analyzeanalysisresults function
 #' @param viewer whether the plot should be displayed in the RStudio viewer or
 #' in Shiny/Knittr
+#' @param maintitlesize main title size (default, 20px)
 #' @param palette RColorBrewer palette to change graph colors
 #' @examples
 #' \dontrun{
@@ -1227,14 +1240,16 @@ plotCompareMethods <- function(analysisresultsmatrix,
 #'                                           lfcshared = 1.2,
 #'                                           pvaltypespecific = 0.01,
 #'                                           pvalshared = 0.05)
+#' comparePeaksAnalysisResults <- comparePeaksAltre(alteredPeaksCategorized)
 #' plotCompareMethodsAll(comparePeaksAnalysisResults)
 #' }
 #' @export
 #'
-plotCompareMethodsAll <-
-  function(analysisresultsmatrix,
-           viewer = TRUE,
-           palette = NULL) {
+plotCompareMethodsAll <-function(analysisresultsmatrix,
+                                    viewer = TRUE,
+                                    palette = NULL,
+                                    maintitlesize="20px"
+                                 ) {
     if (!is.null(palette)) {
       cols <- RColorBrewer::brewer.pal(3, palette)
     }
@@ -1242,9 +1257,9 @@ plotCompareMethodsAll <-
       cols <- c("#00E5EE", "#C71585", "#000080")
     }
 
-    analysisresultsmatrix <- analysisresultsmatrix[[1]]
 
-    if (is.matrix(analysisresultsmatrix) ==
+
+    if (is.matrix(analysisresultsmatrix[[1]]) ==
         FALSE) {
       stop("The input is not a matrix!")
     }
@@ -1252,17 +1267,22 @@ plotCompareMethodsAll <-
     p1 <- plotCompareMethods(analysisresultsmatrix,
                              "TSS-proximal",
                              "Intensity",
-                             palette = palette)
+                             palette = palette,
+                             maintitlesize = maintitlesize)
     p2 <- plotCompareMethods(analysisresultsmatrix,
-                             "TSS-distal", "Intensity", palette = palette)
+                             "TSS-distal", "Intensity", palette = palette,  
+                             maintitlesize = maintitlesize)
     p3 <- plotCompareMethods(analysisresultsmatrix,
-                             "both", "Intensity", palette = palette)
+                             "both", "Intensity", palette = palette, 
+                             maintitlesize = maintitlesize)
     p4 <- plotCompareMethods(analysisresultsmatrix,
-                             "TSS-proximal", "Peak", palette = palette)
+                             "TSS-proximal", "Peak", palette = palette,
+                             maintitlesize = maintitlesize)
     p5 <- plotCompareMethods(analysisresultsmatrix,
-                             "TSS-distal", "Peak", palette = palette)
+                             "TSS-distal", "Peak", palette = palette,
+                             maintitlesize = maintitlesize)
     p6 <- plotCompareMethods(analysisresultsmatrix,
-                             "both", "Peak", palette = palette)
+                             "both", "Peak", palette = palette,  maintitlesize = maintitlesize)
 
     if (viewer == TRUE) {
       p <- htmltools::browsable(hw_grid(p1, p2, p3, p4, p5, p6, ncol = 3,

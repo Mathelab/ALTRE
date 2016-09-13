@@ -8,7 +8,8 @@ combined for both intensity-based peaks and for peaks identified by hotspot
 calling algorithms.  There is no return value. Six venn diagrams will be
 plotted}
 \usage{
-plotCompareMethodsAll(analysisresultsmatrix, viewer = TRUE, palette = NULL)
+plotCompareMethodsAll(analysisresultsmatrix, viewer = TRUE, palette = NULL,
+  maintitlesize = "20px")
 }
 \arguments{
 \item{analysisresultsmatrix}{analysisresults of countanalysis function
@@ -18,6 +19,8 @@ place into a a analysisresults matrix by the analyzeanalysisresults function}
 in Shiny/Knittr}
 
 \item{palette}{RColorBrewer palette to change graph colors}
+
+\item{maintitlesize}{main title size (default, 20px)}
 }
 \description{
 Plots venn diagrams for comparison of two methods of identifying altered
@@ -51,6 +54,7 @@ alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
                                           lfcshared = 1.2,
                                           pvaltypespecific = 0.01,
                                           pvalshared = 0.05)
+comparePeaksAnalysisResults <- comparePeaksAltre(alteredPeaksCategorized)
 plotCompareMethodsAll(comparePeaksAnalysisResults)
 }
 }
