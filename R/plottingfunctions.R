@@ -554,19 +554,28 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL) {
     #####################
     # trim the data
 
-    tssdistEdges <- tssdist[tssdist$padj > 4 & (abs(tssdist$log2FoldChange) > 4), ]
-    tssdistCenter <- tssdist[!(tssdist$padj > 4 & (abs(tssdist$log2FoldChange) > 4)), ]
+    cutoff_p <- 5
+    cutoff_fold <- 4
 
-    tssproxEdges <- tssprox[tssprox$padj > 4 & (abs(tssprox$log2FoldChange) > 4), ]
-    tssproxCenter <- tssprox[!(tssprox$padj > 4 & (abs(tssprox$log2FoldChange) > 4)), ]
+    tssdistEdges <- tssdist[tssdist$padj > cutoff_p &
+                              (abs(tssdist$log2FoldChange) > cutoff_fold), ]
+    tssdistCenter <- tssdist[!(tssdist$padj > cutoff_p &
+                                 (abs(tssdist$log2FoldChange) > cutoff_fold)), ]
+
+    tssproxEdges <- tssprox[tssprox$padj > cutoff_p &
+                              (abs(tssprox$log2FoldChange) > cutoff_fold), ]
+    tssproxCenter <- tssprox[!(tssprox$padj > cutoff_p &
+                                 (abs(tssprox$log2FoldChange) > cutoff_fold)), ]
 
     n1 <- dim(tssdistCenter)[1]
     n2 <- dim(tssproxCenter)[1]
 
-    idx1 <- sort(stats::rexp(min(1200,  3*(n1 %/% 4)), 2))
+    nsamp <- 1000
+
+    idx1 <- sort(stats::rexp(min(nsamp ,  3*(n1 %/% 4)), 2))
     idx1 <- unique(floor(n1 * (idx1 / max(idx1))))
 
-    idx2 <- sort(stats::rexp(min(1200,  3*(n2 %/% 4)), 2))
+    idx2 <- sort(stats::rexp(min(nsamp ,  3*(n2 %/% 4)), 2))
     idx2 <- unique(floor(n2 * (idx2 / max(idx2))))
 
     tssdistCenter <- tssdistCenter[idx1, ]
