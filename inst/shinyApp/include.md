@@ -21,7 +21,7 @@ The CSV file should contain the following four columns:
 3. sample name
 4. replicate number (a minimum of 2 replicates per sample is required)
 
-__NOTE:__ the column names for the CSV file should be "bamfiles", "peakfiles", "sample", and "replicate", in that order. An example CSV file can be accessed <a href="https://raw.githubusercontent.com/mathelab/AltreDataRepo/master/DNAseEncodeExample.csv" target="_blank">here</a> (right click save as).
+__NOTE:__ the column names for the CSV file should be "bamfiles", "peakfiles", "sample", and "replicate", in that order. An example CSV file can be accessed <a href="https://raw.githubusercontent.com/mathelab/AltreDataRepo/master/DNaseEncodeExample.csv" target="_blank">here</a> (right click save as).
 
 To test the package, we are providing a restricted subset of the data with one chromosome (i.e. chromosome 21). The data can be found on this <a href="http://mathelab.github.io/ALTREsampledata/" target="_blank">page</a>. To analyze the entire data containing all chromosomes, please use a *file download manager* to download the files from the links listed on the same page. Remember to include all files (alignments, peaks, CSV) in the same folder for analysis with ALTRE.
 
