@@ -64,7 +64,7 @@ categaltre_peaks <- categAltrePeaks(altre_peaks,
                              lfcshared = 1.2,
                              pvaltypespecific = 0.01,
                              pvalshared = 0.05)
-callpaths <- runGREAT(peaks = alteredPeaksCategorized) 
+callpaths <- runGREAT(peaks = alteredPeaksCategorized)
 pathresults <- processPathways(callpaths, pathway_category = "GO",
 enrichcutoff = 2, adjpvalcutoff = 0.05)
 plotGREATenrich(pathresults, maintitle = "GREAT Enrichment Analysis",
