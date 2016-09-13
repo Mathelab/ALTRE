@@ -542,19 +542,19 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL) {
     #####################
     # trim the data
 
-    tssdistEdges <- tssdist[tssdist$padj > 4 & (abs(tssdist$log2FoldChange) > 3.5), ]
-    tssdistCenter <- tssdist[!(tssdist$padj > 4 & (abs(tssdist$log2FoldChange) > 3.5)), ]
+    tssdistEdges <- tssdist[tssdist$padj > 4 & (abs(tssdist$log2FoldChange) > 4), ]
+    tssdistCenter <- tssdist[!(tssdist$padj > 4 & (abs(tssdist$log2FoldChange) > 4)), ]
 
-    tssproxEdges <- tssprox[tssprox$padj > 4 & (abs(tssprox$log2FoldChange) > 3.5), ]
-    tssproxCenter <- tssprox[!(tssprox$padj > 4 & (abs(tssprox$log2FoldChange) > 3.5)), ]
+    tssproxEdges <- tssprox[tssprox$padj > 4 & (abs(tssprox$log2FoldChange) > 4), ]
+    tssproxCenter <- tssprox[!(tssprox$padj > 4 & (abs(tssprox$log2FoldChange) > 4)), ]
 
     n1 <- dim(tssdistCenter)[1]
     n2 <- dim(tssproxCenter)[1]
 
-    idx1 <- sort(stats::rexp(min(1000,  3*(n1 %/% 4)), 2))
+    idx1 <- sort(stats::rexp(min(1200,  3*(n1 %/% 4)), 2))
     idx1 <- unique(floor(n1 * (idx1 / max(idx1))))
 
-    idx2 <- sort(stats::rexp(min(1000,  3*(n2 %/% 4)), 2))
+    idx2 <- sort(stats::rexp(min(1200,  3*(n2 %/% 4)), 2))
     idx2 <- unique(floor(n2 * (idx2 / max(idx2))))
 
     tssdistCenter <- tssdistCenter[idx1, ]
@@ -847,7 +847,8 @@ plotDistCountAnalysis <-
     p <- highchart() %>%
       hc_title(text = maintitle,
                style = list(color = '#2E1717',
-                            fontWeight = 'bold', fontSize=maintitlesize)) %>%
+                            fontWeight = 'bold',
+                            fontSize=maintitlesize)) %>%
       hc_plotOptions(
         boxplot = list(
           fillColor = '#ffffff',

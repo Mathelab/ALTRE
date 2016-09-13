@@ -323,7 +323,7 @@ body <- dashboardBody(
                   "Change the y-label of the left-hand plot",
                   "Number of REs"
                 ),
-                hr(), 
+                hr(),
                 textInput(
                   "combRightylabel",
                   "Change the y-label of the right-hand plot",
@@ -509,10 +509,7 @@ body <- dashboardBody(
                                  downloadButton("downloadBED",
                                                 strong("Download BED File")
                                  )
-                ),
-                hr(),
-                uiOutput("choosePalette4"),
-                hr()
+                )
               ),
               HTML("</div>"),
               HTML("<div class='col-sm-7' style='min-width:
@@ -532,6 +529,12 @@ body <- dashboardBody(
                 width = NULL,
                 #title = "Volcano Plot",
                 dataTableOutput("table4")
+              ),
+              box(
+                title = "Customize Plot",
+                width = NULL,
+                solidHeader = TRUE,
+                uiOutput("choosePalette4")
               ),
               infoBoxOutput("statusbox6", width = NULL),
               HTML("</div>")
@@ -556,16 +559,13 @@ body <- dashboardBody(
                 hr(),
                 actionButton("buttoncompare", strong("Compare Methods")),
                 hr(),
-                dataTableOutput("table5"),
+                dataTableOutput("table5")
                 # conditionalPanel("input.buttoncompare > 0",
                 #                  hr(),
                 #                  downloadButton("downloadCompareDT",
                 #                                 strong("Download Data Table")
                 #                  )
                 # ),
-                hr(),
-                uiOutput("choosePalette5"),
-                hr()
               ),
               HTML("</div>"),
               HTML("<div class='col-sm-7' style='min-width:
@@ -573,6 +573,12 @@ body <- dashboardBody(
               box(
                 width = NULL,
                 htmlOutput('vennplot')
+              ),
+              box(
+                title = "Customize Plot",
+                width = NULL,
+                solidHeader = TRUE,
+                uiOutput("choosePalette5")
               ),
               infoBoxOutput("statusbox7", width = NULL),
               HTML("</div>")
