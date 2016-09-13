@@ -318,9 +318,9 @@ shinyServer(function(input, output, session) {
   output$densityplot <- highcharter::renderHighchart({
     plotGetCounts(req(getCountsObj()),
                   palette = input$palette3,
-                  maintitle=input$countsPlotTitle,
-                  xlabel=input$countsxlabel,
-                  ylabel=input$countsylabel)
+                  maintitle = input$countsPlotTitle,
+                  xlabel = input$countsxlabel,
+                  ylabel = input$countsylabel)
   })
 
   output$volcano <- renderUI({
@@ -363,7 +363,9 @@ shinyServer(function(input, output, session) {
     else if (!is.null(input$file)) {
     infoBox(
       "Status",
-      HTML(paste("File Loading Complete", "You Can Proceed to Step 2.", sep = "<br/>")),
+      HTML(paste("File Loading Complete",
+                 "You Can Proceed to Step 2.",
+                 sep = "<br/>")),
       icon = icon("thumbs-up", lib = "glyphicon"),
       color = "green", fill = TRUE)
     }
@@ -505,7 +507,7 @@ shinyServer(function(input, output, session) {
     if (input$buttoncat == 0) {
       infoBox(
         "Status",
-        "Categorize Altered Regions Button Not Clicked Yet!",
+        "Categorize Regions Button Not Clicked Yet!",
         icon = icon("flag", lib = "glyphicon"),
         color = "aqua",
         fill = TRUE

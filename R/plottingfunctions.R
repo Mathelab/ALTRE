@@ -23,7 +23,7 @@
 #' @export
 #'
 plotConsensusPeaks <- function(samplepeaks,
-                               palette = "Set1",
+                               palette = NULL,
                                xlabel = as.character(samplepeaks$consPeaksStats$PeakType),
                                ylabel = "Peak Counts",
                                xlabelsize = '15px',
@@ -33,8 +33,11 @@ plotConsensusPeaks <- function(samplepeaks,
                                maintitlesize = "20px",
                                subtitlesize = "15px") {
 
-
-  cols <- RColorBrewer::brewer.pal(3, palette)
+  if ( !is.null(palette) ) {
+    cols <- RColorBrewer::brewer.pal(3, palette)
+  } else {
+    cols <- RColorBrewer::brewer.pal(3, "Set1")
+  }
   CellType <- NULL
   #without this R CMD check throws no visible binding for global variable error
   consPeaksStats <- samplepeaks$consPeaksStats
@@ -146,7 +149,7 @@ plotConsensusPeaks <- function(samplepeaks,
 #'
 plotCombineAnnotatePeaks <- function(conspeaks,
                                      viewer = TRUE,
-                                     palette = "Set1",
+                                     palette = NULL,
                                      rightmaintitle = "Mean Length of REs",
                                      leftmaintitle = "Number of REs",
                                      xlabels = c("Before merging","After merging"),
@@ -156,9 +159,13 @@ plotCombineAnnotatePeaks <- function(conspeaks,
                                      leftylabelsize = "15px",
                                      rightylabelsize = "15px",
                                      leftmaintitlesize = "20px",
-                                     rightmaintitlesize = "20px"
-) {
-  cols <- RColorBrewer::brewer.pal(3, palette)
+                                     rightmaintitlesize = "20px") {
+  if ( !is.null(palette) ) {
+    cols <- RColorBrewer::brewer.pal(4, palette)
+  } else {
+    cols <- RColorBrewer::brewer.pal(4, "Set1")
+  }
+
   CellType <- NULL
   #R CMD check throws no visible binding for global variable error
 
@@ -355,7 +362,7 @@ plotCombineAnnotatePeaks <- function(conspeaks,
 #' @export
 
 plotGetCounts <- function(countsConsPeaks,
-            palette = "Set1",
+            palette = NULL,
             xlabel="Log2 Normalized Read Counts",
             ylabel="Density",
             xlabelsize="15px",
@@ -368,7 +375,12 @@ plotGetCounts <- function(countsConsPeaks,
   value = Reference_specific = Shared = Experiment_specific = c()
   #set to null forR CMD Check error: Undefined global functions/variables
 
-  cols <- RColorBrewer::brewer.pal(4, palette)
+  if ( !is.null(palette) ) {
+    cols <- RColorBrewer::brewer.pal(4, palette)
+  } else {
+    cols <- RColorBrewer::brewer.pal(4, "Set1")
+  }
+
 
   mydf <- countsConsPeaks$regioncountsforplot
   #  varstack <- suppressMessages(reshape2::melt(mydf))
@@ -1014,7 +1026,7 @@ plotCompareMethods <- function(analysisresultsmatrix,
   # this is a way to the name of the 'case'
   # from the analysisresults matrix
 
-  if(maintitle=="default")
+  if (maintitle == "default")
   {maintitle = paste(region, method)}
 
   p <- highchart() %>%
@@ -1022,7 +1034,8 @@ plotCompareMethods <- function(analysisresultsmatrix,
     hc_title(
       text = maintitle,
       style = list(color = '#2E1717',
-                   fontWeight = 'bold', fontSize = maintitlesize)) %>%
+                   fontWeight = 'bold',
+                   fontSize = maintitlesize)) %>%
     hc_plotOptions(series = list(showInLegend = TRUE)) %>%
     hc_legend(
       enabled = TRUE,

@@ -5,7 +5,7 @@
 \title{Given the output from getCounts, plot a density plot of
 log2 RPKM values of regulation regions}
 \usage{
-plotGetCounts(countsConsPeaks, palette = "Set1",
+plotGetCounts(countsConsPeaks, palette = NULL,
   xlabel = "Log2 Normalized Read Counts", ylabel = "Density",
   xlabelsize = "15px", ylabelsize = "15px",
   maintitle = "Density of log2 read counts\\n(normalized by library and region sizes",

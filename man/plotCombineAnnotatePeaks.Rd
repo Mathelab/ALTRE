@@ -7,7 +7,7 @@ plot a barplot showing number of peaks before/after merging or length of
 peaks before/after merging
 (only works if peaks were merged)}
 \usage{
-plotCombineAnnotatePeaks(conspeaks, viewer = TRUE, palette = "Set1",
+plotCombineAnnotatePeaks(conspeaks, viewer = TRUE, palette = NULL,
   rightmaintitle = "Mean Length of REs", leftmaintitle = "Number of REs",
   xlabels = c("Before merging", "After merging"),
   leftylabel = "Number of REs", rightylabel = "Mean Length of REs",

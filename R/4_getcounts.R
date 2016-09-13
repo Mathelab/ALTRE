@@ -78,8 +78,11 @@ getCounts <- function(annotpeaks, sampleinfo, reference, chrom = NULL) {
   }
   # take the log2 so that it is a normalized distribution
   myrpkmlog2 <- log2(as.matrix(myrpkm) + 1)
-  colnames(myrpkmlog2) <- unlist(lapply(paste(sampleinfo$sample, sampleinfo$replicate,
-	sep="_"),as.character))
+  colnames(myrpkmlog2) <- unlist(lapply(paste(sampleinfo$sample,
+                                              sampleinfo$replicate,
+                                              sep = "_"),
+                                        as.character)
+                                 )
 
   #########################################
   # Create stats matrix originaldata is created ~ 10 lines lines above
