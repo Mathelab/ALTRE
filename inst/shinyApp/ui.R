@@ -375,6 +375,32 @@ body <- dashboardBody(
                 #title = "Density Plot",
                 highcharter::highchartOutput('densityplot')
               ),
+              HTML("<div class='col-sm-3' style='min-width:
+                   350px !important;'>"),
+              box(
+                title = "Customize Plot",
+                width = NULL,
+                solidHeader = TRUE,
+                textInput(
+                  "countsPlotTitle",
+                  "Change the main title of the plot",
+                  "Density of log2 read counts (normalized by library and region sizes"
+                ),
+                hr(),
+                textInput(
+                  "countsPlotxlabel",
+                  "Change the x-axis label of the plot",
+                  "Log2 Normalized Read Counts"
+                ),
+                hr(),
+                textInput(
+                  "countsPlotylabel",
+                  "Change the y-axis label of the plot",
+                  "Density"
+                ),
+                hr()
+              ),
+              HTML("</div>"),
               infoBoxOutput("statusbox4", width = NULL),
               HTML("</div>")
               )

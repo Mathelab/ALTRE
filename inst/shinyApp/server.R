@@ -317,7 +317,10 @@ shinyServer(function(input, output, session) {
 
   output$densityplot <- highcharter::renderHighchart({
     plotGetCounts(req(getCountsObj()),
-                  palette = input$palette3)
+                  palette = input$palette3,
+                  maintitle=input$countsPlotTitle,
+                  xlabel=input$countsxlabel,
+                  ylabel=input$countsylabel)
   })
 
   output$volcano <- renderUI({
