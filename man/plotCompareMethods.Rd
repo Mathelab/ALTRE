@@ -10,7 +10,8 @@ presence or by differential counts.  The type of regulatory region
 (intensity or peak) must be specified.}
 \usage{
 plotCompareMethods(analysisresultsmatrix, region = "both",
-  method = "Intensity", palette = NULL)
+  method = "Intensity", palette = NULL, maintitle = "default",
+  maintitlesize = "20px")
 }
 \arguments{
 \item{analysisresultsmatrix}{analysisresults of Intensity analysis place into
@@ -23,6 +24,10 @@ or 'both' -- INCLUDE quotes}
 include quotes}
 
 \item{palette}{RColorBrewer palette to change graph colors}
+
+\item{maintitle}{main title (default generated from sample names)}
+
+\item{maintitlesize}{main title size (default, 20px)}
 }
 \value{
 venn diagram
@@ -60,6 +65,7 @@ alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
                                           lfcshared = 1.2,
                                           pvaltypespecific = 0.01,
                                           pvalshared = 0.05)
+comparePeaksAnalysisResults <- comparePeaksAltre(alteredPeaksCategorized)
 plotCompareMethods(comparePeaksAnalysisResults)
 }
 }
