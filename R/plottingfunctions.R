@@ -1265,7 +1265,6 @@ plotCompareMethodsAll <-
 #'      hypergeometric test results.  Default is "Binom"
 #' @param numshow number of top pathways (ranked according to p-value) of each type
 #' 	(expt, reference, shared) to show in the plot (default=10)
-
 #' @return heatmap
 #'
 #' @examples
@@ -1481,19 +1480,17 @@ plotGREATenrich <- function(input,
   dataforHeatmap <- as.data.frame(cbind(
     as.numeric(theXAxis),
     as.numeric(theYAxis),
-    round(as.numeric(meltedheatmapdata$value)
-          , 3)
+    as.numeric(meltedheatmapdata$value)    
+#as.numeric(format(meltedheatmapdata$value,scientific=T,digits=2))
   ))
 
   formattedHeatmapData <- list_parse2(dataforHeatmap)
 
   fntltp <- JS(
     "function(){
-    return this.series.xAxis.categories[this.point.x] + ' ~ ' +
-    this.series.yAxis.categories[this.point.y] + ': <b>' +
-    Highcharts.numberFormat(this.point.value, 2)+'</b>';
-    ; }"
-  )
+    return 'pval='+this.point.value;
+    }"
+   )
 
   p <- highchart() %>%
     hc_chart(type = "heatmap") %>%
@@ -1502,14 +1499,14 @@ plotGREATenrich <- function(input,
     hc_yAxis(categories = theUniqueY) %>%
     hc_add_series(name = "matrix location, p-value",
                   data = formattedHeatmapData) %>%
-    hc_tooltip(formatter = fntltp) %>%
-    hc_colorAxis(stops = color_stops(2, colors = c("#5097D1", "#FFFFFF")),
-                 min = 0,
-                 max = 1)    %>%
+    hc_tooltip(formatter = fntltp, valueDecimals = 2) %>%
+    hc_colorAxis(stops = color_stops(2, colors = c("#5097D1", "#DEEFF5")),
+                 min = min(as.numeric(dataforHeatmap[,3]),na.rm=T),
+                 max = max(as.numeric(dataforHeatmap[,3]),na.rm=T))    %>%
     hc_legend(title = "p-value",
               enabled = TRUE) %>%
     hc_exporting(enabled = TRUE)
-  #create final formatting                 min: 0,max: 1,
+  #create final formatting  
   return(p)
   } # end plotGREATenrich
 
