@@ -816,6 +816,10 @@ plotCountAnalysisTemp <-
 #' categAltrePeaks()
 #' @param counts output generated from getCounts()
 #' @param palette RColorBrewer palette to change graph colors
+#' @param ylabel label for y-axis (default, "Observations")
+#' @param ylabelsize size of ylabel (default, 15px)
+#' @param maintitle main title (default, "Distribution of Normalized Counts")
+#' @param maintitlesize main title size (default, 20px)
 #' @return a highcharter object
 #'
 #' @examples
@@ -848,7 +852,7 @@ plotCountAnalysisTemp <-
 #' @export
 #'
 plotDistCountAnalysis <-
-  function(analysisresults, counts, palette = NULL) {
+  function(analysisresults, counts, palette = NULL, ylabel="Observations", ylabelsize="15px", maintitle="Distribution of Normalized Counts", maintitlesize="20px") {
     altrecateg <- altrecategplot <- REaltrecategplot <- c()
     #Make sure to names things are from the user-entered sample names
     reference <- analysisresults$reference
@@ -992,9 +996,9 @@ plotDistCountAnalysis <-
   )
 
     p <- highchart() %>%
-      hc_title(text = "Distribution of Normalized Counts",
+      hc_title(text = maintitle,
                style = list(color = '#2E1717',
-                            fontWeight = 'bold')) %>%
+                            fontWeight = 'bold', fontSize=maintitlesize)) %>%
       hc_plotOptions(
         boxplot = list(
           fillColor = '#ffffff',
@@ -1025,7 +1029,7 @@ plotDistCountAnalysis <-
                     fillColor = cols[4],
                     name = reflabel,
                     type = "boxplot") %>%
-      hc_yAxis(title = list(text = "Observations"),
+      hc_yAxis(title = list(text = ylabel, style=list(fontSize=ylabelsize)),
                labels = list(format = "{value}")) %>%
       hc_xAxis(categories = categ, title = "Experiment No.") %>%
       hc_tooltip(valueDecimals = 2) %>%

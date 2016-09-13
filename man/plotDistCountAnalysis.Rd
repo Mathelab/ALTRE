@@ -5,7 +5,9 @@
 \title{Creates a boxplot to see the distribution of read counts in type-specific and
 shared TSS-proximal and TSS-distal regions.}
 \usage{
-plotDistCountAnalysis(analysisresults, counts, palette = NULL)
+plotDistCountAnalysis(analysisresults, counts, palette = NULL,
+  ylabel = "Observations", ylabelsize = "15px",
+  maintitle = "Distribution of Normalized Counts", maintitlesize = "20px")
 }
 \arguments{
 \item{analysisresults}{output generated from countanalysis() then
@@ -14,6 +16,14 @@ categAltrePeaks()}
 \item{counts}{output generated from getCounts()}
 
 \item{palette}{RColorBrewer palette to change graph colors}
+
+\item{ylabel}{label for y-axis (default, "Observations")}
+
+\item{ylabelsize}{size of ylabel (default, 15px)}
+
+\item{maintitle}{main title (default, "Distribution of Normalized Counts")}
+
+\item{maintitlesize}{main title size (default, 20px)}
 }
 \value{
 a highcharter object
