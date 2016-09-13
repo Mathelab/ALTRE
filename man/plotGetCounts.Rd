@@ -5,12 +5,29 @@
 \title{Given the output from getCounts, plot a density plot of
 log2 RPKM values of regulation regions}
 \usage{
-plotGetCounts(countsConsPeaks, palette = "Set1")
+plotGetCounts(countsConsPeaks, palette = "Set1",
+  xlabel = "Log2 Normalized Read Counts", ylabel = "Density",
+  xlabelsize = "15px", ylabelsize = "15px",
+  maintitle = "Density of log2 read counts\\n(normalized by library and region sizes",
+  maintitlesize = "20px")
 }
 \arguments{
 \item{countsConsPeaks}{output generated from getCounts}
 
 \item{palette}{RColorBrewer palette to change graph colors}
+
+\item{xlabel}{label for x-axis (default, "log2 normalized read counts")}
+
+\item{ylabel}{label for y-axis (default, "Density")}
+
+\item{xlabelsize}{size of xlabel (default, 15px)}
+
+\item{ylabelsize}{size of ylabel (default, 15px)}
+
+\item{maintitle}{main title (default, "Density of log2 read counts
+(normalized by library and region sizes)")}
+
+\item{maintitlesize}{main title size (default, 20px)}
 }
 \value{
 a highcharter object

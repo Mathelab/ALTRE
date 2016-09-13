@@ -324,6 +324,13 @@ plotCombineAnnotatePeaks <- function(conspeaks,
 #'
 #' @param countsConsPeaks output generated from getCounts
 #' @param palette RColorBrewer palette to change graph colors
+#' @param xlabel label for x-axis (default, "log2 normalized read counts")
+#' @param ylabel label for y-axis (default, "Density")
+#' @param xlabelsize size of xlabel (default, 15px)
+#' @param ylabelsize size of ylabel (default, 15px)
+#' @param maintitle main title (default, "Density of log2 read counts
+#'      (normalized by library and region sizes)")
+#' @param maintitlesize main title size (default, 20px)
 #'
 #' @return a highcharter object
 #'
@@ -347,7 +354,15 @@ plotCombineAnnotatePeaks <- function(conspeaks,
 #' plotGetCounts(consensusPeaksCounts)}
 #' @export
 
-plotGetCounts <- function(countsConsPeaks, palette = "Set1") {
+plotGetCounts <- function(countsConsPeaks,
+            palette = "Set1",
+            xlabel="Log2 Normalized Read Counts",
+            ylabel="Density",
+            xlabelsize="15px",
+            ylabelsize="15px",
+            maintitle="Density of log2 read counts\n(normalized by library and region sizes",
+            maintitlesize="20px"
+            ) {
   region <- NULL
   variable <- NULL
   value = Reference_specific = Shared = Experiment_specific = c()
@@ -388,13 +403,12 @@ plotGetCounts <- function(countsConsPeaks, palette = "Set1") {
     name = paste(mysamps[1], "TSS-distal")
   ) %>%
     hc_title(
-      text = "Density of log2 read counts
-      (normalized by library and region sizes)",
-      style = list(color = '#2E1717',
+      text = maintitle,
+      style = list(color = '#2E1717',fontSize=maintitlesize,
                    fontWeight = 'bold')
     ) %>%
-    hc_yAxis(title = "density") %>%
-    hc_xAxis(title = "log2 read counts") %>%
+    hc_yAxis(title = list(text=ylabel,style=list(fontSize=ylabelsize))) %>%
+    hc_xAxis(title = list(text = xlabel,style=list(fontSize=xlabelsize))) %>%
     hc_add_series_density(
       stats::density(samp1prox$value),
       area = TRUE,
