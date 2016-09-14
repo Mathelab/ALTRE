@@ -84,10 +84,10 @@ plotConsensusPeaks <- function(samplepeaks,
       ),
       type = "column"
     ) %>%
-    hc_yAxis(title = list(text = ylabel,style= list(fontSize=ylabelsize)),
+    hc_yAxis(title = list(text = ylabel,style = list(fontSize = ylabelsize)),
              labels = list(format = "{value}")) %>%
     hc_xAxis(categories = xlabel,
-	labels = list(style=list(fontSize=xlabelsize))) %>%
+	labels = list(style = list(fontSize = xlabelsize))) %>%
     hc_legend(
       enabled = TRUE,
       layout = "horizontal",
@@ -1223,34 +1223,32 @@ plotCompareMethodsAll <- function(analysisresultsmatrix,
 #'
 #' @examples
 #' \dontrun{
-#' csvfile <- file.path(dir="yourfilepath", 'sampleinfo.csv')
-#' sampleinfo <- loadCSVFile(csvfile)
-#' samplePeaks <- loadBedFiles(sampleinfo)
-#' consPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
-#' plotConsensusPeaks(samplepeaks = consPeaks)
+#' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+#' samplePeaks <- loadBedFiles(csvfile)
+#' consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
 #' TSSannot <- getTSS()
-#' consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
+#' consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
 #'                                           TSS = TSSannot,
 #'                                           merge = TRUE,
 #'                                           regionspecific = TRUE,
 #'                                           distancefromTSSdist = 1500,
 #'                                           distancefromTSSprox = 1000)
-#' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
-#'                               sampleinfo = sampleinfo,
+#' consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
 #'                               reference = 'SAEC',
+#'                               sampleinfo = csvfile,
 #'                               chrom = 'chr21')
-#' altre_peaks <- countanalysis(counts=counts_consPeaks,
+#' alteredPeaks <- countanalysis(counts=consensusPeaksCounts,
 #'                              pval=0.01,
 #'                              lfcvalue=1)
-#' categaltre_peaks <- categAltrePeaks(altre_peaks,
+#' alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
 #'                              lfctypespecific = 1.5,
 #'                              lfcshared = 1.2,
 #'                              pvaltypespecific = 0.01,
 #'                              pvalshared = 0.05)
-#' callpaths <- runGREAT(peaks = alteredPeaksCategorized)
-#' pathresults <- processPathways(callpaths, pathway_category = "GO",
+#' callPaths <- runGREAT(peaks = alteredPeaksCategorized)
+#' pathResults <- processPathways(callPaths, pathway_category = "GO",
 #' enrichcutoff = 2, adjpvalcutoff = 0.05)
-#' plotGREATenrich(pathresults, maintitle = "GREAT Enrichment Analysis",
+#' plotGREATenrich(pathResults, maintitle = "GREAT Enrichment Analysis",
 #' pathwaycateg = "GO_Molecular_Function")
 #'}
 #' @export
@@ -1450,7 +1448,7 @@ plotGREATenrich <- function(input,
   p <- highchart() %>%
     hc_chart(type = "heatmap") %>%
     hc_title(text = maintitle,
-             style = list(color = '#2E1717',fontSize=maintitlesize,
+             style = list(color = '#2E1717',fontSize = maintitlesize,
                           fontWeight = 'bold')) %>%
     hc_xAxis(categories = c("Experiment-specific", "Shared", "Reference-specific")) %>%
     hc_yAxis(categories = theUniqueY) %>%
@@ -1461,7 +1459,9 @@ plotGREATenrich <- function(input,
                  min = min(as.numeric(dataforHeatmap[ , 3]), na.rm = T),
                  max = max(as.numeric(dataforHeatmap[ , 3]), na.rm = T))    %>%
     hc_legend(title = "p-value",
-              enabled = TRUE) %>%
+              enabled = TRUE,
+              layout = "vertical",
+              align = "right") %>%
     hc_exporting(enabled = TRUE)
   #create final formatting
   return(p)
