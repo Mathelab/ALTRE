@@ -406,7 +406,8 @@ plotGetCounts <- function(countsConsPeaks,
 
   round <- JS(
       "function() { return '<b>'+'log2 read count' +'</b>:'+
-    Highcharts.numberFormat(this.x, 2) + ', <b>'+'density' +'</b>:' + Highcharts.numberFormat(this.y, 2); }"
+    Highcharts.numberFormat(this.x, 2) + ', <b>'+'density' +'</b>:' +
+      Highcharts.numberFormat(this.y, 2); }"
   )
 
   p <- hchart(
@@ -416,11 +417,14 @@ plotGetCounts <- function(countsConsPeaks,
   ) %>%
     hc_title(
       text = maintitle,
-      style = list(color = '#2E1717',fontSize=maintitlesize,
+      style = list(color = '#2E1717',
+                   fontSize = maintitlesize,
                    fontWeight = 'bold')
     ) %>%
-    hc_yAxis(title = list(text=ylabel,style=list(fontSize=ylabelsize))) %>%
-    hc_xAxis(title = list(text = xlabel,style=list(fontSize=xlabelsize))) %>%
+    hc_yAxis(title = list(text = ylabel,
+                          style = list(fontSize = ylabelsize))) %>%
+    hc_xAxis(title = list(text = xlabel,
+                          style = list(fontSize = xlabelsize))) %>%
     hc_add_series_density(
       stats::density(samp1prox$value),
       area = TRUE,
