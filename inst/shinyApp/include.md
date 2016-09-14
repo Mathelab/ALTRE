@@ -27,7 +27,7 @@ To test the package, we are providing a restricted subset of the data with one c
 
 ### Notes on Plots and Processed Data
 
-All plots can be downloaded at a high resolution in different formats, including PDF, JPEG, SVG, and PNG.  Within the Shiny ap, users can control the names of the x-axis label, y-axis label, and main title.  Users can also choose different color schemes.  If users wish to control the size of the x-axis/y-axis labels and titles, they would need to use the command line.
+All plots can be downloaded at a high resolution in PDF, JPEG, SVG, or PNG.  Within the Shiny app, users can control the names of the x-axis label, y-axis label, and main title.  Users can also choose different color schemes.  If users wish to control the size of the x-axis/y-axis labels and titles, they would need to use the command line.
 
 Throughout the workflow, users can download processed data at the major steps, including after annotating peaks (step 3), after defining altered regions (step 6), and after pathway analysis (step 8).
 

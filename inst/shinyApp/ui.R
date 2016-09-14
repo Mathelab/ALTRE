@@ -149,7 +149,8 @@ body <- dashboardBody(
                           each replicate and in their merged consensus.")
                   ),
                 tags$p(" Note: You can save the plots by clicking on the right mouse button
-                  and selecting 'save image as'"),
+                  and selecting 'save image as', or by clicking on the menu at the top right
+                  of the plot"),
                 hr(),
                 actionButton("buttonmerge",
                              strong("Load Files then Merge Replicates")),
