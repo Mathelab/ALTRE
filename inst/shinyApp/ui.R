@@ -383,7 +383,7 @@ body <- dashboardBody(
                 textInput(
                   "countsPlotTitle",
                   "Change the main title of the plot",
-                  "Density of log2 read counts (normalized by library and region sizes"
+                  "Density of log2 read counts (normalized by library and region sizes)"
                 ),
                 hr(),
                 textInput(
@@ -466,6 +466,7 @@ body <- dashboardBody(
                   for more details."),
                 hr(),
                 actionButton("buttoncat", strong("Categorize Altered Regions")),
+                HTML('<span style="color: #FD3335">(Please Wait! Plot takes ~1 minute to render!)</span>'),
                 hr(),
                 h4("Select parameters that define cell-type specific regulatory regions"),
                 sliderInput(
@@ -563,7 +564,6 @@ body <- dashboardBody(
                 hr(),
                 dataTableOutput("table5"),
                 conditionalPanel("input.buttoncompare > 0",
-                                 hr(),
                                  downloadButton("downloadCompareDT",
                                                 strong("Download Data Table")
                                  )

@@ -6,8 +6,9 @@
 shared TSS-proximal and TSS-distal regions.}
 \usage{
 plotDistCountAnalysis(analysisresults, counts, palette = NULL,
-  ylabel = "Observations", ylabelsize = "15px",
-  maintitle = "Distribution of Normalized Counts", maintitlesize = "20px")
+  xlabelsize = "15px", ylabel = "Observations", ylabelsize = "15px",
+  maintitle = "Distribution of Normalized Counts", maintitlesize = "20px",
+  xlabel = NULL)
 }
 \arguments{
 \item{analysisresults}{output generated from countanalysis() then
