@@ -159,7 +159,7 @@ To compare resulting altered REs from these two methods, use the function *compa
 comparePeaksAnalysisResults <- comparePeaksAltre(alteredPeaksCategorized)
 ```
 
-The function *plotallvenn()* takes the results from comparePeaksAltre and translates the table into Venn diagrams.
+The function *plotCompareMethodsAll(()* takes the results from comparePeaksAltre and translates the table into pie charts.
 
 
 ```{r}
