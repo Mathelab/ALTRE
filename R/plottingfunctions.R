@@ -910,15 +910,11 @@ plotDistCountAnalysis <-
     }
 
 
-#' Plots a venn diagram that compares altered regions as determined by peak
+#' Plots a pie that compares altered regions as determined by peak
 #' presence or by #' differential counts.  The type of regulatory region
 #' (TSS-proximal, TSS-distal, or both) and type of peak comparison
 #' (intensity or peak) must be specified.
 #'
-#' Plots a venn diagram that compares altered regions as determined by peak
-#' presence or by differential counts.  The type of regulatory region
-#' (TSS-proximal, TSS-distal, or both) and type of peak comparison
-#' (intensity or peak) must be specified.
 #' @param analysisresultsmatrix analysisresults of Intensity analysis place into
 #' analysisresults matrix by the analyzeanalysisresults function
 #' @param region pick a region, regions can be 'TSS-distal', 'TSS-proximal',
@@ -928,7 +924,7 @@ plotDistCountAnalysis <-
 #' @param palette RColorBrewer palette to change graph colors
 #' @param maintitle main title (default generated from sample names)
 #' @param maintitlesize main title size (default, 20px)
-#' @return venn diagram
+#' @return pie chart
 #' @examples
 #' \dontrun{
 #' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
@@ -1079,11 +1075,11 @@ plotCompareMethods <- function(analysisresultsmatrix,
   return(p)
 }
 
-#' Plots venn diagrams for comparison of two methods of identifying altered
-#' regulatory regions Makes venn diagrams for TSS-proximal, TSS-distal, and
+#' Plots pie charts for comparison of two methods of identifying altered
+#' regulatory regions.  Makes pie charts for TSS-proximal, TSS-distal, and
 #' combined for both intensity-based peaks and for peaks identified by hotspot
-#' calling algorithms.  There is no return value. Six venn diagrams will be
-#' plotted
+#' calling algorithms.  There is no return value. Six pie charts swill be
+#' plotted.
 #' @param analysisresultsmatrix analysisresults of countanalysis function
 #' place into a a analysisresults matrix by the analyzeanalysisresults function
 #' @param viewer whether the plot should be displayed in the RStudio viewer or
