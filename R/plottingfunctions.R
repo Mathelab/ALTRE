@@ -718,10 +718,10 @@ plotDistCountAnalysis <-
   function(analysisresults,
            counts,
            palette = NULL,
-           ylabel="Observations",
-           ylabelsize="15px",
-           maintitle="Distribution of Normalized Counts",
-           maintitlesize="20px") {
+           ylabel = "Observations",
+           ylabelsize = "15px",
+           maintitle = "Distribution of Normalized Counts",
+           maintitlesize = "20px") {
     altrecateg <- altrecategplot <- REaltrecategplot <- c()
     #Make sure to names things are from the user-entered sample names
     reference <- analysisresults$reference
@@ -869,7 +869,7 @@ plotDistCountAnalysis <-
       hc_title(text = maintitle,
                style = list(color = '#2E1717',
                             fontWeight = 'bold',
-                            fontSize=maintitlesize)) %>%
+                            fontSize = maintitlesize)) %>%
       hc_plotOptions(
         boxplot = list(
           fillColor = '#ffffff',
@@ -900,7 +900,8 @@ plotDistCountAnalysis <-
                     fillColor = cols[4],
                     name = reflabel,
                     type = "boxplot") %>%
-      hc_yAxis(title = list(text = ylabel, style=list(fontSize=ylabelsize)),
+      hc_yAxis(title = list(text = ylabel,
+                            style = list(fontSize = ylabelsize)),
                labels = list(format = "{value}")) %>%
       hc_xAxis(categories = categ, title = "Experiment No.") %>%
       hc_tooltip(valueDecimals = 2) %>%
@@ -958,12 +959,12 @@ plotCompareMethods <- function(analysisresultsmatrix,
                                region = "both",
                                method = "Intensity",
                                palette = NULL,
-                               maintitle="default",
-                               maintitlesize="20px") {
+                               maintitle = NULL,
+                               maintitlesize = "20px") {
 
 
 
-    analysisresultsmatrix = analysisresultsmatrix$analysisresultsmatrix
+    analysisresultsmatrix <- analysisresultsmatrix$analysisresultsmatrix
 
     if (!is.null(palette)) {
     cols <- RColorBrewer::brewer.pal(3, palette)
@@ -1002,17 +1003,17 @@ plotCompareMethods <- function(analysisresultsmatrix,
   # identifies the correct numbers from the
   # analysisresults matrix based on the
   # method of region
-  string <- paste(
-    rownames(analysisresultsmatrix)[1],
-    rownames(analysisresultsmatrix)[2],
-    rownames(analysisresultsmatrix)[3],
-    rownames(analysisresultsmatrix)[4],
-    rownames(analysisresultsmatrix)[5],
-    rownames(analysisresultsmatrix)[6],
-    rownames(analysisresultsmatrix)[7],
-    rownames(analysisresultsmatrix)[8],
-    rownames(analysisresultsmatrix)[9]
-  )
+  # string <- paste(
+  #   rownames(analysisresultsmatrix)[1],
+  #   rownames(analysisresultsmatrix)[2],
+  #   rownames(analysisresultsmatrix)[3],
+  #   rownames(analysisresultsmatrix)[4],
+  #   rownames(analysisresultsmatrix)[5],
+  #   rownames(analysisresultsmatrix)[6],
+  #   rownames(analysisresultsmatrix)[7],
+  #   rownames(analysisresultsmatrix)[8],
+  #   rownames(analysisresultsmatrix)[9]
+  # )
 
   #stringsplit <- strsplit(string, " ")
   #uniquestringsplit <- unique(stringsplit[[1]])
@@ -1031,13 +1032,16 @@ plotCompareMethods <- function(analysisresultsmatrix,
   # this is a way to the name of the 'case'
   # from the analysisresults matrix
 
-  if (maintitle == "default")
-  {maintitle = paste(region, method)}
+  if (is.null(maintitle)) {
+    maintitle <- paste(region, method)
+  } else {
+    mtitle <- maintitle
+    }
 
   p <- highchart() %>%
     hc_chart(type = "pie") %>%
     hc_title(
-      text = maintitle,
+      text = mtitle,
       style = list(color = '#2E1717',
                    fontWeight = 'bold',
                    fontSize = maintitlesize)) %>%
@@ -1052,8 +1056,9 @@ plotCompareMethods <- function(analysisresultsmatrix,
       x = 0,
       y = 16
     ) %>%
-    hc_add_series(data = list(
-      list(
+    hc_add_series(
+      data = list(
+        list(
         y = case,
         name = casename,
         dataLabels = FALSE
@@ -1069,7 +1074,8 @@ plotCompareMethods <- function(analysisresultsmatrix,
         dataLabels = FALSE
       )
     ),
-    name = paste(region, method)) %>%
+    name = paste(region, method)
+    ) %>%
     hc_colors(cols)  %>%
     hc_exporting(enabled = TRUE)
   return(p)
@@ -1084,8 +1090,15 @@ plotCompareMethods <- function(analysisresultsmatrix,
 #' place into a a analysisresults matrix by the analyzeanalysisresults function
 #' @param viewer whether the plot should be displayed in the RStudio viewer or
 #' in Shiny/Knittr
-#' @param maintitlesize main title size (default, 20px)
 #' @param palette RColorBrewer palette to change graph colors
+#' @param title11 title of the first graph in the first row
+#' @param title12 title of the second graph in the first row
+#' @param title13 title of the third graph in the first row
+#' @param title21 title of the first graph in the second row
+#' @param title22 title of the second graph in the second row
+#' @param title23 title of the third graph in the second row
+#' @param maintitlesize main title size (default, 20px)
+#'
 #' @examples
 #' \dontrun{
 #' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
@@ -1117,9 +1130,15 @@ plotCompareMethods <- function(analysisresultsmatrix,
 #' @export
 #'
 plotCompareMethodsAll <- function(analysisresultsmatrix,
-                                    viewer = TRUE,
-                                    palette = NULL,
-                                    maintitlesize="20px"
+                                  viewer = TRUE,
+                                  palette = NULL,
+                                  title11 = NULL,
+                                  title12 = NULL,
+                                  title13 = NULL,
+                                  title21 = NULL,
+                                  title22 = NULL,
+                                  title23 = NULL,
+                                  maintitlesize = "20px"
                                  ) {
     if (!is.null(palette)) {
       cols <- RColorBrewer::brewer.pal(3, palette)
@@ -1130,8 +1149,7 @@ plotCompareMethodsAll <- function(analysisresultsmatrix,
 
 
 
-    if (is.matrix(analysisresultsmatrix[[1]]) ==
-        FALSE) {
+    if (is.matrix(analysisresultsmatrix[[1]]) == FALSE) {
       stop("The input is not a matrix!")
     }
 
@@ -1139,31 +1157,37 @@ plotCompareMethodsAll <- function(analysisresultsmatrix,
                              "TSS-proximal",
                              "Intensity",
                              palette = palette,
+                             maintitle = title11,
                              maintitlesize = maintitlesize)
     p2 <- plotCompareMethods(analysisresultsmatrix,
                              "TSS-distal",
                              "Intensity",
                              palette = palette,
+                             maintitle = title12,
                              maintitlesize = maintitlesize)
     p3 <- plotCompareMethods(analysisresultsmatrix,
                              "both",
                              "Intensity",
                              palette = palette,
+                             maintitle = title13,
                              maintitlesize = maintitlesize)
     p4 <- plotCompareMethods(analysisresultsmatrix,
                              "TSS-proximal",
                              "Peak",
                              palette = palette,
+                             maintitle = title21,
                              maintitlesize = maintitlesize)
     p5 <- plotCompareMethods(analysisresultsmatrix,
                              "TSS-distal",
                              "Peak",
                              palette = palette,
+                             maintitle = title22,
                              maintitlesize = maintitlesize)
     p6 <- plotCompareMethods(analysisresultsmatrix,
                              "both",
                              "Peak",
                              palette = palette,
+                             maintitle = title23,
                              maintitlesize = maintitlesize)
 
     if (viewer == TRUE) {

@@ -568,6 +568,48 @@ body <- dashboardBody(
                 #                                 strong("Download Data Table")
                 #                  )
                 # ),
+              ),              box(
+                title = "Customize Pie Plot",
+                width = NULL,
+                solidHeader = TRUE,
+                uiOutput("choosePalette5"),
+                hr(),
+                textInput(
+                  "title11",
+                  "Change the title of the first plot",
+                  "TSS-proximal/Intensity"
+                ),
+                hr(),
+                textInput(
+                  "title12",
+                  "Change the title of the second plot",
+                  "TSS-distal/Intensity"
+                ),
+                hr(),
+                textInput(
+                  "title13",
+                  "Change the title of the third plot",
+                  "All/Intensity"
+                ),
+                hr(),
+                textInput(
+                  "title21",
+                  "Change the title of the fourth plot",
+                  "TSS-proximal/Peak"
+                ),
+                hr(),
+                textInput(
+                  "title22",
+                  "Change the title of the fifth plot",
+                  "TSS-distal/Peak"
+                ),
+                hr(),
+                textInput(
+                  "title23",
+                  "Change the title of the sixth plot",
+                  "All/Peak"
+                ),
+                hr()
               ),
               HTML("</div>"),
               HTML("<div class='col-sm-7' style='min-width:
@@ -576,15 +618,6 @@ body <- dashboardBody(
                 width = NULL,
                 htmlOutput('pieplot')
               ),
-              HTML("<div class='col-sm-3' style='min-width:
-                   350px !important;'>"),
-              box(
-                title = "Customize Pie Plot",
-                width = NULL,
-                solidHeader = TRUE,
-                uiOutput("choosePalette5")
-              ),
-              HTML("</div>"),
               infoBoxOutput("statusbox7", width = NULL),
               HTML("</div>")
               )
@@ -597,7 +630,6 @@ body <- dashboardBody(
 		            width = NULL,
 		            title = strong("GREAT Pathways"),
 		            h5("This step does the following: "),
-
 		            tags$ul(
 			      tags$li("Perform pathway analysis with GREAT"),
 		              tags$li("Determines which pathways are overrepresented in

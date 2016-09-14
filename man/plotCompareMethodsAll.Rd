@@ -2,14 +2,15 @@
 % Please edit documentation in R/plottingfunctions.R
 \name{plotCompareMethodsAll}
 \alias{plotCompareMethodsAll}
-\title{Plots venn diagrams for comparison of two methods of identifying altered
-regulatory regions Makes venn diagrams for TSS-proximal, TSS-distal, and
+\title{Plots pie charts for comparison of two methods of identifying altered
+regulatory regions.  Makes pie charts for TSS-proximal, TSS-distal, and
 combined for both intensity-based peaks and for peaks identified by hotspot
-calling algorithms.  There is no return value. Six venn diagrams will be
-plotted}
+calling algorithms.  There is no return value. Six pie charts swill be
+plotted.}
 \usage{
 plotCompareMethodsAll(analysisresultsmatrix, viewer = TRUE, palette = NULL,
-  maintitlesize = "20px")
+  title11 = NULL, title12 = NULL, title13 = NULL, title21 = NULL,
+  title22 = NULL, title23 = NULL, maintitlesize = "20px")
 }
 \arguments{
 \item{analysisresultsmatrix}{analysisresults of countanalysis function
@@ -20,14 +21,26 @@ in Shiny/Knittr}
 
 \item{palette}{RColorBrewer palette to change graph colors}
 
+\item{title11}{title of the first graph in the first row}
+
+\item{title12}{title of the second graph in the first row}
+
+\item{title13}{title of the third graph in the first row}
+
+\item{title21}{title of the first graph in the second row}
+
+\item{title22}{title of the second graph in the second row}
+
+\item{title23}{title of the third graph in the second row}
+
 \item{maintitlesize}{main title size (default, 20px)}
 }
 \description{
-Plots venn diagrams for comparison of two methods of identifying altered
-regulatory regions Makes venn diagrams for TSS-proximal, TSS-distal, and
+Plots pie charts for comparison of two methods of identifying altered
+regulatory regions.  Makes pie charts for TSS-proximal, TSS-distal, and
 combined for both intensity-based peaks and for peaks identified by hotspot
-calling algorithms.  There is no return value. Six venn diagrams will be
-plotted
+calling algorithms.  There is no return value. Six pie charts swill be
+plotted.
 }
 \examples{
 \dontrun{

@@ -330,7 +330,13 @@ shinyServer(function(input, output, session) {
   output$pieplot <- renderUI({
     plotCompareMethodsAll(req(comparePeaksObj()),
                           viewer = FALSE,
-                          palette = input$palette5)
+                          palette = input$palette5,
+                          title11 = input$title11,
+                          title12 = input$title12,
+                          title13 = input$title13,
+                          title21 = input$title21,
+                          title22 = input$title22,
+                          title23 = input$title23)
   })
 
   output$heatplotGREAT <- highcharter::renderHighchart({

@@ -2,13 +2,13 @@
 % Please edit documentation in R/plottingfunctions.R
 \name{plotCompareMethods}
 \alias{plotCompareMethods}
-\title{Plots a venn diagram that compares altered regions as determined by peak
+\title{Plots a pie that compares altered regions as determined by peak
 presence or by #' differential counts.  The type of regulatory region
 (TSS-proximal, TSS-distal, or both) and type of peak comparison
 (intensity or peak) must be specified.}
 \usage{
 plotCompareMethods(analysisresultsmatrix, region = "both",
-  method = "Intensity", palette = NULL, maintitle = "default",
+  method = "Intensity", palette = NULL, maintitle = NULL,
   maintitlesize = "20px")
 }
 \arguments{
@@ -28,11 +28,11 @@ include quotes}
 \item{maintitlesize}{main title size (default, 20px)}
 }
 \value{
-venn diagram
+pie chart
 }
 \description{
-Plots a venn diagram that compares altered regions as determined by peak
-presence or by differential counts.  The type of regulatory region
+Plots a pie that compares altered regions as determined by peak
+presence or by #' differential counts.  The type of regulatory region
 (TSS-proximal, TSS-distal, or both) and type of peak comparison
 (intensity or peak) must be specified.
 }
