@@ -387,13 +387,13 @@ body <- dashboardBody(
                 ),
                 hr(),
                 textInput(
-                  "countsPlotxlabel",
+                  "countsxlabel",
                   "Change the x-axis label of the plot",
                   "Log2 Normalized Read Counts"
                 ),
                 hr(),
                 textInput(
-                  "countsPlotylabel",
+                  "countsylabel",
                   "Change the y-axis label of the plot",
                   "Density"
                 ),

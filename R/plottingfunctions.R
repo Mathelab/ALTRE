@@ -24,7 +24,7 @@
 #'
 plotConsensusPeaks <- function(samplepeaks,
                                palette = NULL,
-                               xlabel = as.character(samplepeaks$consPeaksStats$PeakType),
+                               xlabel = NULL,
                                ylabel = "Peak Counts",
                                xlabelsize = '15px',
                                ylabelsize ='15px',
@@ -55,11 +55,19 @@ plotConsensusPeaks <- function(samplepeaks,
   col1 <- cols[1]
   col2 <- cols[2]
 
-  p <- highchart(height = 700) %>%
+  if ( is.null(xlabel) ) {
+  xLabel <- as.character(samplepeaks$consPeaksStats$PeakType)
+  } else {
+    xLabel <- xlabel
+  }
+
+  p <- highchart() %>%
     hc_title(text = maintitle,
-             style = list(color = '#2E1717',fontSize = maintitlesize,
+             style = list(color = '#2E1717',
+                          fontSize = maintitlesize,
                           fontWeight = 'bold')) %>%
-    hc_subtitle(text = subtitle, style = list(fontSize = subtitlesize)) %>%
+    hc_subtitle(text = subtitle,
+                style = list(fontSize = subtitlesize)) %>%
     hc_add_series(
       color = col1,
       data = plottingData[[1]]$Count,
@@ -84,9 +92,10 @@ plotConsensusPeaks <- function(samplepeaks,
       ),
       type = "column"
     ) %>%
-    hc_yAxis(title = list(text = ylabel,style = list(fontSize = ylabelsize)),
+    hc_yAxis(title = list(text = ylabel,
+                          style = list(fontSize = ylabelsize)),
              labels = list(format = "{value}")) %>%
-    hc_xAxis(categories = xlabel,
+    hc_xAxis(categories = xLabel,
 	            labels = list(style = list(fontSize = xlabelsize))) %>%
     hc_legend(
       enabled = TRUE,
@@ -288,11 +297,12 @@ plotCombineAnnotatePeaks <- function(conspeaks,
         )
       ) %>%
       hc_yAxis(
-        title = list(text = rightylabel,style=list(fontSize=rightylabelsize)),
+        title = list(text = rightylabel,
+                     style = list(fontSize = rightylabelsize)),
         labels = list(format = "{value}")
       ) %>%
       hc_xAxis(categories = xlabels,
-         labels=list(style=list(fontSize=xlabelsize))) %>%
+               labels = list(style = list(fontSize = xlabelsize))) %>%
       hc_legend(
         enabled = TRUE,
         layout = "horizontal",
@@ -363,12 +373,12 @@ plotCombineAnnotatePeaks <- function(conspeaks,
 
 plotGetCounts <- function(countsConsPeaks,
             palette = NULL,
-            xlabel="Log2 Normalized Read Counts",
-            ylabel="Density",
-            xlabelsize="15px",
-            ylabelsize="15px",
-            maintitle="Density of log2 read counts\n(normalized by library and region sizes",
-            maintitlesize="20px"
+            xlabel = "Log2 Normalized Read Counts",
+            ylabel = "Density",
+            xlabelsize = "15px",
+            ylabelsize = "15px",
+            maintitle = "Density of log2 read counts\n(normalized by library and region sizes)",
+            maintitlesize = "20px"
             ) {
   region <- NULL
   variable <- NULL

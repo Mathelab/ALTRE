@@ -8,7 +8,7 @@ log2 RPKM values of regulation regions}
 plotGetCounts(countsConsPeaks, palette = NULL,
   xlabel = "Log2 Normalized Read Counts", ylabel = "Density",
   xlabelsize = "15px", ylabelsize = "15px",
-  maintitle = "Density of log2 read counts\\n(normalized by library and region sizes",
+  maintitle = "Density of log2 read counts\\n(normalized by library and region sizes)",
   maintitlesize = "20px")
 }
 \arguments{

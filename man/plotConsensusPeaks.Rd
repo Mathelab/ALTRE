@@ -5,8 +5,7 @@
 \title{Given the output from getConsensusPeaks, generate a barplot
 of countstatistics}
 \usage{
-plotConsensusPeaks(samplepeaks, palette = NULL,
-  xlabel = as.character(samplepeaks$consPeaksStats$PeakType),
+plotConsensusPeaks(samplepeaks, palette = NULL, xlabel = NULL,
   ylabel = "Peak Counts", xlabelsize = "15px", ylabelsize = "15px",
   maintitle = "Peak Counts by Cell Type",
   subtitle = "For bioreplicates and their merged consensus track",
