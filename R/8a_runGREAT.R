@@ -76,7 +76,7 @@ runGREAT <- function(peaks,
 
   mygreat = list()
   for (i in c("ExperimentSpecificByIntensity", "ReferenceSpecificByIntensity", "Shared")) {
-    print(paste("Running", i))
+    #print(paste("Running", i))
     mypeaks <- as.data.frame(peaks$analysisresults)[
       which(peaks$analysisresults$REaltrecateg == i),
       c("chr", "start", "stop")]
@@ -226,7 +226,7 @@ processPathways <- function(GREATpath,
       else {
         stop("test should be 'Both', 'Binom', or 'Hyper'")
       }
-      print(length(keepers))
+      #print(length(keepers))
       output[[i]] <- output[[i]][keepers, ]
       output[[i]] <- output[[i]][base::order(output[[i]]$Binom_adj_PValue), ]
       stats$NumSig[which(stats$Pathway == i)] <-
