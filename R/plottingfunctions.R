@@ -736,7 +736,7 @@ plotDistCountAnalysis <-
            counts,
            palette = NULL,
            xlabelsize = "15px",
-           ylabel = "Observations",
+           ylabel = "log2(FPKM)",
            ylabelsize = "15px",
            maintitle = "Distribution of Normalized Counts",
            maintitlesize = "20px",
