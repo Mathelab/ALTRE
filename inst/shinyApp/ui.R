@@ -1,7 +1,7 @@
 # App ui
 
 headerbar <- dashboardHeader(
-  title = h4("ALTRE Analysis Workflow"),
+  title = "ALTRE Workflow",
   titleWidth = 270,
   dropdownMenu(
     type = "notifications",

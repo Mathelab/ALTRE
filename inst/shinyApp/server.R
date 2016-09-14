@@ -110,11 +110,6 @@ shinyServer(function(input, output, session) {
   })
 
   categAltreObj <- eventReactive(input$buttoncat, {
-    withProgress(message = 'In progress',
-                 detail = 'This may take a while...',
-                 value = 0,
-                 {
-                   setProgress(value = 0.2, detail = "categorizing altered peaks")
                    categAltreOut <-
                      categAltrePeaks(
                        analysisresults = req(getAlteredObj()),
@@ -123,9 +118,6 @@ shinyServer(function(input, output, session) {
                        pvaltypespecific = input$pvalueSpecific,
                        pvalshared = input$pvalueShared
                      )
-                   setProgress(value = 1, detail = "Done!")
-                   Sys.sleep(0.5)
-                 })
     return(categAltreOut)
   })
 
