@@ -87,7 +87,7 @@ plotConsensusPeaks <- function(samplepeaks,
     hc_yAxis(title = list(text = ylabel,style = list(fontSize = ylabelsize)),
              labels = list(format = "{value}")) %>%
     hc_xAxis(categories = xlabel,
-	labels = list(style = list(fontSize = xlabelsize))) %>%
+	            labels = list(style = list(fontSize = xlabelsize))) %>%
     hc_legend(
       enabled = TRUE,
       layout = "horizontal",
@@ -722,10 +722,12 @@ plotDistCountAnalysis <-
   function(analysisresults,
            counts,
            palette = NULL,
+           xlabelsize = "15px",
            ylabel = "Observations",
            ylabelsize = "15px",
            maintitle = "Distribution of Normalized Counts",
-           maintitlesize = "20px") {
+           maintitlesize = "20px",
+           xlabel = NULL) {
     altrecateg <- altrecategplot <- REaltrecategplot <- c()
     #Make sure to names things are from the user-entered sample names
     reference <- analysisresults$reference
@@ -855,10 +857,13 @@ plotDistCountAnalysis <-
                                  distal4_5num_samp2,
                                  proximal4_5num_samp2)
 
+  if (is.null(xlabel)) {
   categ <- c(paste0(mysamps[1],'-specific (by peaks) TSS-distal'),
 	paste0(mysamps[1],'-specific (by peaks) TSS-proximal'),
         paste0(mysamps[2],'-specific (by peaks) TSS-distal'),
 	paste0(mysamps[2],'-specific (by peaks) TSS-proximal'))
+  }
+  else(categ <- xlabel)
 
   explabel <- paste0(nonreference, "-specific (by intensity)")
   reflabel <- paste0(reference, "-specific (by intensity)")
@@ -907,7 +912,8 @@ plotDistCountAnalysis <-
       hc_yAxis(title = list(text = ylabel,
                             style = list(fontSize = ylabelsize)),
                labels = list(format = "{value}")) %>%
-      hc_xAxis(categories = categ, title = "Experiment No.") %>%
+      hc_xAxis(categories = categ,
+               labels = list(style = list(fontSize = xlabelsize))) %>%
       hc_tooltip(valueDecimals = 2) %>%
       hc_colors(cols) %>%
       hc_exporting(enabled = TRUE)
