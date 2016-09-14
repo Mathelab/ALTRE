@@ -493,7 +493,7 @@ shinyServer(function(input, output, session) {
     else if (input$buttondefine > 0 && !is.null(getAlteredObj())) {
       infoBox(
         "Status",
-        HTML(paste("Altered Regions Have Been Identified",
+        HTML(paste("Altered Regions Have Been Identified.",
                    "You Can Proceed to Step 6.",
                    sep = "<br/>")),
         icon = icon("thumbs-up", lib = "glyphicon"),
@@ -529,7 +529,7 @@ shinyServer(function(input, output, session) {
     else if (input$buttoncat > 0 && !is.null(categAltreObj())) {
       infoBox(
         "Status",
-        HTML(paste("Altered Regions Have Been Categorized",
+        HTML(paste("Altered Regions Have Been Categorized.",
                    "You Can Proceed to Step 7.",
                    sep = "<br/>")),
         icon = icon("thumbs-up", lib = "glyphicon"),

@@ -46,7 +46,7 @@ investigation
 }
 \examples{
 \dontrun{
-runGREAT(peaks=categaltre_peaks)
+runGREAT(peaks = categaltre_peaks)
 }
 }
 

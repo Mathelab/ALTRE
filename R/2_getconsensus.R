@@ -110,6 +110,7 @@ getConsensusPeaks <- function(samplepeaks, minreps) {
                                  samp2))
   colnames(dfstats) <- c("PeakType", names(conspeaks_stats))
 
-  return(list(consPeaks = conspeaks, consPeaksStats = data.frame(dfstats)))
+  return(list(consPeaks = conspeaks,
+              consPeaksStats = data.frame(dfstats)))
 }
 

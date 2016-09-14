@@ -2,28 +2,33 @@
 #' @param csvPath csvPath
 #' @export
 loadCSVFile <- function(csvPath) {
+
     stopifnot(is.character(csvPath))
+
     if (!file.exists(csvPath)) {
         stop("CSV input file does not exist")
     }
     csvfile <- readr::read_csv(csvPath,
-                        col_types = readr::cols_only(bamfiles = readr::col_character(),
-                                              peakfiles = readr::col_character(),
-                                              sample = readr::col_character(),
-                                              replicate = readr::col_character()))
+                        col_types = readr::cols_only(
+                          bamfiles = readr::col_character(),
+                          peakfiles = readr::col_character(),
+                          sample = readr::col_character(),
+                          replicate = readr::col_character()
+                          )
+                        )
 
-   if(ncol(csvfile)!=4) {
-        return(NULL)}
-    else {
-    	csvfile <- csvfile[order(csvfile$replicate, csvfile$sample), ]
+    if (ncol(csvfile) != 4) {
+      return(NULL)
+    } else {
+      csvfile <- csvfile[order(csvfile$replicate, csvfile$sample),]
 
-	#If the current directory is used (no path given), the get the directory first:
-	if(length(grep("/",csvPath))+length(grep("\\*",csvPath)) == 0) {
-		csvPath=paste0(getwd(),"/",csvPath)
-	}
-    	csvfile$datapath = rep(gsub("(.*)\\/(.*)","\\1",csvPath),nrow(csvfile))
-    	return(csvfile)
-   }
+      #If the current directory is used (no path given), then get the directory first:
+      if (length(grep("/", csvPath)) + length(grep("\\*", csvPath)) == 0) {
+        csvPath <- paste0(getwd(), "/", csvPath)
+      }
+      csvfile$datapath <- rep(gsub("(.*)\\/(.*)", "\\1", csvPath), nrow(csvfile))
+      return(csvfile)
+    }
 }
 
 #' Read in BED Files (internal function)

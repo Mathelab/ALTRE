@@ -37,7 +37,8 @@
 #' }
 #' @export
 
-countanalysis <- function(counts, pval = 0.01,
+countanalysis <- function(counts,
+                          pval = 0.01,
                           lfcvalue = 1) {
   countsdds <- counts[[1]]
   errortest <- try(DESeq2::counts(countsdds),

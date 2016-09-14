@@ -42,18 +42,18 @@
 #' @export
 #'
 comparePeaksAltre <- function(analysisresults,
-	lfctypespecific=1.5,
-	lfcshared=1.2,
-	pvaltypespecific=0.01,
-	pvalshared=0.05){
+                              lfctypespecific = 1.5,
+                              lfcshared = 1.2,
+                              pvaltypespecific = 0.01,
+                              pvalshared = 0.05){
 
   analysisresults_firstitem <- analysisresults[[1]]
 
   if (!is.data.frame(analysisresults_firstitem)) {
     stop("Make sure the output of the analysis is from categAltrePeaks() function")
   }
-  
-  #Make sure to names things are from the user-entered sample names 
+
+  #Make sure to names things are from the user-entered sample names
   allSamples <- colnames(analysisresults_firstitem)[11:12]
   reference <- analysisresults$reference
   analysisresultsmatrix <-  matrix(nrow = 9, ncol = 2)
@@ -202,7 +202,8 @@ comparePeaksAltre <- function(analysisresults,
                          any(is.na(x) == FALSE)
                        })))
 
-  listToReturn <- list(analysisresultsmatrix=analysisresultsmatrix, reference=reference)
+  listToReturn <- list(analysisresultsmatrix = analysisresultsmatrix,
+                       reference = reference)
   return(listToReturn)
 }
 

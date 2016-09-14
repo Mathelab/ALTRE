@@ -36,7 +36,11 @@
 #' }
 #' @export
 
-getCounts <- function(annotpeaks, sampleinfo, reference, chrom = NULL) {
+getCounts <- function(annotpeaks,
+                      sampleinfo,
+                      reference,
+                      chrom = NULL) {
+
   bamfileslist <- loadBamFiles(sampleinfo)
 
   if (is.null(chrom) == FALSE) {

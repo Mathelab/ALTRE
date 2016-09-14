@@ -18,7 +18,7 @@
 #'	(default is "GO")
 #' @examples
 #' \dontrun{
-#' runGREAT(peaks=categaltre_peaks)
+#' runGREAT(peaks = categaltre_peaks)
 #' }
 #' @return ways --
 #' pathways also annotated with additional information
@@ -55,13 +55,13 @@ runGREAT <- function(peaks,
   mygreat = list()
   for (i in c("ExperimentSpecificByIntensity", "ReferenceSpecificByIntensity", "Shared")) {
     print(paste("Running", i))
-    mypeaks = as.data.frame(peaks$analysisresults)[which(peaks$analysisresults$REaltrecateg ==
-                                                           i),
-                                                   c("chr", "start", "stop")]
-    ilabel = gsub(" ", "_", i)
+    mypeaks <- as.data.frame(peaks$analysisresults)[
+      which(peaks$analysisresults$REaltrecateg == i),
+      c("chr", "start", "stop")]
+    ilabel <- gsub(" ", "_", i)
     # Run GREAT
     if (rule == "basalPlusExt") {
-      mygreat[[ilabel]] = rGREAT::submitGreatJob(
+      mygreat[[ilabel]] <- rGREAT::submitGreatJob(
         mypeaks,
         species = species,
         adv_span = adv_span,
@@ -72,7 +72,7 @@ runGREAT <- function(peaks,
       )
     }
     if (rule == "twoClosest") {
-      mygreat[[ilabel]] = rGREAT::submitGreatJob(
+      mygreat[[ilabel]] <- rGREAT::submitGreatJob(
         mypeaks,
         species = species,
         rule = "twoClosest",
@@ -81,7 +81,7 @@ runGREAT <- function(peaks,
       )
     }
     if (rule == "oneClosest") {
-      mygreat[[ilabel]] = rGREAT::submitGreatJob(
+      mygreat[[ilabel]] <- rGREAT::submitGreatJob(
         mypeaks,
         species = species,
         rule = "oneClosest",
@@ -130,18 +130,18 @@ processPathways <- function(GREATpath,
       )
     }
 
-    output = rGREAT::getEnrichmentTables(GREATpath[[job]], category = pathway_category)
-    names(output) = gsub(" ", "_", names(output))
-    stats = data.frame(Pathway = names(output),
+    output <- rGREAT::getEnrichmentTables(GREATpath[[job]], category = pathway_category)
+    names(output) <- gsub(" ", "_", names(output))
+    stats <- data.frame(Pathway = names(output),
                        NumSig = rep(NA, length(names(output))))
 
     for (i in names(output)) {
-      output[[i]]$Binom_adj_PValue = stats::p.adjust(output[[i]]$"Binom_Raw_PValue",
+      output[[i]]$Binom_adj_PValue <- stats::p.adjust(output[[i]]$"Binom_Raw_PValue",
                                                      method = adjustby)
-      output[[i]]$Hyper_adj_PValue = stats::p.adjust(output[[i]]$"Hyper_Raw_PValue",
+      output[[i]]$Hyper_adj_PValue <- stats::p.adjust(output[[i]]$"Hyper_Raw_PValue",
                                                      method = adjustby)
       if (test == "Both") {
-        keepers = base::Reduce(intersect, list(
+        keepers <- base::Reduce(intersect, list(
           which(output[[i]]$Binom_Fold_Enrichment > enrichcutoff),
           which(output[[i]]$Hyper_Fold_Enrichment >
                   enrichcutoff),
@@ -152,14 +152,15 @@ processPathways <- function(GREATpath,
         ))
       }
       else if (test == "Binom") {
-        keepers = base::Reduce(intersect, list(
-          which(output[[i]]$Binom_Fold_Enrichment > enrichcutoff),
-          which(output[[i]]$Binom_adj_PValue <=
-                  adjpvalcutoff)
-        ))
+        keepers <- base::Reduce(intersect,
+                                list(
+                                  which(output[[i]]$Binom_Fold_Enrichment > enrichcutoff),
+                                  which(output[[i]]$Binom_adj_PValue <= adjpvalcutoff)
+                                  )
+                                )
       }
       else if (test == "Hyper") {
-        keepers = base::Reduce(intersect, list(
+        keepers <- base::Reduce(intersect, list(
           which(output[[i]]$Hyper_Fold_Enrichment > enrichcutoff),
           which(output[[i]]$Hyper_adj_PValue <=
                   adjpvalcutoff)
@@ -169,12 +170,12 @@ processPathways <- function(GREATpath,
         stop("test should be 'Both', 'Binom', or 'Hyper'")
       }
       print(length(keepers))
-      output[[i]] = output[[i]][keepers, ]
-      output[[i]] = output[[i]][base::order(output[[i]]$Binom_adj_PValue), ]
-      stats$NumSig[which(stats$Pathway == i)] =
+      output[[i]] <- output[[i]][keepers, ]
+      output[[i]] <- output[[i]][base::order(output[[i]]$Binom_adj_PValue), ]
+      stats$NumSig[which(stats$Pathway == i)] <-
         length(which(output[[i]]$Binom_adj_PValue <= adjpvalcutoff))
     }
-    finaloutput[[job]] = list(Sig_Pathways = output, stats = stats)
+    finaloutput[[job]] <- list(Sig_Pathways = output, stats = stats)
     } # end looping through each GREAT job
   return(finaloutput)
 } # end function

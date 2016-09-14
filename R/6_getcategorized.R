@@ -42,10 +42,10 @@
 #'
 #' @export
  categAltrePeaks <- function(analysisresults,
- 	lfctypespecific = 1.5,
- 	lfcshared = 1.2,
- 	pvaltypespecific = 0.01,
- 	pvalshared = 0.05){
+                             lfctypespecific = 1.5,
+                           	 lfcshared = 1.2,
+                           	 pvaltypespecific = 0.01,
+                           	 pvalshared = 0.05){
 
     #Make sure to names things are from the user-entered sample names
     reference <- analysisresults[[2]]
@@ -87,7 +87,8 @@
    REaltrecategplot[which(is.na(analysisresults$padj))]=NA
    REaltrecateg[which(is.na(analysisresults$padj))]=NA
 
-   if (!all.equal(sum(table(REaltrecateg)), nrow(analysisresults[which(!is.na(analysisresults$padj)),]))) {
+   if (!all.equal(sum(table(REaltrecateg)),
+                  nrow(analysisresults[which(!is.na(analysisresults$padj)),]))) {
      stop("Categorization failed, some REs are not categorized")
    }
 
@@ -131,7 +132,9 @@
      )))
    )
 
-    listToReturn <- list(analysisresults = analysisresults, stats = stats, reference=reference)
+    listToReturn <- list(analysisresults = analysisresults,
+                         stats = stats,
+                         reference = reference)
 
    return(listToReturn)
 } # end function
