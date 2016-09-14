@@ -139,7 +139,7 @@ alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
                                     lfcshared = 1.2,
                                     pvaltypespecific = 0.01,
                                     pvalshared = 0.05)
-plotCountAnalysis2(alteredPeaksCategorized)
+plotCountAnalysis(alteredPeaksCategorized)
 ```
 
 REs with large, positive log2fold changes and small p-values are more open in the lung cancer cell type, and therefore, their activity is associated with the cancer phenotype. REs with large, negative log2fold changes and small p-values are more open in the normal lung cell type, and may therefore be associated with tumor suppressive properties. REs with minimal log2fold change and high p-values are equally open in both cell types, and therefore, their activity is more likely to contribute to the house-keeping functions required in every cell.
@@ -183,8 +183,14 @@ By default, the p-values will be adjusted by "bonferroni" and significant pathwa
 
 Note that this vignette only uses chr21, therefore the pathway analysis results presented may not be biolofically relevant.  
 
-```{r, message = FALSE}
-callpaths <- suppressMessages(runGREAT(peaks = alteredPeaksCategorized))
+```{r, eval = FALSE}
+callpaths <- runGREAT(peaks = alteredPeaksCategorized)
+pathresults <- processPathways(callpaths, pathway_category = "GO",
+	enrichcutoff = 2, adjpvalcutoff = 0.05)
+```
+
+```{r, message = FALSE, results = FALSE, echo = FALSE}
+captured <- capture.output(callpaths <- runGREAT(peaks = alteredPeaksCategorized))
 pathresults <- processPathways(callpaths, pathway_category = "GO",
 	enrichcutoff = 2, adjpvalcutoff = 0.05)
 ```
