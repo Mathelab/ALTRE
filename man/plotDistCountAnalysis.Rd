@@ -18,6 +18,8 @@ categAltrePeaks()}
 
 \item{palette}{RColorBrewer palette to change graph colors}
 
+\item{xlabelsize}{size of xlabel (default, 15px)}
+
 \item{ylabel}{label for y-axis (default, "Observations")}
 
 \item{ylabelsize}{size of ylabel (default, 15px)}
@@ -25,6 +27,8 @@ categAltrePeaks()}
 \item{maintitle}{main title (default, "Distribution of Normalized Counts")}
 
 \item{maintitlesize}{main title size (default, 20px)}
+
+\item{xlabel}{label for x-axis (default, sample names)}
 }
 \value{
 a highcharter object

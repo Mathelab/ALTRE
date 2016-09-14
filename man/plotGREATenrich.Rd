@@ -10,7 +10,8 @@ regulatory regions is plotted.}
 \usage{
 plotGREATenrich(input, maintitle = "GREAT Enrichment Analysis",
   pathwaycateg = NULL, test = "Binom", numshow = 10,
-  maintitlesize = "20px")
+  maintitlesize = "20px", ylabelsize = "10px", xlabelsize = "10px",
+  xlabel = NULL)
 }
 \arguments{
 \item{input}{results from GREAT enrichment analysis}
@@ -27,6 +28,12 @@ hypergeometric test results.  Default is "Binom"}
 (expt, reference, shared) to show in the plot (default=10)}
 
 \item{maintitlesize}{main title size (default, 20px)}
+
+\item{ylabelsize}{size of ylabel (default, 10px)}
+
+\item{xlabelsize}{size of xlabel (default, 10px)}
+
+\item{xlabel}{label for x-axis (default, Experiment-specific, shared, Reference-specific )}
 }
 \value{
 heatmap

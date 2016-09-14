@@ -449,7 +449,7 @@ plotGetCounts <- function(countsConsPeaks,
       align = "center",
       horizontalAlign = "middle",
       verticalAlign = "top",
-      floating = FALSE,
+      floating = TRUE,
       maxHeight = 100,
       y = 50)
   return(p)
@@ -685,6 +685,9 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL) {
 #' @param palette RColorBrewer palette to change graph colors
 #' @param ylabel label for y-axis (default, "Observations")
 #' @param ylabelsize size of ylabel (default, 15px)
+#' @param xlabelsize size of xlabel (default, 15px)
+#' @param xlabel label for x-axis (default, sample names)
+
 #' @param maintitle main title (default, "Distribution of Normalized Counts")
 #' @param maintitlesize main title size (default, 20px)
 #' @return a highcharter object
@@ -1229,6 +1232,9 @@ plotCompareMethodsAll <- function(analysisresultsmatrix,
 #' 	(expt, reference, shared) to show in the plot (default=10)
 #' @param maintitle main title (default, "GREAT Enrichment Analysis")
 #' @param maintitlesize main title size (default, 20px)
+#' @param xlabelsize size of xlabel (default, 10px)
+#' @param ylabelsize size of ylabel (default, 10px)
+#' @param xlabel label for x-axis (default, Experiment-specific, shared, Reference-specific )
 #' @return heatmap
 #'
 #' @examples
@@ -1267,7 +1273,10 @@ plotGREATenrich <- function(input,
                             pathwaycateg = NULL,
                             test = "Binom",
                             numshow = 10,
-                            maintitlesize = "20px") {
+                            maintitlesize = "20px",
+                            ylabelsize = "10px",
+                            xlabelsize = "10px",
+                            xlabel = NULL) {
 
 
   variable = value = Experiment_specific = Reference_specific = Shared = c()
@@ -1455,23 +1464,35 @@ plotGREATenrich <- function(input,
     }"
    )
 
-  p <- highchart() %>%
-    hc_chart(type = "heatmap") %>%
+  if (is.null(xlabel))
+  {categ = c("Experiment-specific", "Shared", "Reference-specific")}
+  else
+  {categ = xlabel}
+
+  p <- highchart(width = 800, height = 700) %>%
+    hc_chart(type = "heatmap", spacingRight = 160) %>%
     hc_title(text = maintitle,
              style = list(color = '#2E1717',fontSize = maintitlesize,
                           fontWeight = 'bold')) %>%
-    hc_xAxis(categories = c("Experiment-specific", "Shared", "Reference-specific")) %>%
-    hc_yAxis(categories = theUniqueY) %>%
+    hc_xAxis(categories = categ,
+             labels = list(style = list(fontSize = xlabelsize))) %>%
+    hc_yAxis(categories = theUniqueY, labels = list(style = list(fontSize = ylabelsize))) %>%
     hc_add_series(name = "matrix location, p-value",
                   data = formattedHeatmapData) %>%
     hc_tooltip(formatter = fntltp, valueDecimals = 2) %>%
     hc_colorAxis(stops = color_stops(2, colors = c("#5097D1", "#DEEFF5")),
                  min = min(as.numeric(dataforHeatmap[ , 3]), na.rm = T),
-                 max = max(as.numeric(dataforHeatmap[ , 3]), na.rm = T))    %>%
-    hc_legend(title = "p-value",
-              enabled = TRUE,
-              layout = "vertical",
-              align = "right") %>%
+                 max = max(as.numeric(dataforHeatmap[ , 3]), na.rm = T)) %>%
+    hc_legend(
+      enabled = TRUE,
+      layout = "vertical",
+      align = "right",
+      verticalAlign = "right",
+      floating = FALSE,
+      maxWidth = 200,
+      x = 90,
+      y = 17
+    ) %>%
     hc_exporting(enabled = TRUE)
   #create final formatting
   return(p)
@@ -1535,7 +1556,7 @@ plotCountAnalysis2 <- function(altrepeakscateg, viewer = TRUE, palette = NULL ) 
 
   Referencespecificsamples <- altrepeakscateg$reference
   allsamples <- colnames(altrepeakscateg$analysisresults)[11:12]
-  Experimentspecificsamples<-allsamples[which(!(allsamples %in% Referencespecificsamples))]
+  Experimentspecificsamples <- allsamples[which(!(allsamples %in% Referencespecificsamples))]
 
   Referencespecific <- paste0(Referencespecificsamples, "SpecificByIntensity")
   Experimentspecific <- paste0(Experimentspecificsamples, "SpecificByIntensity")
