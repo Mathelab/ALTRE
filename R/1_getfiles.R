@@ -1,5 +1,18 @@
-#' Read in CSV (internal function)
+#' Read in CSV file
+#'
+#' The metadata associated with data files to be analyzed in ALTRE is supplied
+#' as a CSV file. The software will automatically retrieve the file path of
+#' input CSV so it is important that all analysis files are in the same folder
+#' as CSV file.
+#'
 #' @param csvPath csvPath
+#' @return dataframe of CSV file
+#'
+#' @examples
+#' \dontrun{
+#' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+#' }
+#'
 #' @export
 loadCSVFile <- function(csvPath) {
 
@@ -32,8 +45,22 @@ loadCSVFile <- function(csvPath) {
     }
 }
 
-#' Read in BED Files (internal function)
-#' @param csvfile csvfile
+#' Read in BED Files
+#'
+#' Read in the peak files (BED format) with the loadBedFiles() function. Only
+#' the first three columns (chr, start, end) of the peak files are required an
+#' read in. Additional columns are allowed but ignored.
+#'
+#' @param csvfile csvfile from loadCSVFile function
+#' @return coordinates of peak files
+#'
+#' @examples
+#' \dontrun{
+#' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+#' samplePeaks <- loadBedFiles(csvfile)
+#' }
+#'
+#'
 #' @export
 loadBedFiles <- function(csvfile) {
     if (!is(csvfile, "data.frame"))
@@ -101,7 +128,7 @@ loadBamFiles <- function(csvfile) {
 
 
 
-#' get TSS file
+#' get TSS file for use in combineAnnotatePeaks function.
 #' @export
 getTSS <- function() {
     edb <- EnsDb.Hsapiens.v75::EnsDb.Hsapiens.v75

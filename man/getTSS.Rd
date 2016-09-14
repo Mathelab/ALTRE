@@ -2,11 +2,11 @@
 % Please edit documentation in R/1_getfiles.R
 \name{getTSS}
 \alias{getTSS}
-\title{get TSS file}
+\title{get TSS file for use in combineAnnotatePeaks function.}
 \usage{
 getTSS()
 }
 \description{
-get TSS file
+get TSS file for use in combineAnnotatePeaks function.
 }
 

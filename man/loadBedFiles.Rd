@@ -2,14 +2,27 @@
 % Please edit documentation in R/1_getfiles.R
 \name{loadBedFiles}
 \alias{loadBedFiles}
-\title{Read in BED Files (internal function)}
+\title{Read in BED Files}
 \usage{
 loadBedFiles(csvfile)
 }
 \arguments{
-\item{csvfile}{csvfile}
+\item{csvfile}{csvfile from loadCSVFile function}
+}
+\value{
+coordinates of peak files
 }
 \description{
-Read in BED Files (internal function)
+Read in the peak files (BED format) with the loadBedFiles() function. Only
+the first three columns (chr, start, end) of the peak files are required an
+read in. Additional columns are allowed but ignored.
+}
+\examples{
+\dontrun{
+csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+samplePeaks <- loadBedFiles(csvfile)
+}
+
+
 }
 
