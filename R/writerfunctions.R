@@ -293,7 +293,7 @@ writeCompareRE <-
 #' writeGREATpath(pathenrichOut = pathGREAT, con = con)
 #' }
 #'
-
+#' @export
 writeGREATpath <- function(pathenrichOut, con) {
 
     listNames <- names(pathenrichOut)

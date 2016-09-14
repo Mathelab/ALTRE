@@ -561,14 +561,15 @@ body <- dashboardBody(
                 hr(),
                 actionButton("buttoncompare", strong("Compare Methods")),
                 hr(),
-                dataTableOutput("table5")
-                # conditionalPanel("input.buttoncompare > 0",
-                #                  hr(),
-                #                  downloadButton("downloadCompareDT",
-                #                                 strong("Download Data Table")
-                #                  )
-                # ),
-              ),              box(
+                dataTableOutput("table5"),
+                conditionalPanel("input.buttoncompare > 0",
+                                 hr(),
+                                 downloadButton("downloadCompareDT",
+                                                strong("Download Data Table")
+                                 )
+                )
+              ),
+              box(
                 title = "Customize Pie Plot",
                 width = NULL,
                 solidHeader = TRUE,
@@ -643,7 +644,11 @@ body <- dashboardBody(
 			          "for more information on GREAT.",
 		            hr(),
 		            actionButton("buttongreat", strong("Run GREAT")),
-		            hr()
+    			      conditionalPanel("input.buttongreat > 0",
+    			                       hr(),
+    			                       downloadButton("downloadGREAT",
+    			                                      strong("Download Data")
+    			                       ))
 		          ),
 		          HTML("</div>"),
 		          HTML("<div class='col-sm-8' style='min-width:
@@ -652,11 +657,11 @@ body <- dashboardBody(
 		            width = NULL,
 		            dataTableOutput("table6")
 		          ),
-                           box(
-                             width = NULL,
-                             #title = "Heat Plot",
-                             highcharter::highchartOutput('heatplotGREAT')
-                          ),
+			      box(
+               width = NULL,
+               #title = "Heat Plot",
+               highcharter::highchartOutput('heatplotGREAT')
+               ),
 		          infoBoxOutput("statusbox9", width = NULL),
 		          HTML("</div>")
 		          )
