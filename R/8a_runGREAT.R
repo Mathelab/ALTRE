@@ -136,10 +136,15 @@ processPathways <- function(GREATpath,
                        NumSig = rep(NA, length(names(output))))
 
     for (i in names(output)) {
-      output[[i]]$Binom_adj_PValue <- stats::p.adjust(output[[i]]$"Binom_Raw_PValue",
-                                                     method = adjustby)
-      output[[i]]$Hyper_adj_PValue <- stats::p.adjust(output[[i]]$"Hyper_Raw_PValue",
-                                                     method = adjustby)
+
+      output[[i]]$Binom_adj_PValue <- stats::p.adjust(
+        output[[i]]$"Binom_Raw_PValue",
+        method = adjustby)
+
+      output[[i]]$Hyper_adj_PValue <- stats::p.adjust(
+        output[[i]]$"Hyper_Raw_PValue",
+        method = adjustby)
+
       if (test == "Both") {
         keepers <- base::Reduce(intersect, list(
           which(output[[i]]$Binom_Fold_Enrichment > enrichcutoff),
@@ -154,8 +159,10 @@ processPathways <- function(GREATpath,
       else if (test == "Binom") {
         keepers <- base::Reduce(intersect,
                                 list(
-                                  which(output[[i]]$Binom_Fold_Enrichment > enrichcutoff),
-                                  which(output[[i]]$Binom_adj_PValue <= adjpvalcutoff)
+                                  which(output[[i]]$Binom_Fold_Enrichment
+                                        > enrichcutoff),
+                                  which(output[[i]]$Binom_adj_PValue
+                                        <= adjpvalcutoff)
                                   )
                                 )
       }

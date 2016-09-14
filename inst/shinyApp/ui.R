@@ -53,7 +53,7 @@ sidebar <- dashboardSidebar(
     ),
     menuItem(
       "Categorize Altered Regions",
-      icon = icon("bullseye"),
+      icon = icon("object-ungroup"),
       tabName = "cataltered",
       badgeLabel = "step 6",
       badgeColor = "green"
@@ -362,10 +362,7 @@ body <- dashboardBody(
                                  uiOutput("chooseChrom")
                 ),
                 hr(),
-                uiOutput("chooseref"),
-                hr(),
-                uiOutput("choosePalette3"),
-                hr()
+                uiOutput("chooseref")
               ),
               HTML("</div>"),
               HTML("<div class='col-sm-7' style='min-width:
@@ -381,6 +378,8 @@ body <- dashboardBody(
                 title = "Customize Plot",
                 width = NULL,
                 solidHeader = TRUE,
+                uiOutput("choosePalette3"),
+                hr(),
                 textInput(
                   "countsPlotTitle",
                   "Change the main title of the plot",
@@ -533,7 +532,7 @@ body <- dashboardBody(
               HTML("<div class='col-sm-3' style='min-width:
                    350px !important;'>"),
               box(
-                title = "Customize Plot",
+                title = "Customize Volcano Plot",
                 width = NULL,
                 solidHeader = TRUE,
                 uiOutput("choosePalette4")
@@ -575,12 +574,12 @@ body <- dashboardBody(
                    550px !important;'>"),
               box(
                 width = NULL,
-                htmlOutput('vennplot')
+                htmlOutput('pieplot')
               ),
               HTML("<div class='col-sm-3' style='min-width:
                    350px !important;'>"),
               box(
-                title = "Customize Plot",
+                title = "Customize Pie Plot",
                 width = NULL,
                 solidHeader = TRUE,
                 uiOutput("choosePalette5")

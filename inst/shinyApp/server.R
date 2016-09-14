@@ -335,7 +335,7 @@ shinyServer(function(input, output, session) {
                           palette = input$palette5)
   })
 
-  output$vennplot <- renderUI({
+  output$pieplot <- renderUI({
     plotCompareMethodsAll(req(comparePeaksObj()),
                           viewer = FALSE,
                           palette = input$palette5)
