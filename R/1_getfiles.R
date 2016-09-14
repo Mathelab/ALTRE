@@ -17,7 +17,8 @@ loadCSVFile <- function(csvPath) {
                           )
                         )
 
-    if (ncol(csvfile) != 4) {
+    if (ncol(csvfile) < 4) {
+      print("Check the format of the CSV file")
       return(NULL)
     } else {
       csvfile <- csvfile[order(csvfile$replicate, csvfile$sample),]
