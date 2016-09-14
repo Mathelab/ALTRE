@@ -6,7 +6,7 @@
 shared TSS-proximal and TSS-distal regions.}
 \usage{
 plotDistCountAnalysis(analysisresults, counts, palette = NULL,
-  xlabelsize = "15px", ylabel = "Observations", ylabelsize = "15px",
+  xlabelsize = "15px", ylabel = "log2(FPKM)", ylabelsize = "15px",
   maintitle = "Distribution of Normalized Counts", maintitlesize = "20px",
   xlabel = NULL)
 }
