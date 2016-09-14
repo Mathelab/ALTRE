@@ -1033,7 +1033,7 @@ plotCompareMethods <- function(analysisresultsmatrix,
   # from the analysisresults matrix
 
   if (is.null(maintitle)) {
-    maintitle <- paste(region, method)
+    mtitle <- paste(region, method)
   } else {
     mtitle <- maintitle
     }
