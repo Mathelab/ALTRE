@@ -31,8 +31,7 @@ loadCSVFile <- function(csvPath) {
                         )
 
     if (ncol(csvfile) < 4) {
-      print("Check the format of the CSV file")
-      return(NULL)
+      stop("Columns are missing in the CSV file.  Check the format.")
     } else {
       csvfile <- csvfile[order(csvfile$replicate, csvfile$sample),]
 
@@ -41,6 +40,22 @@ loadCSVFile <- function(csvPath) {
         csvPath <- paste0(getwd(), "/", csvPath)
       }
       csvfile$datapath <- rep(gsub("(.*)\\/(.*)", "\\1", csvPath), nrow(csvfile))
+
+      # Check to be sure that at least 2 replicates exist for each condition
+      if ( min(table(csvfile$replicate)) <2 ) {
+	stop("One of the conditions has less than 2 replicates. ALTRE requires at least 2 replicates per condition")
+      }
+
+      # Check that peakfiles exist
+      if(!all(file.exists(base::file.path(csvfile$datapath,csvfile$peakfiles)))) {
+	   stop("One of the 'peakfiles' does not exist")
+      }
+
+      # Check that bamfiles exist
+      if(!all(file.exists(base::file.path(csvfile$datapath,csvfile$bamfiles)))) {
+           stop("One of the 'bamfiles' in your CSV does not exist")
+      }
+
       return(csvfile)
     }
 }
