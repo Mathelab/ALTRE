@@ -14,11 +14,11 @@ vignette: >
 
 ALTRE (ALTered Regulatory Elements) is an R software package that streamlines and simplifies the analysis of data generated from genome-wide chromatin accessibility assays such as DNase-seq (a.k.a. DHS-seq), FAIRE-seq, and ATAC-seq.
 
-Regulatory elements (REs) such as enhancers and promoters are involved in regulating gene transcription – they control genes and pathways that can be investigated as putative therapeutic targets, or they may serve as targets themselves. Chromatin accessibility assays allow us to identify the location of REs genome-wide by identifying “open” chromatin (i.e. euchromatin). Identifying REs that differ between cell types, such as cancerous and noncancerous cell lines and tissues, holds promise for discovering new mechanisms involved in cellular development and disease progression. 
+Regulatory elements (REs) are involved in regulating gene transcription – they control genes and pathways that can be investigated as putative therapeutic targets, or they may serve as targets themselves. Chromatin accessibility assays allow us to identify the location of REs genome-wide by identifying “open” chromatin (i.e. euchromatin). Identifying REs that differ between cell types, such as cancerous and noncancerous cell lines and tissues, holds promise for discovering new mechanisms involved in cellular development and disease progression. 
 
 #Workflow
 
-ALTRE takes as input a CSV file which provides the names and metadata information for the alignment files (BAM format) and peak files (BED format) of samples to be analyzed.  The software then takes users through defining altered peaks using both binary data (presence/absence of peaks) and quantitative data (peak intensity). Moreover, the package includes functions that merge and annotate peaks (e.g. as promoters and enhancers), perform enrichment analysis for REs of interest, and provide visualization functions. The analysis can be conducted through the R command line or through an RShiny web interface for those who are not familiar with the R statistical language. This vignette further explains the purpose of the package and establishes the workflow.
+ALTRE takes as input a CSV file which provides the names and metadata information for the alignment files (BAM format) and peak files (BED format) of samples to be analyzed.  The software then takes users through defining altered peaks using both binary data (presence/absence of peaks) and quantitative data (peak intensity). Moreover, the package includes functions that merge and annotate peaks (e.g. as TSS-proximal and TSS-distal), perform enrichment analysis for REs of interest, and provide visualization functions. The analysis can be conducted through the R command line or through an RShiny web interface for those who are not familiar with the R statistical language. This vignette further explains the purpose of the package and establishes the workflow.
 
 ###Graphing analysis results
 
@@ -70,11 +70,11 @@ The output of the function *getConsensusPeaks()* is then further processed by th
 
   1. Combines consensus peaks for each samples type into one large master list of peaks for each sample type. 
 
-  2. Categorizes peaks as candidate promoters or enhancers, based on the distance of the peaks from a transcription start site (TSS). In this vignette we will use the default promoter distance argument: peaks within 1,500 bp of a TSS are considered promoters; those not within 1,500 bp of a TSS are considered enhancers.
+  2. Categorizes peaks as TSS-proximal and TSS-distal, based on the distance of the peaks from a transcription start site (TSS). In this vignette we will use the default promoter distance argument: peaks within 1,500 bp of a TSS are considered TSS-proximal; those not within 1,500 bp of a TSS are considered TSS-distal.
 
-  3. Optionally, merges peaks within a certain distance of each other. Merging close-by peaks loosens the stringency of the region comparison. Multiple regions of active chromatin within ~1000 bp are likely to represent only one regulatory element. In this vignette we will use the defaults of the function, which merges regions within 1000 bp of each other and merges only within regulatory element type (i.e. only enhancers will only be merged with other enhancers, and likewise, promoters only with promoters). Both these functionalities can be changed via the “mergedistenh”, “mergedistprom” and “regionspecific” arguments.
+  3. Optionally, merges peaks within a certain distance of each other. Merging close-by peaks loosens the stringency of the region comparison. Multiple regions of active chromatin within ~1000 bp are likely to represent only one regulatory element. In this vignette we will use the defaults of the function, which merges regions within 1000 bp of each other and merges only within regulatory element type (i.e. only TSS-distal will only be merged with other TSS-distal, and likewise, TSS-proximal only with TSS-proximal). Both these functionalities can be changed via the “distancefromTSSprox”, “distancefromTSSdist” and “regionspecific” arguments.
 
-The *combineAnnotatePeaks()* function requires a list of TSSs for the promoter/enhancer annotation, which can be read in with the *getTSS()* function:
+The *combineAnnotatePeaks()* function requires a list of TSSs for the TSS-proximal/TSS-distal annotation, which can be read in with the *getTSS()* function:
 ```{r}
 TSSannot <- getTSS()
 ```
@@ -95,7 +95,7 @@ Note that the output of the previous function *getConsensusPeaks()* is fed as in
 
 The output of *combineAnnotatePeaks()* produces a GRanges object containing the annotated, merged peaks – all peaks present in cancerous or normal lung.
 
-Additionally, the function *plotCombineAnnotatePeaks()* creates a bar graph to showcase the changes in the number and size of enhancers and promoters before and after merging close-by peaks.
+Additionally, the function *plotCombineAnnotatePeaks()* creates a bar graph to showcase the changes in the number and size of TSS-distal and TSS-proximal elements before and after merging close-by peaks.
 
 ```{r}
 plotCombineAnnotatePeaks(consensusPeaksAnnotated)
@@ -131,7 +131,7 @@ alteredPeaks <- countanalysis(counts = consensusPeaksCounts,
 
 ```
 
-Altered REs are next categorized based on associated log2fold changes and p-values, where larger log2fold changes and smaller p-values signify greater differences between cell types. How large a change is considered cell-type specific is left up to the user.
+Altered REs are next categorized based on associated log2 fold changes and p-values, where larger log2fold changes and smaller p-values signify greater differences between cell types. How large a change is considered cell-type specific is left up to the user.
 
 ```{r}
 alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
@@ -165,7 +165,7 @@ To compare resulting altered REs from these two methods, use the function *compa
 comparePeaksAnalysisResults <- comparePeaksAltre(alteredPeaksCategorized)
 ```
 
-The function *plotCompareMethodsAll(()* takes the results from comparePeaksAltre and translates the table into pie charts.
+The function *plotCompareMethodsAll()* takes the results from comparePeaksAltre and translates the table into pie charts.
 
 
 ```{r}
@@ -173,7 +173,7 @@ plotCompareMethodsAll(comparePeaksAnalysisResults)
 ```
 
 
-**8. Get Putative Enrichment Pathways** 
+**7. Get Putative Enrichment Pathways** 
 
 Finally, ALTRE performs pathway enrichment analysis, using [rGREAT](https://bioconductor.org/packages/release/bioc/html/rGREAT.html), for cell type-specific or shared REs using the functions *runGREAT()* and *processPathways()*. The GREAT algorithm incorporates proximal and distal binding sites and uses a binomial testing procedure to mitigate false positives.  More information on the algorithm can be found [here](http://bejerano.stanford.edu/great/public/html/). Enriched” pathways are likely to be regulated by the REs linked to the gene cluster (whether type-specific or shared).
 
@@ -181,7 +181,7 @@ In the web application, Gene Ontology pathway annotations are used by default, a
 
 By default, the p-values will be adjusted by "bonferroni" and significant pathways will have adjusted p-values < 0.05 and an enrichment of at least 2.
 
-Note that this vignette only uses chr21, therefore the pathway analysis results presented may not be biolofically relevant.  
+Note that this vignette only uses Chromosome 21, therefore the pathway analysis results presented may not be biologically relevant.  
 
 ```{r, eval = FALSE}
 callpaths <- runGREAT(peaks = alteredPeaksCategorized)
@@ -203,7 +203,7 @@ plotGREATenrich(pathresults, maintitle = "GREAT Enrichment Analysis",
 	pathwaycateg = "GO_Molecular_Function")
 ```
 
-**9. Writing output to files**
+**8. Writing output to files**
 To enable users to write results to files, the following 4 functions are implemented:
 
 1. *writeBedFile()*: writes a BED file in the working directory with the location of REs, color-coded by type-specificity.  The output BED file can be directly loaded in a genome browser. There is no output to the function that can be saved as an object.
