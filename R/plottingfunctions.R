@@ -1012,7 +1012,7 @@ plotCompareMethods <- function(analysisresultsmatrix,
 
 
 
-    analysisresultsmatrix <- analysisresultsmatrix$analysisresultsmatrix
+    analysisresultsmatrix <- as.matrix(analysisresultsmatrix$compareresults[,c("peak","intensity")])
 
     if (!is.null(palette)) {
     cols <- RColorBrewer::brewer.pal(3, palette)
@@ -1197,9 +1197,9 @@ plotCompareMethodsAll <- function(analysisresultsmatrix,
 
 
 
-    if (is.matrix(analysisresultsmatrix[[1]]) == FALSE) {
-      stop("The input is not a matrix!")
-    }
+#    if (is.matrix(analysisresultsmatrix[[1]]) == FALSE) {
+#      stop("The input is not a matrix!")
+#    }
 
     p1 <- plotCompareMethods(analysisresultsmatrix,
                              "TSS-proximal",
@@ -1490,7 +1490,7 @@ plotGREATenrich <- function(input,
     as.numeric(meltedheatmapdata$value)
 #as.numeric(format(meltedheatmapdata$value,scientific=T,digits=2))
   ))
-
+ 
   formattedHeatmapData <- list_parse2(dataforHeatmap)
 
   fntltp <- JS(
@@ -1522,11 +1522,13 @@ plotGREATenrich <- function(input,
       enabled = TRUE,
       layout = "vertical",
       align = "right",
-      verticalAlign = "right",
+      verticalAlign = "top",
       floating = FALSE,
       maxWidth = 200,
-      x = 90,
-      y = 17
+      x = -10, # 90
+      y = 100, # 70
+      padding=2,
+      title = list(text="p-value")
     ) %>%
     hc_exporting(enabled = TRUE)
   #create final formatting
