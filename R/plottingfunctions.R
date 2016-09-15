@@ -8,8 +8,8 @@
 #' @param xlabelsize size of xlabel (default, 15px)
 #' @param ylabelsize size of ylabel (default, 15px)
 #' @param maintitle main title (default, "Peak Counts by Cell Type")
-#' @param subtitle subtitle (default, "For bioreplicates and their merged consensus track")
 #' @param maintitlesize main title size (default, 20px)
+#' @param subtitle subtitle (default, "For bioreplicates and their merged consensus track")
 #' @param subtitlesize subitle size (default 15px)
 #' @return a highcharter object
 #'
@@ -61,7 +61,7 @@ plotConsensusPeaks <- function(samplepeaks,
     xLabel <- xlabel
   }
 
-  p <- highchart() %>%
+  p <- highchart(width = 520, height = 650) %>%
     hc_title(text = maintitle,
              style = list(color = '#2E1717',
                           fontSize = maintitlesize,
@@ -727,32 +727,30 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL,
 #'
 #' @examples
 #' \dontrun{
-#' dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
-#' csvfile <- file.path(dir, 'lung.csv')
-#' sampleinfo <- loadCSVFile(csvfile)
-#' samplePeaks <- loadBedFiles(sampleinfo)
-#' consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
-#' plotConsensusPeaks(samplepeaks=consPeaks)
-#' TSSannot<- getTSS()
-#' consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
-#'                                           TSS = TSSannot,
-#'                                           merge = TRUE,
-#'                                           regionspecific = TRUE,
-#'                                           distancefromTSSdist = 1500,
-#'                                           distancefromTSSprox = 1000)
-#' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
-#'                               sampleinfo = sampleinfo,
-#'                               reference = 'SAEC',
-#'                               chrom = 'chr21')
-#' altre_peaks <- countanalysis(counts = counts_consPeaks,
-#'                              pval = 0.01,
-#'                              lfcvalue = 1)
-#' categaltre_peaks <- categAltrePeaks(altre_peaks,
-#'                                     lfctypespecific = 1.5,
-#'                                     lfcshared = 1.2,
-#'                                     pvaltypespecific = 0.01,
-#'                                     pvalshared = 0.05)
-#' plotDistCountAnalysis(categaltre_peaks, counts_consPeaks)
+#' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+#' samplePeaks <- loadBedFiles(csvfile)
+#' consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
+#' minreps = 2)
+#' TSSannot <- getTSS()
+#' consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
+#' TSS = TSSannot,
+#' merge = TRUE,
+#' regionspecific = TRUE,
+#' distancefromTSSdist = 1500,
+#' distancefromTSSprox = 1000)
+#' consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
+#'                                  sampleinfo = csvfile,
+#'                                  reference = 'SAEC',
+#'                                  chrom = 'chr21')
+#' alteredPeaks <- countanalysis(counts = consensusPeaksCounts,
+#' pval = 0.01,
+#' lfcvalue = 1)
+#' alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
+#'                                           lfctypespecific = 1.5,
+#'                                           lfcshared = 1.2,
+#'                                           pvaltypespecific = 0.01,
+#'                                           pvalshared = 0.05)
+#' plotDistCountAnalysis(alteredPeaksCategorized, consensusPeaksCounts)
 #' }
 #' @export
 #'
@@ -760,9 +758,9 @@ plotDistCountAnalysis <-
   function(analysisresults,
            counts,
            palette = NULL,
-           xlabelsize = "15px",
+           xlabelsize = "13px",
            ylabel = "log2(FPKM)",
-           ylabelsize = "15px",
+           ylabelsize = "13px",
            maintitle = "Distribution of Normalized Counts (peaks types determine by intensity)",
            maintitlesize = "20px",
            xlabel = NULL) {
@@ -912,7 +910,7 @@ plotDistCountAnalysis <-
       Highcharts.numberFormat(this.y, 2); }"
   )
 
-    p <- highchart() %>%
+    p <- highchart(width = 750, height = 750 ) %>%
       hc_title(text = maintitle,
                style = list(color = '#2E1717',
                             fontWeight = 'bold',
@@ -1008,7 +1006,7 @@ plotCompareMethods <- function(analysisresultsmatrix,
                                method = "Intensity",
                                palette = NULL,
                                maintitle = NULL,
-                               maintitlesize = "20px") {
+                               maintitlesize = "16px") {
 
 
 
@@ -1267,6 +1265,8 @@ plotCompareMethodsAll <- function(analysisresultsmatrix,
 #' 	(expt, reference, shared) to show in the plot (default=10)
 #' @param maintitle main title (default, "GREAT Enrichment Analysis")
 #' @param maintitlesize main title size (default, 20px)
+#' @param subtitle subtitle (default, "color corresponds to p-value")
+#' @param subtitlesize subitle size (default 15px)
 #' @param xlabelsize size of xlabel (default, 10px)
 #' @param ylabelsize size of ylabel (default, 10px)
 #' @param xlabel label for x-axis (default, Experiment-specific, shared, Reference-specific )
@@ -1311,7 +1311,9 @@ plotGREATenrich <- function(input,
                             maintitlesize = "20px",
                             ylabelsize = "10px",
                             xlabelsize = "10px",
-                            xlabel = NULL) {
+                            xlabel = NULL,
+                            subtitle = "(color corresponds to p-value)",
+                            subtitlesize = "13px") {
 
 
   variable = value = Experiment_specific = Reference_specific = Shared = c()
@@ -1512,6 +1514,8 @@ plotGREATenrich <- function(input,
     hc_title(text = maintitle,
              style = list(color = '#2E1717',fontSize = maintitlesize,
                           fontWeight = 'bold')) %>%
+    hc_subtitle(text = subtitle,
+                style = list(fontSize = subtitlesize)) %>%
     hc_xAxis(categories = categ,
              labels = list(style = list(fontSize = xlabelsize))) %>%
     hc_yAxis(categories = theUniqueY, labels = list(style = list(fontSize = ylabelsize))) %>%
@@ -1530,8 +1534,8 @@ plotGREATenrich <- function(input,
       maxWidth = 200,
       x = -10, # 90
       y = 100, # 70
-      padding=2,
-      title = list(text="p-value")
+      padding=2
+      #title = list(text="p-value")
     ) %>%
     hc_exporting(enabled = TRUE)
   #create final formatting

@@ -11,7 +11,8 @@ regulatory regions is plotted.}
 plotGREATenrich(input, maintitle = "GREAT Enrichment Analysis",
   pathwaycateg = NULL, test = "Binom", numshow = 10,
   maintitlesize = "20px", ylabelsize = "10px", xlabelsize = "10px",
-  xlabel = NULL)
+  xlabel = NULL, subtitle = "(color corresponds to p-value)",
+  subtitlesize = "13px")
 }
 \arguments{
 \item{input}{results from GREAT enrichment analysis}
@@ -34,6 +35,10 @@ hypergeometric test results.  Default is "Binom"}
 \item{xlabelsize}{size of xlabel (default, 10px)}
 
 \item{xlabel}{label for x-axis (default, Experiment-specific, shared, Reference-specific )}
+
+\item{subtitle}{subtitle (default, "color corresponds to p-value")}
+
+\item{subtitlesize}{subitle size (default 15px)}
 }
 \value{
 heatmap
