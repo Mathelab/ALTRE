@@ -12,16 +12,16 @@ categAltrePeaks(analysisresults, lfctypespecific = 1.5, lfcshared = 1.2,
 \item{analysisresults}{output of countanalysis()}
 
 \item{lfctypespecific}{log2fold change cutoff (of chromatin accessibility)
-for type specific enhancers/promoters}
+for type specific TSS-distals/TSS-proximals}
 
 \item{lfcshared}{log2fold change cutoff (of chromatin accessibility)
-for shared enhancers/promoters}
+for shared TSS-distals/TSS-proximals}
 
 \item{pvaltypespecific}{p-value cutoff (of chromatin accessibility)
-for type specific enhancers/promoters}
+for type specific TSS-distals/TSS-proximals}
 
 \item{pvalshared}{p-value cutoff (of chromatin accessibility)
-for shared enhancers/promoters}
+for shared TSS-distals/TSS-proximals}
 }
 \value{
 list 1) results of countanalysis,
@@ -34,12 +34,11 @@ Categorize altered peaks as experiment-specific, reference-specific,
 }
 \examples{
 \dontrun{
-dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
-csvfile <- file.path(dir, 'lung.csv')
-sampleinfo <- loadCSVFile(csvfile)
-samplePeaks <- loadBedFiles(sampleinfo )
-consPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
+csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+samplePeaks <- loadBedFiles(csvfile)
+consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
 TSSannot <- getTSS()
+<<<<<<< HEAD
 consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
                                           TSS = TSSannot,
                                           merge = TRUE,
@@ -59,6 +58,26 @@ categaltre_peaks <- categAltrePeaks(
   pvaltypespecific = 0.01,
   pvalshared = 0.05
 )
+=======
+consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
+   TSS = TSSannot,
+   merge = TRUE,
+   regionspecific = TRUE,
+   distancefromTSSdist = 1500,
+   distancefromTSSprox = 1000)
+consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
+   sampleinfo = csvfile,
+   reference = 'SAEC',
+   chrom = 'chr21')
+alteredPeaks <- countanalysis(counts = consensusPeaksCounts,
+   pval = 0.01,
+   lfcvalue = 1)
+alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
+   lfctypespecific = 1.5,
+   lfcshared = 1.2,
+   pvaltypespecific = 0.01,
+   pvalshared = 0.05)
+>>>>>>> webgraphs
 }
 }
 

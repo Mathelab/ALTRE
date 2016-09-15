@@ -11,12 +11,13 @@
 
 ```{R}
 
-install.packages("devtools")               
-# install Bioconductor packages
+
+# Install Bioconductor packages (dependencies)
 source("http://bioconductor.org/biocLite.R")
 BiocInstaller::biocLite(c('GenomeInfoDb',
                         'IRanges',
                         'DESeq2',
+			'tibble',
                         'GenomicAlignments',
                         'SummarizedExperiment',
                         'GenomicRanges',
@@ -26,7 +27,10 @@ BiocInstaller::biocLite(c('GenomeInfoDb',
                         'ensembldb', 
                         'EnsDb.Hsapiens.v75',
                         'GO.db'))
-# install the package
+# Install the devtools package for installing ALTRE
+install.packages("devtools")
+# Install the ALTRE package
+setRepositories(ind=1:2)
 devtools::install_github("mathelab/ALTRE")
 ```
 When installing on Linux, installation might fail if the XML package cannot be installed. Installation failure  can be fixed by installing the libxml2, an XML C parser for Linux. On Ubuntu this can be done by running the following line:
@@ -35,6 +39,7 @@ When installing on Linux, installation might fail if the XML package cannot be i
 sudo apt-get install libxml2-dev
 ```
 To install the devtools R library, you also need to run the following line to install system dependencies on Ubuntu:
+=======
 
 ```{R}
 sudo apt-get install libssl-dev libcurl4-openssl-dev
@@ -45,6 +50,7 @@ On Windows, if you get an installation error then first run the following lines 
 ```{R}
 install.packages(c("htmltools","httpuv","evaluate","markdown"))
 ```
+=======
 
 #### Installation Walk-through Animation
 
@@ -71,7 +77,7 @@ https://mathelab.github.io/ALTRE/vignette.html
 
 ## Data
 
-A restricted subset of the data with one chromosome (i.e. chromosome 21) can be found on this [page](http://mathelab.github.io/ALTREsampledata/). The corresponding CSV file for input into ALTRE can be downloaded [here](https://raw.githubusercontent.com/mathelab/ALTREsampledata/master/DNaseEncodeWindows.csv). Be sure to modify the datapath column of the CSV file so that the appropriate full path of the data files on your local machine is included.
+A restricted subset of the data with one chromosome (i.e. chromosome 21) can be found on this [page](http://mathelab.github.io/ALTREsampledata/). The corresponding CSV file for input into ALTRE can be downloaded [here](https://raw.githubusercontent.com/mathelab/ALTREsampledata/master/DNaseEncodeExample.csv). Be sure that the CSV file and the data files are in the same folder when running analysis with ALTRE.
 
 To download the entire data, please use a file download manager to download the files from the links listed below. 
 

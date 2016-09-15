@@ -2,14 +2,26 @@
 % Please edit documentation in R/1_getfiles.R
 \name{loadCSVFile}
 \alias{loadCSVFile}
-\title{Read in CSV (internal function)}
+\title{Read in CSV file}
 \usage{
 loadCSVFile(csvPath)
 }
 \arguments{
 \item{csvPath}{csvPath}
 }
+\value{
+dataframe of CSV file
+}
 \description{
-Read in CSV (internal function)
+The metadata associated with data files to be analyzed in ALTRE is supplied
+as a CSV file. The software will automatically retrieve the file path of
+input CSV so it is important that all analysis files are in the same folder
+as CSV file.
+}
+\examples{
+\dontrun{
+csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+}
+
 }
 

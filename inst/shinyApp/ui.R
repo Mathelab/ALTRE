@@ -1,12 +1,12 @@
 # App ui
 
 headerbar <- dashboardHeader(
-  title = "ALTRE Analysis Workflow",
+  title = "ALTRE Workflow",
   titleWidth = 270,
   dropdownMenu(
     type = "notifications",
     notificationItem(
-      text = "Plots take some time to display",
+      text = "Plots might take some time to display",
       icon("truck"),
       status = "warning"
       )
@@ -53,7 +53,7 @@ sidebar <- dashboardSidebar(
     ),
     menuItem(
       "Categorize Altered Regions",
-      icon = icon("bullseye"),
+      icon = icon("object-ungroup"),
       tabName = "cataltered",
       badgeLabel = "step 6",
       badgeColor = "green"
@@ -68,7 +68,7 @@ sidebar <- dashboardSidebar(
     menuItem(
       "Find Enriched Pathways",
       icon = icon("gears"),
-      tabName = "pathways",
+      tabName = "greatpathways",
       badgeLabel = "step 8",
       badgeColor = "green"
     ),
@@ -100,6 +100,8 @@ body <- dashboardBody(
                 title = strong("Load Metadata Spreadsheet"),
                 width = NULL,
                 solidHeader = TRUE,
+                tags$b("Please be sure that all files noted in the CSV file,
+                         including the CSV file, are in the same folder."),
                 h5("This step does the following: "),
                 tags$ul(
                   tags$li("Loads a metadata spreadsheet with a CSV file extention."),
@@ -147,7 +149,8 @@ body <- dashboardBody(
                           each replicate and in their merged consensus.")
                   ),
                 tags$p(" Note: You can save the plots by clicking on the right mouse button
-                  and selecting 'save image as'"),
+                  and selecting 'save image as', or by clicking on the menu at the top right
+                  of the plot"),
                 hr(),
                 actionButton("buttonmerge",
                              strong("Load Files then Merge Replicates")),
@@ -159,21 +162,44 @@ body <- dashboardBody(
                   min = 2,
                   max = 10
                 ),
-                hr(),
-                dataTableOutput("table2")
+                dataTableOutput("table2"),
+                hr()
               ),
               HTML("</div>"),
               HTML("<div class='col-sm-7' style='min-width:
                    550px !important;'>"),
-              infoBoxOutput("statusbox2", width = NULL),
+              hr(),
               box(
-                title = "Barplot",
+                #title = "Barplot",
                 width = NULL,
                 solidHeader = TRUE,
-                plotOutput('barplot')
+                highcharter::highchartOutput("barplot")
               ),
+              hr(),
+              HTML("<div class='col-sm-3' style='min-width:
+                   350px !important;'>"),
+              box(
+                title = "Customize Plot",
+                width = NULL,
+                solidHeader = TRUE,
+                uiOutput("choosePalette1"),
+                textInput(
+                  "consPlotTitle",
+                  "Change the main title of the plot",
+                  "Peak Counts by Cell Type"
+                ),
+                hr(),
+                textInput(
+                  "consPlotylabel",
+                  "Change the y-axis label of the plot",
+                  "Peak Counts"
+                ),
+                hr()
+              ),
+              HTML("</div>"),
+              infoBoxOutput("statusbox2", width = NULL),
               HTML("</div>")
-              )
+            )
             ),
     tabItem(tabName = "combine",
             fluidRow(
@@ -183,12 +209,13 @@ body <- dashboardBody(
                 width = NULL,
                 solidHeader = TRUE,
                 title = strong("Combine and Annotate Peaks"),
+                h4("Be sure to scroll all the way down for plotting options"),
                 h5("This step does the following: "),
                 tags$ul(
                   tags$li("Combines peaks from different sample types,
                    optionally merging nearby regions."),
                   tags$li(" Annotates genomic regions with type specificity based
-                          on whether each region is a candidate promoter or enhancer
+                          on whether each region is TSS-proximal or TSS-distal
                           as determined by user-defined distance from a
                           transcription start site.")
                 ),
@@ -221,7 +248,7 @@ body <- dashboardBody(
                                  sliderInput(
                                    "dist",
                                    label = strong("Select upper threshold distance
-                                                  for merging promoters and enhancers"),
+                                                  for merging TSS-proximal and TSS-distal"),
                                    min = 0,
                                    max = 3000,
                                    value = 0
@@ -229,17 +256,17 @@ body <- dashboardBody(
                                  ),
                 conditionalPanel("input.regionradio == 'TRUE'",
                                  sliderInput(
-                                   "distenh",
+                                   "distTSSdist",
                                    label = strong("Select distance
-                                              threshold for merging enhancers"),
+                                              threshold for merging TSS-distal regions"),
                                    min = 0,
                                    max = 3000,
                                    value = 1500
                                    ),
                                  sliderInput(
-                                   "distprom",
+                                   "distTSSprox",
                                    label = strong("Select distance
-                                              threshold for merging promoters"),
+                                              threshold for merging TSS-proximal regions"),
                                    min = 0,
                                    max = 3000,
                                    value = 1000
@@ -253,20 +280,60 @@ body <- dashboardBody(
                                  )
                 ),
                 hr()
-                ),
+                ),  # end box
               HTML("</div>"),
-
               HTML("<div class='col-sm-7' style='min-width:
                    550px !important;'>"),
-              infoBoxOutput("statusbox3", width = NULL),
               box(
-                title = "Barplot",
+                #title = "Barplot",
                 width = NULL,
                 solidHeader = TRUE,
-                plotOutput('annotatebarplot'),
+                htmlOutput('annotatebarplot')
+              ),
+              box(
+                #title = "Barplot",
+                width = NULL,
+                solidHeader = TRUE,
                 hr(),
                 dataTableOutput("table3")
               ),
+              hr(),
+#              HTML("</div>"),
+              HTML("<div class='col-sm-3' style='min-width:
+                   350px !important;'>"),
+              box(
+                title = "Customize Plot",
+                width = NULL,
+                solidHeader = TRUE,
+                uiOutput("choosePalette2"),
+                hr(),
+                textInput(
+                  "combLeftPlotTitle",
+                  "Change the main title of the left-hand plot",
+                  "Number of REs"
+                ),
+                hr(),
+                textInput(
+                  "combRightPlotTitle",
+                  "Change the main title of the right-hand plot",
+                  "Mean Length of REs"
+                ),
+                hr(),
+                textInput(
+                  "combLeftylabel",
+                  "Change the y-label of the left-hand plot",
+                  "Number of REs"
+                ),
+                hr(),
+                textInput(
+                  "combRightylabel",
+                  "Change the y-label of the right-hand plot",
+                  "Mean Length of REs"
+                ),
+                hr()
+              ),
+              HTML("</div>"),
+              infoBoxOutput("statusbox3", width = NULL),
               HTML("</div>")
             )),
     tabItem(tabName = "retrieve",
@@ -280,7 +347,7 @@ body <- dashboardBody(
                 tags$ul(
                   tags$li("Counts the number of reads in each regulatory region
                    for each sample type."),
-                  tags$li(" Outputs a denisty plot of the lengths of genomic regions.")
+                  tags$li(" Outputs a density plot of the widths of genomic regions.")
                 ),
                 hr(),
                 actionButton("buttoncounts", strong("Retrieve Counts")),
@@ -296,19 +363,45 @@ body <- dashboardBody(
                                  uiOutput("chooseChrom")
                 ),
                 hr(),
-                uiOutput("chooseref"),
-                hr()
+                uiOutput("chooseref")
               ),
               HTML("</div>"),
               HTML("<div class='col-sm-7' style='min-width:
                    550px !important;'>"),
-              infoBoxOutput("statusbox4", width = NULL),
-
               box(
                 width = NULL,
-                title = "Density Plot",
-                plotOutput('densityplot')
+                #title = "Density Plot",
+                highcharter::highchartOutput('densityplot')
               ),
+              HTML("<div class='col-sm-3' style='min-width:
+                   350px !important;'>"),
+              box(
+                title = "Customize Plot",
+                width = NULL,
+                solidHeader = TRUE,
+                uiOutput("choosePalette3"),
+                hr(),
+                textInput(
+                  "countsPlotTitle",
+                  "Change the main title of the plot",
+                  "Density of log2 read counts (normalized by library and region sizes)"
+                ),
+                hr(),
+                textInput(
+                  "countsxlabel",
+                  "Change the x-axis label of the plot",
+                  "Log2 Normalized Read Counts"
+                ),
+                hr(),
+                textInput(
+                  "countsylabel",
+                  "Change the y-axis label of the plot",
+                  "Density"
+                ),
+                hr()
+              ),
+              HTML("</div>"),
+              infoBoxOutput("statusbox4", width = NULL),
               HTML("</div>")
               )
             ),
@@ -368,14 +461,19 @@ body <- dashboardBody(
                   tags$li(" Outputs a volcano plot highlighting potential
                           altered regulatory elements.")
                 ),
+                h5("Note that the total number of categorized peaks may be less than the
+                  the total number of peaks evaluated.  This discrepancy is due to DESeq2
+                  independent filtering to remove regions with low power.  See DESeq2 documentation
+                  for more details."),
                 hr(),
                 actionButton("buttoncat", strong("Categorize Altered Regions")),
+                HTML('<span style="color: #FD3335">(Please Wait! Plot takes ~1 minute to render!)</span>'),
                 hr(),
                 h4("Select parameters that define cell-type specific regulatory regions"),
                 sliderInput(
                   "lfcSpecific",
                   label = strong("Select log2fold change cutoff for specific
-                             enhancers/promoters"),
+                             TSS-proximal/distal regions"),
                   min = 0,
                   max = 5,
                   value = 1.5,
@@ -384,7 +482,7 @@ body <- dashboardBody(
                 sliderInput(
                   "pvalueSpecific",
                   label = strong("Select p-value cutoff for specific
-                             enhancers/promoters"),
+                             TSS-proximal/distal regions"),
                   min = 0,
                   max = 1,
                   value = 0.01
@@ -394,7 +492,7 @@ body <- dashboardBody(
                 sliderInput(
                   "lfcShared",
                   label = strong("Select log2fold change cutoff for shared
-                             enhancers/promoters"),
+                             TSS-proximal/distal regions"),
                   min = 0,
                   max = 5,
                   value = 1.2,
@@ -402,7 +500,7 @@ body <- dashboardBody(
                 ),
                 sliderInput(
                   "pvalueShared",
-                  label = strong("Select p-value cutoff for shared enhancers/promoters"),
+                  label = strong("Select p-value cutoff for shared TSS-proximal/distal regions"),
                   min = 0,
                   max = 1,
                   value = 0.05
@@ -412,22 +510,37 @@ body <- dashboardBody(
                                  downloadButton("downloadBED",
                                                 strong("Download BED File")
                                  )
-                ),
-                hr()
+                )
               ),
               HTML("</div>"),
               HTML("<div class='col-sm-7' style='min-width:
                    550px !important;'>"),
-              infoBoxOutput("statusbox6", width = NULL),
               box(
                 width = NULL,
-                title = "Volcano Plot",
-                plotOutput('volcanoplot'),
-                hr(),
-                plotOutput('boxplot'),
-                hr(),
+                #title = "Volcano Plot",
+                solidHeader = TRUE,
+                htmlOutput('volcano')
+              ),
+              box(
+                width = NULL,
+                #title = "Volcano Plot",
+                highcharter::highchartOutput('boxplotCounts')
+              ),
+              box(
+                width = NULL,
+                #title = "Volcano Plot",
                 dataTableOutput("table4")
               ),
+              HTML("<div class='col-sm-3' style='min-width:
+                   350px !important;'>"),
+              box(
+                title = "Customize Volcano Plot",
+                width = NULL,
+                solidHeader = TRUE,
+                uiOutput("choosePalette4")
+              ),
+              HTML("</div>"),
+              infoBoxOutput("statusbox6", width = NULL),
               HTML("</div>")
               )
             ),
@@ -445,186 +558,115 @@ body <- dashboardBody(
                           associated intensity (i.e. chromatin accessibility).
                           The second method uses peak presence only as determined
                           by the peak caller."),
-                  tags$li(" Outputs a Venn diagram.")
+                  tags$li(" Outputs a set of pie charts.")
                 ),
                 hr(),
                 actionButton("buttoncompare", strong("Compare Methods")),
                 hr(),
                 dataTableOutput("table5"),
-                # conditionalPanel("input.buttoncompare > 0",
-                #                  hr(),
-                #                  downloadButton("downloadCompareDT",
-                #                                 strong("Download Data Table")
-                #                  )
-                # ),
+                conditionalPanel("input.buttoncompare > 0",
+                                 downloadButton("downloadCompareDT",
+                                                strong("Download Data Table")
+                                 )
+                )
+              ),
+              box(
+                title = "Customize Pie Plot",
+                width = NULL,
+                solidHeader = TRUE,
+                uiOutput("choosePalette5"),
+                hr(),
+                textInput(
+                  "title11",
+                  "Change the title of the first plot",
+                  "TSS-proximal/Intensity"
+                ),
+                hr(),
+                textInput(
+                  "title12",
+                  "Change the title of the second plot",
+                  "TSS-distal/Intensity"
+                ),
+                hr(),
+                textInput(
+                  "title13",
+                  "Change the title of the third plot",
+                  "All/Intensity"
+                ),
+                hr(),
+                textInput(
+                  "title21",
+                  "Change the title of the fourth plot",
+                  "TSS-proximal/Peak"
+                ),
+                hr(),
+                textInput(
+                  "title22",
+                  "Change the title of the fifth plot",
+                  "TSS-distal/Peak"
+                ),
+                hr(),
+                textInput(
+                  "title23",
+                  "Change the title of the sixth plot",
+                  "All/Peak"
+                ),
                 hr()
               ),
               HTML("</div>"),
               HTML("<div class='col-sm-7' style='min-width:
                    550px !important;'>"),
-              infoBoxOutput("statusbox7", width = NULL),
               box(
                 width = NULL,
-                title = "Venn Plot",
-                plotOutput('vennplot')
+                htmlOutput('pieplot')
               ),
+              infoBoxOutput("statusbox7", width = NULL),
               HTML("</div>")
               )
             ),
-    tabItem(
-      tabName ="pathways",
-      tabBox(
-        title = strong("Pathway Enrichment Analysis"),
-        width = 12,
-        tabPanel("(1) Pathway Enrichment for Molecular Function",
-                 fluidRow(
-                   HTML("<div class='col-sm-4' style='min-width:
-                   400px !important;'>"),
-                   box(
-                     width = NULL,
-                     title = strong("Pathway Enrichment for Molecular Function"),
-                     h5("This step does the following: "),
-                     tags$ul(
-                       tags$li("Determines which pathways are overrepresented in
-                             altered promoters and enhancers as returned by
-                             GO Enrichment Analysis restricted to the Molecular
-                             Function sub-ontology."),
-                       tags$li("Outputs a heatmap plot of the enrichment analysis'
-                             results.")
-                     ),
-                     hr(),
-                     actionButton("buttonpathwayMF",
-                                  strong("Run MF Pathway Enrichment")),
-                     hr(),
-                     sliderInput(
-                       "pathpvaluecutoffMF",
-                       label = strong("Select p-value cutoff"),
-                       min = 0,
-                       max = 1,
-                       value = 0.01
-                     ),
-                     conditionalPanel("input.buttonpathwayMF> 0",
-                                      hr(),
-                                      downloadButton("downloadPathwayMF",
-                                                     strong("Download Zip
-                                                            File with MF
-                                                            Analysis Results")
-                                      )
-                     ),
-                     hr()
-                   ),
-                   HTML("</div>"),
-                   HTML("<div class='col-sm-7' style='min-width:
-                   550px !important;'>"),
-                   infoBoxOutput("statusbox8a", width = NULL),
-                   box(
-                     width = NULL,
-                     title = "Heat Plot",
-                     plotOutput('heatplotMF')
-                   ),
-                   HTML("</div>")
-                 )
-                 ),
-       tabPanel("(2) Pathway Enrichment for Biological Process",
-                fluidRow(
-                  HTML("<div class='col-sm-4' style='min-width:
-                       400px !important;'>"),
-                  box(
-                    width = NULL,
-                    title = strong("Pathway Enrichment for Biological Process"),
-                    h5("This step does the following: "),
-                    tags$ul(
-                      tags$li("Determines which pathways are overrepresented in
-                             altered promoters and enhancers as returned by
-                             GO Enrichment Analysis restricted to the Biological
-                             Process sub-ontology."),
-                      tags$li("Outputs a heatmap plot of the enrichment analysis'
-                             results.")
-                    ),
-                    hr(),
-                    actionButton("buttonpathwayBP",
-                                 strong("Run BP Pathway Enrichment")),
-                    hr(),
-                    sliderInput(
-                      "pathpvaluecutoffBP",
-                      label = strong("Select p-value cutoff"),
-                      min = 0,
-                      max = 1,
-                      value = 0.01
-                    ),
-                    conditionalPanel("input.buttonpathwayBP> 0",
-                                     hr(),
-                                     downloadButton("downloadPathwayBP",
-                                                    strong("Download Zip
-                                                            File with BP
-                                                            Analysis Results")
-                                     )
-                    ),
-                    hr()
-                  ),
-                  HTML("</div>"),
-                  HTML("<div class='col-sm-7' style='min-width:
-                       550px !important;'>"),
-                  infoBoxOutput("statusbox8b", width = NULL),
-                  box(
-                    width = NULL,
-                    title = "Heat Plot",
-                    plotOutput('heatplotBP')
-                  ),
-                  HTML("</div>")
-                  )
-                ),
-       tabPanel("(3) Pathway Enrichment for Cellular Component",
-                fluidRow(
-                  HTML("<div class='col-sm-4' style='min-width:
-                       400px !important;'>"),
-                  box(
-                    width = NULL,
-                    title = strong("Pathway Enrichment for Cellular Component"),
-                    h5("This step does the following: "),
-                    tags$ul(
-                      tags$li("Determines which pathways are overrepresented in
-                              altered promoters and enhancers as returned by
-                              GO Enrichment Analysis restricted to the
-                              Cellular Component sub-ontology."),
-                      tags$li("Outputs a heatmap plot of the enrichment analysis'
-                              results.")
-                      ),
-                    hr(),
-                    actionButton("buttonpathwayCC",
-                                 strong("Run CC Pathway Enrichment")),
-                    hr(),
-                    sliderInput(
-                      "pathpvaluecutoffCC",
-                      label = strong("Select p-value cutoff"),
-                      min = 0,
-                      max = 1,
-                      value = 0.01
-                    ),
-                    conditionalPanel("input.buttonpathwayCC> 0",
-                                     hr(),
-                                     downloadButton("downloadPathwayCC",
-                                                    strong("Download Zip
-                                                            File with CC
-                                                            Analysis Results")
-                                     )
-                    ),
-                    hr()
-                      ),
-                  HTML("</div>"),
-                  HTML("<div class='col-sm-7' style='min-width:
-                       550px !important;'>"),
-                  infoBoxOutput("statusbox8c", width = NULL),
-                  box(
-                    width = NULL,
-                    title = "Heat Plot",
-                    plotOutput('heatplotCC')
-                  ),
-                  HTML("</div>")
-                  )
-      )
-       )
-      )
+		tabItem(tabName = "greatpathways",
+		        fluidRow(
+		          HTML("<div class='col-sm-3' style='min-width:
+		               400px !important;'>"),
+		          box(
+		            width = NULL,
+		            title = strong("GREAT Pathways"),
+		            h5("This step does the following: "),
+		            tags$ul(
+			      tags$li("Perform pathway analysis with GREAT"),
+		              tags$li("Determines which pathways are overrepresented in
+                                altered TSS-proximal/distal regions"),
+                              tags$li("Outputs a heatmap of the top enriched pathways")
+		            ),
+			         "Note: You must be connected to the internet for this step.
+			           Please be patient. It can take 3-5 minutes to run. Click",
+			          tags$a(href = "http://bejerano.stanford.edu/great/public/html/",
+			             "here"),
+			          "for more information on GREAT.",
+		            hr(),
+		            actionButton("buttongreat", strong("Run GREAT")),
+    			      conditionalPanel("input.buttongreat > 0",
+    			                       hr(),
+    			                       downloadButton("downloadGREAT",
+    			                                      strong("Download Data")
+    			                       ))
+		          ),
+		          HTML("</div>"),
+		          HTML("<div class='col-sm-8' style='min-width:
+                   750px !important;'>"),
+		          box(
+		            width = NULL,
+		            dataTableOutput("table6")
+		          ),
+			      box(
+               width = NULL,
+               #title = "Heat Plot",
+               highcharter::highchartOutput('heatplotGREAT')
+               ),
+		          infoBoxOutput("statusbox9", width = NULL),
+		          HTML("</div>")
+		          )
+  )
     )
 )
 

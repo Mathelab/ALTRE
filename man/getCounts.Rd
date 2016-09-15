@@ -19,7 +19,7 @@ considered 'reference' in DESeq2 analysis}
 \value{
 List containing three items:
 (1) DESeqDataSet: contains count information for all replicates of all samples
-(2) Matrix: contains number of enhancers and promoters
+(2) Matrix: contains number of TSS-distal and TSS-proximal
  before and after filtering (if applicable)
 (3) Data frame for creating a density plot (use function plotgetcounts()
 }
@@ -30,7 +30,11 @@ are supplied in a Granges object, ideally output of combineannotatepeaks.R.
 }
 \examples{
 \dontrun{
+csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+samplePeaks <- loadBedFiles(csvfile)
+consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
 TSSannot <- getTSS()
+<<<<<<< HEAD
 dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
 csvfile <- file.path(dir, 'lung.csv')
 sampleinfo <- loadCSVFile(csvfile)
@@ -46,6 +50,18 @@ counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
                               sampleinfo = sampleinfo,
                               reference = 'SAEC',
                               chrom = 'chr21')
+=======
+consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
+   TSS = TSSannot,
+   merge = TRUE,
+   regionspecific = TRUE,
+   distancefromTSSdist = 1500,
+   distancefromTSSprox = 1000)
+consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
+   sampleinfo = csvfile,
+   reference = 'SAEC',
+   chrom = 'chr21')
+>>>>>>> webgraphs
 }
 }
 

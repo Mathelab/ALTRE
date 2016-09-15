@@ -36,7 +36,7 @@ grangestodataframe <- function(grange) {
 }
 
 ################################################################################
-#' Internal function: annotates peaks as promoters or enhancers
+#' Internal function: annotates peaks as TSS-proximals or TSS-distals
 #'
 #' Takes a Grange input
 #' Not for use by package user
@@ -57,11 +57,11 @@ tssannotgrange <- function(grange, TSS, distancefromTSS) {
   newdataframe$distance <- mcols(distancetoTSS)$distance
   newdataframe <- within(newdataframe, {
     region <- ifelse(distance <= distancefromTSS,
-                     "promoter",
-                     "enhancer")
+                     "TSS-proximal",
+                     "TSS-distal")
   })
   # annotate anything <=1500 bp away as
-  # promoter, otherwise enhancer
+  # TSS-proximal, otherwise TSS-distal
   chr <- c()
   annotatedgrange <- with(newdataframe,
                           GRanges(chr,
@@ -92,138 +92,15 @@ statscombineannotate <- function(tableofinfo,
   inputdata <- input
   inputdata$size <- inputdata$stop - inputdata$start
   tableofinfo[row1, 2] <- round(mean(inputdata[inputdata[, 4] ==
-                                                 "enhancer", ]$size),
+                                                 "TSS-distal", ]$size),
                                 digits = 0)
   tableofinfo[row2, 2] <- round(mean(inputdata[inputdata[, 4] ==
-                                                 "promoter", ]$size),
+                                                 "TSS-proximal", ]$size),
                                 digits = 0)
-  tableofinfo[row1, 1] <- nrow(inputdata[inputdata[, 4] == "enhancer", ])
-  tableofinfo[row2, 1] <- nrow(inputdata[inputdata[, 4] == "promoter", ])
+  tableofinfo[row1, 1] <- nrow(inputdata[inputdata[, 4] == "TSS-distal", ])
+  tableofinfo[row2, 1] <- nrow(inputdata[inputdata[, 4] == "TSS-proximal", ])
   return(tableofinfo)
 }
-################################################################################
-
-#' Internal function: runs enrichment analysis
-#'
-#' Not for use by package user
-#'
-#' @param set set
-#' @param background background
-#' @param log2FoldChange log2FoldChange
-#' @param ontoltype ontoltype
-#' @param pvalfilt pvalfilt
-#' @param genes genes
-#' @param offspring offspring
-#'
-#' @return dataframe
-
-rundose <- function(set,
-                    background,
-                    log2FoldChange,
-                    pvalfilt,
-                    ontoltype,
-                    genes,
-                    offspring) {
-
-  TSSgranges <- getTSS()
-  en2eg <- as.list(org.Hs.eg.db::org.Hs.egENSEMBL2EG)
-  en2egfunc <- function(num) {  en2eg[[num]] }
-
-  setgranges <- GRanges(set$chr,
-                        IRanges(set$start, set$stop),
-                        meta = set$log2FoldChange)
-  setwithgene <- TSSgranges[nearest(setgranges, TSSgranges)]
-  # colnames(mcols(setwithgene))=c('genename')
-  # mcols(setwithgene)[2]=mcols(setgranges)[1]
-  # colnames(mcols(setwithgene))=c('gene',
-  # 'log2foldchange')
-  # setwithgenelist=unique(unlist(as.list(mcols(setwithgene)[1])))
-  # setentrezlist=lapply(setwithgenelist,en2egfunc)
-  # names(setentrezlist)=setwithgenelist
-  # setentrezlist=unlist(setentrezlist)
-  setentrezlist <- unique(unlist(as.list(mcols(setwithgene)["gene_id"])))
-
-  bggranges <- GRanges(background$chr,
-                       IRanges(background$start, background$stop),
-                       meta = background$log2FoldChange)
-  bgwithgene <- TSSgranges[nearest(bggranges, TSSgranges)]
-  # colnames(mcols(bgwithgene))=c('genename')
-  # bgwithgenelist=unique(unlist(as.list(mcols(bgwithgene)[1])))
-  # bgentrezlist=lapply(bgwithgenelist,en2egfunc)
-  # names(bgentrezlist)=bgwithgenelist
-  # bgentrezlist=unlist(bgentrezlist)
-  bgentrezlist <- unique(unlist(as.list(mcols(bgwithgene)["gene_id"])))
-
-  result <- clusterProfiler::enrichGO(setentrezlist, OrgDb = "org.Hs.eg.db",
-                     pvalueCutoff = 1, keytype = "ENSEMBL",
-                     qvalueCutoff = 1, pAdjustMethod = "fdr",
-                     universe = bgentrezlist, ont = ontoltype)
-
-  newresult <- summary(result)
-  newresult <- newresult[order(newresult$p.adjust,
-                               decreasing = TRUE), ]
-  newresultpval <- newresult[newresult$p.adjust <
-                               pvalfilt, ]
-
-  if (nrow(newresultpval) == 0) {
-    return(as.data.frame(c("No significant pathways")))
-  } else {
-    GOtocheck <- newresultpval$ID
-
-    #### Gene Filtering###########
-    GenesforGOterms <- function(Node) {
-      GOgenes <- as.list(org.Hs.eg.db::org.Hs.egGO2EG)
-      genenum <- length(GOgenes[[Node]])
-      return(genenum)
-    }
-
-    genenum <- lapply(GOtocheck, GenesforGOterms)
-    compare <- cbind(as.matrix(newresultpval$ID),
-                     as.matrix(newresultpval$Description),
-                     as.matrix(genenum))
-    filternum <- which(compare[, 3] > genes)
-    newresultpval2 <- newresultpval[filternum, ]
-    GOtocheck <- newresultpval2$ID
-
-    #### Offspring Filtering########
-    GOfindtermsatlevel <- function(Node, subont) {
-      subontlist <- as.list(subont)
-      result <- subontlist[[Node]]
-      if (length(result) == 1) {
-        if (is.na(result) == TRUE) {
-          result <- NULL
-        }
-      }
-      return(length(result))
-    }
-
-    if (ontoltype == "MF") {
-      offspringnum <- lapply(GOtocheck,
-                             GOfindtermsatlevel,
-                             subont = GO.db::GOMFOFFSPRING)
-    }
-    if (ontoltype == "BP") {
-      offspringnum <- lapply(GOtocheck,
-                             GOfindtermsatlevel,
-                             subont = GO.db::GOBPOFFSPRING)
-    }
-    if (ontoltype == "CC") {
-      offspringnum <- lapply(GOtocheck,
-                             GOfindtermsatlevel,
-                             subont = GO.db::GOCCOFFSPRING)
-    }
-
-    compare <- cbind(as.matrix(newresultpval2$ID),
-                     as.matrix(newresultpval2$Description),
-                     as.matrix(offspringnum))
-    filternum <- which(compare[, 3] < offspring)
-    genefilt <- newresultpval2[filternum,
-                               ]
-
-    return(genefilt)
-  }
-}
-
 ################################################################################
 
 #' Internal function: merges peaks within user input distance of each other
@@ -317,4 +194,52 @@ mergeclosepeaks <- function(peaklist, grange,
 
   return(aftermerge)
 }  # end merging function
+
+
+#' Multiple plot function
+#'
+#' Plots multiple ggplot objects in one window.
+#' If the layout is something like matrix(c(1,2,3,3), nrow=2, byrow=TRUE),
+#' then plot 1 will go in the upper left, 2 will go in the upper right, and
+#' 3 will go all the way across the bottom.
+#' This function was not written by the authours of this package. Link:
+#' http://www.cookbook-r.com/Graphs/Multiple_graphs_on_one_page_(ggplot2)/
+#'
+#' @param ... list of plots
+#' @param cols number of columns in layout
+#' @param layout matrix specifying layout, if present cols is ignored
+#' @param plotlist plotlist
+#' @param file file
+#'
+multiplot <- function(..., plotlist = NULL, file, cols = 1, layout = NULL) {
+  # Make a list from the ... arguments and plotlist
+  plots <- c(list(...), plotlist)
+
+  numPlots <- length(plots)
+
+  # If layout is NULL, then use 'cols' to determine layout
+  if (is.null(layout)) {
+    # Make the panel ncol: Number of columns of plots nrow: Number of rows
+    # needed, calculated from # of cols
+    layout <- matrix(seq(1, cols * ceiling(numPlots/cols)), ncol = cols,
+                     nrow = ceiling(numPlots/cols))
+  }
+
+  if (numPlots == 1) {
+    print(plots[[1]])
+
+  } else {
+    # Set up the page
+    grid::grid.newpage()
+    grid::pushViewport(grid::viewport(layout = grid::grid.layout(nrow(layout), ncol(layout))))
+    # Make each plot, in the correct location
+    for (i in 1:numPlots) {
+      # Get the i,j matrix positions of the regions that contain this subplot
+      matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
+
+      print(plots[[i]], vp = grid::viewport(layout.pos.row = matchidx$row,
+                                      layout.pos.col = matchidx$col))
+    }
+  }
+}
 

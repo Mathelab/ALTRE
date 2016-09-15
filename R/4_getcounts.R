@@ -12,33 +12,35 @@
 #'
 #' @return List containing three items:
 #' (1) DESeqDataSet: contains count information for all replicates of all samples
-#' (2) Matrix: contains number of enhancers and promoters
+#' (2) Matrix: contains number of TSS-distal and TSS-proximal
 #'  before and after filtering (if applicable)
 #' (3) Data frame for creating a density plot (use function plotgetcounts()
 #'
 #'
 #' @examples
 #' \dontrun{
+#' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+#' samplePeaks <- loadBedFiles(csvfile)
+#' consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
 #' TSSannot <- getTSS()
-#' dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
-#' csvfile <- file.path(dir, 'lung.csv')
-#' sampleinfo <- loadCSVFile(csvfile)
-#' samplePeaks <- loadBedFiles(sampleinfo)
-#' consPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps=2)
-#' consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
-#'                                           TSS = TSSannot,
-#'                                           merge = TRUE,
-#'                                           regionspecific = TRUE,
-#'                                           distancefromTSSdist = 1500,
-#'                                           distancefromTSSprox = 1000 )
-#' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
-#'                               sampleinfo = sampleinfo,
-#'                               reference = 'SAEC',
-#'                               chrom = 'chr21')
+#' consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
+#'    TSS = TSSannot,
+#'    merge = TRUE,
+#'    regionspecific = TRUE,
+#'    distancefromTSSdist = 1500,
+#'    distancefromTSSprox = 1000)
+#' consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
+#'    sampleinfo = csvfile,
+#'    reference = 'SAEC',
+#'    chrom = 'chr21')
 #' }
 #' @export
 
-getCounts <- function(annotpeaks, sampleinfo, reference, chrom = NULL) {
+getCounts <- function(annotpeaks,
+                      sampleinfo,
+                      reference,
+                      chrom = NULL) {
+
   bamfileslist <- loadBamFiles(sampleinfo)
 
   if (is.null(chrom) == FALSE) {
@@ -74,23 +76,27 @@ getCounts <- function(annotpeaks, sampleinfo, reference, chrom = NULL) {
 
   # Calculate RPKM for plotting densities multiply by 10^6 and divide by
   # regions size to get rpkm
-  myrpkm <- as.data.frame(normcountssedds[, 1] * 10^6/regionsize)
+  myrpkm <- as.data.frame(normcountssedds[, 1] * 10 ^ 6/regionsize)
   for (i in 2:ncol(normcountssedds)) {
-    myrpkm[, i] <- normcountssedds[, i] * 10^6/regionsize
+    myrpkm[, i] <- normcountssedds[, i] * 10 ^ 6/regionsize
   }
   # take the log2 so that it is a normalized distribution
   myrpkmlog2 <- log2(as.matrix(myrpkm) + 1)
-  colnames(myrpkmlog2) <- unlist(lapply(sampleinfo$sample, as.character))
+  colnames(myrpkmlog2) <- unlist(lapply(paste(sampleinfo$sample,
+                                              sampleinfo$replicate,
+                                              sep = "_"),
+                                        as.character)
+                                 )
 
   #########################################
   # Create stats matrix originaldata is created ~ 10 lines lines above
   colnames(originaldata) <- unlist(lapply(colnames(originaldata), gsub,
                                           pattern = "meta.", replacement = ""))
-  enhancernum <- length(which(originaldata$region == "enhancer"))
-  promoternum <- length(which(originaldata$region == "promoter"))
+  tssdistnum <- length(which(originaldata$region == "TSS-distal"))
+  tssproxnum <- length(which(originaldata$region == "TSS-proximal"))
 
-  statdf <- data.frame(Num_Enhancers = enhancernum,
-                       Num_Promoters = promoternum)
+  statdf <- data.frame(Num_TSSdistals = tssdistnum,
+                       Num_TSSproximals = tssproxnum)
 
   #########################################
   # Create densityplot
@@ -102,5 +108,5 @@ getCounts <- function(annotpeaks, sampleinfo, reference, chrom = NULL) {
 
 
   return(list(regioncounts = countssedds, regioncountstats = statdf,
-              regioncountsforplot = forplotdf))
+              regioncountsforplot = forplotdf, reference))
 }

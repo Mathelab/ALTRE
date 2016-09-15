@@ -11,18 +11,25 @@ Chromatin accessibility data maps the location of regulatory elements (REs), inc
 
 ### How to Get Started and Load Data
 
+__*It is important and all data to be analyzed (alignment files, peak files, meta information in CSV format) is in the same folder.*__
+
 To get started, please load in a CSV (comma separated values) file in Step 1.
-The CSV file should contain the following five columns:
+The CSV file should contain the following four columns:
 
-1. full path for the location of the alignment (BAM format) and peak (BED format) files
-2. name of bamfiles
-3. name of peakfiles
-4. sample name
-5. replicate number (a minimum of 2 replicates per sample is required to run the workflow)
+1. name of bamfiles
+2. name of peakfiles
+3. sample name
+4. replicate number (a minimum of 2 replicates per sample is required)
 
-NOTE: the column names for the CSV file should be "datapath", "bamfiles", "peakfiles", "sample", and "replicate", in that order. An example CSV file can be accessed <a href="https://raw.githubusercontent.com/mathelab/ALTREsampledata/master/DNaseEncodeWindows.csv" target="_blank">here</a> (right click save as).
+__NOTE:__ the column names for the CSV file should be "bamfiles", "peakfiles", "sample", and "replicate", in that order. An example CSV file can be accessed <a href="https://raw.githubusercontent.com/mathelab/AltreDataRepo/master/DNaseEncodeExample.csv" target="_blank">here</a> (right click save as).
 
-To test the package, we are providing a restricted subset of the data with one chromosome (i.e. chromosome 21). The data can be found on this <a href="http://mathelab.github.io/ALTREsampledata/" target="_blank">page</a>. To download the entire data containing all chromosomes, please use a *file download manager* to download the files from the links listed on the same page. After you download the files, please modify the datapath column of the csv file so that all of the rows contain the file paths pointing to the location of the data files on your local machine.
+To test the package, we are providing a restricted subset of the data with one chromosome (i.e. chromosome 21). The data can be found on this <a href="http://mathelab.github.io/ALTREsampledata/" target="_blank">page</a>. To analyze the entire data containing all chromosomes, please use a *file download manager* to download the files from the links listed on the same page. Remember to include all files (alignments, peaks, CSV) in the same folder for analysis with ALTRE.
+
+### Notes on Plots and Processed Data
+
+All plots can be downloaded at a high resolution in PDF, JPEG, SVG, or PNG.  Within the Shiny app, users can control the names of the x-axis label, y-axis label, and main title.  Users can also choose different color schemes.  If users wish to control the size of the x-axis/y-axis labels and titles, they would need to use the command line.
+
+Throughout the workflow, users can download processed data at the major steps, including after annotating peaks (step 3), after defining altered regions (step 6), and after pathway analysis (step 8).
 
 ### Questions
 For any issues or questions that might arise, please file a new issue on <a href="https://github.com/Mathelab/ALTRE/issues" target="_blank">Github</a>.

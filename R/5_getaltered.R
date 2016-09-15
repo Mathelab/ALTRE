@@ -17,28 +17,28 @@
 #'
 #' @examples
 #' \dontrun{
-#' dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
-#' csvfile <- file.path(dir, 'lung.csv')
-#' sampleinfo <- loadCSVFile(csvfile)
-#' samplePeaks <- loadBedFiles(sampleinfo)
-#' consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
+#' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+#' samplePeaks <- loadBedFiles(csvfile)
+#' consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
 #' TSSannot <- getTSS()
-#' consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
-#'                                           TSS = TSSannot,
-#'                                           merge = TRUE,
-#'                                           regionspecific = TRUE,
-#'                                           distancefromTSSdist = 1500,
-#'                                           distancefromTSSprox = 1000)
-#' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
-#'                               sampleinfo=sampleinfo,
-#'                               reference = 'SAEC')
-#' altre_peaks <- countanalysis(counts=counts_consPeaks,
-#'                              pval=0.01,
-#'                              lfcvalue=1)
+#' consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
+#'    TSS = TSSannot,
+#'    merge = TRUE,
+#'    regionspecific = TRUE,
+#'    distancefromTSSdist = 1500,
+#'    distancefromTSSprox = 1000)
+#' consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
+#'    sampleinfo = csvfile,
+#'    reference = 'SAEC',
+#'    chrom = 'chr21')
+#' alteredPeaks <- countanalysis(counts = consensusPeaksCounts,
+#'    pval = 0.01,
+#'    lfcvalue = 1)
 #' }
 #' @export
 
-countanalysis <- function(counts, pval = 0.01,
+countanalysis <- function(counts,
+                          pval = 0.01,
                           lfcvalue = 1) {
   countsdds <- counts[[1]]
   errortest <- try(DESeq2::counts(countsdds),
@@ -61,11 +61,11 @@ countanalysis <- function(counts, pval = 0.01,
    fulldataframe <- cbind(resultsdataframe,
 	grangesdataframe)
    #Rename some columns
-   metacols=grep("meta",colnames(fulldataframe))
+   metacols <- grep("meta",colnames(fulldataframe))
    colnames(fulldataframe)[metacols] <-
      gsub("metab.","", colnames(fulldataframe)[metacols])
 
-  return(list(results = as.data.frame(fulldataframe)))  #,
+  return(list(results <- as.data.frame(fulldataframe), counts[[4]]))  #,
    #           stats = stats,
   #             dftoplot = list(toplot = toplot,
                              # pval = pval,

@@ -4,22 +4,19 @@
 \alias{comparePeaksAltre}
 \title{Comparison of methods for identifying altered regulatory regions}
 \usage{
-comparePeaksAltre(analysisresults, reference, lfctypespecific = 1.5,
-  lfcshared = 1.2, pvaltypespecific = 0.01, pvalshared = 0.05)
+comparePeaksAltre(analysisresults, lfctypespecific = 1.5, lfcshared = 1.2,
+  pvaltypespecific = 0.01, pvalshared = 0.05)
 }
 \arguments{
 \item{analysisresults}{analysisresults of countanalysis.}
 
-\item{reference}{cell type to be considered "reference" or "reference" to which
-other cell types will be compared}
+\item{lfctypespecific}{log2fold change for type specific TSS-dists/TSS-proxs}
 
-\item{lfctypespecific}{log2fold change for type specific enhancers/promoters}
+\item{lfcshared}{log2fold chance for shared TSS-dists/TSS-proxs}
 
-\item{lfcshared}{log2fold chance for shared enhancers/promoters}
+\item{pvaltypespecific}{p-value for type specific TSS-dists/TSS-proxs}
 
-\item{pvaltypespecific}{p-value for type specific enhancers/promoters}
-
-\item{pvalshared}{p-value for shared enhancers/promoters}
+\item{pvalshared}{p-value for shared TSS-dists/TSS-proxs}
 }
 \value{
 matrix comparing the two methods of identifying altered regulatory
@@ -33,13 +30,11 @@ regions, one based on peak intensity, the other on peak presence as
 }
 \examples{
 \dontrun{
-dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
-csvfile <- file.path(dir, 'lung.csv')
-sampleinfo <- loadCSVFile(csvfile)
-samplePeaks <- loadBedFiles(sampleinfo)
-consPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
-plotConsensusPeaks(samplepeaks = consPeaks)
+csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+samplePeaks <- loadBedFiles(csvfile)
+consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
 TSSannot <- getTSS()
+<<<<<<< HEAD
 consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
                                            TSS = TSSannot,
                                            merge = TRUE,
@@ -58,6 +53,27 @@ categaltre_peaks <- categAltrePeaks(altre_peaks,
                                     pvaltypespecific = 0.01,
                                     pvalshared = 0.05)
 analysisresults <- comparePeaksAltre(categaltre_peaks, reference= 'SAEC')
+=======
+consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
+   TSS = TSSannot,
+   merge = TRUE,
+   regionspecific = TRUE,
+   distancefromTSSdist = 1500,
+   distancefromTSSprox = 1000)
+consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
+   sampleinfo = csvfile,
+   reference = 'SAEC',
+   chrom = 'chr21')
+alteredPeaks <- countanalysis(counts = consensusPeaksCounts,
+   pval = 0.01,
+   lfcvalue = 1)
+alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
+   lfctypespecific = 1.5,
+   lfcshared = 1.2,
+   pvaltypespecific = 0.01,
+   pvalshared = 0.05)
+comparePeaksAnalysisResults <- comparePeaksAltre(alteredPeaksCategorized)
+>>>>>>> webgraphs
 }
 }
 

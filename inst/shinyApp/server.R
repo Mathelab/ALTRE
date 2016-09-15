@@ -59,10 +59,10 @@ shinyServer(function(input, output, session) {
                      conspeaks = req(getConsensusObj()),
                      TSS = TSSannot,
                      merge = input$mergeradio,
-                     regionspecific = input$regionradio,
+                     distancefromTSSdist = input$distTSSdist,
+                     distancefromTSSprox = input$distTSSprox,
                      mergedist = input$dist,
-                     distancefromTSSdist = input$distenh,
-                     distancefromTSSprox = input$distprom,
+                     regionspecific = input$regionradio,
                      distancefromTSS = input$distTSS)
                    setProgress(value = 1, detail = "Done!")
                    Sys.sleep(0.5)
@@ -110,11 +110,6 @@ shinyServer(function(input, output, session) {
   })
 
   categAltreObj <- eventReactive(input$buttoncat, {
-    withProgress(message = 'In progress',
-                 detail = 'This may take a while...',
-                 value = 0,
-                 {
-                   setProgress(value = 0.2, detail = "categorizing altered peaks")
                    categAltreOut <-
                      categAltrePeaks(
                        analysisresults = req(getAlteredObj()),
@@ -123,9 +118,6 @@ shinyServer(function(input, output, session) {
                        pvaltypespecific = input$pvalueSpecific,
                        pvalshared = input$pvalueShared
                      )
-                   setProgress(value = 1, detail = "Done!")
-                   Sys.sleep(0.5)
-                 })
     return(categAltreOut)
   })
 
@@ -137,67 +129,25 @@ shinyServer(function(input, output, session) {
                  {
                    setProgress(value = 0.2, detail = "Comparing Methods")
                    comparePeaksOut <- comparePeaksAltre(
-                     req(categAltreObj()),
-                     reference = req(input$reference)
-                     )
+                     req(categAltreObj()))
                    setProgress(value = 1, detail = "Done!")
                    Sys.sleep(0.5)
                  })
     return(comparePeaksOut)
   })
 
-  pathenrichMFObj <- eventReactive(input$buttonpathwayMF, {
+  pathGREATObj <- eventReactive(input$buttongreat, {
     withProgress(message = 'In progress',
                  detail = 'This may take a while...',
                  value = 0,
                  {
-                   setProgress(value = 0.2, detail = "MF: GO Enrichment Analysis")
-                   MFenrich <-
-                       pathenrich(
-                         analysisresults = req(categAltreObj()),
-                         ontoltype = "MF",
-                         enrichpvalfilt = input$pathpvaluecutoffMF
-                       )
+                   setProgress(value = 0.2, detail = "Running GREAT")
+                   runGREATcalls <- runGREAT(req(categAltreObj()))
+                   runGREATout <- processPathways(req(runGREATcalls))
                    setProgress(value = 1, detail = "Done!")
                    Sys.sleep(0.5)
                  })
-    return(MFenrich)
-  })
-
-  pathenrichBPObj <- eventReactive(input$buttonpathwayBP, {
-    withProgress(message = 'In progress',
-                 detail = 'This may take a while...',
-                 value = 0,
-                 {
-                   setProgress(value = 0.2, detail = "BP: GO Enrichment Analysis")
-                   BPenrich <-
-                     pathenrich(
-                       analysisresults = req(categAltreObj()),
-                       ontoltype = "BP",
-                       enrichpvalfilt = input$pathpvaluecutoffBP
-                     )
-                   setProgress(value = 1, detail = "Done!")
-                   Sys.sleep(0.5)
-                 })
-    return(BPenrich)
-  })
-
-  pathenrichCCObj <- eventReactive(input$buttonpathwayCC, {
-    withProgress(message = 'In progress',
-                 detail = 'This may take a while...',
-                 value = 0,
-                 {
-                   setProgress(value = 0.2, detail = "CC: GO Enrichment Analysis")
-                   BPenrich <-
-                     pathenrich(
-                       analysisresults = req(categAltreObj()),
-                       ontoltype = "CC",
-                       enrichpvalfilt = input$pathpvaluecutoffCC
-                     )
-                   setProgress(value = 1, detail = "Done!")
-                   Sys.sleep(0.5)
-                 })
-    return(BPenrich)
+    return(runGREATout)
   })
   ############################################################################
    #  get input
@@ -218,12 +168,50 @@ shinyServer(function(input, output, session) {
 
   })
 
+  ### palettes
+  colrs <-   rownames(RColorBrewer::brewer.pal.info)
+
+  output$choosePalette1 <- renderUI({
+    selectInput("palette1",
+                "Select color palette",
+                colrs ,
+                selected = colrs[15])
+  })
+
+  output$choosePalette2 <- renderUI({
+    selectInput("palette2",
+                "Select color palette",
+                colrs ,
+                selected = colrs[15])
+  })
+
+  output$choosePalette3 <- renderUI({
+    selectInput("palette3",
+                "Select color palette",
+                colrs ,
+                selected = colrs[15])
+  })
+
+  output$choosePalette4 <- renderUI({
+    selectInput("palette4",
+                "Select color palette",
+                colrs ,
+                selected = colrs[15])
+  })
+
+  output$choosePalette5 <- renderUI({
+    selectInput("palette5",
+                "Select color palette",
+                colrs ,
+                selected = colrs[15])
+  })
+
   ############################################################################
   # download buttons
   output$downloadAnnotate <- downloadHandler(
     filename = "annotatedRegions.csv",
     content = function(con) {
-      writeAnnotatedRegions(req(combineAnnotateObj()), con)
+      writeConsensusRE(req(combineAnnotateObj()), con)
     }
   )
   output$downloadBED <- downloadHandler(
@@ -236,30 +224,16 @@ shinyServer(function(input, output, session) {
   output$downloadCompareDT <- downloadHandler(
     filename = "dataTableRE.csv",
     content = function(con) {
-      writeREdf(req(comparePeaksObj()), con)
+      writeCompareRE(req(comparePeaksObj()), con)
     }
   )
 
-  output$downloadPathwayMF <- downloadHandler(
-    filename = "pathEnrichMF.zip",
+  output$downloadGREAT <- downloadHandler(
+    filename = "GREATpathways.zip",
     content = function(con) {
-      writePathEnrich(req(pathenrichMFObj()), con)
-    #contentType = "application/zip"
-    }
-  )
-
-  output$downloadPathwayBP <- downloadHandler(
-    filename = "pathEnrichBP.zip",
-    content = function(con) {
-      writePathEnrich(req(pathenrichBPObj()), con)
-    }
-  )
-
-  output$downloadPathwayCC <- downloadHandler(
-    filename = "pathEnrichCC.zip",
-    content = function(con) {
-      writePathEnrich(req(pathenrichCCObj()), con)
-    }
+      writeGREATpath(req(pathGREATObj()), con)
+    },
+    contentType = "application/zip"
   )
 
   ####
@@ -304,44 +278,73 @@ shinyServer(function(input, output, session) {
   }, options = list(searching = FALSE,
                     paging = FALSE))
 
+  output$table6 <- renderDataTable({
+	mydf <- req(pathGREATObj())
+   data.frame(Pathway = mydf$ExperimentSpecificByIntensity$stats[ , 1],
+              Experiment_Specific = mydf$ExperimentSpecificByIntensity$stats[ , 2],
+              Shared = mydf$Shared$stats[ , 2],
+              Reference_Specific = mydf$ReferenceSpecificByIntensity$stats[ , 2])
+ }, options = list(searching = FALSE,
+                    paging = FALSE))
+
   ############################################################################
   # plots
 
-  output$barplot <- renderPlot({
-    plotConsensusPeaks(getConsensusObj())
+  output$barplot <- highcharter::renderHighchart({
+       plotConsensusPeaks(req(getConsensusObj()),
+                       palette = input$palette1,
+                       maintitle = input$consPlotTitle,
+                       ylabel = input$consPlotylabel)
   })
 
-  output$annotatebarplot <- renderPlot({
-    plotCombineAnnotatePeaks(combineAnnotateObj())
+  output$annotatebarplot <- renderUI({
+    plotCombineAnnotatePeaks(req(combineAnnotateObj()),
+                             viewer = FALSE,
+                             palette = input$palette2,
+                             leftmaintitle = input$combLeftPlotTitle,
+                             rightmaintitle = input$combRightPlotTitle,
+                             leftylabel = input$combLeftylabel,
+                             rightylabel = input$combRightylabel)
   })
 
-  output$densityplot <- renderPlot({
-    plotgetcounts(getCountsObj())
+  output$densityplot <- highcharter::renderHighchart({
+    plotGetCounts(req(getCountsObj()),
+                  palette = input$palette3,
+                  xlabel = input$countsxlabel,
+                  ylabel = input$countsylabel,
+                  maintitle = input$countsPlotTitle)
   })
 
-  output$volcanoplot <- renderPlot({
-    plotCountAnalysis(req(categAltreObj()))
+  output$volcano <- renderUI({
+                   plotCountAnalysis(req(categAltreObj()),
+                                    viewer = FALSE,
+                                   palette = input$palette4)
   })
 
-  output$boxplot <- renderPlot({
-    plotDistCountAnalysis(req(categAltreObj()), req(getCountsObj()))
+  output$boxplotCounts <- highcharter::renderHighchart({
+    plotDistCountAnalysis(req(categAltreObj()),
+                          req(getCountsObj()),
+                          palette = input$palette5)
   })
 
-  output$heatplotMF <- renderPlot({
-      enrichHeatmap(req(pathenrichMFObj()), title = "GO:MF")
+  output$pieplot <- renderUI({
+    plotCompareMethodsAll(req(comparePeaksObj()),
+                          viewer = FALSE,
+                          palette = input$palette5,
+                          title11 = input$title11,
+                          title12 = input$title12,
+                          title13 = input$title13,
+                          title21 = input$title21,
+                          title22 = input$title22,
+                          title23 = input$title23)
   })
 
-  output$heatplotBP <- renderPlot({
-        enrichHeatmap(req(pathenrichBPObj()), title = "GO:BP")
+  output$heatplotGREAT <- highcharter::renderHighchart({
+    plotGREATenrich(req(pathGREATObj()),
+                    maintitle = "GO Molecular Function",
+                    pathwaycateg = "GO_Molecular_Function")
   })
 
-  output$heatplotCC <- renderPlot({
-    enrichHeatmap(req(pathenrichCCObj()), title = "GO:CC")
-  })
-
-  output$vennplot <- renderPlot({
-    plotallvenn(req(comparePeaksObj()))
-  })
 
   ############################################################################
   # info boxes
@@ -358,7 +361,9 @@ shinyServer(function(input, output, session) {
     else if (!is.null(input$file)) {
     infoBox(
       "Status",
-      "File Loading Complete. You Can Proceed to Step 2.",
+      HTML(paste("File Loading Complete",
+                 "You Can Proceed to Step 2.",
+                 sep = "<br/>")),
       icon = icon("thumbs-up", lib = "glyphicon"),
       color = "green", fill = TRUE)
     }
@@ -376,7 +381,9 @@ shinyServer(function(input, output, session) {
     else if (input$buttonmerge > 0 && is.null(input$file)) {
       infoBox(
         "Status",
-        "Step 2 is Not Complete Yet. Please Run Step 1 Before Proceeding! ",
+        HTML(paste("Step 2 is Not Complete Yet",
+                   "Please Run Step 1 Before Proceeding!.",
+                   sep = "<br/>")),
         icon = icon("warning-sign", lib = "glyphicon"),
         color = "red",
         fill = TRUE)
@@ -384,7 +391,9 @@ shinyServer(function(input, output, session) {
     else if (input$buttonmerge > 0 && !is.null(getConsensusObj())) {
       infoBox(
         "Status",
-        "Replicates Have Been Merged. You Can Proceed to Step 3.",
+        HTML(paste("Replicates Have Been Merged.",
+                   "You Can Proceed to Step 3.",
+                   sep = "<br/>")),
         icon = icon("thumbs-up", lib = "glyphicon"),
         color = "green",
         fill = TRUE)
@@ -403,7 +412,9 @@ shinyServer(function(input, output, session) {
     else if (input$buttonannot > 0 && (input$buttonmerge == 0 || is.null(input$file))) {
       infoBox(
         "Status",
-        "Step 2 is Not Complete Yet. Please Run Previous Steps Before Proceeding!",
+        HTML(paste("Step 2 is Not Complete Yet.",
+                   "Please Run Previous Steps Before Proceeding!",
+                   sep = "<br/>")),
         icon = icon("warning-sign", lib = "glyphicon"),
         color = "red",
         fill = TRUE)
@@ -411,8 +422,11 @@ shinyServer(function(input, output, session) {
     else if (input$buttonannot > 0 && !is.null(combineAnnotateObj())) {
       infoBox(
         "Status",
-        "Peaks Have Been Annotated (If You Change the Parameters,
-        Please Press Button Again). You Can Proceed to Step 4.",
+        HTML(paste("Peaks Have Been Annotated.",
+                   "You Can Proceed to Step 4.",
+                   "(If You Change the Parameters,",
+                    "Please Press Button Again.)",
+                   sep = "<br/>")),
         icon = icon("thumbs-up", lib = "glyphicon"),
         color = "green",
         fill = TRUE)
@@ -433,7 +447,9 @@ shinyServer(function(input, output, session) {
                                          is.null(input$file))) {
       infoBox(
         "Status",
-        "Step 3 is Not Complete Yet. Please Run Previous Steps Before Proceeding!",
+        HTML(paste("Step 3 is Not Complete Yet.",
+                   "Please Run Previous Steps Before Proceeding!",
+                   sep = "<br/>")),
         icon = icon("warning-sign", lib = "glyphicon"),
         color = "red",
         fill = TRUE)
@@ -441,7 +457,9 @@ shinyServer(function(input, output, session) {
     else if (input$buttoncounts > 0 && !is.null(getCountsObj())) {
       infoBox(
         "Status",
-        "Counts Have Been Retrieved. You Can Proceed to Step 5.",
+        HTML(paste("Counts Have Been Retrieved.",
+                   "You Can Proceed to Step 5.",
+                   sep = "<br/>")),
         icon = icon("thumbs-up", lib = "glyphicon"),
         color = "green",
         fill = TRUE)
@@ -451,7 +469,8 @@ shinyServer(function(input, output, session) {
   output$statusbox5 <- renderInfoBox({
     if (input$buttondefine == 0) {
       infoBox(
-        "Status", "Define Altered Regions Button Not Clicked Yet!",
+        "Status",
+        "Identify Altered Regions Button Not Clicked Yet!",
         icon = icon("flag", lib = "glyphicon"),
         color = "aqua",
         fill = TRUE
@@ -462,15 +481,19 @@ shinyServer(function(input, output, session) {
                                          is.null(input$file))) {
       infoBox(
         "Status",
-        "Step 4 is Not Complete Yet. Please Run Previous Steps Before Proceeding! ",
+        HTML(paste("Step 4 is Not Complete Yet.",
+                   "Please Run Previous Steps Before Proceeding!",
+                   sep = "<br/>")),
         icon = icon("warning-sign", lib = "glyphicon"),
         color = "red",
         fill = TRUE)
     }
     else if (input$buttondefine > 0 && !is.null(getAlteredObj())) {
       infoBox(
-        "Status", "Altered Regions Have Been Defined.
-        You Can Proceed to Step 6.",
+        "Status",
+        HTML(paste("Altered Regions Have Been Identified.",
+                   "You Can Proceed to Step 6.",
+                   sep = "<br/>")),
         icon = icon("thumbs-up", lib = "glyphicon"),
         color = "green",
         fill = TRUE
@@ -481,7 +504,8 @@ shinyServer(function(input, output, session) {
   output$statusbox6 <- renderInfoBox({
     if (input$buttoncat == 0) {
       infoBox(
-        "Status", "Categorize Altered Regions Button Not Clicked Yet!",
+        "Status",
+        "Categorize Regions Button Not Clicked Yet!",
         icon = icon("flag", lib = "glyphicon"),
         color = "aqua",
         fill = TRUE
@@ -493,15 +517,19 @@ shinyServer(function(input, output, session) {
                                      is.null(input$file))) {
       infoBox(
         "Status",
-        "Step 5 is Not Complete Yet. Please Run Previous Steps Before Proceeding! ",
+        HTML(paste("Step 5 is Not Complete Yet.",
+                   "Please Run Previous Steps Before Proceeding!",
+                   sep = "<br/>")),
         icon = icon("warning-sign", lib = "glyphicon"),
         color = "red",
         fill = TRUE)
     }
     else if (input$buttoncat > 0 && !is.null(categAltreObj())) {
       infoBox(
-        "Status", "Altered Regions Have Been Categorized.
-        You Can Proceed to Step 7.",
+        "Status",
+        HTML(paste("Altered Regions Have Been Categorized.",
+                   "You Can Proceed to Step 7.",
+                   sep = "<br/>")),
         icon = icon("thumbs-up", lib = "glyphicon"),
         color = "green",
         fill = TRUE
@@ -518,7 +546,7 @@ shinyServer(function(input, output, session) {
         color = "aqua",
         fill = TRUE)
     }
-    else if (input$buttoncompare> 0 && (input$buttoncat    == 0 ||
+    else if (input$buttoncompare > 0 && (input$buttoncat    == 0 ||
                                            input$buttondefine == 0 ||
                                            input$buttoncounts == 0 ||
                                            input$buttonannot  == 0 ||
@@ -526,7 +554,9 @@ shinyServer(function(input, output, session) {
                                            is.null(input$file))) {
       infoBox(
         "Status",
-        "Step 6 is Not Complete Yet. Please Run Previous Steps Before Proceeding!",
+        HTML(paste("Step 6 is Not Complete Yet.",
+                   "Please Run Previous Steps Before Proceeding!",
+                   sep = "<br/>")),
         icon = icon("warning-sign", lib = "glyphicon"),
         color = "red",
         fill = TRUE)
@@ -541,114 +571,150 @@ shinyServer(function(input, output, session) {
     }
   })
 
-  output$statusbox8a <- renderInfoBox({
-    if (input$buttonpathwayMF == 0) {
+  # output$statusbox8a <- renderInfoBox({
+  #   if (input$buttonpathwayMF == 0) {
+  #     infoBox(
+  #       "Status",
+  #       "MF Enrichment Analysis Button Not Clicked Yet!",
+  #       icon = icon("flag", lib = "glyphicon"),
+  #       color = "aqua",
+  #       fill = TRUE)
+  #   }
+  #   else if (input$buttonpathwayMF > 0 && (input$buttoncompare == 0 ||
+  #                                          input$buttoncat    == 0 ||
+  #                                          input$buttondefine == 0 ||
+  #                                          input$buttoncounts == 0 ||
+  #                                          input$buttonannot  == 0 ||
+  #                                          input$buttonmerge  == 0 ||
+  #                                          is.null(input$file))) {
+  #     infoBox(
+  #       "Status",
+  #       "Step 7 is Not Complete Yet. Please Run Previous Steps Before Proceeding!",
+  #       icon = icon("warning-sign", lib = "glyphicon"),
+  #       color = "red",
+  #       fill = TRUE)
+  #   }
+  #   else if (input$buttonpathwayMF > 0 && !is.null(pathenrichMFObj())) {
+  #     infoBox(
+  #       "Status",
+  #       "MF Enrichment Analysis Has Been Run.",
+  #       icon = icon("thumbs-up", lib = "glyphicon"),
+  #       color = "green",
+  #       fill = TRUE)
+  #   }
+  # })
+  #
+  # output$statusbox8b <- renderInfoBox({
+  #   if (input$buttonpathwayBP == 0) {
+  #     infoBox(
+  #       "Status",
+  #       "BP Enrichment Analysis Button Not Clicked Yet!",
+  #       icon = icon("flag", lib = "glyphicon"),
+  #       color = "aqua",
+  #       fill = TRUE)
+  #   }
+  #   else if (input$buttonpathwayBP > 0 && (input$buttoncompare == 0 ||
+  #                                          input$buttoncat    == 0 ||
+  #                                          input$buttondefine == 0 ||
+  #                                          input$buttoncounts == 0 ||
+  #                                          input$buttonannot  == 0 ||
+  #                                          input$buttonmerge  == 0 ||
+  #                                          is.null(input$file))) {
+  #     infoBox(
+  #       "Status",
+  #       "Step 7 is Not Complete Yet. Please Run Previous Steps Before Proceeding!",
+  #       icon = icon("warning-sign", lib = "glyphicon"),
+  #       color = "red",
+  #       fill = TRUE)
+  #   }
+  #   else if (input$buttonpathwayBP > 0 && !is.null(pathenrichBPObj())) {
+  #     infoBox(
+  #       "Status",
+  #       "BP Enrichment Analysis Completed.",
+  #       icon = icon("thumbs-up", lib = "glyphicon"),
+  #       color = "green",
+  #       fill = TRUE
+  #     )
+  #   }
+  # })
+  #
+  #
+  # output$statusbox8c <- renderInfoBox({
+  #   if (input$buttonpathwayCC == 0) {
+  #     infoBox(
+  #       "Status",
+  #       "CC Enrichment Analysis Button Not Clicked Yet!",
+  #       icon = icon("flag", lib = "glyphicon"),
+  #       color = "aqua",
+  #       fill = TRUE)
+  #   }
+  #   else if (input$buttonpathwayCC > 0 && (input$buttoncompare == 0 ||
+  #                                          input$buttoncat    == 0 ||
+  #                                          input$buttondefine == 0 ||
+  #                                          input$buttoncounts == 0 ||
+  #                                          input$buttonannot  == 0 ||
+  #                                          input$buttonmerge  == 0 ||
+  #                                          is.null(input$file))) {
+  #     infoBox(
+  #       "Status",
+  #       "Step 7 is Not Complete Yet. Please Run Previous Steps Before Proceeding!",
+  #       icon = icon("warning-sign", lib = "glyphicon"),
+  #       color = "red",
+  #       fill = TRUE)
+  #   }
+  #   else if (input$buttonpathwayCC > 0 && !is.null(pathenrichCCObj())) {
+  #     infoBox(
+  #       "Status",
+  #       "CC Enrichment Analysis Completed.",
+  #       icon = icon("thumbs-up", lib = "glyphicon"),
+  #       color = "green",
+  #       fill = TRUE
+  #     )
+  #   }
+  # })
+
+
+  output$statusbox9 <- renderInfoBox({
+    if (input$buttongreat == 0) {
       infoBox(
         "Status",
-        "MF Enrichment Analysis Button Not Clicked Yet!",
+        "Run GREAT Button Not Clicked Yet!",
         icon = icon("flag", lib = "glyphicon"),
         color = "aqua",
         fill = TRUE)
     }
-    else if (input$buttonpathwayMF > 0 && (input$buttoncompare == 0 ||
-                                           input$buttoncat    == 0 ||
-                                           input$buttondefine == 0 ||
-                                           input$buttoncounts == 0 ||
-                                           input$buttonannot  == 0 ||
-                                           input$buttonmerge  == 0 ||
-                                           is.null(input$file))) {
+    else if (input$buttongreat > 0 && (input$buttoncat    == 0 ||
+                                        input$buttondefine == 0 ||
+                                        input$buttoncounts == 0 ||
+                                        input$buttonannot  == 0 ||
+                                        input$buttonmerge  == 0 ||
+                                        is.null(input$file))) {
       infoBox(
         "Status",
-        "Step 7 is Not Complete Yet. Please Run Previous Steps Before Proceeding!",
+        HTML(paste("Step 6 is Not Complete Yet.",
+                   "Please Run Previous Steps Before Proceeding!",
+                   sep = "<br/>")),
         icon = icon("warning-sign", lib = "glyphicon"),
         color = "red",
         fill = TRUE)
     }
-    else if (input$buttonpathwayMF > 0 && !is.null(pathenrichMFObj())) {
+    else if (input$buttongreat > 0 && !is.null(pathGREATObj())) {
       infoBox(
         "Status",
-        "MF Enrichment Analysis Has Been Run.",
+        "RUN GREAT Completed.",
         icon = icon("thumbs-up", lib = "glyphicon"),
         color = "green",
         fill = TRUE)
     }
   })
 
-  output$statusbox8b <- renderInfoBox({
-    if (input$buttonpathwayBP == 0) {
-      infoBox(
-        "Status",
-        "BP Enrichment Analysis Button Not Clicked Yet!",
-        icon = icon("flag", lib = "glyphicon"),
-        color = "aqua",
-        fill = TRUE)
-    }
-    else if (input$buttonpathwayBP > 0 && (input$buttoncompare == 0 ||
-                                           input$buttoncat    == 0 ||
-                                           input$buttondefine == 0 ||
-                                           input$buttoncounts == 0 ||
-                                           input$buttonannot  == 0 ||
-                                           input$buttonmerge  == 0 ||
-                                           is.null(input$file))) {
-      infoBox(
-        "Status",
-        "Step 7 is Not Complete Yet. Please Run Previous Steps Before Proceeding!",
-        icon = icon("warning-sign", lib = "glyphicon"),
-        color = "red",
-        fill = TRUE)
-    }
-    else if (input$buttonpathwayBP > 0 && !is.null(pathenrichBPObj())) {
-      infoBox(
-        "Status",
-        "BP Enrichment Analysis Completed.",
-        icon = icon("thumbs-up", lib = "glyphicon"),
-        color = "green",
-        fill = TRUE
-      )
-    }
-  })
 
-
-  output$statusbox8c <- renderInfoBox({
-    if (input$buttonpathwayCC == 0) {
-      infoBox(
-        "Status",
-        "CC Enrichment Analysis Button Not Clicked Yet!",
-        icon = icon("flag", lib = "glyphicon"),
-        color = "aqua",
-        fill = TRUE)
-    }
-    else if (input$buttonpathwayCC > 0 && (input$buttoncompare == 0 ||
-                                           input$buttoncat    == 0 ||
-                                           input$buttondefine == 0 ||
-                                           input$buttoncounts == 0 ||
-                                           input$buttonannot  == 0 ||
-                                           input$buttonmerge  == 0 ||
-                                           is.null(input$file))) {
-      infoBox(
-        "Status",
-        "Step 7 is Not Complete Yet. Please Run Previous Steps Before Proceeding!",
-        icon = icon("warning-sign", lib = "glyphicon"),
-        color = "red",
-        fill = TRUE)
-    }
-    else if (input$buttonpathwayCC > 0 && !is.null(pathenrichCCObj())) {
-      infoBox(
-        "Status",
-        "CC Enrichment Analysis Completed.",
-        icon = icon("thumbs-up", lib = "glyphicon"),
-        color = "green",
-        fill = TRUE
-      )
-    }
-  })
-
-  output$getlocalpath <- renderPrint({
-	if (!is.null(input$testfile)) {
-	print( parseFilePaths(roots = rootVolumes, input$file)$datapath)
-	}
-
-  })
+#   output$getlocalpath <- renderPrint({
+# 	if (!is.null(input$testfile)) {
+# 	print( parseFilePaths(roots = rootVolumes, input$file)$datapath)
+# 	}
+#
+#   })
 
 
   ##########################################################
