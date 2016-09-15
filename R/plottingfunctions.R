@@ -763,8 +763,7 @@ plotDistCountAnalysis <-
            xlabelsize = "15px",
            ylabel = "log2(FPKM)",
            ylabelsize = "15px",
-           maintitle = "Distribution of Normalized Counts
-           (peaks types determine by intensity)",
+           maintitle = "Distribution of Normalized Counts (peaks types determine by intensity)",
            maintitlesize = "20px",
            xlabel = NULL) {
     altrecateg <- altrecategplot <- REaltrecategplot <- c()
