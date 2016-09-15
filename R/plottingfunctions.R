@@ -1532,7 +1532,7 @@ plotGREATenrich <- function(input,
       x = -10, # 90
       y = 100, # 70
       padding=2,
-      title = list(text="p-value")
+      #title = list(text="p-value")
     ) %>%
     hc_exporting(enabled = TRUE)
   #create final formatting
