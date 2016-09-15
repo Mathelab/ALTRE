@@ -23,32 +23,6 @@ Create a volcano plot from the output of categAltrePeaks
 }
 \examples{
 \dontrun{
-<<<<<<< HEAD
-csvfile <- loadCSVFile("DNAseEncodeExample.csv")
-samplePeaks <- loadBedFiles(csvfile)
-consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
-minreps = 2)
-TSSannot <- getTSS()
-consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
-TSS = TSSannot,
-merge = TRUE,
-regionspecific = TRUE,
-distancefromTSSdist = 1500,
-distancefromTSSprox = 1000)
-consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
-                                 sampleinfo = csvfile,
-                                 reference = 'SAEC',
-                                 chrom = 'chr21')
-alteredPeaks <- countanalysis(counts = consensusPeaksCounts,
-pval = 0.01,
-lfcvalue = 1)
-alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
-                                          lfctypespecific = 1.5,
-                                          lfcshared = 1.2,
-                                          pvaltypespecific = 0.01,
-                                          pvalshared = 0.05)
-plotCountAnalysis(alteredPeaksCategorized)
-=======
 dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
 csvfile <- file.path(dir, 'lung.csv')
 sampleinfo <- loadCSVFile(csvfile)
@@ -75,7 +49,6 @@ categaltre_peaks <- categAltrePeaks(altre_peaks,
                                     pvaltypespecific = 0.01,
                                     pvalshared = 0.05)
 plotCountAnalysis(categaltre_peaks)
->>>>>>> db2c19034a36df4f41dc07c4a569d2cd8fa34ec9
 }
 }
 
