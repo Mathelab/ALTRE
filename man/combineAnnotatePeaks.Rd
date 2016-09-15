@@ -17,17 +17,10 @@ combineAnnotatePeaks(conspeaks, TSS, merge = FALSE, distancefromTSSdist = 0,
 \item{merge}{whether or not regions should be merged if they are within a
 user set distance to each other (default is FALSE)}
 
-<<<<<<< HEAD
-\item{distancefromTSSdist}{merge enhancers peaks if they are < distancefromTSSdist apart
-(set when regionspecific is TRUE)}
-
-\item{distancefromTSSprox}{merge promoters if they are < distancefromTSSprox apart
-=======
 \item{distancefromTSSdist}{merge TSS-distal peaks if they are < distancefromTSSdist apart
 (set when regionspecific is TRUE)}
 
 \item{distancefromTSSprox}{merge TSS-proximal if they are < distancefromTSSprox apart
->>>>>>> webgraphs
 (set when regionspecific is TRUE)}
 
 \item{mergedist}{merge TSS-proximal and TSS-distal if they are < mergedist apart
@@ -63,21 +56,12 @@ csvfile <- loadCSVFile("DNAseEncodeExample.csv")
 samplePeaks <- loadBedFiles(csvfile)
 consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
 TSSannot <- getTSS()
-<<<<<<< HEAD
-consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
-                                          TSS = TSSannot,
-                                          merge = TRUE,
-                                          regionspecific = TRUE,
-                                          distancefromTSSdist = 1500,
-                                          distancefromTSSprox = 1000)
-=======
 consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
    TSS = TSSannot,
    merge = TRUE,
    regionspecific = TRUE,
    distancefromTSSdist = 1500,
    distancefromTSSprox = 1000)
->>>>>>> webgraphs
 }
 }
 

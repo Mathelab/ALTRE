@@ -32,20 +32,6 @@ csvfile <- loadCSVFile("DNAseEncodeExample.csv")
 samplePeaks <- loadBedFiles(csvfile)
 consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
 TSSannot <- getTSS()
-<<<<<<< HEAD
-consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
-                                          TSS = TSSannot,
-                                          merge = TRUE,
-                                          regionspecific = TRUE,
-                                          distancefromTSSdist = 1500,
-                                          distancefromTSSprox = 1000)
-counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
-                              sampleinfo=sampleinfo,
-                              reference = 'SAEC')
-altre_peaks <- countanalysis(counts=counts_consPeaks,
-                             pval=0.01,
-                             lfcvalue=1)
-=======
 consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
    TSS = TSSannot,
    merge = TRUE,
@@ -59,7 +45,6 @@ consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
 alteredPeaks <- countanalysis(counts = consensusPeaksCounts,
    pval = 0.01,
    lfcvalue = 1)
->>>>>>> webgraphs
 }
 }
 

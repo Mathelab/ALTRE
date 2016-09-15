@@ -28,13 +28,6 @@ consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
                                           regionspecific = TRUE,
                                           distancefromTSSdist = 1500,
                                           distancefromTSSprox = 1000 )
-<<<<<<< HEAD:man/writeAnnotatedRegions.Rd
-#Need to run getcounts on all chromosomes
-countsPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
-                             csvfile = csvfile,
-                             reference = 'SAEC')
-=======
->>>>>>> webgraphs:man/writeConsensusRE.Rd
 con <- "annotatedRegions.csv"
 writeConsensusRE(consPeaksAnnotated, con)
 }
