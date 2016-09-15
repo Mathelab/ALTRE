@@ -473,42 +473,52 @@ plotGetCounts <- function(countsConsPeaks,
 #' @param viewer whether the plot should be displayed in the RStudio viewer or
 #'        in Shiny/Knittr
 #' @param palette RColorBrewer palette to change graph colors
-
+#' @param xlabel label for x-axis (default, "-log10 pvalue")
+#' @param ylabel label for y-axis (default, "Density")
+#' @param xlabelsize size of xlabel (default, 15px)
+#' @param ylabelsize size of ylabel (default, 15px)
+#' @param maintitlelefty main title (default, "TSS-distal")
+#' @param maintitlerighty main title (default, "TSS-proximal")
+#' @param maintitlesize main title size (default, 20px)
 #'
 #' @return a highcharter object
 #'
 #' @examples
 #' \dontrun{
-#' dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
-#' csvfile <- file.path(dir, 'lung.csv')
-#' sampleinfo <- loadCSVFile(csvfile)
-#' samplePeaks <- loadBedFiles(sampleinfo)
-#' consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
-#' plotConsensusPeaks(samplepeaks=consPeaks)
-#' TSSannot<- getTSS()
-#' consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
+#' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+#' samplePeaks <- loadBedFiles(csvfile)
+#' consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
+#' TSSannot <- getTSS()
+#' consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
 #'                                           TSS = TSSannot,
 #'                                           merge = TRUE,
 #'                                           regionspecific = TRUE,
 #'                                           distancefromTSSdist = 1500,
 #'                                           distancefromTSSprox = 1000)
-#' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
-#'                               sampleinfo = sampleinfo,
+#' consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
 #'                               reference = 'SAEC',
+#'                               sampleinfo = csvfile,
 #'                               chrom = 'chr21')
-#' altre_peaks <- countanalysis(counts = counts_consPeaks,
-#'                              pval = 0.01,
-#'                              lfcvalue = 1)
-#' categaltre_peaks <- categAltrePeaks(altre_peaks,
-#'                                     lfctypespecific = 1.5,
-#'                                     lfcshared = 1.2,
-#'                                     pvaltypespecific = 0.01,
-#'                                     pvalshared = 0.05)
-#' plotCountAnalysis(categaltre_peaks)
+#' alteredPeaks <- countanalysis(counts=consensusPeaksCounts,
+#'                              pval=0.01,
+#'                              lfcvalue=1)
+#' alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
+#'                              lfctypespecific = 1.5,
+#'                              lfcshared = 1.2,
+#'                              pvaltypespecific = 0.01,
+#'                              pvalshared = 0.05)
+#' plotCountAnalysis(alteredPeaksCategorized)
 #' }
 #' @export
 
-plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL) {
+plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL,
+                              maintitlelefty = "TSS-distal",
+                              maintitlerighty = "TSS-proximal",
+                              ylabel = "-log10 pvalue",
+                              xlabel = "log2fold change",
+                              xlabelsize = "15px",
+                              ylabelsize = "15px",
+                              maintitlesize = "20px") {
 
     if ( !is.null(palette) ) {
         cols <- RColorBrewer::brewer.pal(4, palette)
@@ -630,9 +640,12 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL) {
         scatter = list(marker = list(radius = 2),
                        turboThreshold = 0)
       ) %>%
-      hc_title(text = "TSS-distal",
-               style = list(color = '#2E1717',
-                            fontWeight = 'bold')) %>%
+      hc_title(
+        text = maintitlelefty,
+        style = list(color = '#2E1717',
+                     fontSize = maintitlesize,
+                     fontWeight = 'bold')
+      ) %>%
       hc_add_series_df(
         data = tssdist,
         x = log2FoldChange,
@@ -640,8 +653,10 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL) {
         type = "scatter",
         group = REaltrecategplot
       )  %>%
-      hc_xAxis(title = list(text = "log2fold change")) %>%
-      hc_yAxis(title = list(text = "-log10 pvalue")) %>%
+      hc_yAxis(title = list(text = ylabel,
+                            style = list(fontSize = ylabelsize))) %>%
+      hc_xAxis(title = list(text = xlabel,
+                            style = list(fontSize = xlabelsize))) %>%
       hc_tooltip(headerFormat = "",
                  pointFormat  = "<b>log2FC</b> = {point.x}<br> <b>-log10pvalue</b>
                 = {point.y}<br>") %>%
@@ -653,9 +668,12 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL) {
         scatter = list(marker = list(radius = 2))
       ) %>%
       hc_chart(type = "scatter") %>%
-      hc_title(text = "TSS-proximal",
-               style = list(color = '#2E1717',
-                            fontWeight = 'bold')) %>%
+      hc_title(
+        text = maintitlerighty,
+        style = list(color = '#2E1717',
+                     fontSize = maintitlesize,
+                     fontWeight = 'bold')
+      ) %>%
       hc_add_series_df(
         data = tssprox,
         x = log2FoldChange,
@@ -663,8 +681,10 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL) {
         type = "scatter",
         group = REaltrecategplot
       )  %>%
-      hc_xAxis(title = list(text = "log2fold change")) %>%
-      hc_yAxis(title = list(text = "-log10 pvalue")) %>%
+      hc_yAxis(title = list(text = ylabel,
+                            style = list(fontSize = ylabelsize))) %>%
+      hc_xAxis(title = list(text = xlabel,
+                            style = list(fontSize = xlabelsize))) %>%
       hc_tooltip(headerFormat = "",
                  pointFormat  = "<b>log2FC</b> = {point.x}
                  <br> <b>-log10pvalue</b> = {point.y}<br>",
@@ -875,10 +895,10 @@ plotDistCountAnalysis <-
                                  proximal4_5num_samp2)
 
   if (is.null(xlabel)) {
-  categ <- c(paste0(mysamps[1],'-specific (by peaks) TSS-distal'),
-	paste0(mysamps[1],'-specific (by peaks) TSS-proximal'),
-        paste0(mysamps[2],'-specific (by peaks) TSS-distal'),
-	paste0(mysamps[2],'-specific (by peaks) TSS-proximal'))
+  categ <- c(paste0(mysamps[1],' TSS-distal'),
+	paste0(mysamps[1],' TSS-proximal'),
+        paste0(mysamps[2],' TSS-distal'),
+	paste0(mysamps[2],' TSS-proximal'))
   }
   else(categ <- xlabel)
 

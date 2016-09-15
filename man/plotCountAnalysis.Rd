@@ -4,7 +4,10 @@
 \alias{plotCountAnalysis}
 \title{Create a volcano plot from the output of categAltrePeaks}
 \usage{
-plotCountAnalysis(altrepeakscateg, viewer = TRUE, palette = NULL)
+plotCountAnalysis(altrepeakscateg, viewer = TRUE, palette = NULL,
+  maintitlelefty = "TSS-distal", maintitlerighty = "TSS-proximal",
+  ylabel = "-log10 pvalue", xlabel = "log2fold change",
+  xlabelsize = "15px", ylabelsize = "15px", maintitlesize = "20px")
 }
 \arguments{
 \item{altrepeakscateg}{output generated from countanalysis() then
@@ -14,6 +17,20 @@ categAltrePeaks()}
 in Shiny/Knittr}
 
 \item{palette}{RColorBrewer palette to change graph colors}
+
+\item{maintitlelefty}{main title (default, "TSS-distal")}
+
+\item{maintitlerighty}{main title (default, "TSS-proximal")}
+
+\item{ylabel}{label for y-axis (default, "Density")}
+
+\item{xlabel}{label for x-axis (default, "-log10 pvalue")}
+
+\item{xlabelsize}{size of xlabel (default, 15px)}
+
+\item{ylabelsize}{size of ylabel (default, 15px)}
+
+\item{maintitlesize}{main title size (default, 20px)}
 }
 \value{
 a highcharter object
@@ -23,32 +40,29 @@ Create a volcano plot from the output of categAltrePeaks
 }
 \examples{
 \dontrun{
-dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
-csvfile <- file.path(dir, 'lung.csv')
-sampleinfo <- loadCSVFile(csvfile)
-samplePeaks <- loadBedFiles(sampleinfo)
-consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
-plotConsensusPeaks(samplepeaks=consPeaks)
-TSSannot<- getTSS()
-consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
+csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+samplePeaks <- loadBedFiles(csvfile)
+consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
+TSSannot <- getTSS()
+consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
                                           TSS = TSSannot,
                                           merge = TRUE,
                                           regionspecific = TRUE,
                                           distancefromTSSdist = 1500,
                                           distancefromTSSprox = 1000)
-counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
-                              sampleinfo = sampleinfo,
+consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
                               reference = 'SAEC',
+                              sampleinfo = csvfile,
                               chrom = 'chr21')
-altre_peaks <- countanalysis(counts = counts_consPeaks,
-                             pval = 0.01,
-                             lfcvalue = 1)
-categaltre_peaks <- categAltrePeaks(altre_peaks,
-                                    lfctypespecific = 1.5,
-                                    lfcshared = 1.2,
-                                    pvaltypespecific = 0.01,
-                                    pvalshared = 0.05)
-plotCountAnalysis(categaltre_peaks)
+alteredPeaks <- countanalysis(counts=consensusPeaksCounts,
+                             pval=0.01,
+                             lfcvalue=1)
+alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
+                             lfctypespecific = 1.5,
+                             lfcshared = 1.2,
+                             pvaltypespecific = 0.01,
+                             pvalshared = 0.05)
+plotCountAnalysis(alteredPeaksCategorized)
 }
 }
 
