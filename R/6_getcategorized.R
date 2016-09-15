@@ -3,41 +3,38 @@
 #'
 #' @param analysisresults output of countanalysis()
 #' @param lfctypespecific log2fold change cutoff (of chromatin accessibility)
-#' for type specific enhancers/promoters
+#' for type specific TSS-distals/TSS-proximals
 #' @param lfcshared log2fold change cutoff (of chromatin accessibility)
-#' for shared enhancers/promoters
+#' for shared TSS-distals/TSS-proximals
 #' @param pvaltypespecific p-value cutoff (of chromatin accessibility)
-#' for type specific enhancers/promoters
+#' for type specific TSS-distals/TSS-proximals
 #' @param pvalshared p-value cutoff (of chromatin accessibility)
-#' for shared enhancers/promoters
+#' for shared TSS-distals/TSS-proximals
 #'
 #' @examples
 #' \dontrun{
-#' dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
-#' csvfile <- file.path(dir, 'lung.csv')
-#' sampleinfo <- loadCSVFile(csvfile)
-#' samplePeaks <- loadBedFiles(sampleinfo )
-#' consPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
+#' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+#' samplePeaks <- loadBedFiles(csvfile)
+#' consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
 #' TSSannot <- getTSS()
-#' consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
-#'                                           TSS = TSSannot,
-#'                                           merge = TRUE,
-#'                                           regionspecific = TRUE,
-#'                                           distancefromTSSdist = 1500,
-#'                                           distancefromTSSprox = 1000)
-#' counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
-#'                               sampleinfo = sampleinfo,
-#'                               reference = 'SAEC')
-#' altre_peaks <- countanalysis(counts = counts_consPeaks,
-#'                              pval = 0.01,
-#'                              lfcvalue = 1)
-#' categaltre_peaks <- categAltrePeaks(
-#'   altre_peaks,
-#'   lfctypespecific = 1.5,
-#'   lfcshared = 1.2,
-#'   pvaltypespecific = 0.01,
-#'   pvalshared = 0.05
-#' )
+#' consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
+#'    TSS = TSSannot,
+#'    merge = TRUE,
+#'    regionspecific = TRUE,
+#'    distancefromTSSdist = 1500,
+#'    distancefromTSSprox = 1000)
+#' consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
+#'    sampleinfo = csvfile,
+#'    reference = 'SAEC',
+#'    chrom = 'chr21')
+#' alteredPeaks <- countanalysis(counts = consensusPeaksCounts,
+#'    pval = 0.01,
+#'    lfcvalue = 1)
+#' alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
+#'    lfctypespecific = 1.5,
+#'    lfcshared = 1.2,
+#'    pvaltypespecific = 0.01,
+#'    pvalshared = 0.05)
 #'}
 #' @return list 1) results of countanalysis,
 #' 2) Frequences of sample type specific, shared,
@@ -45,15 +42,19 @@
 #'
 #' @export
  categAltrePeaks <- function(analysisresults,
- 	lfctypespecific = 1.5,
- 	lfcshared = 1.2,
- 	pvaltypespecific = 0.01,
- 	pvalshared = 0.05){
+                             lfctypespecific = 1.5,
+                           	 lfcshared = 1.2,
+                           	 pvaltypespecific = 0.01,
+                           	 pvalshared = 0.05){
 
-   #quick fix
-   #names(analysisresults$results)[10:12] <- c("region","A549","SAEC")
+    #Make sure to names things are from the user-entered sample names
+    reference <- analysisresults[[2]]
+    allSamples <- colnames(analysisresults[[1]])[11:length(analysisresults[[1]])]
+    experimentSpecific <- allSamples[which(!(allSamples %in% reference))]
+    referenceSpecific <- paste0(reference, "SpecificByIntensity")
+    experimentSpecific <- paste0(experimentSpecific, "SpecificByIntensity")
 
-   analysisresults <- analysisresults[[1]]
+    analysisresults <- analysisresults[[1]]
 
    if (is.data.frame(analysisresults) == FALSE ||
        is.null(analysisresults$padj) ||
@@ -75,57 +76,66 @@
                         (analysisresults$padj >= pvalshared |
                            is.na(analysisresults$padj)))
    ambigind <- setdiff(1:nrow(analysisresults), c(exptind, refind, sharedind))
-   REaltrecateg <- rep(NA, nrow(analysisresults))
-   REaltrecateg[exptind] <- "Experiment Specific"
-   REaltrecateg[refind] <- "Reference Specific"
-   REaltrecateg[sharedind] <- "Shared"
-   REaltrecateg[ambigind] <- "Ambiguous"
+   REaltrecateg <- REaltrecategplot <- rep(NA, nrow(analysisresults))
+   REaltrecategplot[exptind] <- experimentSpecific
+   REaltrecategplot[refind] <- referenceSpecific
+   REaltrecateg[exptind] <- "ExperimentSpecificByIntensity"
+   REaltrecateg[refind] <- "ReferenceSpecificByIntensity"
+   REaltrecategplot[sharedind] <- REaltrecateg[sharedind] <- "Shared"
+   REaltrecategplot[ambigind] <- REaltrecateg[ambigind] <- "Ambiguous"
+   # Set NA category for regions with padj NA (removed bc of low counts with DESeq2)
+   REaltrecategplot[which(is.na(analysisresults$padj))]=NA
+   REaltrecateg[which(is.na(analysisresults$padj))]=NA
 
-
-   if (!all.equal(sum(table(REaltrecateg)), nrow(analysisresults))) {
+   if (!all.equal(sum(table(REaltrecateg)),
+                  nrow(analysisresults[which(!is.na(analysisresults$padj)),]))) {
      stop("Categorization failed, some REs are not categorized")
    }
 
    analysisresults$REaltrecateg <- REaltrecateg
+   analysisresults$REaltrecategplot <- REaltrecategplot
 
    stats <- data.frame(
-     REtype = c("Promoter", "Enhancer"),
+     REtype = c("TSS-proximal", "TSS-distal"),
      Expt_Specific = c(length(intersect(
-       which(analysisresults$region == "promoter"),
-       which(analysisresults$REaltrecateg ==
-               "Experiment Specific")
+       which(analysisresults$region == "TSS-proximal"),
+       which(analysisresults$REaltrecategplot ==
+               experimentSpecific)
      )),
      length(intersect(
-       which(analysisresults$region == "enhancer"),
-       which(analysisresults$REaltrecateg ==
-               "Experiment Specific")
+       which(analysisresults$region == "TSS-distal"),
+       which(analysisresults$REaltrecategplot ==
+               experimentSpecific)
      ))),
      Ref_Specific = c(length(intersect(
-       which(analysisresults$region ==  "promoter"),
-       which(analysisresults$REaltrecateg == "Reference Specific")
+       which(analysisresults$region ==  "TSS-proximal"),
+       which(analysisresults$REaltrecategplot == referenceSpecific)
      )),
      length(intersect(
-       which(analysisresults$region == "enhancer"),
-       which(analysisresults$REaltrecateg == "Reference Specific")
+       which(analysisresults$region == "TSS-distal"),
+       which(analysisresults$REaltrecategplot == referenceSpecific)
      ))),
      Shared = c(length(intersect(
-       which(analysisresults$region == "promoter"),
-       which(analysisresults$REaltrecateg == "Shared")
+       which(analysisresults$region == "TSS-proximal"),
+       which(analysisresults$REaltrecategplot == "Shared")
      )),
      length(intersect(
-       which(analysisresults$region == "enhancer"),
-       which(analysisresults$REaltrecateg == "Shared")
+       which(analysisresults$region == "TSS-distal"),
+       which(analysisresults$REaltrecategplot == "Shared")
      ))),
      Ambiguous = c(length(intersect(
-       which(analysisresults$region == "promoter"),
-       which(analysisresults$REaltrecateg == "Ambiguous")
+       which(analysisresults$region == "TSS-proximal"),
+       which(analysisresults$REaltrecategplot == "Ambiguous")
      )), length(intersect(
-       which(analysisresults$region == "enhancer"),
-       which(analysisresults$REaltrecateg == "Ambiguous")
+       which(analysisresults$region == "TSS-distal"),
+       which(analysisresults$REaltrecategplot == "Ambiguous")
      )))
    )
 
+    listToReturn <- list(analysisresults = analysisresults,
+                         stats = stats,
+                         reference = reference)
 
-   return(list(analysisresults = analysisresults, stats = stats))
+   return(listToReturn)
 } # end function
 

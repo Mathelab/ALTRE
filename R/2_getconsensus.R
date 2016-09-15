@@ -16,11 +16,9 @@
 #'
 #' @examples
 #' \dontrun{
-#' dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
-#' csvfile <- file.path(dir, 'lung.csv')
-#' sampleinfo <- loadCSVFile(csvfile)
-#' samplePeaks <- loadBedFiles(sampleinfo)
-#' consPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps=2)
+#' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+#' samplePeaks <- loadBedFiles(csvfile)
+#' consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
 #'}
 #' @export
 
@@ -112,6 +110,7 @@ getConsensusPeaks <- function(samplepeaks, minreps) {
                                  samp2))
   colnames(dfstats) <- c("PeakType", names(conspeaks_stats))
 
-  return(list(consPeaks = conspeaks, consPeaksStats = data.frame(dfstats)))
+  return(list(consPeaks = conspeaks,
+              consPeaksStats = data.frame(dfstats)))
 }
 

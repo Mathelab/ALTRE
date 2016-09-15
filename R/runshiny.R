@@ -1,5 +1,3 @@
-
-
 #' run shiny app
 #' @export
 runShinyApp <- function() {

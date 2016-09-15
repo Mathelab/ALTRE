@@ -4,9 +4,9 @@
 #' (1) Combines peaks from different sample types into one master list,
 #'  and annotates each peak with it's sample type-specificity (which cell or
 #'   tissue types the peak can be found in)
-#' (2) Categorizes peaks as either a promoter or enhancer (promoter distance
-#' is defined as 1500bp away from a transcription start site (TSS) by default,
-#' but the distance can be changed with the distancefromTSS argument)
+#' (2) Categorizes peaks as either TSS-proximal or TSS-distal based on the distance
+#' from a known transcription start site (TSS).  By defaul, distance is set to
+#' 1500 bp but can be changed with the distancefromTSS argument).
 #' (3) Optionally, regulatory regions that are within a certain distance of
 #'  each other can be merged to form a larger regulatory region.
 #'
@@ -15,39 +15,37 @@
 #'  (output by getConsensusPeaks() function)
 #' @param TSS file of transcription start sites
 #' @param distancefromTSS in bp; peaks within distFromTSS of an annotated
-#' Transcription Start Site (TSS) will be annotated as promoter (default=1500bp)
+#' Transcription Start Site (TSS) will be annotated as TSS-proximal (default=1500bp)
 #' @param merge whether or not regions should be merged if they are within a
 #' user set distance to each other (default is FALSE)
 #' @param regionspecific logical to if TRUE, merging occurs within same type
-#'  peaks (e.g. merge promoters, then merge enhancers)
-#' @param mergedist merge promoters and enhancers if they are < mergedist apart
+#'  peaks (e.g. merge TSS-proximal, then merge TSS-distal)
+#' @param mergedist merge TSS-proximal and TSS-distal if they are < mergedist apart
 #'  (set when regionspecific is FALSE)
-#' @param distancefromTSSprox merge promoters if they are < distancefromTSSprox apart
+#' @param distancefromTSSprox merge TSS-proximal if they are < distancefromTSSprox apart
 #'  (set when regionspecific is TRUE)
-#' @param distancefromTSSdist merge enhancers peaks if they are < distancefromTSSdist apart
+#' @param distancefromTSSdist merge TSS-distal peaks if they are < distancefromTSSdist apart
 #'  (set when regionspecific is TRUE)
 #'
 #' @return List containing two items:
 #' (1) GRanges object:  all sample types combined, regions annotated as
-#'  type-specific and enhancer/promoter specific.
-#' (2) Matrix: number and size of enhancers and promoters before and
+#'  type-specific and TSS-distal/TSS-proximal specific.
+#' (2) Matrix: number and size of TSS-distal and TSS-proximal before and
 #'  after merging nearby regulatory regions
 #'
 #'
 #' @examples
 #' \dontrun{
-#' dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
-#' csvfile <- file.path(dir, 'lung.csv')
-#' sampleinfo <- loadCSVFile(csvfile)
-#' samplePeaks <- loadBedFiles(sampleinfo)
-#' consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
+#' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+#' samplePeaks <- loadBedFiles(csvfile)
+#' consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
 #' TSSannot <- getTSS()
-#' consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
-#'                                           TSS = TSSannot,
-#'                                           merge = TRUE,
-#'                                           regionspecific = TRUE,
-#'                                           distancefromTSSdist = 1500,
-#'                                           distancefromTSSprox = 1000)
+#' consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
+#'    TSS = TSSannot,
+#'    merge = TRUE,
+#'    regionspecific = TRUE,
+#'    distancefromTSSdist = 1500,
+#'    distancefromTSSprox = 1000)
 #'}
 #' @export
 
@@ -120,7 +118,7 @@ combineAnnotatePeaks <- function(conspeaks,
       stop("If merging, then the regionspecific paramater must
            be set to TRUE or FALSE")
     }
-    # if merging enhancer and promoter regions
+    # if merging TSS-distal and TSS-proximal regions
     # seperately, then run the merging function on
     # them seperately and then combine them
     # (WITHOUT reducing or you will lose the
@@ -131,27 +129,27 @@ combineAnnotatePeaks <- function(conspeaks,
              then distancefromTSSprox and distancefromTSSdist must be set")
       }
       dataframeformerge <- grangestodataframe(TSSgranges)
-      enhancerbeforemergedata <- dataframeformerge[dataframeformerge$region ==
-                                                     "enhancer", ]
-      promoterbeforemergedata <- dataframeformerge[dataframeformerge$region ==
-                                                     "promoter", ]
+      TSSdistalbeforemergedata <- dataframeformerge[dataframeformerge$region ==
+                                                     "TSS-distal", ]
+      TSSproxbeforemergedata <- dataframeformerge[dataframeformerge$region ==
+                                                     "TSS-proximal", ]
 
-      # Merge enhancers and promoters independently
+      # Merge TSS-distal and TSS-proximal independently
       # if they're within user defined distances
-      enhancerafter <- mergeclosepeaks(peaklist,
-                                       enhancerbeforemergedata,
+      TSSdistafter <- mergeclosepeaks(peaklist,
+                                       TSSdistalbeforemergedata,
                                        mergedist = distancefromTSSdist,
                                        TSS, distancefromTSS)
-      promoterafter <- mergeclosepeaks(peaklist,
-                                       promoterbeforemergedata,
+      TSSproxafter <- mergeclosepeaks(peaklist,
+                                       TSSproxbeforemergedata,
                                        mergedist = distancefromTSSprox,
                                        TSS, distancefromTSS)
 
-      bothafter <- sort(GenomeInfoDb::sortSeqlevels(c(enhancerafter,
-                                        promoterafter)))
+      bothafter <- sort(GenomeInfoDb::sortSeqlevels(c(TSSdistafter,
+                                        TSSproxafter)))
     }
 
-    # if merging enhancer and promoter regions at
+    # if merging TSS-distal and TSS-proximal regions at
     # the same time, then you just need to run the
     # function once
     if (regionspecific == FALSE) {
@@ -171,10 +169,10 @@ combineAnnotatePeaks <- function(conspeaks,
     resultuserinput <- grangestodataframe(bothafter)
 
     tableofinfo <- matrix(nrow = 4, ncol = 2)
-    rownames(tableofinfo) <- c("enhancers_before_merging",
-                               "enhancers_after_merging",
-                               "promoters_before_merging",
-                               "promoters_after_merging")
+    rownames(tableofinfo) <- c("TSS-distal_before_merging",
+                               "TSS-distal_after_merging",
+                               "TSS-proximal_before_merging",
+                               "TSS-proximal_after_merging")
     colnames(tableofinfo) <- c("TotalNumber", "MeanLength")
 
     # Callstatscombineannotate internal function

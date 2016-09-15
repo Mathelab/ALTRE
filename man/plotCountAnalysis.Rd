@@ -2,21 +2,24 @@
 % Please edit documentation in R/plottingfunctions.R
 \name{plotCountAnalysis}
 \alias{plotCountAnalysis}
-\title{Given the output from getCounts, plot a density plot
- of log2 RPKM values of regulation regions}
+\title{Create a volcano plot from the output of categAltrePeaks}
 \usage{
-plotCountAnalysis(altrepeakscateg)
+plotCountAnalysis(altrepeakscateg, viewer = TRUE, palette = NULL)
 }
 \arguments{
 \item{altrepeakscateg}{output generated from countanalysis() then
 categAltrePeaks()}
+
+\item{viewer}{whether the plot should be displayed in the RStudio viewer or
+in Shiny/Knittr}
+
+\item{palette}{RColorBrewer palette to change graph colors}
 }
 \value{
-a ggplot
+a highcharter object
 }
 \description{
-Given the output from getCounts, plot a density plot
- of log2 RPKM values of regulation regions
+Create a volcano plot from the output of categAltrePeaks
 }
 \examples{
 \dontrun{

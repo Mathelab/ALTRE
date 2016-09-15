@@ -3,23 +3,41 @@
 \name{plotDistCountAnalysis}
 \alias{plotDistCountAnalysis}
 \title{Creates a boxplot to see the distribution of read counts in type-specific and
-shared enhancers}
+shared TSS-proximal and TSS-distal regions.}
 \usage{
-plotDistCountAnalysis(analysisresults, counts)
+plotDistCountAnalysis(analysisresults, counts, palette = NULL,
+  xlabelsize = "15px", ylabel = "log2(FPKM)", ylabelsize = "15px",
+  maintitle = "Distribution of Normalized Counts", maintitlesize = "20px",
+  xlabel = NULL)
 }
 \arguments{
-\item{analysisresults}{output generated from countanalysis() then categAltrePeaks()}
+\item{analysisresults}{output generated from countanalysis() then
+categAltrePeaks()}
 
 \item{counts}{output generated from getCounts()}
+
+\item{palette}{RColorBrewer palette to change graph colors}
+
+\item{xlabelsize}{size of xlabel (default, 15px)}
+
+\item{ylabel}{label for y-axis (default, "Observations")}
+
+\item{ylabelsize}{size of ylabel (default, 15px)}
+
+\item{maintitle}{main title (default, "Distribution of Normalized Counts")}
+
+\item{maintitlesize}{main title size (default, 20px)}
+
+\item{xlabel}{label for x-axis (default, sample names)}
 }
 \value{
-a ggplot
+a highcharter object
 }
 \description{
 Takes the rlog transformation of the RRKM (Reads Per Kilobase of transcript
-per Million) of the read counts of type-specific and shared regulatory regions
-and plots the distribution of those read counts in all sample types analyzed
-in the workflow.
+per Million) of the read counts of type-specific and shared regulatory
+regions and plots the distribution of those read counts in all sample types
+analyzed in the workflow.
 }
 \examples{
 \dontrun{

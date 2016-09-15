@@ -3,30 +3,60 @@
 \name{plotCombineAnnotatePeaks}
 \alias{plotCombineAnnotatePeaks}
 \title{Given the output from combineAnnotatePeaks,
-plot a barplot showing number of peaks before/after merging
+plot a barplot showing number of peaks before/after merging or length of
+peaks before/after merging
 (only works if peaks were merged)}
 \usage{
-plotCombineAnnotatePeaks(conspeaks)
+plotCombineAnnotatePeaks(conspeaks, viewer = TRUE, palette = NULL,
+  rightmaintitle = "Mean Length of REs", leftmaintitle = "Number of REs",
+  xlabels = c("Before merging", "After merging"),
+  leftylabel = "Number of REs", rightylabel = "Mean Length of REs",
+  xlabelsize = "15px", leftylabelsize = "15px", rightylabelsize = "15px",
+  leftmaintitlesize = "20px", rightmaintitlesize = "20px")
 }
 \arguments{
 \item{conspeaks}{output generated from combineAnnotatePeaks}
+
+\item{viewer}{whether the plot should be displayed in the RStudio viewer or
+in Shiny/Knittr}
+
+\item{palette}{RColorBrewer palette to change graph colors}
+
+\item{rightmaintitle}{main title for mean length of REs plot (default, "Mean length of REs")}
+
+\item{leftmaintitle}{main title for number of REs plot (default, "Number of REs")}
+
+\item{xlabels}{labels for x-axis (default, Before merging/After merging)}
+
+\item{leftylabel}{label for y-axis for number of REs plot (default, "Number of REs")}
+
+\item{rightylabel}{label for y-axis for mean length plot (default, "Mean length of REs")}
+
+\item{xlabelsize}{size of xlabel (default, 15px)}
+
+\item{leftylabelsize}{size of leftylabel (default, 15px)}
+
+\item{rightylabelsize}{size of rightylabel (default, 15px)}
+
+\item{leftmaintitlesize}{main title size for number of REs plot (default, 20px)}
+
+\item{rightmaintitlesize}{main title size for mean length of REs plot (default 15px)}
 }
 \value{
-a ggplot
+a highcharter object
 }
 \description{
 Given the output from combineAnnotatePeaks,
-plot a barplot showing number of peaks before/after merging
+plot a barplot showing number of peaks before/after merging or length of
+peaks before/after merging
 (only works if peaks were merged)
 }
 \examples{
 \dontrun{
-dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
-csvfile <- file.path(dir, 'lung.csv')
-sampleinfo <- loadCSVFile(csvfile)
-samplePeaks <- loadBedFiles(sampleinfo)
-consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
-plotConsensusPeaks(samplepeaks=consPeaks)
+csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+samplePeaks <- loadBedFiles(csvfile)
+consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
+minreps = 2)
 TSSannot <- getTSS()
 consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
                                           TSS = TSSannot,
