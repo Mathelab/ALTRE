@@ -9,46 +9,42 @@
 
 ## Install From Github
 
+
+To install ALTRE, run the following code in the R terminal
+
 ```{R}
-
-
-# Install Bioconductor packages (dependencies)
+# Install Bioconductor packages (dependencies)            
 source("http://bioconductor.org/biocLite.R")
-BiocInstaller::biocLite(c('GenomeInfoDb',
-                        'IRanges',
-                        'DESeq2',
-                        'GenomicAlignments',
-                        'SummarizedExperiment',
-                        'GenomicRanges',
-                        'Rsamtools',
-                        'org.Hs.eg.db',
-                        'clusterProfiler',
-                        'ensembldb', 
-                        'EnsDb.Hsapiens.v75',
-                        'GO.db'))
+BiocInstaller::biocLite(c('org.Hs.eg.db',
+                          'EnsDb.Hsapiens.v75',
+                          'GO.db'))
+                        
 # Install the devtools package for installing ALTRE
-install.packages("devtools")
-# Install the ALTRE package
-setRepositories(ind=1:2)
+install.packages("devtools") 
+# Install the ALTRE package 
 devtools::install_github("mathelab/ALTRE")
 ```
-When installing on Linux, installation might fail if the XML package cannot be installed. Installation failure  can be fixed by installing the libxml2, an XML C parser for Linux. On Ubuntu this can be done by running the following line:
 
-```{R}
-sudo apt-get install libxml2-dev
-```
-To install the devtools R library, you also need to run the following line to install system dependencies on Ubuntu:
+If you encounter an error when runing these 4 lines, please do the following:
+
+On Linux and Mac OS
 =======
 
-```{R}
-sudo apt-get install libssl-dev libcurl4-openssl-dev
-```
+When installing on Linux, installation might fail if the XML package cannot be installed. Installation failure  can be fixed by installing the libxml2, an XML C parser for Linux. Also to install the devtools R library, you also need to install several system dependencies. On Ubuntu this can be done by running the following line in the terminal:
 
-On Windows, if you get an installation error then first run the following lines of code in as well:
+```{R}
+sudo apt-get install libxml2-dev libssl-dev libcurl4-openssl-dev gfortran
+```
+On Mac OS, the same dependecies can installed using the *brew* command. 
+
+
+On Windows
+=======
+
+if you get an installation error then first run the following lines of code in the R console:
 
 ```{R}
 install.packages(c("htmltools","httpuv","evaluate","markdown"))
-```
 
 #### Installation Walk-through Animation
 
