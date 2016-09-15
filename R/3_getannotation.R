@@ -135,7 +135,6 @@ combineAnnotatePeaks <- function(conspeaks,
 
       # Merge TSS-distal and TSS-proximal independently
       # if they're within user defined distances
-
       TSSdistafter <- mergeclosepeaks(peaklist,
                                        TSSdistalbeforemergedata,
                                        mergedist = distancefromTSSdist,

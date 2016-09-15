@@ -41,6 +41,7 @@ analyzed in the workflow.
 }
 \examples{
 \dontrun{
+<<<<<<< HEAD
 csvfile <- loadCSVFile("DNAseEncodeExample.csv")
 samplePeaks <- loadBedFiles(csvfile)
 consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
@@ -65,6 +66,34 @@ alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
                                           pvaltypespecific = 0.01,
                                           pvalshared = 0.05)
 plotDistCountAnalysis(alteredPeaksCategorized, consensusPeaksCounts)
+=======
+dir <- system.file('extdata', package='ALTRE', mustWork=TRUE)
+csvfile <- file.path(dir, 'lung.csv')
+sampleinfo <- loadCSVFile(csvfile)
+samplePeaks <- loadBedFiles(sampleinfo)
+consPeaks <- getConsensusPeaks(samplepeaks=samplePeaks,minreps=2)
+plotConsensusPeaks(samplepeaks=consPeaks)
+TSSannot<- getTSS()
+consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
+                                          TSS = TSSannot,
+                                          merge = TRUE,
+                                          regionspecific = TRUE,
+                                          distancefromTSSdist = 1500,
+                                          distancefromTSSprox = 1000)
+counts_consPeaks <- getCounts(annotpeaks = consPeaksAnnotated,
+                              sampleinfo = sampleinfo,
+                              reference = 'SAEC',
+                              chrom = 'chr21')
+altre_peaks <- countanalysis(counts = counts_consPeaks,
+                             pval = 0.01,
+                             lfcvalue = 1)
+categaltre_peaks <- categAltrePeaks(altre_peaks,
+                                    lfctypespecific = 1.5,
+                                    lfcshared = 1.2,
+                                    pvaltypespecific = 0.01,
+                                    pvalshared = 0.05)
+plotDistCountAnalysis(categaltre_peaks, counts_consPeaks)
+>>>>>>> db2c19034a36df4f41dc07c4a569d2cd8fa34ec9
 }
 }
 

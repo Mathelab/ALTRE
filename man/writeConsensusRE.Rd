@@ -28,6 +28,12 @@ consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
                                           regionspecific = TRUE,
                                           distancefromTSSdist = 1500,
                                           distancefromTSSprox = 1000 )
+<<<<<<< HEAD
+=======
+countsPeaks <- getcounts(annotpeaks = consPeaksAnnotated,
+                             csvfile = csvfile,
+                             reference = 'SAEC',chrom="chr21")
+>>>>>>> db2c19034a36df4f41dc07c4a569d2cd8fa34ec9
 con <- "annotatedRegions.csv"
 writeConsensusRE(consPeaksAnnotated, con)
 }

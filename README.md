@@ -17,7 +17,6 @@ source("http://bioconductor.org/biocLite.R")
 BiocInstaller::biocLite(c('GenomeInfoDb',
                         'IRanges',
                         'DESeq2',
-			'tibble',
                         'GenomicAlignments',
                         'SummarizedExperiment',
                         'GenomicRanges',
@@ -50,7 +49,6 @@ On Windows, if you get an installation error then first run the following lines 
 ```{R}
 install.packages(c("htmltools","httpuv","evaluate","markdown"))
 ```
-=======
 
 #### Installation Walk-through Animation
 
