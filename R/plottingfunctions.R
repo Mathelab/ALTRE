@@ -997,8 +997,7 @@ plotCompareMethods <- function(analysisresultsmatrix,
     cols <- RColorBrewer::brewer.pal(3, palette)
   }
   else{
-    #cols <- c("#00E5EE", "#C71585", "#000080")
-    cols <- c("#C71585", "#d3d3d3", "#000080", "#00E5EE")
+    cols <- c("#C71585", "#00E5EE", "#000080", "#d3d3d3")
   }
 
   if (region == "TSS-proximal") {
