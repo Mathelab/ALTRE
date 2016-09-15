@@ -61,7 +61,7 @@ plotConsensusPeaks <- function(samplepeaks,
     xLabel <- xlabel
   }
 
-  p <- highchart(width = 600, height = 750) %>%
+  p <- highchart(width = 580, height = 700) %>%
     hc_title(text = maintitle,
              style = list(color = '#2E1717',
                           fontSize = maintitlesize,
@@ -910,7 +910,7 @@ plotDistCountAnalysis <-
       Highcharts.numberFormat(this.y, 2); }"
   )
 
-    p <- highchart(width = 800, height = 800 ) %>%
+    p <- highchart(width = 750, height = 750 ) %>%
       hc_title(text = maintitle,
                style = list(color = '#2E1717',
                             fontWeight = 'bold',
