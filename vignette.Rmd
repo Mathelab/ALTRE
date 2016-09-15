@@ -144,8 +144,6 @@ plotCountAnalysis(alteredPeaksCategorized)
 
 REs with large, positive log2fold changes and small p-values are more open in the lung cancer cell type, and therefore, their activity is associated with the cancer phenotype. REs with large, negative log2fold changes and small p-values are more open in the normal lung cell type, and may therefore be associated with tumor suppressive properties. REs with minimal log2fold change and high p-values are equally open in both cell types, and therefore, their activity is more likely to contribute to the house-keeping functions required in every cell.
 
-***raw data exploration***
-
 The function *plotDistCountAnalysis()* enables users to view the raw count data in regions identified as type-specific or shared. The log2 transformation of reads per kilo-base per million for each RE is plotted. As expected, for REs identified as higher log-fold change than normal, the lung cancer cell line has much higher counts than he normal lung cell line. The opposite is true for the lower log-fold change regions. For RE with little log-fold change between cell types, the counts are similar. This visual depiction confirms the results of countanalysis and enables users to change parameters if needed.
 
 ```{r}

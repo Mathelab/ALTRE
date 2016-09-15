@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "Package: ALTRE\nType: Package\nTitle: Workflow for Identifying Regulatory Elements from Chromatin Accessibility Assay Data\nVersion: 0.99.0\nAuthors@R: c(\n person(\"Elizabeth\", \"Baskin\", email = \"Elizabeth.Baskin@osumc.edu\", role = \"aut\"),\n person(\"Rick\", \"Farouni\", email = \"farouni.1@osu.edu\", role = \"aut\"),\n person(\"Ewy\", \"Mathe\", email = \"Ewy.Mathe@osumc.edu\", role = c(\"aut\", \"cre\")))\nDescription: This workflow takes alignment data and hotspot calls from assays of\n open chromatin (ATAC-seq, DNase-seq, and FAIRE-seq) and identifies candidate regulatory\n elements (e.g. TSS-distal and TSS-proximal) that differ across cell and tissue type.\nURL: https://github.com/Mathelab/ALTRE\nBugReports: https://github.com/Mathelab/ALTRE/issues\nDepends: R (>= 3.2.0)\nImports:\n    shiny,\n    shinydashboard,\n    rmarkdown,\n    shinyFiles,\n    methods,\n    S4Vectors,\n    GenomeInfoDb,\n    IRanges,\n    DESeq2,\n    GenomicAlignments,\n    SummarizedExperiment,\n    GenomicRanges,\n    Rsamtools,\n    readr,\n    org.Hs.eg.db,\n    ensembldb,\n    EnsDb.Hsapiens.v75,\n    tidyr,\n    dplyr,\n    GO.db,\n    grid,\n    stringr,\n    tibble,\n    magrittr,\n    highcharter,\n    htmltools,\n    rGREAT,\n    RColorBrewer\nLicense: GPL-2\nBiocViews: Visualization, Annotation, Software, AnnotationData, FunctionalAnnotation\nLazyData: TRUE\nRoxygenNote: 5.0.1\nNeedsCompilation: no\n",
+    "created" : 1473959186952.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "844641965",
+    "id" : "73B16477",
+    "lastKnownWriteTime" : 1473959019,
+    "last_content_update" : 1473959019,
+    "path" : "~/Desktop/ALTRE/DESCRIPTION",
+    "project_path" : "DESCRIPTION",
+    "properties" : {
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "dcf"
+}
