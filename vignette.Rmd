@@ -155,8 +155,9 @@ plotDistCountAnalysis(alteredPeaksCategorized, consensusPeaksCounts)
 
 Once results have been obtained there are additional functions in ALTRE to compare the two major methods for identifying altered REs:
 
-    Method 1: based on peak intensity (ALTRE's *countanalysis()* function)
-    Method 2: based on peak presence or absence as determined by the peak calling algorithm
+Method 1: based on peak intensity (ALTRE's *countanalysis()* function)\
+
+Method 2: based on peak presence or absence as determined by the peak calling algorithm
 
 To compare resulting altered REs from these two methods, use the function *comparePeaksAltre* as follows:
 
