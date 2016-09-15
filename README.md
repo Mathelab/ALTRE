@@ -46,8 +46,9 @@ if you get an installation error then first run the following lines of code in t
 ```{R}
 install.packages(c("htmltools","httpuv","evaluate","markdown"))
 
-#### Installation Walk-through Animation
 
+
+## Installation Walk-through Animation
 
 ![](inst/img/ALTREinstall.gif)
 
@@ -59,10 +60,15 @@ To launch the Shiny app inside R, run
 library(ALTRE)
 runShinyApp()
 ```
+#### Shiny App How to Run
+
+![](inst/img/ALTRErun.gif)
+
+
 #### Shiny App Preview
 
 
-![](inst/img/ALTRErun.gif)
+![](inst/img/ALTREprev.gif)
 
 ##Vignette 
 
