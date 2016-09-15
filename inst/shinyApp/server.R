@@ -361,7 +361,7 @@ shinyServer(function(input, output, session) {
     else if (!is.null(input$file)) {
     infoBox(
       "Status",
-      HTML(paste("File Loading Complete",
+      HTML(paste("File Loading Complete.",
                  "You Can Proceed to Step 2.",
                  sep = "<br/>")),
       icon = icon("thumbs-up", lib = "glyphicon"),
@@ -381,7 +381,7 @@ shinyServer(function(input, output, session) {
     else if (input$buttonmerge > 0 && is.null(input$file)) {
       infoBox(
         "Status",
-        HTML(paste("Step 2 is Not Complete Yet",
+        HTML(paste("Step 2 is Not Complete Yet!",
                    "Please Run Step 1 Before Proceeding!.",
                    sep = "<br/>")),
         icon = icon("warning-sign", lib = "glyphicon"),
@@ -412,7 +412,7 @@ shinyServer(function(input, output, session) {
     else if (input$buttonannot > 0 && (input$buttonmerge == 0 || is.null(input$file))) {
       infoBox(
         "Status",
-        HTML(paste("Step 2 is Not Complete Yet.",
+        HTML(paste("Step 2 is Not Complete Yet!",
                    "Please Run Previous Steps Before Proceeding!",
                    sep = "<br/>")),
         icon = icon("warning-sign", lib = "glyphicon"),
@@ -447,7 +447,7 @@ shinyServer(function(input, output, session) {
                                          is.null(input$file))) {
       infoBox(
         "Status",
-        HTML(paste("Step 3 is Not Complete Yet.",
+        HTML(paste("Step 3 is Not Complete Yet!",
                    "Please Run Previous Steps Before Proceeding!",
                    sep = "<br/>")),
         icon = icon("warning-sign", lib = "glyphicon"),
@@ -481,7 +481,7 @@ shinyServer(function(input, output, session) {
                                          is.null(input$file))) {
       infoBox(
         "Status",
-        HTML(paste("Step 4 is Not Complete Yet.",
+        HTML(paste("Step 4 is Not Complete Yet!",
                    "Please Run Previous Steps Before Proceeding!",
                    sep = "<br/>")),
         icon = icon("warning-sign", lib = "glyphicon"),
@@ -517,7 +517,7 @@ shinyServer(function(input, output, session) {
                                      is.null(input$file))) {
       infoBox(
         "Status",
-        HTML(paste("Step 5 is Not Complete Yet.",
+        HTML(paste("Step 5 is Not Complete Yet!",
                    "Please Run Previous Steps Before Proceeding!",
                    sep = "<br/>")),
         icon = icon("warning-sign", lib = "glyphicon"),
@@ -554,7 +554,7 @@ shinyServer(function(input, output, session) {
                                            is.null(input$file))) {
       infoBox(
         "Status",
-        HTML(paste("Step 6 is Not Complete Yet.",
+        HTML(paste("Step 6 is Not Complete Yet!",
                    "Please Run Previous Steps Before Proceeding!",
                    sep = "<br/>")),
         icon = icon("warning-sign", lib = "glyphicon"),
@@ -588,7 +588,7 @@ shinyServer(function(input, output, session) {
                                         is.null(input$file))) {
       infoBox(
         "Status",
-        HTML(paste("Step 6 is Not Complete Yet.",
+        HTML(paste("Step 6 is Not Complete Yet!",
                    "Please Run Previous Steps Before Proceeding!",
                    sep = "<br/>")),
         icon = icon("warning-sign", lib = "glyphicon"),
