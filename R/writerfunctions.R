@@ -314,7 +314,7 @@ writeGREATpath <- function(pathenrichOut, con) {
                                         fileExt,
                                         stringr::str_c(paste(l, p, sep = "_"),
                                                        "csv", sep = "."))
-        print(paste("Writing", fileCon))
+        message(paste("Writing", fileCon))
         readr::write_csv(pathenrichOut[[l]]$Sig_Pathways[[p]], fileCon)
         allfiles <- c(allfiles, fileCon)
       }

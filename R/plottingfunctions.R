@@ -208,7 +208,8 @@ plotCombineAnnotatePeaks <- function(conspeaks,
 
     p1 <- highchart(height = 400) %>%
       hc_title(text = leftmaintitle,
-               style = list(color = '#2E1717',fontSize=leftmaintitlesize,
+               style = list(color = '#2E1717',
+                            fontSize = leftmaintitlesize,
                             fontWeight = 'bold')) %>%
       hc_add_series(
         data = mergeStatsBefore$Count,
@@ -232,10 +233,11 @@ plotCombineAnnotatePeaks <- function(conspeaks,
           y = 40
         )
       ) %>%
-      hc_yAxis(title = list(text = leftylabel,style=list(fontSize=leftylabelsize)),
+      hc_yAxis(title = list(text = leftylabel,
+                            style = list(fontSize = leftylabelsize)),
                labels = list(format = "{value}")) %>%
       hc_xAxis(categories = xlabels,
-               labels=list(style=list(fontSize=xlabelsize))) %>%
+               labels = list(style = list(fontSize = xlabelsize))) %>%
       hc_legend(
         enabled = TRUE,
         layout = "horizontal",
@@ -272,7 +274,8 @@ plotCombineAnnotatePeaks <- function(conspeaks,
 
     p2 <- highchart(height = 400) %>%
       hc_title(text = rightmaintitle,
-               style = list(color = '#2E1717',fontSize=rightmaintitlesize,
+               style = list(color = '#2E1717',
+                            fontSize = rightmaintitlesize,
                             fontWeight = 'bold')) %>%
       hc_add_series(
         data = mergeStatsBefore$Count,
@@ -904,12 +907,6 @@ plotDistCountAnalysis <-
   explabel <- paste0(nonreference, "-specific (by intensity)")
   reflabel <- paste0(reference, "-specific (by intensity)")
 
-  round <- JS(
-      "function() { return '<b>'+'log2 read count' +'</b>:'+
-    Highcharts.numberFormat(this.x, 2) + ', <b>'+'density' +'</b>:' +
-      Highcharts.numberFormat(this.y, 2); }"
-  )
-
     p <- highchart(width = 750, height = 750 ) %>%
       hc_title(text = maintitle,
                style = list(color = '#2E1717',
@@ -1186,13 +1183,6 @@ plotCompareMethodsAll <- function(analysisresultsmatrix,
                                   title23 = NULL,
                                   maintitlesize = "20px"
                                  ) {
-    if (!is.null(palette)) {
-      cols <- RColorBrewer::brewer.pal(3, palette)
-    }
-    else{
-      cols <- c("#00E5EE", "#C71585", "#000080")
-    }
-
 
 
 #    if (is.matrix(analysisresultsmatrix[[1]]) == FALSE) {
@@ -1202,37 +1192,37 @@ plotCompareMethodsAll <- function(analysisresultsmatrix,
     p1 <- plotCompareMethods(analysisresultsmatrix,
                              "TSS-proximal",
                              "Intensity",
-                             palette = cols,
+                             palette = palette,
                              maintitle = title11,
                              maintitlesize = maintitlesize)
     p2 <- plotCompareMethods(analysisresultsmatrix,
                              "TSS-distal",
                              "Intensity",
-                             palette = cols,
+                             palette = palette,
                              maintitle = title12,
                              maintitlesize = maintitlesize)
     p3 <- plotCompareMethods(analysisresultsmatrix,
                              "both",
                              "Intensity",
-                             palette = cols,
+                             palette = palette,
                              maintitle = title13,
                              maintitlesize = maintitlesize)
     p4 <- plotCompareMethods(analysisresultsmatrix,
                              "TSS-proximal",
                              "Peak",
-                             palette = cols,
+                             palette = palette,
                              maintitle = title21,
                              maintitlesize = maintitlesize)
     p5 <- plotCompareMethods(analysisresultsmatrix,
                              "TSS-distal",
                              "Peak",
-                             palette = cols,
+                             palette = palette,
                              maintitle = title22,
                              maintitlesize = maintitlesize)
     p6 <- plotCompareMethods(analysisresultsmatrix,
                              "both",
                              "Peak",
-                             palette = cols,
+                             palette = palette,
                              maintitle = title23,
                              maintitlesize = maintitlesize)
 
@@ -1421,7 +1411,6 @@ plotGREATenrich <- function(input,
 
   # places the adjusted p-value in the matrix is there is one
   for (i in 1:nrow(heatmapmatrix)) {
-    #print(row.names(heatmapmatrix)[i])
     if (row.names(heatmapmatrix)[i] %in% up$name) {
       num1 <- which(up$name == row.names(heatmapmatrix)[i])
       heatmapmatrix[i, 1] <- up[num1, mycols[3]]
@@ -1534,7 +1523,7 @@ plotGREATenrich <- function(input,
       maxWidth = 200,
       x = -10, # 90
       y = 100, # 70
-      padding=2
+      padding = 2
       #title = list(text="p-value")
     ) %>%
     hc_exporting(enabled = TRUE)

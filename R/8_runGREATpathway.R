@@ -74,7 +74,7 @@ runGREAT <- function(peaks,
     stop("rule must be either 'basalPlusExt', 'twoClosest', 'oneClosest'")
   }
 
-  mygreat = list()
+  mygreat <- list()
   for (i in c("ExperimentSpecificByIntensity", "ReferenceSpecificByIntensity", "Shared")) {
     #print(paste("Running", i))
     mypeaks <- as.data.frame(peaks$analysisresults)[

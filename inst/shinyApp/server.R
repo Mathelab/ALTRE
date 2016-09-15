@@ -248,7 +248,7 @@ shinyServer(function(input, output, session) {
     if (!is.null(input$file)) {
      csvoutput <- loadCSVObj()[ , !(names(loadCSVObj()) %in% "datapath")]
      if (is.null(csvoutput)) {
-	print("Check the format of the CSV file")
+	message("Check the format of the CSV file")
         data.frame(ERROR = "Check the format of the CSV file")
      }
      else {
@@ -571,109 +571,6 @@ shinyServer(function(input, output, session) {
     }
   })
 
-  # output$statusbox8a <- renderInfoBox({
-  #   if (input$buttonpathwayMF == 0) {
-  #     infoBox(
-  #       "Status",
-  #       "MF Enrichment Analysis Button Not Clicked Yet!",
-  #       icon = icon("flag", lib = "glyphicon"),
-  #       color = "aqua",
-  #       fill = TRUE)
-  #   }
-  #   else if (input$buttonpathwayMF > 0 && (input$buttoncompare == 0 ||
-  #                                          input$buttoncat    == 0 ||
-  #                                          input$buttondefine == 0 ||
-  #                                          input$buttoncounts == 0 ||
-  #                                          input$buttonannot  == 0 ||
-  #                                          input$buttonmerge  == 0 ||
-  #                                          is.null(input$file))) {
-  #     infoBox(
-  #       "Status",
-  #       "Step 7 is Not Complete Yet. Please Run Previous Steps Before Proceeding!",
-  #       icon = icon("warning-sign", lib = "glyphicon"),
-  #       color = "red",
-  #       fill = TRUE)
-  #   }
-  #   else if (input$buttonpathwayMF > 0 && !is.null(pathenrichMFObj())) {
-  #     infoBox(
-  #       "Status",
-  #       "MF Enrichment Analysis Has Been Run.",
-  #       icon = icon("thumbs-up", lib = "glyphicon"),
-  #       color = "green",
-  #       fill = TRUE)
-  #   }
-  # })
-  #
-  # output$statusbox8b <- renderInfoBox({
-  #   if (input$buttonpathwayBP == 0) {
-  #     infoBox(
-  #       "Status",
-  #       "BP Enrichment Analysis Button Not Clicked Yet!",
-  #       icon = icon("flag", lib = "glyphicon"),
-  #       color = "aqua",
-  #       fill = TRUE)
-  #   }
-  #   else if (input$buttonpathwayBP > 0 && (input$buttoncompare == 0 ||
-  #                                          input$buttoncat    == 0 ||
-  #                                          input$buttondefine == 0 ||
-  #                                          input$buttoncounts == 0 ||
-  #                                          input$buttonannot  == 0 ||
-  #                                          input$buttonmerge  == 0 ||
-  #                                          is.null(input$file))) {
-  #     infoBox(
-  #       "Status",
-  #       "Step 7 is Not Complete Yet. Please Run Previous Steps Before Proceeding!",
-  #       icon = icon("warning-sign", lib = "glyphicon"),
-  #       color = "red",
-  #       fill = TRUE)
-  #   }
-  #   else if (input$buttonpathwayBP > 0 && !is.null(pathenrichBPObj())) {
-  #     infoBox(
-  #       "Status",
-  #       "BP Enrichment Analysis Completed.",
-  #       icon = icon("thumbs-up", lib = "glyphicon"),
-  #       color = "green",
-  #       fill = TRUE
-  #     )
-  #   }
-  # })
-  #
-  #
-  # output$statusbox8c <- renderInfoBox({
-  #   if (input$buttonpathwayCC == 0) {
-  #     infoBox(
-  #       "Status",
-  #       "CC Enrichment Analysis Button Not Clicked Yet!",
-  #       icon = icon("flag", lib = "glyphicon"),
-  #       color = "aqua",
-  #       fill = TRUE)
-  #   }
-  #   else if (input$buttonpathwayCC > 0 && (input$buttoncompare == 0 ||
-  #                                          input$buttoncat    == 0 ||
-  #                                          input$buttondefine == 0 ||
-  #                                          input$buttoncounts == 0 ||
-  #                                          input$buttonannot  == 0 ||
-  #                                          input$buttonmerge  == 0 ||
-  #                                          is.null(input$file))) {
-  #     infoBox(
-  #       "Status",
-  #       "Step 7 is Not Complete Yet. Please Run Previous Steps Before Proceeding!",
-  #       icon = icon("warning-sign", lib = "glyphicon"),
-  #       color = "red",
-  #       fill = TRUE)
-  #   }
-  #   else if (input$buttonpathwayCC > 0 && !is.null(pathenrichCCObj())) {
-  #     infoBox(
-  #       "Status",
-  #       "CC Enrichment Analysis Completed.",
-  #       icon = icon("thumbs-up", lib = "glyphicon"),
-  #       color = "green",
-  #       fill = TRUE
-  #     )
-  #   }
-  # })
-
-
   output$statusbox9 <- renderInfoBox({
     if (input$buttongreat == 0) {
       infoBox(
@@ -708,13 +605,6 @@ shinyServer(function(input, output, session) {
     }
   })
 
-
-#   output$getlocalpath <- renderPrint({
-# 	if (!is.null(input$testfile)) {
-# 	print( parseFilePaths(roots = rootVolumes, input$file)$datapath)
-# 	}
-#
-#   })
 
 
   ##########################################################
