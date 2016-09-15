@@ -763,7 +763,8 @@ plotDistCountAnalysis <-
            xlabelsize = "15px",
            ylabel = "log2(FPKM)",
            ylabelsize = "15px",
-           maintitle = "Distribution of Normalized Counts (peaks types determine by intensity)",
+           maintitle = "Distribution of Normalized Counts
+           (peaks types determine by intensity)",
            maintitlesize = "20px",
            xlabel = NULL) {
     altrecateg <- altrecategplot <- REaltrecategplot <- c()
@@ -1204,37 +1205,37 @@ plotCompareMethodsAll <- function(analysisresultsmatrix,
     p1 <- plotCompareMethods(analysisresultsmatrix,
                              "TSS-proximal",
                              "Intensity",
-                             palette = palette,
+                             palette = cols,
                              maintitle = title11,
                              maintitlesize = maintitlesize)
     p2 <- plotCompareMethods(analysisresultsmatrix,
                              "TSS-distal",
                              "Intensity",
-                             palette = palette,
+                             palette = cols,
                              maintitle = title12,
                              maintitlesize = maintitlesize)
     p3 <- plotCompareMethods(analysisresultsmatrix,
                              "both",
                              "Intensity",
-                             palette = palette,
+                             palette = cols,
                              maintitle = title13,
                              maintitlesize = maintitlesize)
     p4 <- plotCompareMethods(analysisresultsmatrix,
                              "TSS-proximal",
                              "Peak",
-                             palette = palette,
+                             palette = cols,
                              maintitle = title21,
                              maintitlesize = maintitlesize)
     p5 <- plotCompareMethods(analysisresultsmatrix,
                              "TSS-distal",
                              "Peak",
-                             palette = palette,
+                             palette = cols,
                              maintitle = title22,
                              maintitlesize = maintitlesize)
     p6 <- plotCompareMethods(analysisresultsmatrix,
                              "both",
                              "Peak",
-                             palette = palette,
+                             palette = cols,
                              maintitle = title23,
                              maintitlesize = maintitlesize)
 
@@ -1340,14 +1341,17 @@ plotGREATenrich <- function(input,
       is.list(input$Shared$Sig_Pathways) == FALSE |
       length(input) != 3 |
       length(which(!is.na(match(
-        mycols, colnames(input$ExperimentSpecificByIntensity$Sig_Pathways[[pathwaycateg]])
+        mycols,
+        colnames(input$ExperimentSpecificByIntensity$Sig_Pathways[[pathwaycateg]])
       )))) !=
       length(mycols) |
       length(which(!is.na(match(
-        mycols, colnames(input$ReferenceSpecificByIntensity$Sig_Pathways[[pathwaycateg]])
+        mycols,
+        colnames(input$ReferenceSpecificByIntensity$Sig_Pathways[[pathwaycateg]])
       )))) !=
       length(mycols) |
-      length(match(mycols, colnames(input$Shared$Sig_Pathways[[pathwaycateg]]))) !=
+      length(match(mycols,
+                   colnames(input$Shared$Sig_Pathways[[pathwaycateg]]))) !=
       length(mycols) |
       all(
         names(input) != c(
@@ -1490,7 +1494,7 @@ plotGREATenrich <- function(input,
     as.numeric(meltedheatmapdata$value)
 #as.numeric(format(meltedheatmapdata$value,scientific=T,digits=2))
   ))
- 
+
   formattedHeatmapData <- list_parse2(dataforHeatmap)
 
   fntltp <- JS(
