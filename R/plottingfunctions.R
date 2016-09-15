@@ -522,11 +522,12 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL,
 
     if ( !is.null(palette) ) {
         cols <- RColorBrewer::brewer.pal(4, palette)
-    } else {cols <- c("#C71585", "#d3d3d3", "#000080", "#00E5EE")}
-                        #grey (ambiguous)
+    } else {cols <- c("#C71585", "#d3d3d3", "#00E5EE", "#000080")}
                         #magenta (experiment-specific)
-                        #blue (reference specific)
-                            #blue (shared)
+                        #grey (ambiguous)
+
+                        #dark blue (shared)
+                            #blue (ref)
 
   log2FoldChange <- NULL
   padj <- NULL
