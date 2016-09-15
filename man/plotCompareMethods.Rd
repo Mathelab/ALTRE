@@ -9,7 +9,7 @@ presence or by #' differential counts.  The type of regulatory region
 \usage{
 plotCompareMethods(analysisresultsmatrix, region = "both",
   method = "Intensity", palette = NULL, maintitle = NULL,
-  maintitlesize = "20px")
+  maintitlesize = "16px")
 }
 \arguments{
 \item{analysisresultsmatrix}{analysisresults of Intensity analysis place into
