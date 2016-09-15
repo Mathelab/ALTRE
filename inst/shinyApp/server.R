@@ -274,7 +274,7 @@ shinyServer(function(input, output, session) {
                     paging = FALSE))
 
   output$table5 <- renderDataTable({
-    req(comparePeaksObj())
+    req(comparePeaksObj())$analysisresultsmatrix
   }, options = list(searching = FALSE,
                     paging = FALSE))
 
