@@ -758,9 +758,9 @@ plotDistCountAnalysis <-
   function(analysisresults,
            counts,
            palette = NULL,
-           xlabelsize = "15px",
+           xlabelsize = "13px",
            ylabel = "log2(FPKM)",
-           ylabelsize = "15px",
+           ylabelsize = "13px",
            maintitle = "Distribution of Normalized Counts (peaks types determine by intensity)",
            maintitlesize = "20px",
            xlabel = NULL) {
