@@ -7,7 +7,7 @@
 [![codecov](https://codecov.io/gh/Mathelab/ALTRE/branch/master/graph/badge.svg)](https://codecov.io/gh/Mathelab/ALTRE)
 
 
-## Install From Github
+## Installation From Github
 
 
 To install ALTRE, run the following code in the R terminal
@@ -27,8 +27,8 @@ devtools::install_github("mathelab/ALTRE")
 
 If you encounter an error when runing these 4 lines, please do the following:
 
-On Linux and Mac OS
-=======
+### On Linux and Mac OS
+
 
 When installing on Linux, installation might fail if the XML package cannot be installed. Installation failure  can be fixed by installing the libxml2, an XML C parser for Linux. Also to install the devtools R library, you also need to install several system dependencies. On Ubuntu this can be done by running the following line in the terminal:
 
@@ -38,20 +38,21 @@ sudo apt-get install libxml2-dev libssl-dev libcurl4-openssl-dev gfortran
 On Mac OS, the same dependecies can installed using the *brew* command. 
 
 
-On Windows
-=======
+### On Windows
+
 
 if you get an installation error then first run the following lines of code in the R console:
 
 ```{R}
 install.packages(c("htmltools","httpuv","evaluate","markdown"))
+```
 
-#### Installation Walk-through Animation
-
+### Installation Walk-through Screencast
 
 ![](inst/img/ALTREinstall.gif)
 
-### To Run
+
+## Running and Launching the Shiny App
 
 To launch the Shiny app inside R, run
 
@@ -59,10 +60,16 @@ To launch the Shiny app inside R, run
 library(ALTRE)
 runShinyApp()
 ```
-#### Shiny App Preview
 
+### Shiny App How to Run Screencast
 
 ![](inst/img/ALTRErun.gif)
+
+
+### Shiny App Preview
+
+
+![](inst/img/ALTREprev.gif)
 
 ##Vignette 
 
