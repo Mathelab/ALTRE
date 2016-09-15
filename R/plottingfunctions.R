@@ -8,8 +8,8 @@
 #' @param xlabelsize size of xlabel (default, 15px)
 #' @param ylabelsize size of ylabel (default, 15px)
 #' @param maintitle main title (default, "Peak Counts by Cell Type")
-#' @param subtitle subtitle (default, "For bioreplicates and their merged consensus track")
 #' @param maintitlesize main title size (default, 20px)
+#' @param subtitle subtitle (default, "For bioreplicates and their merged consensus track")
 #' @param subtitlesize subitle size (default 15px)
 #' @return a highcharter object
 #'
@@ -61,7 +61,7 @@ plotConsensusPeaks <- function(samplepeaks,
     xLabel <- xlabel
   }
 
-  p <- highchart(width = 580, height = 700) %>%
+  p <- highchart(width = 520, height = 650) %>%
     hc_title(text = maintitle,
              style = list(color = '#2E1717',
                           fontSize = maintitlesize,
@@ -1265,6 +1265,8 @@ plotCompareMethodsAll <- function(analysisresultsmatrix,
 #' 	(expt, reference, shared) to show in the plot (default=10)
 #' @param maintitle main title (default, "GREAT Enrichment Analysis")
 #' @param maintitlesize main title size (default, 20px)
+#' @param subtitle subtitle (default, "color corresponds to p-value")
+#' @param subtitlesize subitle size (default 15px)
 #' @param xlabelsize size of xlabel (default, 10px)
 #' @param ylabelsize size of ylabel (default, 10px)
 #' @param xlabel label for x-axis (default, Experiment-specific, shared, Reference-specific )
@@ -1309,7 +1311,9 @@ plotGREATenrich <- function(input,
                             maintitlesize = "20px",
                             ylabelsize = "10px",
                             xlabelsize = "10px",
-                            xlabel = NULL) {
+                            xlabel = NULL,
+                            subtitle = "(color corresponds to p-value)",
+                            subtitlesize = "13px") {
 
 
   variable = value = Experiment_specific = Reference_specific = Shared = c()
@@ -1488,7 +1492,7 @@ plotGREATenrich <- function(input,
     as.numeric(meltedheatmapdata$value)
 #as.numeric(format(meltedheatmapdata$value,scientific=T,digits=2))
   ))
- 
+
   formattedHeatmapData <- list_parse2(dataforHeatmap)
 
   fntltp <- JS(
@@ -1507,6 +1511,8 @@ plotGREATenrich <- function(input,
     hc_title(text = maintitle,
              style = list(color = '#2E1717',fontSize = maintitlesize,
                           fontWeight = 'bold')) %>%
+    hc_subtitle(text = subtitle,
+                style = list(fontSize = subtitlesize)) %>%
     hc_xAxis(categories = categ,
              labels = list(style = list(fontSize = xlabelsize))) %>%
     hc_yAxis(categories = theUniqueY, labels = list(style = list(fontSize = ylabelsize))) %>%
