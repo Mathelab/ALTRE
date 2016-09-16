@@ -131,7 +131,7 @@ alteredPeaks <- countanalysis(counts = consensusPeaksCounts,
 
 ```
 
-Altered REs are next categorized based on associated log2 fold changes and p-values, where larger log2fold changes and smaller p-values signify greater differences between cell types. How large a change is considered cell-type specific is left up to the user.
+Altered REs are next categorized based on associated log2 fold changes and p-values, where larger log2 fold changes and smaller p-values mark REs with a change in signal magnitude between the two cell-types that is unlikely to be caused by chance alone. What magnitude (p-value/log2 fold) is considered cell-type specific is left up to the user.
 
 ```{r}
 alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
@@ -142,7 +142,7 @@ alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
 plotCountAnalysis(alteredPeaksCategorized)
 ```
 
-REs with large, positive log2fold changes and small p-values are more open in the lung cancer cell type, and therefore, their activity is associated with the cancer phenotype. REs with large, negative log2fold changes and small p-values are more open in the normal lung cell type, and may therefore be associated with tumor suppressive properties. REs with minimal log2fold change and high p-values are equally open in both cell types, and therefore, their activity is more likely to contribute to the house-keeping functions required in every cell.
+REs with larger, positive log2 fold changes and smaller p-values have strong statistical evidence indicating that the DNA is more accessible in the lung cancer cell type compared to the normal lung tissue. Therefore, their activity is considered associated with the cancer phenotype. REs with larger, negative log2fold changes and smaller p-values indicate the opposite -- the DNA is less accessible in the cancer type and may therefore be associated with tumor suppressive properties. REs with minimal log2fold change and high p-values are equally accessible in both cell types, and therefore, their activity is more likely to contribute to the house-keeping functions required in every cell.
 
 The function *plotDistCountAnalysis()* enables users to view the raw count data in regions identified as type-specific or shared. The log2 transformation of reads per kilo-base per million for each RE is plotted. As expected, for REs identified as higher log-fold change than normal, the lung cancer cell line has much higher counts than he normal lung cell line. The opposite is true for the lower log-fold change regions. For RE with little log-fold change between cell types, the counts are similar. This visual depiction confirms the results of countanalysis and enables users to change parameters if needed.
 
@@ -184,12 +184,12 @@ By default, the p-values will be adjusted by "bonferroni" and significant pathwa
 Note that this vignette only uses Chromosome 21, therefore the pathway analysis results presented may not be biologically relevant.  
 
 ```{r, eval = FALSE}
-callpaths <- runGREAT(peaks = alteredPeaksCategorized)
-pathresults <- processPathways(callpaths, pathway_category = "GO",
+callPaths <- runGREAT(peaks = alteredPeaksCategorized)
+enrichmentTables <- processPathways(callpaths, pathway_category = "GO",
 	enrichcutoff = 2, adjpvalcutoff = 0.05)
 ```
 
-```{r, message = FALSE, results = FALSE, echo = FALSE}
+```{r, echo = FALSE, message = FALSE}
 captured <- capture.output(callpaths <- runGREAT(peaks = alteredPeaksCategorized))
 pathresults <- processPathways(callpaths, pathway_category = "GO",
 	enrichcutoff = 2, adjpvalcutoff = 0.05)
