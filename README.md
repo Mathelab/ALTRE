@@ -18,7 +18,7 @@ source("http://bioconductor.org/biocLite.R")
 BiocInstaller::biocLite(c('org.Hs.eg.db', 'EnsDb.Hsapiens.v75', 'GO.db'))
 # Second, install the devtools package for installing ALTRE from GitHub
 install.packages("devtools") 
-# Third,iInstall the ALTRE package 
+# Third, install the ALTRE package 
 devtools::install_github("mathelab/ALTRE")
 ```
 
