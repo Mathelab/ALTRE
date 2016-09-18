@@ -13,15 +13,12 @@
 To install ALTRE, run the following code in the R terminal
 
 ```{R}
-# Install Bioconductor packages (dependencies)            
+# First, install the Bioconductor packages (dependencies) with these two lines           
 source("http://bioconductor.org/biocLite.R")
-BiocInstaller::biocLite(c('org.Hs.eg.db',
-                          'EnsDb.Hsapiens.v75',
-                          'GO.db'))
-                        
-# Install the devtools package for installing ALTRE
+BiocInstaller::biocLite(c('org.Hs.eg.db', 'EnsDb.Hsapiens.v75', 'GO.db'))
+# Second, install the devtools package for installing ALTRE from GitHub
 install.packages("devtools") 
-# Install the ALTRE package 
+# Third,iInstall the ALTRE package 
 devtools::install_github("mathelab/ALTRE")
 ```
 
