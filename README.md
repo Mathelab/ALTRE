@@ -1,9 +1,15 @@
 # ALTRE R Package
-[![Join the chat at https://gitter.im/ProjectALTRE/PublicLobby](https://badges.gitter.im/ProjectALTRE/PublicLobby.svg)](https://gitter.im/ProjectALTRE/PublicLobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/Mathelab/ALTRE.svg?branch=master)](https://travis-ci.org/Mathelab/ALTRE)
 [![Build status](https://ci.appveyor.com/api/projects/status/i7lbh9tl449hvnmj/branch/master?svg=true)](https://ci.appveyor.com/project/Mathelab/altre/branch/master)
 [![codecov](https://codecov.io/gh/Mathelab/ALTRE/branch/master/graph/badge.svg)](https://codecov.io/gh/Mathelab/ALTRE)
 
+## Contact Us
+
+You can contact us on Gitter chat by clicking on this badge
+
+[![Join the chat at https://gitter.im/ProjectALTRE/PublicLobby](https://badges.gitter.im/ProjectALTRE/PublicLobby.svg)](https://gitter.im/ProjectALTRE/PublicLobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+Alternatively, if you encounter any installation problems or bugs, you can file an issue on the Issues tab.
 
 ## Installation From Github
 
