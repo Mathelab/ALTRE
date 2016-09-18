@@ -1,55 +1,57 @@
 # ALTRE R Package
 
+[![Join the chat at https://gitter.im/ProjectALTRE/PublicLobby](https://badges.gitter.im/ProjectALTRE/PublicLobby.svg)](https://gitter.im/ProjectALTRE/PublicLobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+[![Join the chat at https://gitter.im/ProjectALTRE/Lobby](https://badges.gitter.im/ProjectALTRE/Lobby.svg)](https://gitter.im/ProjectALTRE/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Build Status](https://travis-ci.org/Mathelab/ALTRE.svg?branch=master)](https://travis-ci.org/Mathelab/ALTRE)
 [![Build status](https://ci.appveyor.com/api/projects/status/i7lbh9tl449hvnmj/branch/master?svg=true)](https://ci.appveyor.com/project/Mathelab/altre/branch/master)
 [![codecov](https://codecov.io/gh/Mathelab/ALTRE/branch/master/graph/badge.svg)](https://codecov.io/gh/Mathelab/ALTRE)
 
 
-## Install From Github
+## Installation From Github
+
+
+To install ALTRE, run the following code in the R terminal
 
 ```{R}
-
-install.packages("devtools")               
-# install Bioconductor packages
+# First, install the Bioconductor packages (dependencies) with these two lines           
 source("http://bioconductor.org/biocLite.R")
-BiocInstaller::biocLite(c('GenomeInfoDb',
-                        'IRanges',
-                        'DESeq2',
-                        'GenomicAlignments',
-                        'SummarizedExperiment',
-                        'GenomicRanges',
-                        'Rsamtools',
-                        'org.Hs.eg.db',
-                        'clusterProfiler',
-                        'ensembldb', 
-                        'EnsDb.Hsapiens.v75',
-                        'GO.db'))
-# install the package
+BiocInstaller::biocLite(c('org.Hs.eg.db', 'EnsDb.Hsapiens.v75', 'GO.db'))
+# Second, install the devtools package for installing ALTRE from GitHub
+install.packages("devtools") 
+# Third, install the ALTRE package 
 devtools::install_github("mathelab/ALTRE")
 ```
-When installing on Linux, installation might fail if the XML package cannot be installed. Installation failure  can be fixed by installing the libxml2, an XML C parser for Linux. On Ubuntu this can be done by running the following line:
+
+If you encounter an error when runing these 4 lines, please do the following:
+
+### On Linux and Mac OS
+
+
+When installing on Linux, installation might fail if the XML package cannot be installed. Installation failure  can be fixed by installing the libxml2, an XML C parser for Linux. Also to install the devtools R library, you also need to install several system dependencies. On Ubuntu this can be done by running the following line in the terminal:
 
 ```{R}
-sudo apt-get install libxml2-dev
+sudo apt-get install libxml2-dev libssl-dev libcurl4-openssl-dev gfortran
 ```
-To install the devtools R library, you also need to run the following line to install system dependencies on Ubuntu:
+On Mac OS, the same dependecies can installed using the *brew* command. 
 
-```{R}
-sudo apt-get install libssl-dev libcurl4-openssl-dev
-```
 
-On Windows, if you get an installation error then first run the following lines of code in as well:
+### On Windows
+
+
+if you get an installation error then first run the following lines of code in the R console:
 
 ```{R}
 install.packages(c("htmltools","httpuv","evaluate","markdown"))
 ```
 
-#### Installation Walk-through Animation
-
+### Installation Walk-through Screencast
 
 ![](inst/img/ALTREinstall.gif)
 
-### To Run
+
+## Running and Launching the Shiny App
 
 To launch the Shiny app inside R, run
 
@@ -57,10 +59,16 @@ To launch the Shiny app inside R, run
 library(ALTRE)
 runShinyApp()
 ```
-#### Shiny App Preview
 
+### Shiny App How to Run Screencast
 
 ![](inst/img/ALTRErun.gif)
+
+
+### Shiny App Preview
+
+
+![](inst/img/ALTREprev.gif)
 
 ##Vignette 
 
@@ -69,7 +77,7 @@ https://mathelab.github.io/ALTRE/vignette.html
 
 ## Data
 
-A restricted subset of the data with one chromosome (i.e. chromosome 21) can be found on this [page](http://mathelab.github.io/ALTREsampledata/). The corresponding CSV file for input into ALTRE can be downloaded [here](https://raw.githubusercontent.com/mathelab/ALTREsampledata/master/DNaseEncodeWindows.csv). Be sure to modify the datapath column of the CSV file so that the appropriate full path of the data files on your local machine is included.
+A restricted subset of the data with one chromosome (i.e. chromosome 21) can be found on this [page](http://mathelab.github.io/ALTREsampledata/). The corresponding CSV file for input into ALTRE can be downloaded [here](https://raw.githubusercontent.com/mathelab/ALTREsampledata/master/DNaseEncodeExample.csv). Be sure that the CSV file and the data files are in the same folder when running analysis with ALTRE.
 
 To download the entire data, please use a file download manager to download the files from the links listed below. 
 
