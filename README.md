@@ -112,5 +112,9 @@ http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/wgEncod
 
 https://sites.google.com/site/anshulkundaje/projects/blacklists
 
+### Highcharts
 
+All plots from this package use Highcharts:
+Highcharts (www.highcharts.com) is a Highsoft software product which is
+not free for commercial and Governmental use.
 
