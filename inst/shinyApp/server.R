@@ -4,7 +4,8 @@ shinyServer(function(input, output, session) {
   ############################################################################
    # Button to Load Data
 
-  rootVolumes <- getVolumes()
+  rootVolumes <- c(Home = normalizePath("~"), getVolumes()(), WD = '.')
+
 
   shinyFileChoose(input,'file',
                   roots = rootVolumes,
