@@ -1,11 +1,15 @@
 # ALTRE R Package
-
-[![Join the chat at https://gitter.im/ProjectALTRE/Lobby](https://badges.gitter.im/ProjectALTRE/Lobby.svg)](https://gitter.im/ProjectALTRE/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 [![Build Status](https://travis-ci.org/Mathelab/ALTRE.svg?branch=master)](https://travis-ci.org/Mathelab/ALTRE)
 [![Build status](https://ci.appveyor.com/api/projects/status/i7lbh9tl449hvnmj/branch/master?svg=true)](https://ci.appveyor.com/project/Mathelab/altre/branch/master)
 [![codecov](https://codecov.io/gh/Mathelab/ALTRE/branch/master/graph/badge.svg)](https://codecov.io/gh/Mathelab/ALTRE)
 
+## Contact Us
+
+You can contact us on Gitter chat by clicking on this badge
+
+[![Join the chat at https://gitter.im/ProjectALTRE/PublicLobby](https://badges.gitter.im/ProjectALTRE/PublicLobby.svg)](https://gitter.im/ProjectALTRE/PublicLobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+Alternatively, if you encounter any installation problems or bugs, you can file an issue on the Issues tab.
 
 ## Installation From Github
 
@@ -13,15 +17,12 @@
 To install ALTRE, run the following code in the R terminal
 
 ```{R}
-# Install Bioconductor packages (dependencies)            
+# First, install the Bioconductor packages (dependencies) with these two lines           
 source("http://bioconductor.org/biocLite.R")
-BiocInstaller::biocLite(c('org.Hs.eg.db',
-                          'EnsDb.Hsapiens.v75',
-                          'GO.db'))
-                        
-# Install the devtools package for installing ALTRE
+BiocInstaller::biocLite(c('org.Hs.eg.db', 'EnsDb.Hsapiens.v75', 'GO.db'))
+# Second, install the devtools package for installing ALTRE from GitHub
 install.packages("devtools") 
-# Install the ALTRE package 
+# Third, install the ALTRE package 
 devtools::install_github("mathelab/ALTRE")
 ```
 
@@ -111,5 +112,9 @@ http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/wgEncod
 
 https://sites.google.com/site/anshulkundaje/projects/blacklists
 
+### Highcharts
 
+All plots from this package use Highcharts:
+Highcharts (www.highcharts.com) is a Highsoft software product which is
+not free for commercial and Governmental use.
 
