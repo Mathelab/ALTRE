@@ -146,13 +146,13 @@ plotConsensusPeaks <- function(samplepeaks,
 #' consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
 #' minreps = 2)
 #' TSSannot <- getTSS()
-#' consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
+#' consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
 #'                                           TSS = TSSannot,
 #'                                           merge = TRUE,
 #'                                           regionspecific = TRUE,
 #'                                           distancefromTSSdist = 1500,
 #'                                           distancefromTSSprox = 1000)
-#' plotCombineAnnotatePeaks(consPeaksAnnotated)
+#' plotCombineAnnotatePeaks(consensusPeaksAnnotated)
 #' }
 #' @export
 #'
@@ -510,7 +510,7 @@ plotGetCounts <- function(countsConsPeaks,
 #'                              lfcshared = 1.2,
 #'                              pvaltypespecific = 0.01,
 #'                              pvalshared = 0.05)
-#' plotCountAnalysis(alteredPeaksCategorized)
+#' plotCountAnalysis(altrepeakscateg = alteredPeaksCategorized)
 #' }
 #' @export
 
@@ -538,7 +538,7 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL,
   #To prevent R CMD check error
 
   Referencespecificsamples <- altrepeakscateg[[3]]
-  allsamples <- colnames(altrepeakscateg$analysisresults)[11:12]
+  allsamples <- colnames(altrepeakscateg$analysisresults)[12:13]
   Experimentspecificsamples <- allsamples[which(!(allsamples %in% Referencespecificsamples))]
 
   Referencespecific <- paste0(Referencespecificsamples, "SpecificByIntensity")
@@ -770,7 +770,7 @@ plotDistCountAnalysis <-
     altrecateg <- altrecategplot <- REaltrecategplot <- c()
     #Make sure to names things are from the user-entered sample names
     reference <- analysisresults$reference
-    allSamples <- colnames(analysisresults$analysisresults)[11:12]
+    allSamples <- colnames(analysisresults$analysisresults)[12:13]
     nonreference <- allSamples[which(!(allSamples %in% reference))]
     Referencespecific <- paste0(reference, "SpecificByIntensity")
     Experimentspecific <- paste0(nonreference, "SpecificByIntensity")
@@ -1281,7 +1281,7 @@ plotCompareMethodsAll <- function(analysisresultsmatrix,
 #' alteredPeaks <- countanalysis(counts=consensusPeaksCounts,
 #'                              pval=0.01,
 #'                              lfcvalue=1)
-#' alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
+#' alteredPeaksCategorized <- categAltrePeaks(analysisresults = alteredPeaks,
 #'                              lfctypespecific = 1.5,
 #'                              lfcshared = 1.2,
 #'                              pvaltypespecific = 0.01,

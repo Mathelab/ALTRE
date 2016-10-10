@@ -58,13 +58,13 @@ samplePeaks <- loadBedFiles(csvfile)
 consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
 minreps = 2)
 TSSannot <- getTSS()
-consPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consPeaks,
+consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
                                           TSS = TSSannot,
                                           merge = TRUE,
                                           regionspecific = TRUE,
                                           distancefromTSSdist = 1500,
                                           distancefromTSSprox = 1000)
-plotCombineAnnotatePeaks(consPeaksAnnotated)
+plotCombineAnnotatePeaks(consensusPeaksAnnotated)
 }
 }
 
