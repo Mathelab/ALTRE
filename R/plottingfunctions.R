@@ -2,14 +2,17 @@
 #' of countstatistics
 #'
 #' @param samplepeaks output generated from getConsensusPeaks
-#' @param palette RColorBrewer palette to change graph colors
-#' @param xlabel label for x-axis (default, types of peaks - e.g. ConsensusPeaks, rep1, rep2, etc.)
+#' @param palette choose an RColorBrewer palette ("Set1", "Set2", "Set3",
+#' "Pastel1", "Pastel2", "Paired", etc.) or submit a vector of colors
+#' @param xlabel label for x-axis (default, types of peaks - e.g.
+#' ConsensusPeaks, rep1, rep2, etc.)
 #' @param ylabel label for y-axis (default, "Peak Counts")
 #' @param xlabelsize size of xlabel (default, 15px)
 #' @param ylabelsize size of ylabel (default, 15px)
 #' @param maintitle main title (default, "Peak Counts by Cell Type")
 #' @param maintitlesize main title size (default, 20px)
-#' @param subtitle subtitle (default, "For bioreplicates and their merged consensus track")
+#' @param subtitle subtitle (default, "For bioreplicates and their merged
+#' consensus track")
 #' @param subtitlesize subitle size (default 15px)
 #' @return a highcharter object
 #'
@@ -23,7 +26,7 @@
 #' @export
 #'
 plotConsensusPeaks <- function(samplepeaks,
-                               palette = NULL,
+                               palette = "Set1",
                                xlabel = NULL,
                                ylabel = "Peak Counts",
                                xlabelsize = '15px',
@@ -33,11 +36,12 @@ plotConsensusPeaks <- function(samplepeaks,
                                maintitlesize = "20px",
                                subtitlesize = "15px") {
 
-  if ( !is.null(palette) ) {
-    cols <- RColorBrewer::brewer.pal(3, palette)
-  } else {
-    cols <- RColorBrewer::brewer.pal(3, "Set1")
+  if (grepl("#",palette[1])) {
+    cols <- c(palette)
+  } else{
+    cols <- RColorBrewer::brewer.pal(4, palette)
   }
+
   CellType <- NULL
   #without this R CMD check throws no visible binding for global variable error
   consPeaksStats <- samplepeaks$consPeaksStats
@@ -124,7 +128,8 @@ plotConsensusPeaks <- function(samplepeaks,
 #' (only works if peaks were merged)
 #'
 #' @param conspeaks output generated from combineAnnotatePeaks
-#' @param palette RColorBrewer palette to change graph colors
+#' @param palette choose an RColorBrewer palette ("Set1", "Set2", "Set3",
+#' "Pastel1", "Pastel2", "Paired", etc.) or submit a vector of colors
 #' @param viewer whether the plot should be displayed in the RStudio viewer or
 #'        in Shiny/Knittr
 #' @param xlabels labels for x-axis (default, Before merging/After merging)
@@ -158,7 +163,7 @@ plotConsensusPeaks <- function(samplepeaks,
 #'
 plotCombineAnnotatePeaks <- function(conspeaks,
                                      viewer = TRUE,
-                                     palette = NULL,
+                                     palette = "Set1",
                                      rightmaintitle = "Mean Length of REs",
                                      leftmaintitle = "Number of REs",
                                      xlabels = c("Before merging","After merging"),
@@ -169,10 +174,10 @@ plotCombineAnnotatePeaks <- function(conspeaks,
                                      rightylabelsize = "15px",
                                      leftmaintitlesize = "20px",
                                      rightmaintitlesize = "20px") {
-  if ( !is.null(palette) ) {
+  if (grepl("#",palette[1])) {
+    cols <- c(palette)
+  } else{
     cols <- RColorBrewer::brewer.pal(4, palette)
-  } else {
-    cols <- RColorBrewer::brewer.pal(4, "Set1")
   }
 
   CellType <- NULL
@@ -343,7 +348,8 @@ plotCombineAnnotatePeaks <- function(conspeaks,
 #' log2 RPKM values of regulation regions
 #'
 #' @param countsConsPeaks output generated from getCounts
-#' @param palette RColorBrewer palette to change graph colors
+#' @param palette choose an RColorBrewer palette ("Set1", "Set2", "Set3",
+#'  "Pastel1", "Pastel2", "Paired", etc.) or submit a vector of colors
 #' @param xlabel label for x-axis (default, "log2 normalized read counts")
 #' @param ylabel label for y-axis (default, "Density")
 #' @param xlabelsize size of xlabel (default, 15px)
@@ -375,7 +381,7 @@ plotCombineAnnotatePeaks <- function(conspeaks,
 #' @export
 
 plotGetCounts <- function(countsConsPeaks,
-            palette = NULL,
+            palette = "Set1",
             xlabel = "Log2 Normalized Read Counts",
             ylabel = "Density",
             xlabelsize = "15px",
@@ -388,10 +394,10 @@ plotGetCounts <- function(countsConsPeaks,
   value = Reference_specific = Shared = Experiment_specific = c()
   #set to null forR CMD Check error: Undefined global functions/variables
 
-  if ( !is.null(palette) ) {
+  if (grepl("#",palette[1])) {
+    cols <- c(palette)
+  } else{
     cols <- RColorBrewer::brewer.pal(4, palette)
-  } else {
-    cols <- RColorBrewer::brewer.pal(4, "Set1")
   }
 
 
@@ -475,7 +481,8 @@ plotGetCounts <- function(countsConsPeaks,
 #' categAltrePeaks()
 #' @param viewer whether the plot should be displayed in the RStudio viewer or
 #'        in Shiny/Knittr
-#' @param palette RColorBrewer palette to change graph colors
+#' @param palette choose an RColorBrewer palette ("Set1", "Set2", "Set3",
+#' "Pastel1", "Pastel2", "Paired", etc.) or submit a vector of colors
 #' @param xlabel label for x-axis (default, "-log10 pvalue")
 #' @param ylabel label for y-axis (default, "Density")
 #' @param xlabelsize size of xlabel (default, 15px)
@@ -514,7 +521,8 @@ plotGetCounts <- function(countsConsPeaks,
 #' }
 #' @export
 
-plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = "Set1",
+plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE,
+                              palette = c("#C71585", "#d3d3d3", "#00E5EE", "#000080"),
                               maintitlelefty = "TSS-distal",
                               maintitlerighty = "TSS-proximal",
                               ylabel = "-log10 pvalue",
@@ -620,24 +628,6 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = "Set1",
   }
 
 
-
-  # upperThresh1 <- max((n1 - 1000),  3 * (n1 %/% 4))
-  # upperThresh2 <- max((n2 - 1000),  3 *(n2 %/% 4))
-  # lowerThresh1 <-   (n1 %/% 4)
-  # lowerThresh2 <-   (n2 %/% 4)
-  #
-  # idx1 <- c(sample((lowerThresh1 + 1):upperThresh1,
-  #                       min(3000, (upperThresh1 - lowerThresh1))),
-  #               (upperThresh1 + 1):n1
-  #                )
-  # idx2 <- c(sample((lowerThresh2 + 1):upperThresh2,
-  #                       min(3000, (upperThresh2 - lowerThresh2))),
-  #               (upperThresh2 + 1):n2
-  #               )
-
-
-  ###########################
-
     p1 <- highchart() %>%
       hc_chart(type = "scatter") %>%
       hc_plotOptions(
@@ -717,7 +707,8 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = "Set1",
 #' @param analysisresults output generated from countanalysis() then
 #' categAltrePeaks()
 #' @param counts output generated from getCounts()
-#' @param palette RColorBrewer palette to change graph colors
+#' @param palette choose an RColorBrewer palette ("Set1", "Set2", "Set3",
+#' "Pastel1", "Pastel2", "Paired", etc.) or submit a vector of colors
 #' @param ylabel label for y-axis (default, "Observations")
 #' @param ylabelsize size of ylabel (default, 15px)
 #' @param xlabelsize size of xlabel (default, 15px)
@@ -759,7 +750,7 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = "Set1",
 plotDistCountAnalysis <-
   function(analysisresults,
            counts,
-           palette = "Set1",
+           palette = c("#C71585", "#d3d3d3", "#00E5EE", "#000080"),
            xlabelsize = "13px",
            ylabel = "log2(FPKM)",
            ylabelsize = "13px",
@@ -774,7 +765,7 @@ plotDistCountAnalysis <-
     Referencespecific <- paste0(reference, "SpecificByIntensity")
     Experimentspecific <- paste0(nonreference, "SpecificByIntensity")
 
-    if (grepl("#",palette)) {
+    if (grepl("#",palette[1])) {
       cols <- c(palette)
     } else{
       cols <- RColorBrewer::brewer.pal(4, palette)
@@ -961,7 +952,8 @@ plotDistCountAnalysis <-
 #' or 'both' -- INCLUDE quotes
 #' @param method pick a method, methods can be 'Intensity' or 'Peak'
 #' include quotes
-#' @param palette RColorBrewer palette to change graph colors
+#' @param palette choose an RColorBrewer palette ("Set1", "Set2", "Set3", "Pastel1",
+#' "Pastel2", "Paired", etc.) or submit a vector of colors
 #' @param maintitle main title (default generated from sample names)
 #' @param maintitlesize main title size (default, 20px)
 #' @return pie chart
@@ -997,7 +989,7 @@ plotDistCountAnalysis <-
 plotCompareMethods <- function(analysisresultsmatrix,
                                region = "both",
                                method = "Intensity",
-                               palette = "Set1",
+                               palette = c("#C71585", "#d3d3d3", "#00E5EE", "#000080"),
                                maintitle = NULL,
                                maintitlesize = "16px") {
 
@@ -1005,7 +997,7 @@ plotCompareMethods <- function(analysisresultsmatrix,
 
     analysisresultsmatrix <- as.matrix(analysisresultsmatrix$compareresults[,c("peak","intensity")])
 
-    if (grepl("#",palette)) {
+    if (grepl("#",palette[1])) {
     cols <- c(palette)
     } else{
       cols <- RColorBrewer::brewer.pal(3, palette)
@@ -1114,7 +1106,7 @@ plotCompareMethods <- function(analysisresultsmatrix,
     ),
     name = paste(region, method)
     ) %>%
-    hc_colors(c(cols[1], cols[3], cols[2]))  %>%
+    hc_colors(c(cols[1], cols[3], cols[4]))  %>%
     hc_exporting(enabled = TRUE)
   return(p)
 }

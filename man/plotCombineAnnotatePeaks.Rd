@@ -7,7 +7,7 @@ plot a barplot showing number of peaks before/after merging or length of
 peaks before/after merging
 (only works if peaks were merged)}
 \usage{
-plotCombineAnnotatePeaks(conspeaks, viewer = TRUE, palette = NULL,
+plotCombineAnnotatePeaks(conspeaks, viewer = TRUE, palette = "Set1",
   rightmaintitle = "Mean Length of REs", leftmaintitle = "Number of REs",
   xlabels = c("Before merging", "After merging"),
   leftylabel = "Number of REs", rightylabel = "Mean Length of REs",
@@ -20,7 +20,8 @@ plotCombineAnnotatePeaks(conspeaks, viewer = TRUE, palette = NULL,
 \item{viewer}{whether the plot should be displayed in the RStudio viewer or
 in Shiny/Knittr}
 
-\item{palette}{RColorBrewer palette to change graph colors}
+\item{palette}{choose an RColorBrewer palette ("Set1", "Set2", "Set3",
+"Pastel1", "Pastel2", "Paired", etc.) or submit a vector of colors}
 
 \item{rightmaintitle}{main title for mean length of REs plot (default, "Mean length of REs")}
 
