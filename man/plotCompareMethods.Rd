@@ -8,7 +8,7 @@ presence or by #' differential counts.  The type of regulatory region
 (intensity or peak) must be specified.}
 \usage{
 plotCompareMethods(analysisresultsmatrix, region = "both",
-  method = "Intensity", palette = NULL, maintitle = NULL,
+  method = "Intensity", palette = "Set1", maintitle = NULL,
   maintitlesize = "16px")
 }
 \arguments{
@@ -62,7 +62,7 @@ alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
                                           pvaltypespecific = 0.01,
                                           pvalshared = 0.05)
 comparePeaksAnalysisResults <- comparePeaksAltre(alteredPeaksCategorized)
-plotCompareMethods(comparePeaksAnalysisResults)
+plotCompareMethods(analysisresultsmatrix = comparePeaksAnalysisResults)
 }
 }
 

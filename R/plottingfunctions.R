@@ -514,7 +514,7 @@ plotGetCounts <- function(countsConsPeaks,
 #' }
 #' @export
 
-plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL,
+plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = "Set1",
                               maintitlelefty = "TSS-distal",
                               maintitlerighty = "TSS-proximal",
                               ylabel = "-log10 pvalue",
@@ -523,19 +523,19 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL,
                               ylabelsize = "15px",
                               maintitlesize = "20px") {
 
-    if ( !is.null(palette) ) {
-        cols <- RColorBrewer::brewer.pal(4, palette)
-    } else {cols <- c("#C71585", "#d3d3d3", "#00E5EE", "#000080")}
-                        #magenta (experiment-specific)
-                        #grey (ambiguous)
 
-                        #dark blue (shared)
-                            #blue (ref)
+    #Either use an R color brewer palette or your own palette.
+  if (grepl("#",palette)) {
+    cols <- c(palette)
+  } else{
+    cols <- RColorBrewer::brewer.pal(4, palette)
+  }
 
+  #To prevent R CMD check error
   log2FoldChange <- NULL
   padj <- NULL
   REaltrecateg <- REaltrecategplot <- NULL
-  #To prevent R CMD check error
+
 
   Referencespecificsamples <- altrepeakscateg[[3]]
   allsamples <- colnames(altrepeakscateg$analysisresults)[12:13]
@@ -664,7 +664,7 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL,
       hc_tooltip(headerFormat = "",
                  pointFormat  = "<b>log2FC</b> = {point.x}<br> <b>-log10pvalue</b>
                 = {point.y}<br>") %>%
-      hc_colors(cols) %>%
+      hc_colors(c(cols[1], cols[2], cols[3], cols[4])) %>%
       hc_exporting(enabled = TRUE)
 
     p2 <- highchart() %>%
@@ -693,14 +693,13 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL,
                  pointFormat  = "<b>log2FC</b> = {point.x}
                  <br> <b>-log10pvalue</b> = {point.y}<br>",
                  valueDecimals = 2) %>%
-      hc_colors(cols) %>%
+      hc_colors(c(cols[1], cols[2], cols[3], cols[4])) %>%
       hc_exporting(enabled = TRUE)
 
     if (viewer == TRUE) {
       p <-
         htmltools::browsable(hw_grid(p1, p2, ncol = 2))
-    }
-    else {
+    }else {
       p <- hw_grid(p1, p2, ncol = 2)
     }
     return(p)
@@ -753,14 +752,14 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE, palette = NULL,
 #'                                           lfcshared = 1.2,
 #'                                           pvaltypespecific = 0.01,
 #'                                           pvalshared = 0.05)
-#' plotDistCountAnalysis(alteredPeaksCategorized, consensusPeaksCounts)
+#' plotDistCountAnalysis(analysisresults = alteredPeaksCategorized, counts = consensusPeaksCounts)
 #' }
 #' @export
 #'
 plotDistCountAnalysis <-
   function(analysisresults,
            counts,
-           palette = NULL,
+           palette = "Set1",
            xlabelsize = "13px",
            ylabel = "log2(FPKM)",
            ylabelsize = "13px",
@@ -775,13 +774,11 @@ plotDistCountAnalysis <-
     Referencespecific <- paste0(reference, "SpecificByIntensity")
     Experimentspecific <- paste0(nonreference, "SpecificByIntensity")
 
-    if (!is.null(palette)) {
-      cols <- RColorBrewer::brewer.pal(4, palette)
+    if (grepl("#",palette)) {
+      cols <- c(palette)
     } else{
-      cols <- c("#C71585", "#d3d3d3", "#000080", "#00E5EE")
+      cols <- RColorBrewer::brewer.pal(4, palette)
     }
-    #magenta (experiment-specific) #grey (ambiguous) #blue (shared))
-    #blue (reference specific)
 
     readcounts <- counts$regioncounts
     analysisresults <- analysisresults$analysisresults
@@ -901,8 +898,7 @@ plotDistCountAnalysis <-
 	paste0(mysamps[1],' TSS-proximal'),
         paste0(mysamps[2],' TSS-distal'),
 	paste0(mysamps[2],' TSS-proximal'))
-  }
-  else(categ <- xlabel)
+  }else(categ <- xlabel)
 
   explabel <- paste0(nonreference, "-specific (by intensity)")
   reflabel <- paste0(reference, "-specific (by intensity)")
@@ -935,11 +931,11 @@ plotDistCountAnalysis <-
                     name = 'Ambiguous',
                     type = "boxplot") %>%
       hc_add_series(data = Shared_list,
-                    fillColor = cols[3],
+                    fillColor = cols[4],
                     name = 'Shared',
                     type = "boxplot") %>%
       hc_add_series(data = Referencespecific_list,
-                    fillColor = cols[4],
+                    fillColor = cols[3],
                     name = reflabel,
                     type = "boxplot") %>%
       hc_yAxis(title = list(text = ylabel,
@@ -948,7 +944,7 @@ plotDistCountAnalysis <-
       hc_xAxis(categories = categ,
                labels = list(style = list(fontSize = xlabelsize))) %>%
       hc_tooltip(valueDecimals = 2) %>%
-      hc_colors(cols) %>%
+      hc_colors(c(cols[1], cols[2], cols[4], cols[3])) %>%
       hc_exporting(enabled = TRUE)
     return(p)
     }
@@ -995,13 +991,13 @@ plotDistCountAnalysis <-
 #'                                           pvaltypespecific = 0.01,
 #'                                           pvalshared = 0.05)
 #' comparePeaksAnalysisResults <- comparePeaksAltre(alteredPeaksCategorized)
-#' plotCompareMethods(comparePeaksAnalysisResults)
+#' plotCompareMethods(analysisresultsmatrix = comparePeaksAnalysisResults)
 #'}
 
 plotCompareMethods <- function(analysisresultsmatrix,
                                region = "both",
                                method = "Intensity",
-                               palette = NULL,
+                               palette = "Set1",
                                maintitle = NULL,
                                maintitlesize = "16px") {
 
@@ -1009,11 +1005,10 @@ plotCompareMethods <- function(analysisresultsmatrix,
 
     analysisresultsmatrix <- as.matrix(analysisresultsmatrix$compareresults[,c("peak","intensity")])
 
-    if (!is.null(palette)) {
-    cols <- RColorBrewer::brewer.pal(3, palette)
-  }
-  else{
-    cols <- c("#C71585", "#00E5EE", "#000080", "#d3d3d3")
+    if (grepl("#",palette)) {
+    cols <- c(palette)
+    } else{
+      cols <- RColorBrewer::brewer.pal(3, palette)
   }
 
   if (region == "TSS-proximal") {
@@ -1119,7 +1114,7 @@ plotCompareMethods <- function(analysisresultsmatrix,
     ),
     name = paste(region, method)
     ) %>%
-    hc_colors(cols)  %>%
+    hc_colors(c(cols[1], cols[3], cols[2]))  %>%
     hc_exporting(enabled = TRUE)
   return(p)
 }
@@ -1183,11 +1178,6 @@ plotCompareMethodsAll <- function(analysisresultsmatrix,
                                   title23 = NULL,
                                   maintitlesize = "20px"
                                  ) {
-
-
-#    if (is.matrix(analysisresultsmatrix[[1]]) == FALSE) {
-#      stop("The input is not a matrix!")
-#    }
 
     p1 <- plotCompareMethods(analysisresultsmatrix,
                              "TSS-proximal",

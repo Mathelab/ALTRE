@@ -4,7 +4,7 @@
 \alias{plotCountAnalysis}
 \title{Create a volcano plot from the output of categAltrePeaks}
 \usage{
-plotCountAnalysis(altrepeakscateg, viewer = TRUE, palette = NULL,
+plotCountAnalysis(altrepeakscateg, viewer = TRUE, palette = "Set1",
   maintitlelefty = "TSS-distal", maintitlerighty = "TSS-proximal",
   ylabel = "-log10 pvalue", xlabel = "log2fold change",
   xlabelsize = "15px", ylabelsize = "15px", maintitlesize = "20px")

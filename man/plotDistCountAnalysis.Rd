@@ -5,7 +5,7 @@
 \title{Creates a boxplot to see the distribution of read counts in type-specific and
 shared TSS-proximal and TSS-distal regions.}
 \usage{
-plotDistCountAnalysis(analysisresults, counts, palette = NULL,
+plotDistCountAnalysis(analysisresults, counts, palette = "Set1",
   xlabelsize = "13px", ylabel = "log2(FPKM)", ylabelsize = "13px",
   maintitle = "Distribution of Normalized Counts (peaks types determine by intensity)",
   maintitlesize = "20px", xlabel = NULL)
@@ -64,7 +64,7 @@ alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
                                           lfcshared = 1.2,
                                           pvaltypespecific = 0.01,
                                           pvalshared = 0.05)
-plotDistCountAnalysis(alteredPeaksCategorized, consensusPeaksCounts)
+plotDistCountAnalysis(analysisresults = alteredPeaksCategorized, counts = consensusPeaksCounts)
 }
 }
 
