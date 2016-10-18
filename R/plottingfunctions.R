@@ -914,7 +914,7 @@ plotDistCountAnalysis <-
         )
       ) %>%
       hc_add_series(data = Experimentspecific_list,
-                    fillColor = cols[1],
+                    fillColor = cols[3],
                     name = explabel,
                     type = "boxplot") %>%
       hc_add_series(data = Ambiguous_list,
@@ -926,7 +926,7 @@ plotDistCountAnalysis <-
                     name = 'Shared',
                     type = "boxplot") %>%
       hc_add_series(data = Referencespecific_list,
-                    fillColor = cols[3],
+                    fillColor = cols[1],
                     name = reflabel,
                     type = "boxplot") %>%
       hc_yAxis(title = list(text = ylabel,
@@ -935,7 +935,7 @@ plotDistCountAnalysis <-
       hc_xAxis(categories = categ,
                labels = list(style = list(fontSize = xlabelsize))) %>%
       hc_tooltip(valueDecimals = 2) %>%
-      hc_colors(c(cols[1], cols[2], cols[4], cols[3])) %>%
+      hc_colors(c(cols[3], cols[2], cols[4], cols[1])) %>%
       hc_exporting(enabled = TRUE)
     return(p)
     }
@@ -1106,7 +1106,7 @@ plotCompareMethods <- function(analysisresultsmatrix,
     ),
     name = paste(region, method)
     ) %>%
-    hc_colors(c(cols[1], cols[3], cols[4]))  %>%
+    hc_colors(c(cols[3], cols[1], cols[4]))  %>%
     hc_exporting(enabled = TRUE)
   return(p)
 }
