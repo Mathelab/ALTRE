@@ -135,14 +135,14 @@ combineAnnotatePeaks <- function(conspeaks,
 
       # Merge TSS-distal and TSS-proximal independently
       # if they're within user defined distances
-      TSSdistafter <- mergeclosepeaks(peaklist,
-                                       TSSdistalbeforemergedata,
+      TSSdistafter <- mergeclosepeaks(peaklist = peaklist,
+                                       grange = TSSdistalbeforemergedata,
                                        mergedist = distancefromTSSdist,
-                                       TSS, distancefromTSS)
+                                       TSS = TSS, distancefromTSS = distancefromTSS)
       TSSproxafter <- mergeclosepeaks(peaklist,
                                        TSSproxbeforemergedata,
                                        mergedist = distancefromTSSprox,
-                                       TSS, distancefromTSS)
+                                       TSS=TSS, distancefromTSS)
 
       bothafter <- sort(GenomeInfoDb::sortSeqlevels(c(TSSdistafter,
                                         TSSproxafter)))

@@ -48,28 +48,13 @@ grangestodataframe <- function(grange) {
 #'
 
 tssannotgrange <- function(grange, TSS, distancefromTSS) {
-  # read in TSS, make column header, change to
-  # Granges Find distance to transcription
-  # start site
+
   distancetoTSS <- distanceToNearest(grange, TSS)
-  # make dataframe from grange
-  newdataframe <- grangestodataframe(grange)
-  newdataframe$distance <- mcols(distancetoTSS)$distance
-  newdataframe <- within(newdataframe, {
-    region <- ifelse(distance <= distancefromTSS,
-                     "TSS-proximal",
-                     "TSS-distal")
-  })
-  # annotate anything <=1500 bp away as
-  # TSS-proximal, otherwise TSS-distal
-  chr <- c()
-  annotatedgrange <- with(newdataframe,
-                          GRanges(chr,
-                                  IRanges(start, stop),
-                                  meta = newdataframe[, 5]))
-  # create a grange
-  colnames(mcols(annotatedgrange)) <- c("region")
-  return(annotatedgrange)
+  mcols(grange)$region <- ifelse(mcols(distancetoTSS)$distance <= distancefromTSS,
+                                 "TSS-proximal",
+                                 "TSS-distal")
+  mcols(grange)$gene_name <- mcols(TSS[subjectHits(distancetoTSS), ])$gene_name
+  return(grange)
 }
 
 ################################################################################
@@ -190,7 +175,7 @@ mergeclosepeaks <- function(peaklist, grange,
                         IRanges(aftermergedata$start, aftermergedata$stop),
                         meta = aftermergedata[, c(4:lengthdata)])
 
-  colnames(mcols(aftermerge)) <- c("region",  namesvector)
+  colnames(mcols(aftermerge)) <- c("region", "closestGene",  namesvector)
 
   return(aftermerge)
 }  # end merging function

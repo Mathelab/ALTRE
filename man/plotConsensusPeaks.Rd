@@ -5,7 +5,7 @@
 \title{Given the output from getConsensusPeaks, generate a barplot
 of countstatistics}
 \usage{
-plotConsensusPeaks(samplepeaks, palette = NULL, xlabel = NULL,
+plotConsensusPeaks(samplepeaks, palette = "Set1", xlabel = NULL,
   ylabel = "Peak Counts", xlabelsize = "15px", ylabelsize = "15px",
   maintitle = "Peak Counts by Cell Type",
   subtitle = "For bioreplicates and their merged consensus track",
@@ -14,9 +14,11 @@ plotConsensusPeaks(samplepeaks, palette = NULL, xlabel = NULL,
 \arguments{
 \item{samplepeaks}{output generated from getConsensusPeaks}
 
-\item{palette}{RColorBrewer palette to change graph colors}
+\item{palette}{choose an RColorBrewer palette ("Set1", "Set2", "Set3",
+"Pastel1", "Pastel2", "Paired", etc.) or submit a vector of colors}
 
-\item{xlabel}{label for x-axis (default, types of peaks - e.g. ConsensusPeaks, rep1, rep2, etc.)}
+\item{xlabel}{label for x-axis (default, types of peaks - e.g.
+ConsensusPeaks, rep1, rep2, etc.)}
 
 \item{ylabel}{label for y-axis (default, "Peak Counts")}
 
@@ -26,7 +28,8 @@ plotConsensusPeaks(samplepeaks, palette = NULL, xlabel = NULL,
 
 \item{maintitle}{main title (default, "Peak Counts by Cell Type")}
 
-\item{subtitle}{subtitle (default, "For bioreplicates and their merged consensus track")}
+\item{subtitle}{subtitle (default, "For bioreplicates and their merged
+consensus track")}
 
 \item{maintitlesize}{main title size (default, 20px)}
 

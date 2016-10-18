@@ -8,8 +8,8 @@ presence or by #' differential counts.  The type of regulatory region
 (intensity or peak) must be specified.}
 \usage{
 plotCompareMethods(analysisresultsmatrix, region = "both",
-  method = "Intensity", palette = NULL, maintitle = NULL,
-  maintitlesize = "16px")
+  method = "Intensity", palette = c("#C71585", "#d3d3d3", "#00E5EE",
+  "#000080"), maintitle = NULL, maintitlesize = "16px")
 }
 \arguments{
 \item{analysisresultsmatrix}{analysisresults of Intensity analysis place into
@@ -21,7 +21,8 @@ or 'both' -- INCLUDE quotes}
 \item{method}{pick a method, methods can be 'Intensity' or 'Peak'
 include quotes}
 
-\item{palette}{RColorBrewer palette to change graph colors}
+\item{palette}{choose an RColorBrewer palette ("Set1", "Set2", "Set3", "Pastel1",
+"Pastel2", "Paired", etc.) or submit a vector of colors}
 
 \item{maintitle}{main title (default generated from sample names)}
 
@@ -62,7 +63,7 @@ alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
                                           pvaltypespecific = 0.01,
                                           pvalshared = 0.05)
 comparePeaksAnalysisResults <- comparePeaksAltre(alteredPeaksCategorized)
-plotCompareMethods(comparePeaksAnalysisResults)
+plotCompareMethods(analysisresultsmatrix = comparePeaksAnalysisResults)
 }
 }
 

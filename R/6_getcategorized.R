@@ -30,7 +30,7 @@
 #' alteredPeaks <- countanalysis(counts = consensusPeaksCounts,
 #'    pval = 0.01,
 #'    lfcvalue = 1)
-#' alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
+#' alteredPeaksCategorized <- categAltrePeaks(analysisresults = alteredPeaks,
 #'    lfctypespecific = 1.5,
 #'    lfcshared = 1.2,
 #'    pvaltypespecific = 0.01,
@@ -49,7 +49,7 @@
 
     #Make sure to names things are from the user-entered sample names
     reference <- analysisresults[[2]]
-    allSamples <- colnames(analysisresults[[1]])[11:length(analysisresults[[1]])]
+    allSamples <- colnames(analysisresults[[1]])[12:length(analysisresults[[1]])]
     experimentSpecific <- allSamples[which(!(allSamples %in% reference))]
     referenceSpecific <- paste0(reference, "SpecificByIntensity")
     experimentSpecific <- paste0(experimentSpecific, "SpecificByIntensity")

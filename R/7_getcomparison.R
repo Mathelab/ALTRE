@@ -54,7 +54,7 @@ comparePeaksAltre <- function(analysisresults,
   }
 
   #Make sure to names things are from the user-entered sample names
-  allSamples <- colnames(analysisresults_firstitem)[11:12]
+  allSamples <- colnames(analysisresults_firstitem)[12:13]
   reference <- analysisresults$reference
   compareresults <-  matrix(nrow = 9, ncol = 2)
   nonreference <-  allSamples[!(allSamples %in% reference)]
