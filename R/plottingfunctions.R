@@ -1000,7 +1000,7 @@ plotCompareMethods <- function(analysisresultsmatrix,
     if (grepl("#",palette[1])) {
     cols <- c(palette)
     } else{
-      cols <- RColorBrewer::brewer.pal(3, palette)
+      cols <- RColorBrewer::brewer.pal(4, palette)
   }
 
   if (region == "TSS-proximal") {
@@ -1120,7 +1120,8 @@ plotCompareMethods <- function(analysisresultsmatrix,
 #' place into a a analysisresults matrix by the analyzeanalysisresults function
 #' @param viewer whether the plot should be displayed in the RStudio viewer or
 #' in Shiny/Knittr
-#' @param palette RColorBrewer palette to change graph colors
+#' @param palette choose an RColorBrewer palette ("Set1", "Set2", "Set3", "Pastel1",
+#' "Pastel2", "Paired", etc.) or submit a vector of colors
 #' @param title11 title of the first graph in the first row
 #' @param title12 title of the second graph in the first row
 #' @param title13 title of the third graph in the first row
@@ -1161,7 +1162,7 @@ plotCompareMethods <- function(analysisresultsmatrix,
 #'
 plotCompareMethodsAll <- function(analysisresultsmatrix,
                                   viewer = TRUE,
-                                  palette = NULL,
+                                  palette = c("#C71585", "#d3d3d3", "#00E5EE", "#000080"),
                                   title11 = NULL,
                                   title12 = NULL,
                                   title13 = NULL,

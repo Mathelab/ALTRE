@@ -325,13 +325,13 @@ shinyServer(function(input, output, session) {
   output$boxplotCounts <- highcharter::renderHighchart({
     plotDistCountAnalysis(req(categAltreObj()),
                           req(getCountsObj()),
-                          palette = input$palette5)
+                          palette = input$palette4)
   })
 
   output$pieplot <- renderUI({
     plotCompareMethodsAll(req(comparePeaksObj()),
                           viewer = FALSE,
-                          palette = input$palette5,
+                          palette = input$palette4,
                           title11 = input$title11,
                           title12 = input$title12,
                           title13 = input$title13,
