@@ -8,9 +8,10 @@ combined for both intensity-based peaks and for peaks identified by hotspot
 calling algorithms.  There is no return value. Six pie charts swill be
 plotted.}
 \usage{
-plotCompareMethodsAll(analysisresultsmatrix, viewer = TRUE, palette = NULL,
-  title11 = NULL, title12 = NULL, title13 = NULL, title21 = NULL,
-  title22 = NULL, title23 = NULL, maintitlesize = "20px")
+plotCompareMethodsAll(analysisresultsmatrix, viewer = TRUE,
+  palette = c("#C71585", "#d3d3d3", "#00E5EE", "#000080"), title11 = NULL,
+  title12 = NULL, title13 = NULL, title21 = NULL, title22 = NULL,
+  title23 = NULL, maintitlesize = "20px")
 }
 \arguments{
 \item{analysisresultsmatrix}{analysisresults of countanalysis function
@@ -19,7 +20,8 @@ place into a a analysisresults matrix by the analyzeanalysisresults function}
 \item{viewer}{whether the plot should be displayed in the RStudio viewer or
 in Shiny/Knittr}
 
-\item{palette}{RColorBrewer palette to change graph colors}
+\item{palette}{choose an RColorBrewer palette ("Set1", "Set2", "Set3", "Pastel1",
+"Pastel2", "Paired", etc.) or submit a vector of colors}
 
 \item{title11}{title of the first graph in the first row}
 

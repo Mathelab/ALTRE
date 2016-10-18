@@ -5,7 +5,7 @@
 \title{Given the output from getCounts, plot a density plot of
 log2 RPKM values of regulation regions}
 \usage{
-plotGetCounts(countsConsPeaks, palette = NULL,
+plotGetCounts(countsConsPeaks, palette = "Set1",
   xlabel = "Log2 Normalized Read Counts", ylabel = "Density",
   xlabelsize = "15px", ylabelsize = "15px",
   maintitle = "Density of log2 read counts\\n(normalized by library and region sizes)",
@@ -14,7 +14,8 @@ plotGetCounts(countsConsPeaks, palette = NULL,
 \arguments{
 \item{countsConsPeaks}{output generated from getCounts}
 
-\item{palette}{RColorBrewer palette to change graph colors}
+\item{palette}{choose an RColorBrewer palette ("Set1", "Set2", "Set3",
+"Pastel1", "Pastel2", "Paired", etc.) or submit a vector of colors}
 
 \item{xlabel}{label for x-axis (default, "log2 normalized read counts")}
 

@@ -4,10 +4,11 @@
 \alias{plotCountAnalysis}
 \title{Create a volcano plot from the output of categAltrePeaks}
 \usage{
-plotCountAnalysis(altrepeakscateg, viewer = TRUE, palette = NULL,
-  maintitlelefty = "TSS-distal", maintitlerighty = "TSS-proximal",
-  ylabel = "-log10 pvalue", xlabel = "log2fold change",
-  xlabelsize = "15px", ylabelsize = "15px", maintitlesize = "20px")
+plotCountAnalysis(altrepeakscateg, viewer = TRUE, palette = c("#C71585",
+  "#d3d3d3", "#00E5EE", "#000080"), maintitlelefty = "TSS-distal",
+  maintitlerighty = "TSS-proximal", ylabel = "-log10 pvalue",
+  xlabel = "log2fold change", xlabelsize = "15px", ylabelsize = "15px",
+  maintitlesize = "20px")
 }
 \arguments{
 \item{altrepeakscateg}{output generated from countanalysis() then
@@ -16,7 +17,8 @@ categAltrePeaks()}
 \item{viewer}{whether the plot should be displayed in the RStudio viewer or
 in Shiny/Knittr}
 
-\item{palette}{RColorBrewer palette to change graph colors}
+\item{palette}{choose an RColorBrewer palette ("Set1", "Set2", "Set3",
+"Pastel1", "Pastel2", "Paired", etc.) or submit a vector of colors}
 
 \item{maintitlelefty}{main title (default, "TSS-distal")}
 
@@ -62,7 +64,7 @@ alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
                              lfcshared = 1.2,
                              pvaltypespecific = 0.01,
                              pvalshared = 0.05)
-plotCountAnalysis(alteredPeaksCategorized)
+plotCountAnalysis(altrepeakscateg = alteredPeaksCategorized)
 }
 }
 

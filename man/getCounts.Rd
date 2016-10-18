@@ -4,7 +4,7 @@
 \alias{getCounts}
 \title{Generates count data for regulatory regions}
 \usage{
-getCounts(annotpeaks, sampleinfo, reference, chrom = NULL)
+getCounts(annotpeaks, sampleinfo, reference, singleEnd = TRUE, chrom = NULL)
 }
 \arguments{
 \item{annotpeaks}{list output from combineannotatepeaks function}
@@ -13,6 +13,8 @@ getCounts(annotpeaks, sampleinfo, reference, chrom = NULL)
 
 \item{reference}{name of sample type to be
 considered 'reference' in DESeq2 analysis}
+
+\item{singleEnd}{whether input data is single-end (default is TRUE)}
 
 \item{chrom}{optional, only chromosome chrom will be evaluated}
 }
