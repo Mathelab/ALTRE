@@ -133,7 +133,7 @@ loadBamFiles <- function(csvfile) {
                                   sep = ""))
     if (!all(file.exists(indexfiles))) {
         bamFiles <- Rsamtools::BamFileList(bamfiles,
-                                           yieldSize = 1e+05)
+                                          yieldSize = 1e+05)
     } else {
         bamFiles <- Rsamtools::BamFileList(bamfiles,
                                            index = indexfiles,

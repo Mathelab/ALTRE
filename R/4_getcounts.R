@@ -8,6 +8,7 @@
 #' @param sampleinfo dataframe as returned from loadCSVFile() function
 #' @param reference name of sample type to be
 #' considered 'reference' in DESeq2 analysis
+#' @param singleEnd whether input data is single-end (default is TRUE)
 #' @param chrom optional, only chromosome chrom will be evaluated
 #'
 #' @return List containing three items:
@@ -39,6 +40,7 @@
 getCounts <- function(annotpeaks,
                       sampleinfo,
                       reference,
+                      singleEnd=TRUE,
                       chrom = NULL) {
 
   bamfileslist <- loadBamFiles(sampleinfo)
@@ -51,11 +53,21 @@ getCounts <- function(annotpeaks,
   }
 
   # Count number of reads overlapping each annotated peak
-  countsse <- GenomicAlignments::summarizeOverlaps(features = inputgranges,
+  if(singleEnd==TRUE) {
+  	countsse <- GenomicAlignments::summarizeOverlaps(features = inputgranges,
                                                    reads = bamfileslist,
                                                    mode = "Union",
                                                    singleEnd = TRUE,
                                                    ignore.strand = TRUE)
+  }
+  else {
+        countsse <- GenomicAlignments::summarizeOverlaps(features = inputgranges,
+                                                   reads = bamfileslist,
+                                                   mode = "Union",
+                                                   singleEnd = FALSE,
+						   fragments = TRUE,
+                                                   ignore.strand = TRUE)
+  }
   # add column labels
   SummarizedExperiment::colData(countsse) <- DataFrame(sampleinfo[, c(1:4)])
   countsse$sample <- as.factor(countsse$sample)
