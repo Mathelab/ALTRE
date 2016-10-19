@@ -5,14 +5,17 @@
 \title{Given the output from getConsensusPeaks, generate a barplot
 of countstatistics}
 \usage{
-plotConsensusPeaks(samplepeaks, palette = "Set1", xlabel = NULL,
-  ylabel = "Peak Counts", xlabelsize = "15px", ylabelsize = "15px",
-  maintitle = "Peak Counts by Cell Type",
+plotConsensusPeaks(samplepeaks, viewer = TRUE, palette = "Set1",
+  xlabel = NULL, ylabel = "Peak Counts", xlabelsize = "15px",
+  ylabelsize = "15px", maintitle = "Peak Counts by Cell Type",
   subtitle = "For bioreplicates and their merged consensus track",
   maintitlesize = "20px", subtitlesize = "15px")
 }
 \arguments{
 \item{samplepeaks}{output generated from getConsensusPeaks}
+
+\item{viewer}{whether the plot should be displayed in the RStudio viewer or
+in Shiny/Knittr}
 
 \item{palette}{choose an RColorBrewer palette ("Set1", "Set2", "Set3",
 "Pastel1", "Pastel2", "Paired", etc.) or submit a vector of colors}

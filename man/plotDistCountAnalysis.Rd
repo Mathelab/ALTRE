@@ -5,9 +5,9 @@
 \title{Creates a boxplot to see the distribution of read counts in type-specific and
 shared TSS-proximal and TSS-distal regions.}
 \usage{
-plotDistCountAnalysis(analysisresults, counts, palette = c("#C71585",
-  "#d3d3d3", "#00E5EE", "#000080"), xlabelsize = "13px",
-  ylabel = "log2(FPKM)", ylabelsize = "13px",
+plotDistCountAnalysis(analysisresults, counts, viewer = TRUE,
+  palette = c("#C71585", "#d3d3d3", "#00E5EE", "#000080"),
+  xlabelsize = "13px", ylabel = "log2(FPKM)", ylabelsize = "13px",
   maintitle = "Distribution of Normalized Counts (peaks types determine by intensity)",
   maintitlesize = "20px", xlabel = NULL)
 }
@@ -16,6 +16,9 @@ plotDistCountAnalysis(analysisresults, counts, palette = c("#C71585",
 categAltrePeaks()}
 
 \item{counts}{output generated from getCounts()}
+
+\item{viewer}{whether the plot should be displayed in the RStudio viewer or
+in Shiny/Knittr}
 
 \item{palette}{choose an RColorBrewer palette ("Set1", "Set2", "Set3",
 "Pastel1", "Pastel2", "Paired", etc.) or submit a vector of colors}

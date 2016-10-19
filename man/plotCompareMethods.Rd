@@ -7,13 +7,16 @@ presence or by #' differential counts.  The type of regulatory region
 (TSS-proximal, TSS-distal, or both) and type of peak comparison
 (intensity or peak) must be specified.}
 \usage{
-plotCompareMethods(analysisresultsmatrix, region = "both",
+plotCompareMethods(analysisresultsmatrix, viewer = TRUE, region = "both",
   method = "Intensity", palette = c("#C71585", "#d3d3d3", "#00E5EE",
   "#000080"), maintitle = NULL, maintitlesize = "16px")
 }
 \arguments{
 \item{analysisresultsmatrix}{analysisresults of Intensity analysis place into
 analysisresults matrix by the analyzeanalysisresults function}
+
+\item{viewer}{whether the plot should be displayed in the RStudio viewer or
+in Shiny/Knittr}
 
 \item{region}{pick a region, regions can be 'TSS-distal', 'TSS-proximal',
 or 'both' -- INCLUDE quotes}

@@ -6,6 +6,8 @@
 #' "Pastel1", "Pastel2", "Paired", etc.) or submit a vector of colors
 #' @param xlabel label for x-axis (default, types of peaks - e.g.
 #' ConsensusPeaks, rep1, rep2, etc.)
+#' @param viewer whether the plot should be displayed in the RStudio viewer or
+#' in Shiny/Knittr
 #' @param ylabel label for y-axis (default, "Peak Counts")
 #' @param xlabelsize size of xlabel (default, 15px)
 #' @param ylabelsize size of ylabel (default, 15px)
@@ -26,6 +28,7 @@
 #' @export
 #'
 plotConsensusPeaks <- function(samplepeaks,
+                               viewer = TRUE,
                                palette = "Set1",
                                xlabel = NULL,
                                ylabel = "Peak Counts",
@@ -35,10 +38,18 @@ plotConsensusPeaks <- function(samplepeaks,
                                subtitle = "For bioreplicates and their merged consensus track",
                                maintitlesize = "20px",
                                subtitlesize = "15px") {
-
-  if (grepl("#",palette[1])) {
-    cols <- c(palette)
-  } else{
+  if( viewer == TRUE ){
+    if (length(palette) == 4) {
+      cols <- c(palette)
+    }
+    else if (length(palette) == 1) {
+      cols <- RColorBrewer::brewer.pal(4, palette)
+    }
+    else {
+      stop("palette must either be an RColorBrewer palette or a vector of hex colors")
+    }
+    }
+  else{
     cols <- RColorBrewer::brewer.pal(4, palette)
   }
 
@@ -174,9 +185,19 @@ plotCombineAnnotatePeaks <- function(conspeaks,
                                      rightylabelsize = "15px",
                                      leftmaintitlesize = "20px",
                                      rightmaintitlesize = "20px") {
-  if (grepl("#",palette[1])) {
-    cols <- c(palette)
-  } else{
+
+  if ( viewer == TRUE ){
+    if (length(palette) == 4) {
+      cols <- c(palette)
+    }
+    else if (length(palette) == 1) {
+      cols <- RColorBrewer::brewer.pal(4, palette)
+    }
+    else {
+      stop("palette must either be an RColorBrewer palette or a vector of hex colors")
+    }
+  }
+  else{
     cols <- RColorBrewer::brewer.pal(4, palette)
   }
 
@@ -350,6 +371,8 @@ plotCombineAnnotatePeaks <- function(conspeaks,
 #' @param countsConsPeaks output generated from getCounts
 #' @param palette choose an RColorBrewer palette ("Set1", "Set2", "Set3",
 #'  "Pastel1", "Pastel2", "Paired", etc.) or submit a vector of colors
+#' @param viewer whether the plot should be displayed in the RStudio viewer or
+#' in Shiny/Knittr
 #' @param xlabel label for x-axis (default, "log2 normalized read counts")
 #' @param ylabel label for y-axis (default, "Density")
 #' @param xlabelsize size of xlabel (default, 15px)
@@ -381,6 +404,7 @@ plotCombineAnnotatePeaks <- function(conspeaks,
 #' @export
 
 plotGetCounts <- function(countsConsPeaks,
+            viewer = TRUE,
             palette = "Set1",
             xlabel = "Log2 Normalized Read Counts",
             ylabel = "Density",
@@ -394,9 +418,18 @@ plotGetCounts <- function(countsConsPeaks,
   value = Reference_specific = Shared = Experiment_specific = c()
   #set to null forR CMD Check error: Undefined global functions/variables
 
-  if (grepl("#",palette[1])) {
-    cols <- c(palette)
-  } else{
+  if( viewer == TRUE ){
+    if (length(palette) == 4) {
+      cols <- c(palette)
+    }
+    else if (length(palette) == 1) {
+      cols <- RColorBrewer::brewer.pal(4, palette)
+    }
+    else {
+      stop("palette must either be an RColorBrewer palette or a vector of hex colors")
+    }
+  }
+  else{
     cols <- RColorBrewer::brewer.pal(4, palette)
   }
 
@@ -533,9 +566,18 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE,
 
 
     #Either use an R color brewer palette or your own palette.
-  if (grepl("#",palette)) {
-    cols <- c(palette)
-  } else{
+  if ( viewer == TRUE ){
+    if (length(palette) == 4) {
+      cols <- c(palette)
+    }
+    else if (length(palette) == 1) {
+      cols <- RColorBrewer::brewer.pal(4, palette)
+    }
+    else {
+      stop("palette must either be an RColorBrewer palette or a vector of hex colors")
+    }
+  }
+  else{
     cols <- RColorBrewer::brewer.pal(4, palette)
   }
 
@@ -707,6 +749,8 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE,
 #' @param analysisresults output generated from countanalysis() then
 #' categAltrePeaks()
 #' @param counts output generated from getCounts()
+#' @param viewer whether the plot should be displayed in the RStudio viewer or
+#' in Shiny/Knittr
 #' @param palette choose an RColorBrewer palette ("Set1", "Set2", "Set3",
 #' "Pastel1", "Pastel2", "Paired", etc.) or submit a vector of colors
 #' @param ylabel label for y-axis (default, "Observations")
@@ -750,6 +794,7 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE,
 plotDistCountAnalysis <-
   function(analysisresults,
            counts,
+           viewer = TRUE,
            palette = c("#C71585", "#d3d3d3", "#00E5EE", "#000080"),
            xlabelsize = "13px",
            ylabel = "log2(FPKM)",
@@ -765,9 +810,18 @@ plotDistCountAnalysis <-
     Referencespecific <- paste0(reference, "SpecificByIntensity")
     Experimentspecific <- paste0(nonreference, "SpecificByIntensity")
 
-    if (grepl("#",palette[1])) {
-      cols <- c(palette)
-    } else{
+    if ( viewer == TRUE ){
+      if (length(palette) == 4) {
+        cols <- c(palette)
+      }
+      else if (length(palette) == 1) {
+        cols <- RColorBrewer::brewer.pal(4, palette)
+      }
+      else {
+        stop("palette must either be an RColorBrewer palette or a vector of hex colors")
+      }
+    }
+    else{
       cols <- RColorBrewer::brewer.pal(4, palette)
     }
 
@@ -950,6 +1004,8 @@ plotDistCountAnalysis <-
 #' analysisresults matrix by the analyzeanalysisresults function
 #' @param region pick a region, regions can be 'TSS-distal', 'TSS-proximal',
 #' or 'both' -- INCLUDE quotes
+#' @param viewer whether the plot should be displayed in the RStudio viewer or
+#' in Shiny/Knittr
 #' @param method pick a method, methods can be 'Intensity' or 'Peak'
 #' include quotes
 #' @param palette choose an RColorBrewer palette ("Set1", "Set2", "Set3", "Pastel1",
@@ -987,6 +1043,7 @@ plotDistCountAnalysis <-
 #'}
 
 plotCompareMethods <- function(analysisresultsmatrix,
+                               viewer = TRUE,
                                region = "both",
                                method = "Intensity",
                                palette = c("#C71585", "#d3d3d3", "#00E5EE", "#000080"),
@@ -997,11 +1054,20 @@ plotCompareMethods <- function(analysisresultsmatrix,
 
     analysisresultsmatrix <- as.matrix(analysisresultsmatrix$compareresults[,c("peak","intensity")])
 
-    if (grepl("#",palette[1])) {
-    cols <- c(palette)
-    } else{
+    if ( viewer == TRUE ){
+      if (length(palette) == 4) {
+        cols <- c(palette)
+      }
+      else if (length(palette) == 1) {
+        cols <- RColorBrewer::brewer.pal(4, palette)
+      }
+      else {
+        stop("palette must either be an RColorBrewer palette or a vector of hex colors")
+      }
+    }
+    else{
       cols <- RColorBrewer::brewer.pal(4, palette)
-  }
+    }
 
   if (region == "TSS-proximal") {
     feature <- c("TSS-proxs")
@@ -1173,38 +1239,38 @@ plotCompareMethodsAll <- function(analysisresultsmatrix,
                                  ) {
 
     p1 <- plotCompareMethods(analysisresultsmatrix,
-                             "TSS-proximal",
-                             "Intensity",
+                             region = "TSS-proximal",
+                             method = "Intensity",
                              palette = palette,
                              maintitle = title11,
                              maintitlesize = maintitlesize)
     p2 <- plotCompareMethods(analysisresultsmatrix,
-                             "TSS-distal",
-                             "Intensity",
+                             region = "TSS-distal",
+                             method = "Intensity",
                              palette = palette,
                              maintitle = title12,
                              maintitlesize = maintitlesize)
     p3 <- plotCompareMethods(analysisresultsmatrix,
-                             "both",
-                             "Intensity",
+                             region = "both",
+                             method = "Intensity",
                              palette = palette,
                              maintitle = title13,
                              maintitlesize = maintitlesize)
     p4 <- plotCompareMethods(analysisresultsmatrix,
-                             "TSS-proximal",
-                             "Peak",
+                             region = "TSS-proximal",
+                             method = "Peak",
                              palette = palette,
                              maintitle = title21,
                              maintitlesize = maintitlesize)
     p5 <- plotCompareMethods(analysisresultsmatrix,
-                             "TSS-distal",
-                             "Peak",
+                             region = "TSS-distal",
+                             method = "Peak",
                              palette = palette,
                              maintitle = title22,
                              maintitlesize = maintitlesize)
     p6 <- plotCompareMethods(analysisresultsmatrix,
-                             "both",
-                             "Peak",
+                             region = "both",
+                             method = "Peak",
                              palette = palette,
                              maintitle = title23,
                              maintitlesize = maintitlesize)

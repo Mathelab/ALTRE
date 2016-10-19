@@ -294,6 +294,7 @@ shinyServer(function(input, output, session) {
   output$barplot <- highcharter::renderHighchart({
        plotConsensusPeaks(req(getConsensusObj()),
                        palette = input$palette1,
+                       viewer = FALSE,
                        maintitle = input$consPlotTitle,
                        ylabel = input$consPlotylabel)
   })
@@ -310,6 +311,7 @@ shinyServer(function(input, output, session) {
 
   output$densityplot <- highcharter::renderHighchart({
     plotGetCounts(req(getCountsObj()),
+                  viewer = FALSE,
                   palette = input$palette3,
                   xlabel = input$countsxlabel,
                   ylabel = input$countsylabel,
@@ -325,6 +327,7 @@ shinyServer(function(input, output, session) {
   output$boxplotCounts <- highcharter::renderHighchart({
     plotDistCountAnalysis(req(categAltreObj()),
                           req(getCountsObj()),
+                          viewer = FALSE,
                           palette = input$palette4)
   })
 
