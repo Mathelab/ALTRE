@@ -546,7 +546,7 @@ body <- dashboardBody(
             ),
     tabItem(tabName = "compare",
             fluidRow(
-              HTML("<div class='col-sm-4' style='min-width:
+              HTML("<div class='col-sm-3' style='min-width:
                    400px !important;'>"),
               box(
                 width = NULL,
@@ -614,8 +614,8 @@ body <- dashboardBody(
                 hr()
               ),
               HTML("</div>"),
-              HTML("<div class='col-sm-7' style='min-width:
-                   550px !important;'>"),
+              HTML("<div class='col-sm-8' style='min-width:
+                   750px !important;'>"),
               box(
                 width = NULL,
                 htmlOutput('pieplot')
