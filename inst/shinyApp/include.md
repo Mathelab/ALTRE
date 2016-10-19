@@ -11,7 +11,7 @@ Chromatin accessibility data maps the location of regulatory elements (REs), inc
 
 ### How to Get Started and Load Data
 
-__*It is important and all data to be analyzed (alignment files, peak files, meta information in CSV format) is in the same folder.*__
+__*It is important and all data to be analyzed (alignment files, peak files, meta information in CSV format) be in the same folder.*__
 
 To get started, please load in a CSV (comma separated values) file in Step 1.
 The CSV file should contain the following four columns:
