@@ -50,7 +50,9 @@ plotConsensusPeaks <- function(samplepeaks,
     }
     }
   else{
+    if(!is.null(palette)){
     cols <- RColorBrewer::brewer.pal(4, palette)
+    }
   }
 
   CellType <- NULL
@@ -198,7 +200,9 @@ plotCombineAnnotatePeaks <- function(conspeaks,
     }
   }
   else{
-    cols <- RColorBrewer::brewer.pal(4, palette)
+    if(!is.null(palette)){
+      cols <- RColorBrewer::brewer.pal(4, palette)
+    }
   }
 
   CellType <- NULL
@@ -430,7 +434,9 @@ plotGetCounts <- function(countsConsPeaks,
     }
   }
   else{
-    cols <- RColorBrewer::brewer.pal(4, palette)
+    if(!is.null(palette)){
+      cols <- RColorBrewer::brewer.pal(4, palette)
+    }
   }
 
 
@@ -578,7 +584,9 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE,
     }
   }
   else{
-    cols <- RColorBrewer::brewer.pal(4, palette)
+    if(!is.null(palette)){
+      cols <- RColorBrewer::brewer.pal(4, palette)
+    }
   }
 
   #To prevent R CMD check error
@@ -822,7 +830,9 @@ plotDistCountAnalysis <-
       }
     }
     else{
-      cols <- RColorBrewer::brewer.pal(4, palette)
+      if(!is.null(palette)){
+        cols <- RColorBrewer::brewer.pal(4, palette)
+      }
     }
 
     readcounts <- counts$regioncounts
@@ -1066,7 +1076,9 @@ plotCompareMethods <- function(analysisresultsmatrix,
       }
     }
     else{
-      cols <- RColorBrewer::brewer.pal(4, palette)
+      if(!is.null(palette)){
+        cols <- RColorBrewer::brewer.pal(4, palette)
+      }
     }
 
   if (region == "TSS-proximal") {
