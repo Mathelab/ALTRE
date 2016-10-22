@@ -560,8 +560,13 @@ body <- dashboardBody(
                           by the peak caller."),
                   tags$li(" Outputs a set of pie charts.")
                 ),
-                hr(),
                 actionButton("buttoncompare", strong("Compare Methods")),
+                hr()
+	      ),
+	      HTML("</div>"),
+	      box(
+	      HTML("<div class='col-sm-8' style='min-width:
+                   400px !important;'>"),
                 hr(),
                 dataTableOutput("table5"),
                 conditionalPanel("input.buttoncompare > 0",
@@ -570,7 +575,18 @@ body <- dashboardBody(
                                  )
                 )
               ),
+	      HTML("</div>"),
+              HTML("<div class='col-sm-8' style='min-width:
+                   1000px !important;'>"),
               box(
+                width = NULL,
+                htmlOutput('pieplot')
+              ),
+	      HTML("</div>"),
+              HTML("<div class='col-sm-3' style='min-width:
+                   400px !important;'>"),
+              infoBoxOutput("statusbox7", width = NULL),              
+	      box(
                 title = "Customize Pie Plot",
                 width = NULL,
                 solidHeader = TRUE,
@@ -613,15 +629,15 @@ body <- dashboardBody(
                 ),
                 hr()
               ),
-              HTML("</div>"),
-              HTML("<div class='col-sm-8' style='min-width:
-                   750px !important;'>"),
-              box(
-                width = NULL,
-                htmlOutput('pieplot')
-              ),
-              infoBoxOutput("statusbox7", width = NULL),
               HTML("</div>")
+#              HTML("<div class='col-sm-8' style='min-width:
+#                   1000px !important;'>"),
+#              box(
+#                width = NULL,
+#                htmlOutput('pieplot')
+#              ),
+#              infoBoxOutput("statusbox7", width = NULL),
+#              HTML("</div>")
               )
             ),
 		tabItem(tabName = "greatpathways",
