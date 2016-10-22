@@ -33,10 +33,6 @@ environment:
     R_ARCH: x64
     BIOC_USE_DEVEL: true
 
-  - R_VERSION: oldrel
-    R_ARCH: x64
-    BIOC_USE_DEVEL: false
-
 build_script:
   - travis-tool.sh install_deps
   - travis-tool.sh install_r htmltools httpuv evaluate

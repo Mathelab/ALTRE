@@ -546,8 +546,8 @@ body <- dashboardBody(
             ),
     tabItem(tabName = "compare",
             fluidRow(
-              HTML("<div class='col-sm-3' style='min-width:
-                   400px !important;'>"),
+              HTML("<div class='col-sm-4' style='min-width:
+                   500px !important;'>"),
               box(
                 width = NULL,
                 title = strong("Compare Methods"),
@@ -562,31 +562,31 @@ body <- dashboardBody(
                 ),
                 actionButton("buttoncompare", strong("Compare Methods")),
                 hr()
-	      ),
-	      HTML("</div>"),
-	      box(
-	      HTML("<div class='col-sm-8' style='min-width:
-                   400px !important;'>"),
+                ),
+              infoBoxOutput("statusbox7", width = NULL),
+              HTML("</div>"),
+              HTML("<div class='col-sm-7' style='min-width:400px !important;'>"),
+              box(
                 hr(),
                 dataTableOutput("table5"),
+	              hr(),
                 conditionalPanel("input.buttoncompare > 0",
                                  downloadButton("downloadCompareDT",
                                                 strong("Download Data Table")
                                  )
                 )
               ),
-	      HTML("</div>"),
+	            HTML("</div>"),
               HTML("<div class='col-sm-8' style='min-width:
                    1000px !important;'>"),
               box(
                 width = NULL,
                 htmlOutput('pieplot')
               ),
-	      HTML("</div>"),
+	            HTML("</div>"),
               HTML("<div class='col-sm-3' style='min-width:
                    400px !important;'>"),
-              infoBoxOutput("statusbox7", width = NULL),              
-	      box(
+	            box(
                 title = "Customize Pie Plot",
                 width = NULL,
                 solidHeader = TRUE,
