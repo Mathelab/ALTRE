@@ -546,8 +546,8 @@ body <- dashboardBody(
             ),
     tabItem(tabName = "compare",
             fluidRow(
-              HTML("<div class='col-sm-4' style='min-width:
-                   500px !important;'>"),
+              HTML("<div class='col-sm-2' style='min-width:
+                   300px !important;'>"),
               box(
                 width = NULL,
                 title = strong("Compare Methods"),
@@ -563,30 +563,28 @@ body <- dashboardBody(
                 actionButton("buttoncompare", strong("Compare Methods")),
                 hr()
                 ),
-              infoBoxOutput("statusbox7", width = NULL),
-              HTML("</div>"),
-              HTML("<div class='col-sm-7' style='min-width:400px !important;'>"),
               box(
+                width = NULL,
+                title = "Comparison Data Table",
                 hr(),
                 dataTableOutput("table5"),
-	              hr(),
+                hr(),
                 conditionalPanel("input.buttoncompare > 0",
                                  downloadButton("downloadCompareDT",
                                                 strong("Download Data Table")
                                  )
                 )
               ),
-	            HTML("</div>"),
-              HTML("<div class='col-sm-8' style='min-width:
-                   1000px !important;'>"),
+              HTML("</div>"),
+              HTML("<div class='col-sm-7' style='min-width:
+                   870px !important;'>"),
               box(
                 width = NULL,
                 htmlOutput('pieplot')
               ),
-	            HTML("</div>"),
-              HTML("<div class='col-sm-3' style='min-width:
-                   400px !important;'>"),
-	            box(
+              HTML("</div>"),
+              HTML("<div class='col-sm-2' style='min-width:200px !important;'>"),
+              box(
                 title = "Customize Pie Plot",
                 width = NULL,
                 solidHeader = TRUE,
@@ -629,7 +627,10 @@ body <- dashboardBody(
                 ),
                 hr()
               ),
-              HTML("</div>")
+              HTML("</div>"),
+              HTML("<div class='col-sm-2' style='min-width:200px !important;'>"),
+              infoBoxOutput("statusbox7", width = NULL),
+	            HTML("</div>")
 #              HTML("<div class='col-sm-8' style='min-width:
 #                   1000px !important;'>"),
 #              box(
