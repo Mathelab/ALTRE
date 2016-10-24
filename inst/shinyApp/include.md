@@ -31,6 +31,8 @@ All plots can be downloaded at a high resolution in PDF, JPEG, SVG, or PNG.  <st
 
 Throughout the workflow, users can download processed data at the major steps, including after annotating peaks (step 3), after defining altered regions (step 6), and after pathway analysis (step 8).
 
+When using smaller monitors, the lefhand workflow panel (black background) can be toggled off by clicking on the menu bar symbol to the right of the words "ALTRE Workflow".
+
 ### Questions
 For any issues or questions that might arise, please file a new issue on <a href="https://github.com/Mathelab/ALTRE/issues" target="_blank">Github</a>.
 
