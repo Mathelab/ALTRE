@@ -15,9 +15,9 @@ Alternatively, if you encounter any installation problems or bugs, you can file 
 
 ALTRE is a package for the R statisical programming language. ALTRE can be run on R version >=3.2.0, but for quickest installation, R >= 3.3.0 is recommended.
 
-Download (or upgrade) R here: https://www.r-project.org/
+Download (or upgrade) R here: https://cloud.r-project.org/
 
-RStudio (an interface to R than can make R easier to use for individuals inexperienced with command-line programming) can be download here (not required): https://www.rstudio.com/
+RStudio (an interface to R than can make R easier to use) can be download here (not required): https://www.rstudio.com/products/rstudio/download3/
 
 ## Installation From Github
 
