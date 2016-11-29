@@ -57,6 +57,9 @@ loadCSVFile <- function(csvPath) {
            stop("One of the 'bamfiles' in your CSV does not exist")
       }
 
+     # If "_" are present, remove them, or else downstream code will break
+     csvfile$sample=gsub("_","",csvfile$sample)
+
       return(csvfile)
     }
 }
