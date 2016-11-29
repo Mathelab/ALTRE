@@ -42,7 +42,7 @@ loadCSVFile <- function(csvPath) {
       csvfile$datapath <- rep(gsub("(.*)\\/(.*)", "\\1", csvPath), nrow(csvfile))
 
       # Check to be sure that at least 2 replicates exist for each condition
-      if ( min(table(csvfile$replicate)) < 2 ) {
+      if ( min(table(csvfile$sample)) < 2 ) {
 	stop("One of the conditions has less than 2 replicates.
 	     ALTRE requires at least 2 replicates per condition")
       }
