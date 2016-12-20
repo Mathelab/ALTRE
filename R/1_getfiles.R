@@ -3,18 +3,22 @@
 #' The metadata associated with data files to be analyzed in ALTRE is supplied
 #' as a CSV file. The software will automatically retrieve the file path of
 #' input CSV so it is important that all analysis files are in the same folder
-#' as CSV file.
+#' as CSV file. If there are greater than two sample types in the file,
+#' two samples must be selected for analysis using the paramaters sample1 and
+#' sample2. This software can only compare two samples at a time.
 #'
 #' @param csvPath csvPath
+#' @param sample1 optional, select first sample to use if >2 samples are in csv file
+#' @param sample2 optional, select second sample to use if >2 samples are in csv file
 #' @return dataframe of CSV file
 #'
 #' @examples
 #' \dontrun{
-#' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+#' csvfile <- loadCSVFile(csvPath = "DNAseEncodeExample.csv")
 #' }
 #'
 #' @export
-loadCSVFile <- function(csvPath) {
+loadCSVFile <- function(csvPath, sample1 = NULL, sample2 = NULL) {
 
     stopifnot(is.character(csvPath))
 
@@ -29,6 +33,15 @@ loadCSVFile <- function(csvPath) {
                           replicate = readr::col_character()
                           )
                         )
+
+
+    if ( length(unique(csvfile$sample)) > 2 && (is.null(sample1) || is.null(sample2)) ) {
+      stop("If there are greater than two sample types in the file, two samples must be selected for analysis using the sample1 and sample2 parameters. This software can only
+           compare two samples at a time.")
+    }
+    else if ( length(unique(csvfile$sample)) > 2) {
+      csvfile = csvfile[csvfile$sample == c(sample1, sample2), ]
+    }
 
     if (ncol(csvfile) < 4) {
       stop("Columns are missing in the CSV file.  Check the format.")

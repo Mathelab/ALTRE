@@ -48,8 +48,7 @@ plotConsensusPeaks <- function(samplepeaks,
     else {
       stop("palette must either be an RColorBrewer palette or a vector of hex colors")
     }
-    }
-  else{
+    } else{
     if(!is.null(palette)){
     cols <- RColorBrewer::brewer.pal(4, palette)
     }
@@ -66,8 +65,7 @@ plotConsensusPeaks <- function(samplepeaks,
   statsFormated <-
     tidyr::gather(consPeaksStats, "CellType", "Count", 2:3)
 
-  plottingData <- statsFormated %>%
-    split(levels(as.factor(statsFormated$CellType)))
+  plottingData <- split(statsFormated, statsFormated$CellType)
 
   col1 <- cols[1]
   col2 <- cols[2]
@@ -77,6 +75,8 @@ plotConsensusPeaks <- function(samplepeaks,
   } else {
     xLabel <- xlabel
   }
+
+
 
   p <- highchart(width = 520, height = 650) %>%
     hc_title(text = maintitle,
@@ -572,19 +572,17 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE,
 
 
     #Either use an R color brewer palette or your own palette.
-  if ( viewer == TRUE ){
+  if ( viewer == TRUE ) {
     if (length(palette) == 4) {
       cols <- c(palette)
     }
     else if (length(palette) == 1) {
       cols <- RColorBrewer::brewer.pal(4, palette)
-    }
-    else {
+    } else {
       stop("palette must either be an RColorBrewer palette or a vector of hex colors")
     }
-  }
-  else{
-    if(!is.null(palette)){
+  } else{
+    if (!is.null(palette)) {
       cols <- RColorBrewer::brewer.pal(4, palette)
     }
   }

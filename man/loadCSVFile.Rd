@@ -4,10 +4,14 @@
 \alias{loadCSVFile}
 \title{Read in CSV file}
 \usage{
-loadCSVFile(csvPath)
+loadCSVFile(csvPath, sample1 = NULL, sample2 = NULL)
 }
 \arguments{
 \item{csvPath}{csvPath}
+
+\item{sample1}{optional, select first sample to use if >2 samples are in csv file}
+
+\item{sample2}{optional, select second sample to use if >2 samples are in csv file}
 }
 \value{
 dataframe of CSV file
@@ -16,11 +20,13 @@ dataframe of CSV file
 The metadata associated with data files to be analyzed in ALTRE is supplied
 as a CSV file. The software will automatically retrieve the file path of
 input CSV so it is important that all analysis files are in the same folder
-as CSV file.
+as CSV file. If there are greater than two sample types in the file,
+two samples must be selected for analysis using the paramaters sample1 and
+sample2. This software can only compare two samples at a time.
 }
 \examples{
 \dontrun{
-csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+csvfile <- loadCSVFile(csvPath = "DNAseEncodeExample.csv")
 }
 
 }
