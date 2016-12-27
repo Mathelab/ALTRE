@@ -43,54 +43,35 @@ getCounts <- function(annotpeaks,
                       singleEnd=TRUE,
                       chrom = NULL) {
 
-  bamfileslist <- loadBamFiles(sampleinfo)
+  datapaths <- paste(sampleinfo$datapath, sampleinfo$bamfiles, sep = "/")
 
+  #subset by chromosome if necessary
   if (is.null(chrom) == FALSE) {
-    inputgranges <- annotpeaks[[1]][seqnames(annotpeaks[[1]]) == chrom,
-                                    ]
+    regions <- annotpeaks[[1]][seqnames(annotpeaks[[1]]) == chrom,]
   } else {
-    inputgranges <- annotpeaks[[1]]
+    regions <- annotpeaks[[1]]
   }
 
-  # Count number of reads overlapping each annotated peak
-  if(singleEnd==TRUE) {
-  	countsse <- GenomicAlignments::summarizeOverlaps(features = inputgranges,
-                                                   reads = bamfileslist,
-                                                   mode = "Union",
-                                                   singleEnd = TRUE,
-                                                   ignore.strand = TRUE)
-  }
-  else {
-        countsse <- GenomicAlignments::summarizeOverlaps(features = inputgranges,
-                                                   reads = bamfileslist,
-                                                   mode = "Union",
-                                                   singleEnd = FALSE,
-						   fragments = TRUE,
-                                                   ignore.strand = TRUE)
-  }
-  # add column labels
-  SummarizedExperiment::colData(countsse) <- DataFrame(sampleinfo[, c(1:4)])
-  countsse$sample <- as.factor(countsse$sample)
-
-  countsse$status <- stats::relevel(countsse$sample, reference)
-  countssedds <- DESeq2::DESeqDataSet(countsse, design = ~status)
-
-  # Optional filtering out of lowcount regions As part of the DESeq2
-  # algorithm, more stringent filtering will be applied subsequently
-  # countssedds[ rowSums(counts(countssedds)) > 1, ]
-
-  # get counts referenceized by librarysize
-  normcountssedds <- SummarizedExperiment::assay(countssedds, norm = T)
+  # create correct format (SAF) in order to use featureCounts
+  regionsdataframe = as.data.frame(regions)
+  SAFformat = as.data.frame(paste(regionsdataframe[,1], regionsdataframe[,2], regionsdataframe[,3], sep = ":"))
+  SAFformat = cbind(SAFformat, regionsdataframe[,c(1:3)])
+  SAFformat$Strand = "-"
+  colnames(SAFformat) = c("GeneID", "Chr", "Start", "End", "Strand")
+  sampleinfo$bamfiles
+  results = Rsubread::featureCounts(files = datapaths, annot.ext = SAFformat)
+  counts = results$counts
+  colnames(counts) = sampleinfo$bamfiles
 
   # get region/peak size
-  originaldata <- grangestodataframe(inputgranges)
+  originaldata <- grangestodataframe(regions)
   regionsize <- originaldata$stop - originaldata$start
 
   # Calculate RPKM for plotting densities multiply by 10^6 and divide by
   # regions size to get rpkm
-  myrpkm <- as.data.frame(normcountssedds[, 1] * 10 ^ 6/regionsize)
-  for (i in 2:ncol(normcountssedds)) {
-    myrpkm[, i] <- normcountssedds[, i] * 10 ^ 6/regionsize
+  myrpkm <- as.data.frame((counts[, 1] * 10 ^ 6)/regionsize)
+  for (i in 2:ncol(counts)) {
+    myrpkm[, i] <- counts[, i] * 10 ^ 6/regionsize
   }
   # take the log2 so that it is a normalized distribution
   myrpkmlog2 <- log2(as.matrix(myrpkm) + 1)
@@ -115,10 +96,15 @@ getCounts <- function(annotpeaks,
   region <- originaldata$region
   forplotdf <- cbind(myrpkmlog2, as.data.frame(region))
 
-  colnames(SummarizedExperiment::rowData(countssedds)) <-
-    gsub("meta.","", colnames(SummarizedExperiment::rowData(countssedds)))
+  ##########################################
+  # Create a summerizedExperiment Object
+  sampleinfo$status <- stats::relevel(as.factor(sampleinfo$sample), reference)
+  SEcounts <- DESeq2::DESeqDataSetFromMatrix(counts, as.data.frame(sampleinfo), design = ~status)
+  SummarizedExperiment::rowRanges(SEcounts) = regions
+  colnames(SummarizedExperiment::rowData(SEcounts)) <-
+    gsub("meta.","", colnames(SummarizedExperiment::rowData(SEcounts)))
 
 
-  return(list(regioncounts = countssedds, regioncountstats = statdf,
+  return(list(regioncounts = SEcounts, regioncountstats = statdf,
               regioncountsforplot = forplotdf, reference))
 }

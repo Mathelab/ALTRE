@@ -40,35 +40,24 @@
 countanalysis <- function(counts,
                           pval = 0.01,
                           lfcvalue = 1) {
-  countsdds <- counts[[1]]
-  errortest <- try(DESeq2::counts(countsdds),
-                   silent = TRUE)
-  if (inherits(errortest, "try-error") == TRUE) {
-    stop("The input is not a summarized experiment object!")
-  }
-
+  countsonly <- counts[[1]]
   # run differential analysis
-  countsdiffexp <- suppressMessages(DESeq2::DESeq(countsdds))
+  countsdiffexp <- suppressMessages(DESeq2::DESeq(countsonly))
   # define the threshold
   countsresultsalphalfc <- DESeq2::results(countsdiffexp,
                                            alpha = pval,
                                            lfcThreshold = lfcvalue)
 
    resultsdataframe <- as.data.frame(countsresultsalphalfc)
-   originalgranges <- SummarizedExperiment::rowRanges(countsdds)
+   originalgranges <- SummarizedExperiment::rowRanges(countsonly)
    grangesdataframe <- grangestodataframe(originalgranges)
 
-   fulldataframe <- cbind(resultsdataframe,
-	grangesdataframe)
+   fulldataframe <- cbind(resultsdataframe, grangesdataframe)
    #Rename some columns
    metacols <- grep("meta",colnames(fulldataframe))
    colnames(fulldataframe)[metacols] <-
      gsub("metab.","", colnames(fulldataframe)[metacols])
 
-  return(list(results <- as.data.frame(fulldataframe), counts[[4]]))  #,
-   #           stats = stats,
-  #             dftoplot = list(toplot = toplot,
-                             # pval = pval,
-                             # lfcvalue = lfcvalue)))
+  return(list(results <- as.data.frame(fulldataframe), counts[[4]]))
 }
 

@@ -40,7 +40,8 @@ Imports:
     highcharter,
     htmltools,
     rGREAT,
-    RColorBrewer
+    RColorBrewer,
+    Rsubread
 License: GPL-2
 BiocViews: Visualization, Annotation, Software, AnnotationData, FunctionalAnnotation
 LazyData: TRUE
