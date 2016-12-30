@@ -14,7 +14,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' csvfile <- loadCSVFile(csvPath = "DNAseEncodeExample.csv")
+#' csvfile <- loadCSVFile(csvPath = "DNaseEncodeExample.csv")
 #' }
 #'
 #' @export

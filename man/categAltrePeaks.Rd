@@ -34,7 +34,7 @@ Categorize altered peaks as experiment-specific, reference-specific,
 }
 \examples{
 \dontrun{
-csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+csvfile <- loadCSVFile("DNaseEncodeExample.csv")
 samplePeaks <- loadBedFiles(csvfile)
 consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
 TSSannot <- getTSS()

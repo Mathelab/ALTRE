@@ -28,7 +28,7 @@ Altered regions are those that show differences in chromatin accessibility
 }
 \examples{
 \dontrun{
-csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+csvfile <- loadCSVFile("DNaseEncodeExample.csv")
 samplePeaks <- loadBedFiles(csvfile)
 consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
 TSSannot <- getTSS()

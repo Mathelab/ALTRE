@@ -15,12 +15,12 @@
 #' (1) DESeqDataSet: contains count information for all replicates of all samples
 #' (2) Matrix: contains number of TSS-distal and TSS-proximal
 #'  before and after filtering (if applicable)
-#' (3) Data frame for creating a density plot (use function plotgetcounts()
+#' (3) Data frame for creating a density plot (use function plotGetCounts()
 #'
 #'
 #' @examples
 #' \dontrun{
-#' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+#' csvfile <- loadCSVFile("DNaseEncodeExample.csv")
 #' samplePeaks <- loadBedFiles(csvfile)
 #' consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
 #' TSSannot <- getTSS()
@@ -44,7 +44,7 @@ getCounts <- function(annotpeaks,
                       chrom = NULL) {
 
   datapaths <- paste(sampleinfo$datapath, sampleinfo$bamfiles, sep = "/")
-
+  print(datapaths)
   #subset by chromosome if necessary
   if (is.null(chrom) == FALSE) {
     regions <- annotpeaks[[1]][seqnames(annotpeaks[[1]]) == chrom,]

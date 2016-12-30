@@ -26,7 +26,7 @@ sample2. This software can only compare two samples at a time.
 }
 \examples{
 \dontrun{
-csvfile <- loadCSVFile(csvPath = "DNAseEncodeExample.csv")
+csvfile <- loadCSVFile(csvPath = "DNaseEncodeExample.csv")
 }
 
 }

@@ -389,7 +389,7 @@ plotCombineAnnotatePeaks <- function(conspeaks,
 #'
 #' @examples
 #' \dontrun{
-#' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+#' csvfile <- loadCSVFile("DNaseEncodeExample.csv")
 #' samplePeaks <- loadBedFiles(csvfile)
 #' consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
 #' minreps = 2)
@@ -534,7 +534,7 @@ plotGetCounts <- function(countsConsPeaks,
 #'
 #' @examples
 #' \dontrun{
-#' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+#' csvfile <- loadCSVFile("DNaseEncodeExample.csv")
 #' samplePeaks <- loadBedFiles(csvfile)
 #' consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
 #' TSSannot <- getTSS()
@@ -770,7 +770,7 @@ plotCountAnalysis <- function(altrepeakscateg, viewer = TRUE,
 #'
 #' @examples
 #' \dontrun{
-#' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+#' csvfile <- loadCSVFile("DNaseEncodeExample.csv")
 #' samplePeaks <- loadBedFiles(csvfile)
 #' consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
 #' minreps = 2)
@@ -1023,7 +1023,7 @@ plotDistCountAnalysis <-
 #' @return pie chart
 #' @examples
 #' \dontrun{
-#' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+#' csvfile <- loadCSVFile("DNaseEncodeExample.csv")
 #' samplePeaks <- loadBedFiles(csvfile)
 #' consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
 #' minreps = 2)
@@ -1208,7 +1208,7 @@ plotCompareMethods <- function(analysisresultsmatrix,
 #'
 #' @examples
 #' \dontrun{
-#' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+#' csvfile <- loadCSVFile("DNaseEncodeExample.csv")
 #' samplePeaks <- loadBedFiles(csvfile)
 #' consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
 #' minreps = 2)
@@ -1323,7 +1323,7 @@ plotCompareMethodsAll <- function(analysisresultsmatrix,
 #'
 #' @examples
 #' \dontrun{
-#' csvfile <- loadCSVFile("DNAseEncodeExample.csv")
+#' csvfile <- loadCSVFile("DNaseEncodeExample.csv")
 #' samplePeaks <- loadBedFiles(csvfile)
 #' consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
 #' TSSannot <- getTSS()
