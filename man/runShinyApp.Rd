@@ -4,10 +4,10 @@
 \alias{runShinyApp}
 \title{run shiny app}
 \usage{
-runShinyApp(setPort = "127.0.0.1")
+runShinyApp(port = "127.0.0.1")
 }
 \arguments{
-\item{setPort}{port}
+\item{port}{set port}
 }
 \description{
 run shiny app
