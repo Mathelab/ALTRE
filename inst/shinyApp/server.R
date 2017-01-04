@@ -77,12 +77,24 @@ shinyServer(function(input, output, session) {
                  value = 0,
                  {
                    setProgress(value = 0.1, detail = "Retrieving counts")
+
+                   if (input$operatingradio) {
                    getCountsOut <- getCounts(
                      annotpeaks = req(combineAnnotateObj()),
                      sampleinfo = req(loadCSVObj()),
                      reference = input$reference,
                      chrom = input$chr)
+                   } else{
+                     getCountsOut <- getCountsWindows(
+                       annotpeaks = req(combineAnnotateObj()),
+                       sampleinfo = req(loadCSVObj()),
+                       reference = input$reference,
+                       chrom = input$chr)
+                   }
+
                    setProgress(value = 1, detail = "Done!")
+
+
                    Sys.sleep(0.5)
                  })
     return(getCountsOut)

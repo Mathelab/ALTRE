@@ -12,6 +12,7 @@ Description: This workflow takes alignment data and hotspot calls from assays of
 URL: https://github.com/Mathelab/ALTRE
 BugReports: https://github.com/Mathelab/ALTRE/issues
 Depends: R (>= 3.2.0)
+Suggests: Rsubread
 Imports:
     shiny,
     shinydashboard,
@@ -40,8 +41,7 @@ Imports:
     highcharter,
     htmltools,
     rGREAT,
-    RColorBrewer,
-    Rsubread
+    RColorBrewer
 License: GPL-2
 BiocViews: Visualization, Annotation, Software, AnnotationData, FunctionalAnnotation
 LazyData: TRUE

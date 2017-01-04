@@ -363,6 +363,12 @@ body <- dashboardBody(
                                  uiOutput("chooseChrom")
                 ),
                 hr(),
+                radioButtons(
+                  "operatingradio",
+                  label = strong("What operating system is this R package running on?"),
+                  choices = list("UNIX/MacOS" = "TRUE", "Windows" = "FALSE"),
+                  selected = "TRUE"
+                ),
                 uiOutput("chooseref")
               ),
               HTML("</div>"),
