@@ -34,7 +34,7 @@ environment:
     BIOC_USE_DEVEL: true
 
 build_script:
-  - travis-tool.sh install_bioc  GenomeInfoDb DESeq2 Rsamtools org.Hs.eg.db clusterProfiler ensembldb EnsDb.Hsapiens.v75 GO.db IRanges GenomicAlignments SummarizedExperiment GenomicRanges S4Vectors Rsubread
+  - travis-tool.sh install_bioc  GenomeInfoDb DESeq2 Rsamtools org.Hs.eg.db clusterProfiler ensembldb EnsDb.Hsapiens.v75 GO.db IRanges GenomicAlignments SummarizedExperiment GenomicRanges S4Vectors
   - travis-tool.sh install_deps
   - travis-tool.sh install_r htmltools httpuv evaluate
 
