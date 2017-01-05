@@ -38,11 +38,11 @@ If you are installing on a Linux or MacOS operating system it is highly recommen
 ```{R}
 BiocInstaller::biocLite(c('Rsubread'))
 ```
-This package will enable you to run one step of the pipeline significantly faster than Windows users. The extra package is not available for Windows. 
+This package will enable you to run one step of the pipeline significantly faster than Windows users. The extra package is not available for Windows (attempting to install it will produce an error). 
 
 If you encounter an error when runing the above lines, please do the following:
 
-### On Linux and Mac OS
+### On Linux and MacOS
 
 
 When installing on Linux, installation might fail if the XML package cannot be installed. Installation failure  can be fixed by installing the libxml2, an XML C parser for Linux. Also to install the devtools R library, you also need to install several system dependencies. 
