@@ -2,8 +2,9 @@
 % Please edit documentation in R/4_getcountsWindows.R
 \name{getCounts}
 \alias{getCounts}
-\title{THIS FUNCTION FOR USE WHEN RUNNING ALTRE ON A WINDOWS COMPUTER ONLY!
-Generates count data for regulatory regions.}
+\title{Generates count data for regulatory regions. This function is best for
+WINDOWS USERS ONLY. If you are using Linux or MacOS, getCountsFast is the
+better choice (it is faster).}
 \usage{
 getCounts(annotpeaks, sampleinfo, reference, singleEnd = TRUE, chrom = NULL)
 }
@@ -33,12 +34,12 @@ of interest are supplied in a GRanges object, ideally output of combineAnnotateP
 The function getCounts generates count data using the summerizeOverlaps
 function from the GenomicAlignments package. This function is slower than the
 count function getCountsFast in the ALTRE package. However,
-getCounts MUST be used to count reads on a windows
+getCounts MUST be used to count reads on a Windows
 computer -- getCountsFast is not available in Windows.
-If the package is being run on Linux or MacOS, use GetCountsFast.  For
+If the package is being run on Linux or MacOS, use GetCountsFast. For
 high-thoughput experiments (many samples need to be
 analyzed), it is highly suggested that a non-Windows computer is used (MacOS/Linux).
-s
+To be clear: GetCounts and GetCountsFast give the EXACT SAME results.
 }
 \examples{
 \dontrun{

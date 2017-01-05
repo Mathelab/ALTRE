@@ -1,4 +1,4 @@
-#' THIS FUNCTION FOR USE WHEN RUNNING ALTRE ON MAC OS/LINUX ONLY!
+#' THIS FUNCTION FOR USE WHEN RUNNING ALTRE ON MACOS/LINUX ONLY!
 #' Generates count data for regulatory regions.
 #'
 #' Counts the number of reads in each regulatory region for each sample type --
@@ -8,7 +8,7 @@
 #' the featureCounts function from the R package Rsubreads, which is the fastest
 #' way available on R to count. The getCountsFast function CANNOT be used when
 #' running ALTRE on a Windows computer. Windows computers must use the function
-#' getCounts (also available in the ALTRE package), which is significatly
+#' getCounts (also available in the ALTRE package), which is significantly
 #' slower, but ultimately will give the exact same results. For high-thoughput
 #' experiments (many samples need to be analyzed), it is highly suggested that
 #' a non-Windows computer is used (MacOS/Linux).

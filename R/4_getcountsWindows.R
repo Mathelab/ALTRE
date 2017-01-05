@@ -1,5 +1,7 @@
-#' THIS FUNCTION FOR USE WHEN RUNNING ALTRE ON A WINDOWS COMPUTER ONLY!
-#' Generates count data for regulatory regions.
+#' Generates count data for regulatory regions. This function is best for
+#' WINDOWS USERS ONLY. If you are using Linux or MacOS, getCountsFast is the
+#' better choice (it is faster).
+#'
 #'
 #' Counts the number of reads in each regulatory region for
 #' each sample type -- read count is derived from user-input BAM filex, and regions
@@ -7,12 +9,13 @@
 #' The function getCounts generates count data using the summerizeOverlaps
 #' function from the GenomicAlignments package. This function is slower than the
 #' count function getCountsFast in the ALTRE package. However,
-#' getCounts MUST be used to count reads on a windows
+#' getCounts MUST be used to count reads on a Windows
 #' computer -- getCountsFast is not available in Windows.
-#' If the package is being run on Linux or MacOS, use GetCountsFast.  For
+#' If the package is being run on Linux or MacOS, use GetCountsFast. For
 #' high-thoughput experiments (many samples need to be
 #' analyzed), it is highly suggested that a non-Windows computer is used (MacOS/Linux).
-#'s
+#' To be clear: GetCounts and GetCountsFast give the EXACT SAME results.
+#'
 #' @param annotpeaks list output from combineAnnotatePeaks() function
 #' @param sampleinfo dataframe as returned from loadCSVFile() function
 #' @param reference name of sample type to be
