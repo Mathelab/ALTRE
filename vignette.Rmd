@@ -108,7 +108,7 @@ The number of regulatory elements decreases and the size of the regions increase
 
 The next function *getCounts()* retrieves the number of reads in each regulatory element (RE) for each sample type – this determines the peak height/intensity and approximates the accessibility of the RE in question.  Read counts are retrieved from the alignment files (BAM format) that are supplied in the CSV file containing the sample metadata.  We have already read in the CSV in the first step of the workflow (load data).  
 
-Of note, one cell type must be designated as  “reference ”, to which the other cell types will be compared. In this example, the reference type is the normal lung cell line (SAEC).
+Of note, one cell type must be designated as  “reference”, to which the other cell types will be compared. In this example, the reference type is the normal lung cell line (SAEC).
 
 To run the function:
 ```{r}
@@ -119,6 +119,8 @@ consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
 plotGetCounts(consensusPeaksCounts)
 ```
 
+
+__Note__: If you are running ALTRE on a Unix or MacOS operating system you can use the function *getCountsFast* in the place of *getCounts*. Both functions yeild the same results but *getCountsFast* is significantly faster. Unfortunately, *getCountsFast* is not available for Windows. 
 
 **5. Retrieve and Categorize Candidate Altered Regulatory Elements (REs)**
 
