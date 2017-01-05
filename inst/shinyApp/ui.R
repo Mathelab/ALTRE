@@ -373,8 +373,8 @@ body <- dashboardBody(
                 hr(),
                 radioButtons(
                   "operatingradio",
-                  label = strong("What operating system is this R package running on?"),
-                  choices = list("Windows" = "FALSE", "UNIX/MacOS" = "TRUE"),
+                  label = strong("Which counting function would you like to use? Both functions give same result -- one is faster."),
+                  choices = list("Regular count" = "FALSE", "Faster count (only available on UNIX/MacOS)" = "TRUE"),
                   selected = "FALSE"
                 ),
                 uiOutput("chooseref")
