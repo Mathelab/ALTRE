@@ -6,12 +6,12 @@
 #' are supplied in a GRanges object, ideally output of combineAnnotatePeaks.
 #' The function getCounts generates count data using
 #' the featureCounts function from the R package Rsubreads, which is the fastest
-#' way available on R to count. The getCounts function CANNOT be used when
+#' way available on R to count. The getCountsFast function CANNOT be used when
 #' running ALTRE on a Windows computer. Windows computers must use the function
-#' getCountsWindows (also available in the ALTRE package), which is significatly
+#' getCounts (also available in the ALTRE package), which is significatly
 #' slower, but ultimately will give the exact same results. For high-thoughput
 #' experiments (many samples need to be analyzed), it is highly suggested that
-#' a non-Windows computer is used (Mac OS/Linux).
+#' a non-Windows computer is used (MacOS/Linux).
 #'
 
 #'
@@ -41,14 +41,14 @@
 #'    regionspecific = TRUE,
 #'    distancefromTSSdist = 1500,
 #'    distancefromTSSprox = 1000)
-#' consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
+#' consensusPeaksCounts <- getCountsFast(annotpeaks = consensusPeaksAnnotated,
 #'    sampleinfo = csvfile,
 #'    reference = 'SAEC',
 #'    chrom = 'chr21')
 #' }
 #' @export
 
-getCounts <- function(annotpeaks,
+getCountsFast <- function(annotpeaks,
                       sampleinfo,
                       reference,
                       singleEnd = TRUE,
@@ -59,7 +59,7 @@ getCounts <- function(annotpeaks,
 Rsubread is only available for computers running MacOS or Linux.
 If you are running MacOS or Linux please install Rsubread:
 https://bioconductor.org/packages/release/bioc/html/Rsubread.html.
-If you are using a Windows computer please use the function getCountsWindows
+If you are using a Windows computer please use the function getCounts
 (also available in the ALTRE R package) in place of the current function.
 The results of the analysis will be exactly the same, but the processing
 time may be much slower. If you plan to analyze a very large number of samples

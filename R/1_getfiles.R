@@ -36,9 +36,15 @@ loadCSVFile <- function(csvPath, sample1 = NULL, sample2 = NULL) {
 
 
     if ( length(unique(csvfile$sample)) > 2 && (is.null(sample1) || is.null(sample2)) ) {
-      stop("If there are greater than two sample types in the file, two samples must be selected for analysis using the sample1 and sample2 parameters. This software can only
-           compare two samples at a time.")
+      stop("If there are greater than two sample types in the file, two samples must be selected for analysis using the sample1 and sample2 parameters. This software can only compare two samples at a time.")
     } else if ( length(unique(csvfile$sample)) > 2) {
+        if (!c(sample1) %in% csvfile$sample) {
+          stop("Sample ", sample1, " is not present in the sample column of the CSV file.")
+        }
+        if (!c(sample2) %in% csvfile$sample) {
+        stop("Sample ", sample2, " is not present in the sample column of the CSV file.")
+        }
+
       csvfile = csvfile[csvfile$sample %in% c(sample1, sample2), ]
     }
 

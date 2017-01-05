@@ -112,6 +112,14 @@ body <- dashboardBody(
                         'peakfiles' (name of peak files)"),
                   tags$li("Prints out the contents of the file.")
                 ),
+		          hr(),
+		          radioButtons(
+		          "csvradio",
+		          label = strong("Does your CSV file contain more than two samples (not including replicates)?"),
+		          choices = list("No" = "FALSE", "Yes" = "TRUE"),
+		          selected = "FALSE"
+		  ),
+		            conditionalPanel("input.csvradio == 'TRUE'", textInput('csvsample1', 'What is the name of the first sample?'), textInput('csvsample2', 'What is the name of the second sample?', NULL)),
                 hr(),
 	        strong("Load CSV File:"),
 		br(),
@@ -366,8 +374,8 @@ body <- dashboardBody(
                 radioButtons(
                   "operatingradio",
                   label = strong("What operating system is this R package running on?"),
-                  choices = list("UNIX/MacOS" = "TRUE", "Windows" = "FALSE"),
-                  selected = "TRUE"
+                  choices = list("Windows" = "FALSE", "UNIX/MacOS" = "TRUE"),
+                  selected = "FALSE"
                 ),
                 uiOutput("chooseref")
               ),

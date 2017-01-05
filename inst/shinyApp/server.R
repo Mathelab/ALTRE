@@ -20,7 +20,7 @@ shinyServer(function(input, output, session) {
              parseFilePaths(
                rootVolumes,
                input$file)$datapath)
-           )
+           ), input$csvsample1, input$csvsample2
          )
 
   })
@@ -79,13 +79,13 @@ shinyServer(function(input, output, session) {
                    setProgress(value = 0.1, detail = "Retrieving counts")
 
                    if (input$operatingradio) {
-                   getCountsOut <- getCounts(
+                   getCountsOut <- getCountsFast(
                      annotpeaks = req(combineAnnotateObj()),
                      sampleinfo = req(loadCSVObj()),
                      reference = input$reference,
                      chrom = input$chr)
                    } else{
-                     getCountsOut <- getCountsWindows(
+                     getCountsOut <- getCounts(
                        annotpeaks = req(combineAnnotateObj()),
                        sampleinfo = req(loadCSVObj()),
                        reference = input$reference,
