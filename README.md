@@ -33,18 +33,32 @@ install.packages("devtools")
 # Third, install the ALTRE package 
 devtools::install_github("mathelab/ALTRE")
 ```
+If you are installing on a Linux or MacOS operating system it is highly recommended that you install one additional package:
 
-If you encounter an error when runing these 4 lines, please do the following:
+```{R}
+BiocInstaller::biocLite(c('Rsubread'))
+```
+This package will enable you to run one step of the pipeline significantly faster than Windows users. The extra package is not available for Windows. 
+
+If you encounter an error when runing the above lines, please do the following:
 
 ### On Linux and Mac OS
 
 
-When installing on Linux, installation might fail if the XML package cannot be installed. Installation failure  can be fixed by installing the libxml2, an XML C parser for Linux. Also to install the devtools R library, you also need to install several system dependencies. On Ubuntu this can be done by running the following line in the terminal:
+When installing on Linux, installation might fail if the XML package cannot be installed. Installation failure  can be fixed by installing the libxml2, an XML C parser for Linux. Also to install the devtools R library, you also need to install several system dependencies. 
+
+On Ubuntu this can be done by running the following line in the terminal:
 
 ```{R}
 sudo apt-get install libxml2-dev libssl-dev libcurl4-openssl-dev gfortran
 ```
 On Mac OS, the same dependecies can installed using the *brew* command. 
+
+On Red-hat Enterprise Linux or CentOS it is the following:
+
+```{R}
+sudo yum install libcurl-devel openssl-devel libxml2-devel
+```
 
 
 ### On Windows
