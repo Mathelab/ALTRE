@@ -2,11 +2,30 @@
 % Please edit documentation in R/1_getfiles.R
 \name{getTSS}
 \alias{getTSS}
-\title{get TSS file for use in combineAnnotatePeaks function.}
+\title{get TSS file for use in combineAnnotatePeaks function. The default
+functionality (with no parameters suppplied) is to retrieve human TSS from
+ensembldb annotation 75, which is hg19. If this isn't suitable for your organism
+or human genome alignment you will need to supply your own text file with
+TSS information. The first three columns must contain the chr start and stop
+coordinates, and 4th column must contain the gene name.}
 \usage{
-getTSS()
+getTSS(file = NULL)
+}
+\arguments{
+\item{file}{filname of TSS for organism under study}
 }
 \description{
-get TSS file for use in combineAnnotatePeaks function.
+get TSS file for use in combineAnnotatePeaks function. The default
+functionality (with no parameters suppplied) is to retrieve human TSS from
+ensembldb annotation 75, which is hg19. If this isn't suitable for your organism
+or human genome alignment you will need to supply your own text file with
+TSS information. The first three columns must contain the chr start and stop
+coordinates, and 4th column must contain the gene name.
+}
+\examples{
+\dontrun{
+TSSannot <- getTSS(file="./gtfManipulation/Homo_sapiens.GRCh37.75_exon1only.bed")
+}
+
 }
 

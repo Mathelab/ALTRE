@@ -174,7 +174,7 @@ loadBamFiles <- function(csvfile) {
 #'
 #' @param file filname of TSS for organism under study
 #
-#' @example
+#' @examples
 #' \dontrun{
 #' TSSannot <- getTSS(file="./gtfManipulation/Homo_sapiens.GRCh37.75_exon1only.bed")
 #' }
@@ -184,7 +184,7 @@ getTSS <- function(file=NULL) {
 
   if (!is.null(file)) {
     organismFile = file
-    organismDatatable = read.table(organismFile, sep = "\t", stringsAsFactors = FALSE, skip = 1)
+    organismDatatable = utils::read.table(organismFile, sep = "\t", stringsAsFactors = FALSE, skip = 1)
     organismGRanges = GRanges(organismDatatable[,1], IRanges(as.numeric(organismDatatable[,2]), as.numeric(organismDatatable[,3])), metadata = organismDatatable[,4])
     colnames(mcols(organismGRanges)) = "gene_name"
     TSSdb = organismGRanges
