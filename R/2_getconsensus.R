@@ -34,7 +34,7 @@ getConsensusPeaks <- function(samplepeaks, minreps) {
   conspeaks_stats <- list()
 
   # Chromosomes to keep (used later to remove other chromosomes e.g. chrM)
-  chrom_subset <- paste0('chr', c(1:22,'X','Y'))
+  #chrom_subset <- paste0('chr', c(1:22,'X','Y'))
 
   for (mytype in order(sampletypes)) {
     mytypepeaks <- samplepeaks[grep(sampletypes[mytype], sampnames)]
@@ -76,7 +76,7 @@ getConsensusPeaks <- function(samplepeaks, minreps) {
     colnames(mcols(finalgranges)) <- "sampletype"
 
    # Remove chromosomes that are not 1-22/X/Y
-    finalgranges <- GenomeInfoDb::keepSeqlevels(finalgranges, chrom_subset)
+    #finalgranges <- GenomeInfoDb::keepSeqlevels(finalgranges, chrom_subset)
 
     # Construct output
     conspeaks$mytype <- finalgranges

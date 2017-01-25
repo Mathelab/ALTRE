@@ -165,9 +165,31 @@ loadBamFiles <- function(csvfile) {
 
 
 
-#' get TSS file for use in combineAnnotatePeaks function.
+#' get TSS file for use in combineAnnotatePeaks function. The default
+#' functionality (with no parameters suppplied) is to retrieve human TSS from
+#' ensembldb annotation 75, which is hg19. If this isn't suitable for your organism
+#' or human genome alignment you will need to supply your own text file with
+#' TSS information. The first three columns must contain the chr start and stop
+#' coordinates, and 4th column must contain the gene name.
+#'
+#' @param file filname of TSS for organism under study
+#
+#' @example
+#' \dontrun{
+#' TSSannot <- getTSS(file="./gtfManipulation/Homo_sapiens.GRCh37.75_exon1only.bed")
+#' }
+#'
 #' @export
-getTSS <- function() {
+getTSS <- function(file=NULL) {
+
+  if (!is.null(file)) {
+    organismFile = file
+    organismDatatable = read.table(organismFile, sep = "\t", stringsAsFactors = FALSE, skip = 1)
+    organismGRanges = GRanges(organismDatatable[,1], IRanges(as.numeric(organismDatatable[,2]), as.numeric(organismDatatable[,3])), metadata = organismDatatable[,4])
+    colnames(mcols(organismGRanges)) = "gene_name"
+    TSSdb = organismGRanges
+  }
+  else{
     edb <- EnsDb.Hsapiens.v75::EnsDb.Hsapiens.v75
     ensembldb::seqlevelsStyle(edb) <- "UCSC"
     TSSdb <- ensembldb::promoters(edb,
@@ -182,5 +204,7 @@ getTSS <- function() {
                     "gene_name"),
         upstream = 0,
         downstream = 2)
+  }
+
     return(TSSdb)
 }
