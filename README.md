@@ -13,7 +13,7 @@ https://github.com/Mathelab/ALTREsampledata/tree/master/gtfManipulation
 
 Additional information also available in the documentation for the *getTSS()* function.
 
-Installation instructions below or if you want to see an example of how ALTRE works without installation, browse the vignette: https://mathelab.github.io/ALTRE/vignette.html
+Installation instructions below or if you want to see an example of how ALTRE works without installation browse the vignette: https://mathelab.github.io/ALTRE/vignette.html
 
 
 ## Contact Us
