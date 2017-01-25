@@ -6,7 +6,7 @@
 
 ## What is ALTRE?
 
-ALTRE enables easy comparison of chromatin accessibility between two samples (each sample must have at least two replicates). Chromatin accessibility information is obtained through assays such as ATAC-seq and Dnase-seq. By default, ALTRE works on the hg19 human genome. However, the __new update (01/25/2017)__ enables ALTRE to __easily__ be used adapted to other human builds or other organisms entirely. However, it is up to users to provide their own file of gene transcription start sites to supply to the getTSS function. This file can be created from a gtf file. 
+ALTRE enables easy comparison of chromatin accessibility between two samples (each sample must have at least two replicates). Chromatin accessibility information is obtained through assays such as ATAC-seq and Dnase-seq. By default, ALTRE works on the hg19 human genome. However, the __new update (01/25/2017)__ enables ALTRE to easily take on other human builds or other organisms entirely. However, it is up to users to provide their own file of gene transcription start sites to supply to the getTSS function. This file can be created from a gtf file. 
 
 See here for more information about creating the required file: 
 https://github.com/Mathelab/ALTREsampledata/tree/master/gtfManipulation
