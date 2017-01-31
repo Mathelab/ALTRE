@@ -483,17 +483,17 @@ plotGetCounts <- function(countsConsPeaks,
                           style = list(fontSize = ylabelsize))) %>%
     hc_xAxis(title = list(text = xlabel,
                           style = list(fontSize = xlabelsize))) %>%
-    hc_add_series_density(
+    hc_add_series(
       stats::density(samp1prox$value),
       area = TRUE,
       name = paste(mysamps[1], "TSS-proximal")
     ) %>%
-    hc_add_series_density(
+    hc_add_series(
       stats::density(samp2dist$value),
       area = TRUE,
       name = paste(mysamps[2], "TSS-distal")
     ) %>%
-    hc_add_series_density(
+    hc_add_series(
       stats::density(samp2prox$value),
       area = TRUE,
       name = paste(mysamps[2], "TSS-proximal")
