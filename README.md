@@ -17,12 +17,7 @@ Installation instructions below or if you want to see an example of how ALTRE wo
 
 
 ## Contact Us
-
-You can contact us on Gitter chat by clicking on this badge
-
-[![Join the chat at https://gitter.im/ProjectALTRE/PublicLobby](https://badges.gitter.im/ProjectALTRE/PublicLobby.svg)](https://gitter.im/ProjectALTRE/PublicLobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-Alternatively, if you encounter any installation problems or bugs, you can file an issue on the Issues tab.
+If you encounter any problems running on the software, or find installation problems or bugs, please start an issue on the Issues tab or email Elizabeth.Baskin@osumc.edu directly. Thanks! 
 
 ## ALTRE prerequisites 
 
