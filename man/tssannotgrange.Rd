@@ -20,4 +20,3 @@ GRanges object
 Takes a Grange input
 Not for use by package user
 }
-

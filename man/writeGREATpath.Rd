@@ -47,4 +47,3 @@ writeGREATpath(pathenrichOut = pathGREAT, con = con)
 }
 
 }
-

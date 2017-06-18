@@ -11,10 +11,10 @@
 #' count function getCountsFast in the ALTRE package. However,
 #' getCounts MUST be used to count reads on a Windows
 #' computer -- getCountsFast is not available in Windows.
-#' If the package is being run on Linux or MacOS, use GetCountsFast. For
+#' If the package is being run on Linux or MacOS, use getCountsFast. For
 #' high-thoughput experiments (many samples need to be
 #' analyzed), it is highly suggested that a non-Windows computer is used (MacOS/Linux).
-#' To be clear: GetCounts and GetCountsFast give the EXACT SAME results.
+#' To be clear: GetCounts and getCountsFast give the EXACT SAME results.
 #'
 #' @param annotpeaks list output from combineAnnotatePeaks() function
 #' @param sampleinfo dataframe as returned from loadCSVFile() function

@@ -34,4 +34,3 @@ samplePeaks <- loadBedFiles(csvfile)
 consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks, minreps = 2)
 }
 }
-

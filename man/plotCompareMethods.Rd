@@ -69,4 +69,3 @@ comparePeaksAnalysisResults <- comparePeaksAltre(alteredPeaksCategorized)
 plotCompareMethods(analysisresultsmatrix = comparePeaksAnalysisResults)
 }
 }
-

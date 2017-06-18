@@ -72,4 +72,3 @@ alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
 plotDistCountAnalysis(analysisresults = alteredPeaksCategorized, counts = consensusPeaksCounts)
 }
 }
-

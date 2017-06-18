@@ -59,4 +59,3 @@ consensusPeaksCounts <- getCounts(annotpeaks = consensusPeaksAnnotated,
                                  chrom = 'chr21')
 plotGetCounts(consensusPeaksCounts)}
 }
-

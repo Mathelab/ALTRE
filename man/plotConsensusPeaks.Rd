@@ -53,4 +53,3 @@ consensusPeaks <- getConsensusPeaks(samplepeaks = samplePeaks,
 minreps = 2)
 plotConsensusPeaks(samplepeaks = consensusPeaks)}
 }
-

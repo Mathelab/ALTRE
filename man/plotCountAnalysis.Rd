@@ -67,4 +67,3 @@ alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
 plotCountAnalysis(altrepeakscateg = alteredPeaksCategorized)
 }
 }
-

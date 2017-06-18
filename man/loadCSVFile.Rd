@@ -30,4 +30,3 @@ csvfile <- loadCSVFile(csvPath = "DNaseEncodeExample.csv")
 }
 
 }
-

@@ -66,4 +66,3 @@ pathResults <- processPathways(callPaths, pathway_category = "GO",
 enrichcutoff = 2, adjpvalcutoff = 0.05)
 }
 }
-

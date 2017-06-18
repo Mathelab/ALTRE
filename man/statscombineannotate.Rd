@@ -22,4 +22,3 @@ matrix
 Takes a data frame of GRanges
 Not for use by package user
 }
-

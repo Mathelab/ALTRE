@@ -47,4 +47,3 @@ alteredPeaks <- countanalysis(counts = consensusPeaksCounts,
    lfcvalue = 1)
 }
 }
-

@@ -71,4 +71,3 @@ alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
 callPaths <- runGREAT(peaks = alteredPeaksCategorized)
 }
 }
-

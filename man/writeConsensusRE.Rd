@@ -32,4 +32,3 @@ con <- "annotatedRegions.csv"
 writeConsensusRE(consPeaksAnnotated, con)
 }
 }
-

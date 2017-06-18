@@ -64,4 +64,3 @@ consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
    distancefromTSSprox = 1000)
 }
 }
-

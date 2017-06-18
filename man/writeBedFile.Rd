@@ -45,4 +45,3 @@ lfcshared = 1.2, pvaltypespecific = 0.01, pvalshared = 0.05)
 writeBedFile(categaltre_peaks)
 }
 }
-

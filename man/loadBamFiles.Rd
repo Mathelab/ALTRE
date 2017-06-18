@@ -12,4 +12,3 @@ loadBamFiles(csvfile)
 \description{
 Read in BAM files (internal function)
 }
-

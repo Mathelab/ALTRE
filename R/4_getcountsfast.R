@@ -67,7 +67,8 @@ it is highly suggested that a non-Windows computer is used (MacOS/Linux).",
          call. = FALSE)
   }
 
-  datapaths <- paste(sampleinfo$datapath, sampleinfo$bamfiles, sep = "/")
+#  datapaths <- paste(sampleinfo$datapath, sampleinfo$bamfiles, sep = "/")
+  datapaths <- file.path(sampleinfo$datapath, sampleinfo$bamfiles)
   #subset by chromosome if necessary
   if (is.null(chrom) == FALSE) {
     regions <- annotpeaks[[1]][seqnames(annotpeaks[[1]]) == chrom,]

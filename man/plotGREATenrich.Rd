@@ -81,4 +81,3 @@ plotGREATenrich(pathResults, maintitle = "GREAT Enrichment Analysis",
 pathwaycateg = "GO_Molecular_Function")
 }
 }
-

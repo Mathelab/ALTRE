@@ -47,4 +47,3 @@ writeCompareRE(comparePeaksOut, con)
 
 }
 }
-

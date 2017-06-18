@@ -68,4 +68,3 @@ consensusPeaksAnnotated <- combineAnnotatePeaks(conspeaks = consensusPeaks,
 plotCombineAnnotatePeaks(consensusPeaksAnnotated)
 }
 }
-

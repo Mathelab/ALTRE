@@ -24,4 +24,3 @@ GRanges object
 Takes a data frame of GRanges and distance as input
 Not for use by package user
 }
-

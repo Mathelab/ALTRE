@@ -17,7 +17,7 @@ Installation instructions below or if you want to see an example of how ALTRE wo
 
 
 ## Contact Us
-If you encounter any problems running on the software, or find installation problems or bugs, please start an issue on the Issues tab or email Elizabeth.Baskin@osumc.edu directly. Thanks! 
+If you encounter any problems running on the software, or find installation problems or bugs, please start an issue on the Issues tab or email Ewy.Mathe@osumc.edu directly. Thanks! 
 
 ## ALTRE prerequisites 
 

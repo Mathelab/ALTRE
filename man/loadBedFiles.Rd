@@ -25,4 +25,3 @@ samplePeaks <- loadBedFiles(csvfile)
 
 
 }
-

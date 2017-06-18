@@ -18,4 +18,3 @@ Dataframe1 <- grangestodataframe(Grange1)
 Takes a Grange input and converts it into a dataframe
 Not for use by package user
 }
-

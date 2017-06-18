@@ -28,4 +28,3 @@ TSSannot <- getTSS(file="./gtfManipulation/Homo_sapiens.GRCh37.75_exon1only.bed"
 }
 
 }
-

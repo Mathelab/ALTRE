@@ -58,4 +58,3 @@ consensusPeaksCounts <- getCountsFast(annotpeaks = consensusPeaksAnnotated,
    chrom = 'chr21')
 }
 }
-

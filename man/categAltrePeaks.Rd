@@ -58,4 +58,3 @@ alteredPeaksCategorized <- categAltrePeaks(analysisresults = alteredPeaks,
    pvalshared = 0.05)
 }
 }
-

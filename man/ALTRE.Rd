@@ -93,4 +93,3 @@ using GREAT.  By default, Gene Ontology pathway annotations are used.
 To visualize the pathways that are enriched, use the function plotGREATenrich().
 }
 }
-

@@ -55,4 +55,3 @@ alteredPeaksCategorized <- categAltrePeaks(alteredPeaks,
 comparePeaksAnalysisResults <- comparePeaksAltre(alteredPeaksCategorized)
 }
 }
-
