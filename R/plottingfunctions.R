@@ -1096,30 +1096,16 @@ plotCompareMethods <- function(analysisresultsmatrix,
   # analysisresults matrix based on the
   # regulatory region of interest
   if (method == "Intensity") {
-    case <- analysisresultsmatrix[coordinates[1], 1]
-    reference <- analysisresultsmatrix[coordinates[2], 1]
-    shared <- analysisresultsmatrix[coordinates[3], 1]
+    case <- analysisresultsmatrix[coordinates[1], "intensity"]
+    reference <- analysisresultsmatrix[coordinates[2], "intensity"]
+    shared <- analysisresultsmatrix[coordinates[3], "intensity"]
   }
 
   if (method == "Peak") {
-    case <- analysisresultsmatrix[coordinates[1], 2]
-    reference <- analysisresultsmatrix[coordinates[2], 2]
-    shared <- analysisresultsmatrix[coordinates[3], 2]
+    case <- analysisresultsmatrix[coordinates[1], "peak"]
+    reference <- analysisresultsmatrix[coordinates[2], "peak"]
+    shared <- analysisresultsmatrix[coordinates[3], "peak"]
   }
-  # identifies the correct numbers from the
-  # analysisresults matrix based on the
-  # method of region
-  # string <- paste(
-  #   rownames(analysisresultsmatrix)[1],
-  #   rownames(analysisresultsmatrix)[2],
-  #   rownames(analysisresultsmatrix)[3],
-  #   rownames(analysisresultsmatrix)[4],
-  #   rownames(analysisresultsmatrix)[5],
-  #   rownames(analysisresultsmatrix)[6],
-  #   rownames(analysisresultsmatrix)[7],
-  #   rownames(analysisresultsmatrix)[8],
-  #   rownames(analysisresultsmatrix)[9]
-  # )
 
   #stringsplit <- strsplit(string, " ")
   #uniquestringsplit <- unique(stringsplit[[1]])
