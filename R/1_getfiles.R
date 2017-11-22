@@ -194,9 +194,9 @@ getTSS <- function(file=NULL) {
     ensembldb::seqlevelsStyle(edb) <- "UCSC"
     TSSdb <- ensembldb::promoters(edb,
                                   filter = list(
-                                    ensembldb::SeqnameFilter(
+                                    AnnotationFilter::SeqNameFilter(
                                       paste0("chr", c(1:22, "X", "Y"))),
-                                    ensembldb::GeneidFilter("ENSG%", "like")),
+                                    AnnotationFilter::GeneIdFilter("ENSG%", "contains")),
         columns = c("tx_seq_start",
                     "tx_id",
                     "tx_biotype",

@@ -30,6 +30,7 @@ Imports:
     readr,
     org.Hs.eg.db,
     ensembldb,
+    AnnotationFilter,
     EnsDb.Hsapiens.v75,
     tidyr,
     dplyr,
