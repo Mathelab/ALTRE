@@ -109,6 +109,10 @@ https://mathelab.github.io/ALTRE/vignette.html
 
 ## Data
 
+When using your own data, be sure that extraneous annotations (e.g. chrN_random sequences) are removed from your peak files and annotation files.  You may have to remove them from your alignment (bam) files as well since the software will not recognize these as valid entries.
+
+## Sample Data
+
 A restricted subset of the data with one chromosome (i.e. chromosome 21) can be found on this [page](http://mathelab.github.io/ALTREsampledata/). The corresponding CSV file for input into ALTRE can be downloaded [here](https://raw.githubusercontent.com/mathelab/ALTREsampledata/master/DNaseEncodeExample.csv). Be sure that the CSV file and the data files are in the same folder when running analysis with ALTRE.
 
 To download the entire data, please use a file download manager to download the files from the links listed below. 
